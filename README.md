@@ -1,9 +1,11 @@
 # TdA25 - Error Makers
 
-## Tým
+### Tým
 - [**AldiiX** - Stanislav Škudrna](https://stanislavskudrna.cz)
 - [**DGKuba657** - Jakub Funk](https://github.com/DGKuba657)
 - [**Wedralek** - Pavel Andrle](https://github.com/Wedralda)
+
+> Soutěžíme za [Střední Školu EDUCHEM, a.s.](https://educhem.cz)  &nbsp;&nbsp;&nbsp;:))
 
 ---
 
