@@ -23,6 +23,7 @@ COPY . .
 RUN dotnet build "TdA25-Error-Makers.csproj" -c $BUILD_CONFIGURATION -o /app/build --runtime linux-x64
 COPY database.sql /app/
 COPY start.sh /app/
+RUN chmod +x /app/start.sh
 
 # Publikace aplikace do /app/
 RUN dotnet publish "TdA25-Error-Makers.csproj" -c $BUILD_CONFIGURATION -o /app/ --runtime linux-x64 /p:UseAppHost=false
