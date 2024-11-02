@@ -1,0 +1,21 @@
+﻿html {
+    --text-color-primary: #080808;
+    --text-color: var(--text-color-primary);
+    --text-color-secondary: #1A1A1A;
+    --background-color-primary: #F6F6F6;
+    --background-color: var(--background-color-primary);
+    --background-color-secondary: #FFFFFF;
+    --accent-color-primary: #0070BB;
+    --accent-color: var(--accent-color-primary);
+    --accent-color-secondary: #E31837;
+    --accent-color-additional-1: #AB2E58;
+    --accent-color-additional-2: #724479;
+    --accent-color-additional-3: #395A9A;
+}
+
+
+#HELLO-PAGE {
+    .bg {
+        filter: blur(10vw);
+    }
+}

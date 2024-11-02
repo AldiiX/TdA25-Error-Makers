@@ -1,14 +1,31 @@
-﻿<!doctype html>
+﻿@using TdA25_Error_Makers.Classes
+@{
+    var webTheme = Utilities.WebTheme.Get();
+}
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Hello TdA! • Error Makers</title>
+    <title>Hello TdA • Error Makers</title>
+    <link rel="icon" href="/favicon.ico">
+
+    <link rel="stylesheet" href="/libs/purecss.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/hello.css">
+    <link rel="stylesheet" href="@Utilities.WebTheme.GetCSSPath()">
 </head>
-<body>
-    <h1>&lt;/Hello TdA&gt;</h1>
-    <p>we are error makers</p>
+<body id="HELLO-PAGE">
+    <div class="bg">
+        <div class="one"></div>
+        <div class="two"></div>
+    </div>
+
+    <div class="centertxt">
+        <h1><span>&lt;/</span>Hello TdA<span>&gt;</span></h1>
+        <p>we are error makers</p>
+    </div>
 </body>
 </html>
