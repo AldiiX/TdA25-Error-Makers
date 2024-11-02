@@ -7,7 +7,8 @@ public class HomeController : Controller {
 
 
     [Route("/")]
-    public IActionResult Index() {
-        return View("/Views/Index.cshtml");
-    }
+    public IActionResult Index() => Hello();
+
+    [Route("/hello")]
+    public IActionResult Hello() => View("/Views/Hello.cshtml");
 }
