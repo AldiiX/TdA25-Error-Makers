@@ -24,6 +24,12 @@ jobs:
           cache-to: type=gha,mode=max
           tags: tda:latest
           outputs: type=docker,dest=/tmp/tda.tar
+          build-args:
+            DATABASE_IP: ${{ secrets.DATABASE_IP }}
+            DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+            #REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+            #REDIS_PORT: ${{ secrets.REDIS_PORT }}
+            CACHE_VERSION: ${{ secrets.CACHE_VERSION }}
 
       - name: Upload to TdA
         uses: Tour-de-App/upload-app@tda-25

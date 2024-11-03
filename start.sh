@@ -1,4 +1,4 @@
-﻿#!/usr/bin/bash
+﻿#!/bin/bash
 
 redis-server &
 /app/build/TdA25-Error-Makers &

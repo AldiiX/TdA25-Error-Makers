@@ -1,5 +1,6 @@
 using dotenv.net;
 using StackExchange.Redis;
+using TdA25_Error_Makers.Classes;
 using TdA25_Error_Makers.Middlewares;
 using TdA25_Error_Makers.Services;
 
@@ -90,6 +91,14 @@ public static class Program {
         App.UseAuthorization();
         App.UseMiddleware<ErrorHandlingMiddleware>();
         App.MapControllerRoute(name: "default", pattern: "/");
+
+
+
+        // Vyzkoušení připojení k databázi
+        using var conn = Database.GetConnection(false);
+        if (conn == null) Logger.Log(LogLevel.Critical, $"Database connection ({Database.DATABASE_IP}) error při spouštění aplikace.");
+        else Logger.Log(LogLevel.Information, $"Database connection ({Database.DATABASE_IP}) successful při spouštění aplikace.");
+        conn?.Close();
 
         
 
