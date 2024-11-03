@@ -1,3 +1,4 @@
+global using HCS = TdA25_Error_Makers.Services.HttpContextService;
 using dotenv.net;
 using StackExchange.Redis;
 using TdA25_Error_Makers.Classes;

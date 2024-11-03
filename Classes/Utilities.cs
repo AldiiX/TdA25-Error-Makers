@@ -1,16 +1,60 @@
 ﻿namespace TdA25_Error_Makers.Classes;
 
+
+
+
+
 public static class Utilities {
 
 
-    public static class WebTheme {
-        public static string Get() {
-            // TODO: Implementovat zjištění tématu z cookies
-            return "light";
+    public static class Cookie {
+        public static void Set(in string key, in string? value, in bool saveToTemp = true) {
+            if (saveToTemp && HCS.Current.Items["tempcookie_" + key] != null) return;
+
+            HCS.Current.Items["tempcookie_" + key] = value;
+            HCS.Current.Response.Cookies.Append(key, value ?? "null", new CookieOptions() {
+                //HttpOnly = true,
+                IsEssential = true,
+                MaxAge = TimeSpan.FromDays(365),
+                Domain = Program.DEVELOPMENT_MODE ? "" : ".adminsphere.me",
+                //Secure = !Program.DEVELOPMENT_MODE,
+            });
         }
 
-        public static string GetCSSPath() => $"/css/themes/{Get().ToLower()}.css";
+        public static string? Get(in string key) => HCS.Current.Request.Cookies[key];
+
+        public static bool Exists(in string key) => HCS.Current.Request.Cookies.ContainsKey(key);
+
+        public static void Delete(in string key) {
+            HCS.Current.Response.Cookies.Append(key, "", new CookieOptions() {
+                //HttpOnly = true,
+                IsEssential = true,
+                Expires = DateTime.UtcNow.AddDays(-1),
+                Domain = Program.DEVELOPMENT_MODE ? "" : ".adminsphere.me",
+                //Secure = !Program.DEVELOPMENT_MODE,
+            });
+        }
+
+        public static void Remove(in string key) => Delete(key);
     }
+
+    public static class WebTheme {
+        public static void Set(in string theme) => Cookie.Set("webtheme", theme);
+
+        public static string Get() {
+            var wt = Cookie.Get("webtheme");
+            if(wt == null) Cookie.Set("webtheme", "light");
+
+            return wt switch {
+                "light" => "light",
+                "dark" => "dark",
+                _ => "light"
+            };
+        }
+
+        public static string GetCSSFile() => Get() == "light" ? "/css/themes/light.css" : "/css/themes/dark.css";
+    }
+
 
 
 
