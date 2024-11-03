@@ -15,7 +15,7 @@ public static class Database {
 
         try {
             conn = new MySqlConnection(
-                $"server={DATABASE_IP};userid=tda25;password={Program.ENV["DATABASE_PASSWORD"]};database=tda25;pooling=true;Max Pool Size={MAX_POOL_SIZE};");
+                $"server={DATABASE_IP};userid=tda25;password={Program.ENV.GetValueOrNull("DATABASE_PASSWORD") ?? "password"};database=tda25;pooling=true;Max Pool Size={MAX_POOL_SIZE};");
             conn.Open();
         } catch (Exception e) {
             conn?.Close();
