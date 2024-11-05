@@ -13,11 +13,8 @@ public static class Utilities {
 
             HCS.Current.Items["tempcookie_" + key] = value;
             HCS.Current.Response.Cookies.Append(key, value ?? "null", new CookieOptions() {
-                //HttpOnly = true,
                 IsEssential = true,
                 MaxAge = TimeSpan.FromDays(365),
-                //Domain = Program.DEVELOPMENT_MODE ? "" : ".adminsphere.me",
-                //Secure = !Program.DEVELOPMENT_MODE,
             });
         }
 
@@ -27,11 +24,8 @@ public static class Utilities {
 
         public static void Delete(in string key) {
             HCS.Current.Response.Cookies.Append(key, "", new CookieOptions() {
-                //HttpOnly = true,
                 IsEssential = true,
                 Expires = DateTime.UtcNow.AddDays(-1),
-                //Domain = Program.DEVELOPMENT_MODE ? "" : ".adminsphere.me",
-                //Secure = !Program.DEVELOPMENT_MODE,
             });
         }
 

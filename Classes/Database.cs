@@ -2,6 +2,10 @@
 
 namespace TdA25_Error_Makers.Classes;
 
+
+
+
+
 public static class Database {
     public static string DATABASE_IP => Program.ENV.GetValueOrNull("DATABASE_IP") ?? "localhost";
     private const int MAX_POOL_SIZE = 300;
