@@ -1,4 +1,7 @@
-﻿namespace TdA25_Error_Makers.Classes;
+﻿using System.Data;
+using MySql.Data.MySqlClient;
+
+namespace TdA25_Error_Makers.Classes;
 
 
 
@@ -60,5 +63,9 @@ public static class Utilities {
         return dictionary.TryGetValue(key, out var value) ? value : default;
     }
 
+    public static T? GetValueOrNull<T>(this MySqlDataReader reader, string key) {
+        if(reader.IsDBNull(key)) return default;
+        return (T)reader[key];
+    }
 #endregion
 }
