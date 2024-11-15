@@ -88,7 +88,7 @@ public class APIv1 : Controller {
                 Enum.Parse<Game.GameState>(reader.GetString("game_state"))
             );
 
-            return new JsonResult(game){ ContentType = "application/json" };
+            return new JsonResult(game){ ContentType = "application/json", StatusCode = 201};
         }
     }
 
