@@ -34,7 +34,7 @@ public class APIv1 : Controller {
         var createdGame = Game.Create(name, difficulty, board, true);
         if(createdGame == null) return new UnprocessableEntityObjectResult(new { code = BadRequest().StatusCode, message = "Failed to create game." });
 
-        return new ObjectResult(createdGame){StatusCode = 201};
+        return new JsonResult(createdGame){ StatusCode = 201 };
     }
 
     [HttpGet("games/{uuid}")]
