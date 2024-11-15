@@ -17,7 +17,7 @@ public class APIv1 : Controller {
     [HttpGet("games")]
     public IActionResult GetGames() {
         var games = Game.GetAll();
-        return new JsonResult(games);
+        return new JsonResult(games) { ContentType = "application/json" };
     }
 
     [HttpPost("games")]
@@ -88,7 +88,7 @@ public class APIv1 : Controller {
                 Enum.Parse<Game.GameState>(reader.GetString("game_state"))
             );
 
-            return new ObjectResult(game);
+            return new JsonResult(game){ ContentType = "application/json" };
         }
     }
 

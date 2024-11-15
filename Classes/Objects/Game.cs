@@ -12,7 +12,7 @@ public class Game {
 
     // picovinky
     public enum GameDifficulty { BEGINNER, EASY, INTERMEDIATE, HARD, EXTREME }
-    public enum GameState { OPENING, MIDDLE, ENDING, FINISHED }
+    public enum GameState { OPENING, MIDGAME, ENDING, FINISHED }
 
 
 
