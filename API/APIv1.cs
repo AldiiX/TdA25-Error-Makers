@@ -34,7 +34,7 @@ public class APIv1 : Controller {
         var createdGame = Game.Create(name, difficulty, board, true);
         if(createdGame == null) return new UnprocessableEntityObjectResult(new { code = BadRequest().StatusCode, message = "Failed to create game." });
 
-        return new JsonResult(createdGame){ StatusCode = 201, ContentType = "application/json" };
+        return new JsonResult(createdGame){ StatusCode = 417, ContentType = "application/json" };
     }
 
     [HttpGet("games/{uuid}")]
@@ -88,7 +88,7 @@ public class APIv1 : Controller {
                 Enum.Parse<Game.GameState>(reader.GetString("game_state"))
             );
 
-            return new JsonResult(game){ ContentType = "application/json", StatusCode = 201};
+            return new JsonResult(game){ ContentType = "application/json" };
         }
     }
 
