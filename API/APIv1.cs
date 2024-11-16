@@ -41,6 +41,7 @@ public class APIv1 : Controller {
             _ => "opening"
         };
 
+        // vytvoření hry
         var createdGame = Game.Create(name, difficulty, board, gameState, true);
         if(createdGame == null) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Failed to create game." });
 
