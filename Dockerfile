@@ -11,8 +11,12 @@ RUN apt-get update && apt-get install -y \
     && dpkg -i packages-microsoft-prod.deb \
     && apt-get update && apt-get install -y dotnet-sdk-8.0
 
+
+
 # Exponování portů
 EXPOSE 80
+
+
 
 # Sestavení projektu
 ARG BUILD_CONFIGURATION=Release
@@ -33,6 +37,13 @@ WORKDIR /app/
 
 
 
+# Instalace balíčku tzdata a konfigurace časové zóny
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends tzdata \
+    && ln -sf /usr/share/zoneinfo/Europe/Prague /etc/localtime \
+    && echo "Europe/Prague" > /etc/timezone \
+    && dpkg-reconfigure -f noninteractive tzdata \
+    && apt-get clean
 
 
 
@@ -45,7 +56,6 @@ ARG DATABASE_PASSWORD=default
 #ARG REDIS_PASSWORD=default
 #ARG REDIS_PORT=6379
 ARG CACHE_VERSION=1
-
 
 # Vytvoření .env souboru ve složce /app
 RUN echo "DATABASE_PASSWORD=${DATABASE_PASSWORD}" >> /app/.env && \
