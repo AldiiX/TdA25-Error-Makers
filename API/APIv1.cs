@@ -22,16 +22,26 @@ public class APIv1 : Controller {
 
     [HttpPost("games")]
     public IActionResult CreateGame([FromBody] Dictionary<string, object?> data) {
-        if (!data.ContainsKey("name") || !data.ContainsKey("difficulty") || !data.ContainsKey("board")) return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Missing required data." });
+        if (!data.ContainsKey("name") || !data.ContainsKey("difficulty")) return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Missing required data." });
 
         using var conn = Database.GetConnection();
         if (conn == null) return new StatusCodeResult(500);
 
+        // formátování dat
         string name = data["name"]?.ToString() ?? $"New Game {Random.Shared.Next()}";
         string difficulty = data["difficulty"]?.ToString() ?? "intermediate";
-        string board = JsonSerializer.Serialize((JsonElement?) data["board"]);
+        string board = data.GetValueOrDefault("board") switch {
+            JsonElement jsonElement => jsonElement.ToString(),
+            string strValue => strValue,
+            _ => "[]"
+        };
+        string gameState = data.GetValueOrDefault("gameState") switch {
+            JsonElement jsonElement => jsonElement.ToString(),
+            string strValue => strValue,
+            _ => "opening"
+        };
 
-        var createdGame = Game.Create(name, difficulty, board, true);
+        var createdGame = Game.Create(name, difficulty, board, gameState, true);
         if(createdGame == null) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Failed to create game." });
 
         return new JsonResult(createdGame){ StatusCode = 201, ContentType = "application/json" };
