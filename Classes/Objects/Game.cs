@@ -11,7 +11,7 @@ namespace TdA25_Error_Makers.Classes.Objects;
 public class Game {
 
     // picovinky
-    public enum GameDifficulty { BEGINNER, EASY, INTERMEDIATE, HARD, EXTREME }
+    public enum GameDifficulty { BEGINNER, EASY, MEDIUM, HARD, EXTREME }
     public enum GameState { OPENING, MIDGAME, ENDING, FINISHED }
 
 
