@@ -1,6 +1,6 @@
 ﻿@using TdA25_Error_Makers.Classes.Objects
 @{
-    if (ViewBag.Game is not Game game) throw new Exception("Game is null");
+    Game? game = ViewBag.Game as Game;
 }
 <!doctype html>
 <html lang="en">
@@ -13,8 +13,10 @@
     <title>Document</title>
 </head>
 <body>
-    <p>Game loaded: @game.Name</p>
-    <div class="grid"></div>
+    @if (game != null) {
+        <p>Game loaded: @game.Name</p>
+    }
+<div class="grid"></div>
 </body>
 <script>
     const grid = document.querySelector('.grid');
