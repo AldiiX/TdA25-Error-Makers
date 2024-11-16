@@ -101,12 +101,12 @@ public class Game {
 
     public static Game? GetByUUID(in string uuid) => GetByUUIDAsync(uuid).Result;
 
-    public static Game? Create(string name, string difficulty, string board, bool insertToDatabase = false) {
+    public static Game? Create(string name, string difficulty, string? board, bool insertToDatabase = false) {
         var game = new Game(
             Guid.NewGuid().ToString(),
             name,
-            JsonSerializer.Deserialize<List<List<string>>>(board) ?? [],
-            Enum.Parse<GameDifficulty>(difficulty.ToUpper()),
+            board != null ? JsonSerializer.Deserialize<List<List<string>>>(board) ?? [] : [],
+            !Enum.TryParse<GameDifficulty>(difficulty?.ToUpper(), out var diff) ? GameDifficulty.BEGINNER : diff,
             DateTime.Now,
             DateTime.Now,
             GameState.OPENING
@@ -127,8 +127,8 @@ public class Game {
         int res = 0;
         try {
             res = cmd.ExecuteNonQuery();
-        } catch (Exception _) {
-            // ignored
+        } catch (Exception e) {
+            Program.Logger.Log(LogLevel.Error, e, "Failed to insert new game to database.");
         }
 
         return res <= 0 ? null : game;

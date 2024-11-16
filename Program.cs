@@ -90,7 +90,7 @@ public static class Program {
         App.UseSession();
         App.UseRouting();
         App.UseAuthorization();
-        App.UseMiddleware<ErrorHandlingMiddleware>();
+        //App.UseMiddleware<ErrorHandlingMiddleware>();
         App.MapControllerRoute(name: "default", pattern: "/");
 
 

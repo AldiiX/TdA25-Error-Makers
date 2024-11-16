@@ -21,20 +21,20 @@ public class APIv1 : Controller {
     }
 
     [HttpPost("games")]
-    public IActionResult CreateGame([FromBody] Dictionary<string, object> data) {
+    public IActionResult CreateGame([FromBody] Dictionary<string, object?> data) {
         if (!data.ContainsKey("name") || !data.ContainsKey("difficulty") || !data.ContainsKey("board")) return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Missing required data." });
 
         using var conn = Database.GetConnection();
         if (conn == null) return new StatusCodeResult(500);
 
-        var name = data["name"].ToString();
-        var difficulty = data["difficulty"].ToString();
-        var board = data["board"].ToString();
+        string name = data["name"]?.ToString() ?? $"New Game {Random.Shared.Next()}";
+        string difficulty = data["difficulty"]?.ToString() ?? "intermediate";
+        string board = JsonSerializer.Serialize((JsonElement?) data["board"]);
 
         var createdGame = Game.Create(name, difficulty, board, true);
-        if(createdGame == null) return new UnprocessableEntityObjectResult(new { code = BadRequest().StatusCode, message = "Failed to create game." });
+        if(createdGame == null) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Failed to create game." });
 
-        return new JsonResult(createdGame){ StatusCode = 417, ContentType = "application/json" };
+        return new JsonResult(createdGame){ StatusCode = 201, ContentType = "application/json" };
     }
 
     [HttpGet("games/{uuid}")]
