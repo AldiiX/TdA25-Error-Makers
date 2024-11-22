@@ -29,7 +29,7 @@ public class APIv1 : Controller {
 
         // formátování dat
         string name = data["name"]?.ToString() ?? $"New Game {Random.Shared.Next()}";
-        string difficulty = data["difficulty"]?.ToString() ?? "intermediate";
+        string difficulty = data["difficulty"]?.ToString() ?? "medium";
         string board = data.GetValueOrDefault("board") switch {
             JsonElement jsonElement => jsonElement.ToString(),
             string strValue => strValue,
