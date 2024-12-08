@@ -27,14 +27,21 @@ public class GameBoard {
     }
 
     public GameBoard(string? boardJson) {
-        string[,]? deserializedBoard = JsonSerializer.Deserialize<string[,]>(boardJson);
+        var deserializedBoard = JsonSerializer.Deserialize<List<List<string>>>(boardJson);
         if (deserializedBoard == null) {
             Board = new string[15, 15];
             InitializeBoard();
             return;
         }
 
-        Board = deserializedBoard;
+        var board = new string[15, 15];
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
+                board[row, col] = deserializedBoard[row][col];
+            }
+        }
+
+        Board = board;
     }
 
     public GameBoard(byte size = 15) {
@@ -53,9 +60,46 @@ public class GameBoard {
             boardToList.Add(rowList);
         }
 
-        return JsonSerializer.Serialize(this);
+        return JsonSerializer.Serialize(boardToList);
     }
 
+    public bool ValidateBoard() {
+        bool sumCheck = true;
+        bool boardSizeCheck = true;
+        bool validValues = true;
+
+
+        // kontrola počtu X a O
+        int xCount = 0;
+        int oCount = 0;
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
+                if (Board[row, col] == "X") {
+                    xCount++;
+                } else if (Board[row, col] == "O") {
+                    oCount++;
+                }
+            }
+        }
+
+        // kontrola hodnot
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
+                if (Board[row, col] != "" && Board[row, col] != "X" && Board[row, col] != "O") {
+                    validValues = false;
+                    break;
+                }
+            }
+        }
+
+
+
+        sumCheck = xCount == oCount || xCount == oCount + 1;
+        boardSizeCheck = Board.GetLength(0) == 15 && Board.GetLength(1) == 15;
+
+
+        return sumCheck && boardSizeCheck && validValues;
+    }
 
     private void InitializeBoard() {
         for (int row = 0; row < 15; row++)

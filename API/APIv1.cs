@@ -70,6 +70,13 @@ public class APIv1 : Controller {
         var difficulty = _difficulty.ToString();
         var board = _board.ToString();
 
+        // kontrola validity boardu
+        var _b = JsonSerializer.Deserialize<List<List<string>>>(board ?? "[]");
+        if (_b == null || _b.Count != 15 || _b.Any(row => row.Count != 15)) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Board is not 15x15." });
+        if (!new GameBoard(board).ValidateBoard()) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Invalid board." });
+
+
+
         using var cmd = new MySqlCommand(@"
             UPDATE `games`
             SET 
