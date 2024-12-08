@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Text.Json;
 using MySql.Data.MySqlClient;
 
 namespace TdA25_Error_Makers.Classes;
@@ -57,7 +58,6 @@ public static class Utilities {
 
 
 #region rozšiřující metody
-
     public static Value? GetValueOrNull<Key, Value>(this IDictionary<Key, Value> dictionary, in Key? key) {
         if (key == null) return default;
         return dictionary.TryGetValue(key, out var value) ? value : default;
@@ -67,5 +67,11 @@ public static class Utilities {
         if(reader.IsDBNull(key)) return default;
         return (T)reader[key];
     }
+#endregion
+
+#region normální metody
+
+
+
 #endregion
 }

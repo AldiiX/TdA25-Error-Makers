@@ -1,0 +1,195 @@
+﻿using System.Text.Json;
+
+namespace TdA25_Error_Makers.Classes.Objects;
+
+
+
+
+
+public class GameBoard {
+
+    private string[,] Board { get; set; }
+    public enum Player { X, O }
+    //private byte Size { get; set; } = 15;
+
+    public GameBoard(string[,] board) {
+        Board = board;
+    }
+
+    public GameBoard(List<List<string>> board) {
+        Board = new string[15, 15];
+
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
+                Board[row, col] = board[row][col];
+            }
+        }
+    }
+
+    public GameBoard(string? boardJson) {
+        string[,]? deserializedBoard = JsonSerializer.Deserialize<string[,]>(boardJson);
+        if (deserializedBoard == null) {
+            Board = new string[15, 15];
+            InitializeBoard();
+            return;
+        }
+
+        Board = deserializedBoard;
+    }
+
+    public GameBoard(byte size = 15) {
+        Board = new string[size, size];
+        //Size = size;
+        InitializeBoard();
+    }
+
+    public override string ToString() {
+        var boardToList = new List<List<string>>();
+        for (int row = 0; row < 15; row++) {
+            var rowList = new List<string>();
+            for (int col = 0; col < 15; col++) {
+                rowList.Add(Board[row, col]);
+            }
+            boardToList.Add(rowList);
+        }
+
+        return JsonSerializer.Serialize(this);
+    }
+
+
+    private void InitializeBoard() {
+        for (int row = 0; row < 15; row++)
+        {
+            for (int col = 0; col < 15; col++)
+            {
+                Board[row, col] = "";
+            }
+        }
+    }
+
+
+
+    /*public void SetCell(int row, int col, string value) {
+        if(value != "X" && value != "O" && value != "") {
+            throw new ArgumentOutOfRangeException("Invalid value.");
+        }
+
+        if (!IsValidPosition(row, col)) {
+            throw new ArgumentOutOfRangeException("Invalid board position.");
+        }
+
+        Board[row, col] = value;
+    }
+
+    public string GetCell(int row, int col) {
+        if (IsValidPosition(row, col)) {
+            return Board[row, col];
+        }
+
+        throw new ArgumentOutOfRangeException("Invalid board position.");
+    }*/
+
+    private bool IsValidPosition(int row, int col) {
+        return row >= 0 && row < 15 && col >= 0 && col < 15;
+    }
+
+    public void ResetBoard() {
+        InitializeBoard();
+    }
+
+
+
+    public Player? CheckIfSomeoneWon() {
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
+                if (Board[row, col] != "") {
+                    if (CheckHorizontal(row, col) || CheckVertical(row, col) || CheckDiagonal(row, col)) {
+                        return Board[row, col] == "X" ? Player.X : Player.O;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public Player? CheckIfSomeoneCanWin() {
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
+                if (Board[row, col] == "") {
+
+                    // simulace X
+                    Board[row, col] = "X";
+                    if (CheckIfSomeoneWon() != null) {
+                        Board[row, col] = "";
+                        return Player.X;
+                    }
+
+                    Board[row, col] = "";
+
+                    // simulace O
+                    Board[row, col] = "O";
+                    if (CheckIfSomeoneWon() != null) {
+                        Board[row, col] = "";
+                        return Player.O;
+                    }
+
+                    Board[row, col] = "";
+                }
+            }
+        }
+
+        return null;
+    }
+
+
+    private bool CheckWin(int row, int col) => CheckHorizontal(row, col) || CheckVertical(row, col) || CheckDiagonal(row, col);
+
+    private bool CheckHorizontal(int row, int col) {
+        if (col + 4 >= 15) return false;
+        for (int i = 0; i < 5; i++) {
+            if (Board[row, col + i] != Board[row, col] || Board[row, col] == "") {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private bool CheckVertical(int row, int col) {
+        if (row + 4 >= 15) return false;
+        for (int i = 0; i < 5; i++) {
+            if (Board[row + i, col] != Board[row, col] || Board[row, col] == "") {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private bool CheckDiagonal(int row, int col) {
+        // 1. diagonální směr (\)
+        if (row + 4 < 15 && col + 4 < 15) {
+            bool diagonalMatch1 = true;
+            for (int i = 0; i < 5; i++) {
+                if (Board[row + i, col + i] != Board[row, col] || Board[row, col] == "") {
+                    diagonalMatch1 = false;
+                    break;
+                }
+            }
+            if (diagonalMatch1) return true;
+        }
+
+        // 2. diagonální směr (/)
+        if (row + 4 < 15 && col - 4 >= 0) {
+            bool diagonalMatch2 = true;
+            for (int i = 0; i < 5; i++) {
+                if (Board[row + i, col - i] != Board[row, col] || Board[row, col] == "") {
+                    diagonalMatch2 = false;
+                    break;
+                }
+            }
+            if (diagonalMatch2) return true;
+        }
+
+        return false;
+    }
+}
