@@ -139,7 +139,11 @@ public class APIv1 : Controller {
             gameJson["gameState"] = "endgame";
         } else {
             reader.Close();
-            using var endgameCmd = new MySqlCommand($"UPDATE `games` SET `game_state` = {(game.Round > 5 ? "'MIDGAME'" : "'OPENING'")} WHERE `uuid` = @uuid", conn);
+            using var endgameCmd = new MySqlCommand($@"
+                UPDATE `games`
+                SET `game_state` = IF(`round` + 1 > 6, 'MIDGAME', 'OPENING')
+                WHERE `uuid` = @uuid;
+            ", conn);
             endgameCmd.Parameters.AddWithValue("@uuid", uuid);
             endgameCmd.ExecuteNonQuery();
             gameJson["gameState"] = game.Round > 5 ? "midgame" : "opening";
