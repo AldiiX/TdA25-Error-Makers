@@ -12,7 +12,7 @@ public class Game {
 
     // picovinky
     public enum GameDifficulty { BEGINNER, EASY, MEDIUM, HARD, EXTREME }
-    public enum GameState { OPENING, MIDGAME, ENDING, FINISHED }
+    public enum GameState { OPENING, MIDGAME, ENDGAME, FINISHED }
 
 
 
@@ -20,6 +20,7 @@ public class Game {
     public string UUID { get; private set; }
     public string Name { get; private set; }
     public List<List<string>> Board { get; private set; }
+    public ushort Round { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
@@ -38,7 +39,7 @@ public class Game {
 
 
     // constructory
-    public Game(string uuid, string name, List<List<string>> board, GameDifficulty difficulty, DateTime createdAt, DateTime updatedAt, GameState state) {
+    public Game(string uuid, string name, List<List<string>> board, GameDifficulty difficulty, DateTime createdAt, DateTime updatedAt, GameState state, ushort round) {
         UUID = uuid;
         Name = name;
         Difficulty = difficulty;
@@ -46,6 +47,7 @@ public class Game {
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
         State = state;
+        Round = round;
     }
 
 
@@ -69,7 +71,8 @@ public class Game {
                     Enum.Parse<GameDifficulty>(reader.GetString("difficulty")),
                     reader.GetDateTime("created_at"),
                     reader.GetDateTime("updated_at"),
-                    Enum.Parse<GameState>(reader.GetString("game_state"))
+                    Enum.Parse<GameState>(reader.GetString("game_state")),
+                    reader.GetUInt16("round")
                 )
             );
         }
@@ -95,7 +98,8 @@ public class Game {
             Enum.Parse<GameDifficulty>(reader.GetString("difficulty")),
             reader.GetDateTime("created_at"),
             reader.GetDateTime("updated_at"),
-            Enum.Parse<GameState>(reader.GetString("game_state"))
+            Enum.Parse<GameState>(reader.GetString("game_state")),
+            reader.GetUInt16("round")
         );
     }
 
@@ -109,7 +113,8 @@ public class Game {
             !Enum.TryParse<GameDifficulty>(difficulty.ToUpper(), out var diff) ? GameDifficulty.BEGINNER : diff,
             DateTime.Now,
             DateTime.Now,
-            !Enum.TryParse<GameState>(gameState.ToUpper(), out var gms) ? GameState.OPENING : gms
+            !Enum.TryParse<GameState>(gameState.ToUpper(), out var gms) ? GameState.OPENING : gms,
+            1
         );
 
         using var conn = Database.GetConnection();

@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using TdA25_Error_Makers.Classes;
@@ -58,49 +59,82 @@ public class APIv1 : Controller {
 
     [HttpPut("games/{uuid}")]
     public IActionResult EditGame(string uuid, [FromBody] Dictionary<string, object> data) {
-        if (!data.ContainsKey("name") || !data.ContainsKey("difficulty") || !data.ContainsKey("board")) return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Missing required data." });
+        if (!data.TryGetValue("name", out object? _name) || !data.TryGetValue("difficulty", out object? _difficulty) || !data.TryGetValue("board", out object? _board)) {
+            return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Missing required data." });
+        }
 
         using var conn = Database.GetConnection();
         if (conn == null) return new StatusCodeResult(500);
+        
 
-        var name = data["name"].ToString();
-        var difficulty = data["difficulty"].ToString();
-        var board = data["board"].ToString();
+        var name = _name.ToString();
+        var difficulty = _difficulty.ToString();
+        var board = _board.ToString();
 
-        // aktualizace dat
-        using (var updateCmd = new MySqlCommand("UPDATE `games` SET `name` = @name, `difficulty` = @difficulty, `board` = @board WHERE `uuid` = @uuid", conn)) {
-            updateCmd.Parameters.AddWithValue("@name", name);
-            updateCmd.Parameters.AddWithValue("@difficulty", difficulty);
-            updateCmd.Parameters.AddWithValue("@board", board);
-            updateCmd.Parameters.AddWithValue("@uuid", uuid);
+        // kontrola validity boardu
+        var _b = JsonSerializer.Deserialize<List<List<string>>>(board ?? "[]");
+        if (_b == null || _b.Count != 15 || _b.Any(row => row.Count != 15)) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Board is not 15x15." });
+        if (!new GameBoard(board).ValidateBoard()) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Invalid board." });
 
-            int affectedRows = updateCmd.ExecuteNonQuery();
-            if (affectedRows == 0) {
-                return new NotFoundObjectResult(new { code = NotFound().StatusCode, message = "Game not found." });
-            }
+
+
+        using var cmd = new MySqlCommand(@"
+            UPDATE `games`
+            SET 
+                `name` = @name,
+                `difficulty` = @difficulty,
+                `board` = @board,
+                `round` = `round` + 1,
+                `game_state` = IF(`round` + 1 > 6, 'MIDGAME', `game_state`)
+            WHERE `uuid` = @uuid;
+            
+            SELECT * FROM games;
+        ", conn);
+
+        cmd.Parameters.AddWithValue("@name", name);
+        cmd.Parameters.AddWithValue("@difficulty", difficulty);
+        cmd.Parameters.AddWithValue("@board", board);
+        cmd.Parameters.AddWithValue("@uuid", uuid);
+
+        using var reader = cmd.ExecuteReader();
+        if (!reader.Read()) return new NotFoundObjectResult(new { code = NotFound().StatusCode, message = "Game not found." });
+
+
+        var game = new Game(
+            reader.GetString("uuid"),
+            reader.GetString("name"),
+            JsonSerializer.Deserialize<List<List<string>>>(reader.GetValueOrNull<string?>("board") ?? "[]") ?? new List<List<string>>(),
+            Enum.Parse<Game.GameDifficulty>(reader.GetString("difficulty")),
+            reader.GetDateTime("created_at"),
+            reader.GetDateTime("updated_at"),
+            Enum.Parse<Game.GameState>(reader.GetString("game_state")),
+            reader.GetUInt16("round")
+        );
+
+        var gameJson = JsonNode.Parse(JsonSerializer.Serialize(game));
+        if (gameJson == null) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Failed to serialize game." });
+
+
+        // nastavení hry na endgame
+        var boardObject = new GameBoard(JsonSerializer.Deserialize<List<List<string>>>(reader.GetValueOrNull<string?>("board")));
+        Console.WriteLine("Další tah: " + boardObject.GetNextPlayer());
+        Console.WriteLine("Může vyhrát: " + boardObject.CheckIfSomeoneCanWin());
+        Console.WriteLine("Vyhrál: " + boardObject.CheckIfSomeoneWon());
+        if(boardObject.CheckIfSomeoneCanWin() != null) {
+            reader.Close();
+            using var endgameCmd = new MySqlCommand("UPDATE `games` SET `game_state` = 'ENDGAME' WHERE `uuid` = @uuid", conn);
+            endgameCmd.Parameters.AddWithValue("@uuid", uuid);
+            endgameCmd.ExecuteNonQuery();
+            gameJson["gameState"] = "endgame";
+        } else {
+            reader.Close();
+            using var endgameCmd = new MySqlCommand($"UPDATE `games` SET `game_state` = {(game.Round > 5 ? "'MIDGAME'" : "'OPENING'")} WHERE `uuid` = @uuid", conn);
+            endgameCmd.Parameters.AddWithValue("@uuid", uuid);
+            endgameCmd.ExecuteNonQuery();
+            gameJson["gameState"] = game.Round > 5 ? "midgame" : "opening";
         }
 
-        // načtení hry
-        using (var selectCmd = new MySqlCommand("SELECT * FROM `games` WHERE `uuid` = @uuid", conn)) {
-            selectCmd.Parameters.AddWithValue("@uuid", uuid);
-
-            using var reader = selectCmd.ExecuteReader();
-            if (!reader.Read()) {
-                return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Failed to retrieve updated game." });
-            }
-
-            var game = new Game(
-                reader.GetString("uuid"),
-                reader.GetString("name"),
-                JsonSerializer.Deserialize<List<List<string>>>(reader.GetValueOrNull<string?>("board") ?? "[]") ?? new List<List<string>>(),
-                Enum.Parse<Game.GameDifficulty>(reader.GetString("difficulty")),
-                reader.GetDateTime("created_at"),
-                reader.GetDateTime("updated_at"),
-                Enum.Parse<Game.GameState>(reader.GetString("game_state"))
-            );
-
-            return new JsonResult(game){ ContentType = "application/json" };
-        }
+        return new OkObjectResult(gameJson);
     }
 
     [HttpDelete("games/{uuid}")]
