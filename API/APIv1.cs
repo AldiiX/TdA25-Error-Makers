@@ -85,27 +85,29 @@ public class APIv1 : Controller {
 
         // kontrola validity boardu
         var _b = JsonSerializer.Deserialize<List<List<string>>>(board ?? "[]");
+        var _bb = new GameBoard(board);
         if (_b == null || _b.Count != 15 || _b.Any(row => row.Count != 15)) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Board is not 15x15." });
-        if (!new GameBoard(board).ValidateBoard()) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Invalid board." });
+        if (!_bb.ValidateBoard()) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Invalid board." });
 
 
 
         using var cmd = new MySqlCommand(@"
-                    UPDATE `games`
-                    SET 
-                        `name` = @name,
-                        `difficulty` = @difficulty,
-                        `board` = @board,
-                        `round` = `round` + 1,
-                        `game_state` = IF(`round` + 1 > 6, 'MIDGAME', 'OPENING')
-                    WHERE `uuid` = @uuid;
-                    SELECT * FROM games;
-                ", conn);
+            UPDATE `games`
+            SET 
+                `name` = @name,
+                `difficulty` = @difficulty,
+                `board` = @board,
+                `round` = @round,
+                `game_state` = IF(`round` + 1 > 6, 'MIDGAME', 'OPENING')
+            WHERE `uuid` = @uuid;
+            SELECT * FROM games WHERE uuid = @uuid;
+        ", conn);
 
         cmd.Parameters.AddWithValue("@name", name);
         cmd.Parameters.AddWithValue("@difficulty", difficulty);
         cmd.Parameters.AddWithValue("@board", board);
         cmd.Parameters.AddWithValue("@uuid", uuid);
+        cmd.Parameters.AddWithValue("@round", _bb.GetRound());
 
         using var reader = cmd.ExecuteReader();
         if (!reader.Read()) return new NotFoundObjectResult(new { code = NotFound().StatusCode, message = "Game not found." });
@@ -128,6 +130,7 @@ public class APIv1 : Controller {
 
         // nastavení hry na endgame
         var boardObject = new GameBoard(JsonSerializer.Deserialize<List<List<string>>>(reader.GetValueOrNull<string?>("board")));
+        Console.WriteLine("Aktuální kolo: " + boardObject.GetRound());
         Console.WriteLine("Další tah: " + boardObject.GetNextPlayer());
         Console.WriteLine("Může vyhrát: " + boardObject.CheckIfSomeoneCanWin());
         Console.WriteLine("Vyhrál: " + boardObject.CheckIfSomeoneWon());

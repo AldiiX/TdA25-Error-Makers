@@ -63,6 +63,20 @@ public class GameBoard {
         return JsonSerializer.Serialize(boardToList);
     }
 
+    public ushort GetRound() {
+        ushort round = 0;
+
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
+                if (Board[row, col] != "") {
+                    round++;
+                }
+            }
+        }
+
+        return round;
+    }
+
     public bool ValidateBoard() {
         bool sumCheck = true;
         bool boardSizeCheck = true;
