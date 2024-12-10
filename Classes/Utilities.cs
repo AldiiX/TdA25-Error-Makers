@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Text.Json;
 using MySql.Data.MySqlClient;
 
 namespace TdA25_Error_Makers.Classes;

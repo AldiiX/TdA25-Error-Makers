@@ -141,6 +141,25 @@ public class GameBoard {
         InitializeBoard();
     }
 
+    /**
+     * metoda na zjištění, kdo je na tahu (vždy začíná X)
+     */
+    public Player GetNextPlayer() {
+        int xCount = 0;
+        int oCount = 0;
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
+                if (Board[row, col] == "X") {
+                    xCount++;
+                } else if (Board[row, col] == "O") {
+                    oCount++;
+                }
+            }
+        }
+
+        return xCount == oCount ? Player.X : Player.O;
+    }
+
 
 
     public Player? CheckIfSomeoneWon() {
@@ -164,7 +183,7 @@ public class GameBoard {
 
                     // simulace X
                     Board[row, col] = "X";
-                    if (CheckIfSomeoneWon() != null) {
+                    if (CheckIfSomeoneWon() != null && GetNextPlayer() == Player.O) {
                         Board[row, col] = "";
                         return Player.X;
                     }
@@ -173,7 +192,7 @@ public class GameBoard {
 
                     // simulace O
                     Board[row, col] = "O";
-                    if (CheckIfSomeoneWon() != null) {
+                    if (CheckIfSomeoneWon() != null && GetNextPlayer() == Player.X) {
                         Board[row, col] = "";
                         return Player.O;
                     }

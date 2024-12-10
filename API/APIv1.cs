@@ -65,6 +65,7 @@ public class APIv1 : Controller {
 
         using var conn = Database.GetConnection();
         if (conn == null) return new StatusCodeResult(500);
+        
 
         var name = _name.ToString();
         var difficulty = _difficulty.ToString();
@@ -116,6 +117,7 @@ public class APIv1 : Controller {
 
         // nastavení hry na endgame
         var boardObject = new GameBoard(JsonSerializer.Deserialize<List<List<string>>>(reader.GetValueOrNull<string?>("board")));
+        Console.WriteLine("Další tah: " + boardObject.GetNextPlayer());
         Console.WriteLine("Může vyhrát: " + boardObject.CheckIfSomeoneCanWin());
         Console.WriteLine("Vyhrál: " + boardObject.CheckIfSomeoneWon());
         if(boardObject.CheckIfSomeoneCanWin() != null) {
@@ -131,7 +133,6 @@ public class APIv1 : Controller {
             endgameCmd.ExecuteNonQuery();
             gameJson["gameState"] = game.Round > 5 ? "midgame" : "opening";
         }
-
 
         return new OkObjectResult(gameJson);
     }
