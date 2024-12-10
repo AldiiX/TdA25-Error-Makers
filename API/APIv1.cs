@@ -24,6 +24,8 @@ public class APIv1 : Controller {
     [HttpPost("games")]
     public IActionResult CreateGame([FromBody] Dictionary<string, object?> data) {
         if (!data.ContainsKey("name") || !data.ContainsKey("difficulty")) return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Missing required data." });
+        if (!data.ContainsKey("board") || data["board"] == null)
+            return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Missing required board data." });
 
         using var conn = Database.GetConnection();
         if (conn == null) return new StatusCodeResult(500);
@@ -41,6 +43,16 @@ public class APIv1 : Controller {
             string strValue => strValue,
             _ => "opening"
         };
+
+        // kontrola validity boardu
+        var _b = JsonSerializer.Deserialize<List<List<string>>>(board ?? "[]");
+        if (_b == null || _b.Count != 15 || _b.Any(row => row.Count != 15))
+            return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Board is not 15x15." });
+
+        if (!new GameBoard(board).ValidateBoard())
+            return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Invalid board." });
+
+
 
         // vytvoření hry
         var createdGame = Game.Create(name, difficulty, board, gameState, true);
@@ -79,17 +91,16 @@ public class APIv1 : Controller {
 
 
         using var cmd = new MySqlCommand(@"
-            UPDATE `games`
-            SET 
-                `name` = @name,
-                `difficulty` = @difficulty,
-                `board` = @board,
-                `round` = `round` + 1,
-                `game_state` = IF(`round` + 1 > 6, 'MIDGAME', `game_state`)
-            WHERE `uuid` = @uuid;
-            
-            SELECT * FROM games;
-        ", conn);
+                    UPDATE `games`
+                    SET 
+                        `name` = @name,
+                        `difficulty` = @difficulty,
+                        `board` = @board,
+                        `round` = `round` + 1,
+                        `game_state` = IF(`round` + 1 > 6, 'MIDGAME', 'OPENING')
+                    WHERE `uuid` = @uuid;
+                    SELECT * FROM games;
+                ", conn);
 
         cmd.Parameters.AddWithValue("@name", name);
         cmd.Parameters.AddWithValue("@difficulty", difficulty);
