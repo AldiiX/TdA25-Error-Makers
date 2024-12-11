@@ -19,10 +19,15 @@ public class Game {
     // vlastnosti
     public string UUID { get; private set; }
     public string Name { get; private set; }
-    public GameBoard Board { get; private set; }
     public ushort Round { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
+
+    [JsonIgnore]
+    public GameBoard Board { get; private set; }
+
+    [JsonInclude, JsonPropertyName("board")]
+    private List<List<string>> json_Board => Board.ToList();
 
     [JsonIgnore]
     public GameState State { get; private set; }
@@ -133,7 +138,7 @@ public class Game {
         cmd.Parameters.AddWithValue("@uuid", game.UUID);
         cmd.Parameters.AddWithValue("@name", game.Name);
         cmd.Parameters.AddWithValue("@difficulty", game.Difficulty.ToString());
-        cmd.Parameters.AddWithValue("@board", JsonSerializer.Serialize(game.Board));
+        cmd.Parameters.AddWithValue("@board", game.Board.ToString());
         cmd.Parameters.AddWithValue("@created_at", game.CreatedAt);
         cmd.Parameters.AddWithValue("@updated_at", game.UpdatedAt);
         cmd.Parameters.AddWithValue("@game_state", gmss.ToString());
