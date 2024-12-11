@@ -74,7 +74,7 @@ public class GameBoard {
             }
         }
 
-        return round;
+        return (ushort)(round - 1);
     }
 
     public bool ValidateBoard() {
