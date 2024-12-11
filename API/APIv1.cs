@@ -119,12 +119,13 @@ public class APIv1 : Controller {
 
 
         // nastavení hry na endgame
-        Console.WriteLine($"\n---------{DateTime.Now.ToLocalTime()}-----------");
+        /*Console.WriteLine($"\n---------{DateTime.Now.ToLocalTime()}-----------");
         Console.WriteLine("Aktuální kolo: " + game.Board.GetRound());
         Console.WriteLine("Další tah: " + game.Board.GetNextPlayer());
         Console.WriteLine("Může vyhrát: " + game.Board.CheckIfSomeoneCanWin());
         Console.WriteLine("Vyhrál: " + game.Board.CheckIfSomeoneWon());
-        Console.WriteLine("------------------------------------");
+        Console.WriteLine("------------------------------------");*/
+
         if(game.Board.CheckIfSomeoneCanWin() != null) {
             reader.Close();
             using var endgameCmd = new MySqlCommand("UPDATE `games` SET `game_state` = 'ENDGAME' WHERE `uuid` = @uuid", conn);
