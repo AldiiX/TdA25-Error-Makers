@@ -2,7 +2,6 @@ global using HCS = TdA25_Error_Makers.Services.HttpContextService;
 using dotenv.net;
 using StackExchange.Redis;
 using TdA25_Error_Makers.Classes;
-using TdA25_Error_Makers.Middlewares;
 using TdA25_Error_Makers.Services;
 
 namespace TdA25_Error_Makers;
@@ -72,7 +71,7 @@ public static class Program {
         
         // Konfigurace HttpContextService
         var httpContextAccessor = App.Services.GetRequiredService<IHttpContextAccessor>();
-        HttpContextService.Configure(httpContextAccessor);
+        HCS.Configure(httpContextAccessor);
         
 
         
