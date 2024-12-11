@@ -130,10 +130,12 @@ public class APIv1 : Controller {
 
         // nastavení hry na endgame
         var boardObject = new GameBoard(JsonSerializer.Deserialize<List<List<string>>>(reader.GetValueOrNull<string?>("board")));
+        Console.WriteLine($"\n---------{DateTime.Now.ToLocalTime()}-----------");
         Console.WriteLine("Aktuální kolo: " + boardObject.GetRound());
         Console.WriteLine("Další tah: " + boardObject.GetNextPlayer());
         Console.WriteLine("Může vyhrát: " + boardObject.CheckIfSomeoneCanWin());
         Console.WriteLine("Vyhrál: " + boardObject.CheckIfSomeoneWon());
+        Console.WriteLine("------------------------------------");
         if(boardObject.CheckIfSomeoneCanWin() != null) {
             reader.Close();
             using var endgameCmd = new MySqlCommand("UPDATE `games` SET `game_state` = 'ENDGAME' WHERE `uuid` = @uuid", conn);

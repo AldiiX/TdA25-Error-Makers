@@ -117,17 +117,26 @@ public class Game {
             1
         );
 
+        // zpracování boardy
+        var boardObj = new GameBoard(board);
+        if (!boardObj.ValidateBoard()) return null;
+        var gmss = boardObj.GetRound() + 1 > 6 ? GameState.MIDGAME : GameState.OPENING;
+        if(boardObj.CheckIfSomeoneCanWin() != null || boardObj.CheckIfSomeoneWon() != null) gmss = GameState.ENDGAME;
+
+
+
         using var conn = Database.GetConnection();
         if (conn == null) return null;
 
-        using var cmd = new MySqlCommand("INSERT INTO `games` (`uuid`, `name`, `difficulty`, `board`, `created_at`, `updated_at`, `game_state`) VALUES (@uuid, @name, @difficulty, @board, @created_at, @updated_at, @game_state)", conn);
+        using var cmd = new MySqlCommand("INSERT INTO `games` (`uuid`, `name`, `difficulty`, `board`, `created_at`, `updated_at`, `game_state`, `round`) VALUES (@uuid, @name, @difficulty, @board, @created_at, @updated_at, @game_state, @round)", conn);
         cmd.Parameters.AddWithValue("@uuid", game.UUID);
         cmd.Parameters.AddWithValue("@name", game.Name);
         cmd.Parameters.AddWithValue("@difficulty", game.Difficulty.ToString());
         cmd.Parameters.AddWithValue("@board", JsonSerializer.Serialize(game.Board));
         cmd.Parameters.AddWithValue("@created_at", game.CreatedAt);
         cmd.Parameters.AddWithValue("@updated_at", game.UpdatedAt);
-        cmd.Parameters.AddWithValue("@game_state", game.State.ToString());
+        cmd.Parameters.AddWithValue("@game_state", gmss);
+        cmd.Parameters.AddWithValue("@round", boardObj.GetRound());
 
         int res = 0;
         try {
