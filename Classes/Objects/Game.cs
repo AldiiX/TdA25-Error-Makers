@@ -106,6 +106,12 @@ public class Game {
     public static Game? GetByUUID(in string uuid) => GetByUUIDAsync(uuid).Result;
 
     public static Game? Create(string name, string difficulty, string? board, string gameState, bool insertToDatabase = false) {
+        // zpracování boardy
+        var boardObj = new GameBoard(board);
+        if (!boardObj.ValidateBoard()) return null;
+        GameState gmss = boardObj.GetRound() + 1 > 6 ? GameState.MIDGAME : GameState.OPENING;
+        if(boardObj.CheckIfSomeoneCanWin() != null || boardObj.CheckIfSomeoneWon() != null) gmss = GameState.ENDGAME;
+
         var game = new Game(
             Guid.NewGuid().ToString(),
             name,
@@ -113,15 +119,10 @@ public class Game {
             !Enum.TryParse<GameDifficulty>(difficulty.ToUpper(), out var diff) ? GameDifficulty.BEGINNER : diff,
             DateTime.Now,
             DateTime.Now,
-            !Enum.TryParse<GameState>(gameState.ToUpper(), out var gms) ? GameState.OPENING : gms,
-            1
+            gmss,
+            boardObj.GetRound()
         );
 
-        // zpracování boardy
-        var boardObj = new GameBoard(board);
-        if (!boardObj.ValidateBoard()) return null;
-        var gmss = boardObj.GetRound() + 1 > 6 ? GameState.MIDGAME : GameState.OPENING;
-        if(boardObj.CheckIfSomeoneCanWin() != null || boardObj.CheckIfSomeoneWon() != null) gmss = GameState.ENDGAME;
 
 
 
@@ -135,7 +136,7 @@ public class Game {
         cmd.Parameters.AddWithValue("@board", JsonSerializer.Serialize(game.Board));
         cmd.Parameters.AddWithValue("@created_at", game.CreatedAt);
         cmd.Parameters.AddWithValue("@updated_at", game.UpdatedAt);
-        cmd.Parameters.AddWithValue("@game_state", gmss);
+        cmd.Parameters.AddWithValue("@game_state", gmss.ToString());
         cmd.Parameters.AddWithValue("@round", boardObj.GetRound());
 
         int res = 0;
