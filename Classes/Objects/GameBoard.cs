@@ -64,7 +64,7 @@ public class GameBoard {
     }
 
     public ushort GetRound() {
-        ushort round = 0;
+        ushort round = 1;
 
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
@@ -193,26 +193,36 @@ public class GameBoard {
     public Player? CheckIfSomeoneCanWin() {
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
-                if (Board[row, col] == "") {
+                if (Board[row, col] != "") continue;
 
-                    // simulace X
-                    Board[row, col] = "X";
-                    if (CheckIfSomeoneWon() != null && GetNextPlayer() == Player.O) {
-                        Board[row, col] = "";
-                        return Player.X;
+                // simulace tahu aktuálního hráče
+                Player? currentPlayer = GetNextPlayer();
+
+                switch (currentPlayer) {
+                    case Player.X: {
+                        // simulace X
+                        Board[row, col] = "X";
+                        if (CheckIfSomeoneWon() == Player.X) {
+                            Board[row, col] = "";
+                            return Player.X;
+                        }
+
+                        break;
                     }
+                    case Player.O: {
+                        // simulace O
+                        Board[row, col] = "O";
+                        if (CheckIfSomeoneWon() == Player.O) {
+                            Board[row, col] = "";
+                            return Player.O;
+                        }
 
-                    Board[row, col] = "";
-
-                    // simulace O
-                    Board[row, col] = "O";
-                    if (CheckIfSomeoneWon() != null && GetNextPlayer() == Player.X) {
-                        Board[row, col] = "";
-                        return Player.O;
+                        break;
                     }
-
-                    Board[row, col] = "";
                 }
+
+                // reset pole
+                Board[row, col] = "";
             }
         }
 
