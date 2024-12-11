@@ -38,11 +38,6 @@ public class APIv1 : Controller {
             string strValue => strValue,
             _ => "[]"
         };
-        string gameState = data.GetValueOrDefault("gameState") switch {
-            JsonElement jsonElement => jsonElement.ToString(),
-            string strValue => strValue,
-            _ => "opening"
-        };
 
         // kontrola validity boardu
         var _b = JsonSerializer.Deserialize<List<List<string>>>(board ?? "[]");
@@ -55,7 +50,7 @@ public class APIv1 : Controller {
 
 
         // vytvoření hry
-        var createdGame = Game.Create(name, difficulty, board, gameState, true);
+        var createdGame = Game.Create(name, difficulty, board, true);
         if(createdGame == null) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Failed to create game." });
 
         return new JsonResult(createdGame){ StatusCode = 201, ContentType = "application/json" };
@@ -88,7 +83,7 @@ public class APIv1 : Controller {
         var _bb = new GameBoard(board);
         if (_b == null || _b.Count != 15 || _b.Any(row => row.Count != 15)) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Board is not 15x15." });
         if (!_bb.ValidateBoard()) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Invalid board." });
-
+        Game.GameState gameState = _bb.CheckIfSomeoneCanWin() != null || _bb.CheckIfSomeoneWon() != null ? Game.GameState.ENDGAME : _bb.GetRound() > 5 ? Game.GameState.MIDGAME : Game.GameState.OPENING;
 
 
         using var cmd = new MySqlCommand(@"
@@ -98,7 +93,7 @@ public class APIv1 : Controller {
                 `difficulty` = @difficulty,
                 `board` = @board,
                 `round` = @round,
-                `game_state` = IF(`round` + 1 > 6, 'MIDGAME', 'OPENING')
+                `game_state` = @gameState
             WHERE `uuid` = @uuid;
             SELECT * FROM games WHERE uuid = @uuid;
         ", conn);
@@ -108,6 +103,7 @@ public class APIv1 : Controller {
         cmd.Parameters.AddWithValue("@board", board);
         cmd.Parameters.AddWithValue("@uuid", uuid);
         cmd.Parameters.AddWithValue("@round", _bb.GetRound());
+        cmd.Parameters.AddWithValue("@gameState", gameState.ToString());
 
         using var reader = cmd.ExecuteReader();
         if (!reader.Read()) return new NotFoundObjectResult(new { code = NotFound().StatusCode, message = "Game not found." });

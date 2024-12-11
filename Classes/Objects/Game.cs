@@ -105,7 +105,7 @@ public class Game {
 
     public static Game? GetByUUID(in string uuid) => GetByUUIDAsync(uuid).Result;
 
-    public static Game? Create(string name, string difficulty, string? board, string gameState, bool insertToDatabase = false) {
+    public static Game? Create(string name, string difficulty, string? board, bool insertToDatabase = false) {
         // zpracování boardy
         var boardObj = new GameBoard(board);
         if (!boardObj.ValidateBoard()) return null;
