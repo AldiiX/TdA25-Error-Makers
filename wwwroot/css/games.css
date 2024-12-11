@@ -1,0 +1,70 @@
+@charset "UTF-8";
+.sections > .mainsection > .texts {
+  margin-bottom: 96px;
+}
+.sections > .mainsection > .texts > h1 {
+  font-size: clamp(48px, 5vw, 128px);
+  color: var(--accent-color-primary);
+  text-align: center;
+  margin: 0;
+}
+.sections > .mainsection > .texts > .inputs {
+  text-align: center;
+}
+.sections > .mainsection > .texts > .inputs > input {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.games-parent {
+  display: grid;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 20px;
+  grid-template-columns: repeat(6, 1fr); /* 6 sloupců stejné šířky */
+}
+.games-parent > .child {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 10px #ccc;
+  transition: all 0.3s ease-in-out;
+}
+.games-parent > .child:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #ccc;
+}
+.games-parent > .child img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+.games-parent > .child h3 {
+  font-size: 1.5rem;
+  color: #333;
+}
+.games-parent > .child p {
+  font-size: 1rem;
+  color: #666;
+}
+.games-parent > .child a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1rem;
+  padding: 5px 10px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+}
+.games-parent > .child a:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+/*# sourceMappingURL=games.css.map */

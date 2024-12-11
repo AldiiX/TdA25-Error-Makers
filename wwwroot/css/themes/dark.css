@@ -6,8 +6,10 @@
     --background-color: var(--background-color-primary);
     --background-color-secondary: #1A1A1A;
     --accent-color-primary: #0070BB;
+    --accent-color-primary-darker: #005288;
     --accent-color: var(--accent-color-primary);
     --accent-color-secondary: #E31837;
+    --accent-color-secondary-darker: #a11127;
     --accent-color-additional-1: #AB2E58;
     --accent-color-additional-2: #724479;
     --accent-color-additional-3: #395A9A;

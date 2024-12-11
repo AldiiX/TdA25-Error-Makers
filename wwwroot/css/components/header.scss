@@ -1,0 +1,47 @@
+﻿.header-5F015D44-0984-4A50-B52B-5319AE57C19C {
+    position: fixed;
+    background: white;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+    border-radius: 40px;
+    width: 85%;
+    height: 80px;
+    margin-top: 2.5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    z-index: 3;
+
+
+    >.flex {
+        position: relative;
+        display: flex;
+        height: 100%;
+        width: 90%;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 auto;
+
+        >.Login {
+            width: fit-content;
+
+            button{
+                //background: rgba(26, 26, 26, 0.5);
+                //color: var(--text-color-primary);
+                border: none;
+                border-radius: 12px;
+                padding: 10px 20px;
+                cursor: pointer;
+                margin: 0;
+            }
+        }
+
+        >.Header-Logo {
+            height: 50px;
+            aspect-ratio: 150/47;
+            display: flex;
+            pointer-events: none;
+        }
+    }
+
+
+}

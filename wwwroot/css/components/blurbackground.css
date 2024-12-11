@@ -1,0 +1,44 @@
+.bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433 {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  filter: blur(20vw);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: -1;
+}
+.bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433 .one, .bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433 .two {
+  width: 32vw;
+}
+.bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433 .one {
+  position: absolute;
+  aspect-ratio: 1/1;
+  background-color: var(--accent-color-secondary);
+  bottom: -10vw;
+  left: -5vw;
+  border-radius: 100%;
+  animation: blobanim 10s infinite ease;
+}
+.bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433 .two {
+  position: absolute;
+  aspect-ratio: 1/1;
+  background-color: var(--accent-color-primary);
+  top: -10vw;
+  right: -5vw;
+  border-radius: 100%;
+  animation: blobanim 15s infinite ease;
+  animation-delay: 2.5s;
+}
+@keyframes blobanim {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.18);
+  }
+}
+
+/*# sourceMappingURL=blurbackground.css.map */
