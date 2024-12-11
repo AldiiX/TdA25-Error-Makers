@@ -72,7 +72,7 @@ public class Game {
                 new Game(
                     reader.GetString("uuid"),
                     reader.GetString("name"),
-                     GameBoard.Parse(reader.GetValueOrNull<string?>("board")),
+                    GameBoard.Parse(reader.GetValueOrNull<string?>("board")),
                     Enum.Parse<GameDifficulty>(reader.GetString("difficulty")),
                     reader.GetDateTime("created_at"),
                     reader.GetDateTime("updated_at"),

@@ -37,7 +37,7 @@ public class APIv1 : Controller {
         string difficulty = data["difficulty"]?.ToString() ?? "medium";
         GameBoard? board =
             !data.TryGetValue("board", out var _bb) ?
-                GameBoard.Create() :
+                GameBoard.CreateNew() :
             GameBoard.TryParse(_bb?.ToString(), out var _b) ?
                 _b : null;
 

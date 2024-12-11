@@ -28,8 +28,12 @@ public class GameBoard {
     }
 
     private GameBoard(string? boardJson) {
-        var deserializedBoard = JsonSerializer.Deserialize<List<List<string>>>(boardJson);
-        if (deserializedBoard == null) {
+        List<List<string>>? deserializedBoard = null;
+        try {
+            JsonSerializer.Deserialize<List<List<string>>>(boardJson);
+        } catch { /*_*/ }
+
+        if (deserializedBoard == null || boardJson == null) {
             Board = new string[15, 15];
             InitializeBoard();
             return;
@@ -88,7 +92,7 @@ public class GameBoard {
         }
     }
 
-    public static GameBoard Create() => new GameBoard();
+    public static GameBoard CreateNew() => new GameBoard();
 
     public override string ToString() {
         var boardToList = new List<List<string>>();
