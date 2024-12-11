@@ -12,11 +12,11 @@ public class GameBoard {
     public enum Player { X, O }
     //private byte Size { get; set; } = 15;
 
-    public GameBoard(string[,] board) {
+    private GameBoard(string[,] board) {
         Board = board;
     }
 
-    public GameBoard(List<List<string>> board) {
+    private GameBoard(List<List<string>> board) {
         Board = new string[15, 15];
 
         for (int row = 0; row < 15; row++) {
@@ -26,7 +26,7 @@ public class GameBoard {
         }
     }
 
-    public GameBoard(string? boardJson) {
+    private GameBoard(string? boardJson) {
         var deserializedBoard = JsonSerializer.Deserialize<List<List<string>>>(boardJson);
         if (deserializedBoard == null) {
             Board = new string[15, 15];
@@ -44,11 +44,50 @@ public class GameBoard {
         Board = board;
     }
 
-    public GameBoard(byte size = 15) {
+    private GameBoard(byte size = 15) {
         Board = new string[size, size];
         //Size = size;
         InitializeBoard();
     }
+
+
+
+    // metody
+    public static GameBoard Parse(string[,] board) => new GameBoard(board);
+    public static GameBoard Parse(List<List<string>> board) => new GameBoard(board);
+    public static GameBoard Parse(string? board) => new GameBoard(board);
+
+    public static bool TryParse(string? board, out GameBoard gameBoard) {
+        try {
+            gameBoard = new GameBoard(board);
+            return true;
+        } catch {
+            gameBoard = new GameBoard();
+            return false;
+        }
+    }
+
+    public static bool TryParse(string[,] board, out GameBoard gameBoard) {
+        try {
+            gameBoard = new GameBoard(board);
+            return true;
+        } catch {
+            gameBoard = new GameBoard();
+            return false;
+        }
+    }
+
+    public static bool TryParse(List<List<string>> board, out GameBoard gameBoard) {
+        try {
+            gameBoard = new GameBoard(board);
+            return true;
+        } catch {
+            gameBoard = new GameBoard();
+            return false;
+        }
+    }
+
+    public static GameBoard Create() => new GameBoard();
 
     public override string ToString() {
         var boardToList = new List<List<string>>();
@@ -77,7 +116,8 @@ public class GameBoard {
         return (ushort)(round - 1);
     }
 
-    public bool ValidateBoard() {
+    public bool IsValid() {
+        var bl = this.ToList();
         bool sumCheck = true;
         bool boardSizeCheck = true;
         bool validValues = true;
@@ -109,7 +149,7 @@ public class GameBoard {
 
 
         sumCheck = xCount == oCount || xCount == oCount + 1;
-        boardSizeCheck = Board.GetLength(0) == 15 && Board.GetLength(1) == 15;
+        boardSizeCheck = bl.Count == 15 && bl.Any(row => row.Count == 15);
 
 
         return sumCheck && boardSizeCheck && validValues;
@@ -150,6 +190,21 @@ public class GameBoard {
     private bool IsValidPosition(int row, int col) {
         return row >= 0 && row < 15 && col >= 0 && col < 15;
     }
+
+    public List<List<string>> ToList() {
+        var boardToList = new List<List<string>>();
+        for (int row = 0; row < 15; row++) {
+            var rowList = new List<string>();
+            for (int col = 0; col < 15; col++) {
+                rowList.Add(Board[row, col]);
+            }
+            boardToList.Add(rowList);
+        }
+
+        return boardToList;
+    }
+
+    public Game.GameState GetGameState() => CheckIfSomeoneCanWin() != null || CheckIfSomeoneWon() != null ? Game.GameState.ENDGAME : GetRound() > 5 ? Game.GameState.MIDGAME : Game.GameState.OPENING;
 
     public void ResetBoard() {
         InitializeBoard();

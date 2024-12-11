@@ -30,22 +30,18 @@ public class APIv1 : Controller {
         using var conn = Database.GetConnection();
         if (conn == null) return new StatusCodeResult(500);
 
+
+
         // formátování dat
         string name = data["name"]?.ToString() ?? $"New Game {Random.Shared.Next()}";
         string difficulty = data["difficulty"]?.ToString() ?? "medium";
-        string board = data.GetValueOrDefault("board") switch {
-            JsonElement jsonElement => jsonElement.ToString(),
-            string strValue => strValue,
-            _ => "[]"
-        };
+        GameBoard? board =
+            !data.TryGetValue("board", out var _bb) ?
+                GameBoard.Create() :
+            GameBoard.TryParse(_bb?.ToString(), out var _b) ?
+                _b : null;
 
-        // kontrola validity boardu
-        var _b = JsonSerializer.Deserialize<List<List<string>>>(board ?? "[]");
-        if (_b == null || _b.Count != 15 || _b.Any(row => row.Count != 15))
-            return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Board is not 15x15." });
-
-        if (!new GameBoard(board).ValidateBoard())
-            return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Invalid board." });
+        if (board == null || !board.IsValid()) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Board is not valid." });
 
 
 
@@ -79,11 +75,9 @@ public class APIv1 : Controller {
         var board = _board.ToString();
 
         // kontrola validity boardu
-        var _b = JsonSerializer.Deserialize<List<List<string>>>(board ?? "[]");
-        var _bb = new GameBoard(board);
-        if (_b == null || _b.Count != 15 || _b.Any(row => row.Count != 15)) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Board is not 15x15." });
-        if (!_bb.ValidateBoard()) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Invalid board." });
-        Game.GameState gameState = _bb.CheckIfSomeoneCanWin() != null || _bb.CheckIfSomeoneWon() != null ? Game.GameState.ENDGAME : _bb.GetRound() > 5 ? Game.GameState.MIDGAME : Game.GameState.OPENING;
+        if(!GameBoard.TryParse(board, out var _b)) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Failed to parse board." });
+        if (!_b.IsValid()) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Board is not 15x15." });
+        var gameState = _b.GetGameState();
 
 
         using var cmd = new MySqlCommand(@"
@@ -102,7 +96,7 @@ public class APIv1 : Controller {
         cmd.Parameters.AddWithValue("@difficulty", difficulty);
         cmd.Parameters.AddWithValue("@board", board);
         cmd.Parameters.AddWithValue("@uuid", uuid);
-        cmd.Parameters.AddWithValue("@round", _bb.GetRound());
+        cmd.Parameters.AddWithValue("@round", _b.GetRound());
         cmd.Parameters.AddWithValue("@gameState", gameState.ToString());
 
         using var reader = cmd.ExecuteReader();
@@ -112,7 +106,7 @@ public class APIv1 : Controller {
         var game = new Game(
             reader.GetString("uuid"),
             reader.GetString("name"),
-            JsonSerializer.Deserialize<List<List<string>>>(reader.GetValueOrNull<string?>("board") ?? "[]") ?? new List<List<string>>(),
+            GameBoard.Parse(reader.GetValueOrNull<string?>("board")),
             Enum.Parse<Game.GameDifficulty>(reader.GetString("difficulty")),
             reader.GetDateTime("created_at"),
             reader.GetDateTime("updated_at"),
@@ -125,14 +119,13 @@ public class APIv1 : Controller {
 
 
         // nastavení hry na endgame
-        var boardObject = new GameBoard(JsonSerializer.Deserialize<List<List<string>>>(reader.GetValueOrNull<string?>("board")));
         Console.WriteLine($"\n---------{DateTime.Now.ToLocalTime()}-----------");
-        Console.WriteLine("Aktuální kolo: " + boardObject.GetRound());
-        Console.WriteLine("Další tah: " + boardObject.GetNextPlayer());
-        Console.WriteLine("Může vyhrát: " + boardObject.CheckIfSomeoneCanWin());
-        Console.WriteLine("Vyhrál: " + boardObject.CheckIfSomeoneWon());
+        Console.WriteLine("Aktuální kolo: " + game.Board.GetRound());
+        Console.WriteLine("Další tah: " + game.Board.GetNextPlayer());
+        Console.WriteLine("Může vyhrát: " + game.Board.CheckIfSomeoneCanWin());
+        Console.WriteLine("Vyhrál: " + game.Board.CheckIfSomeoneWon());
         Console.WriteLine("------------------------------------");
-        if(boardObject.CheckIfSomeoneCanWin() != null) {
+        if(game.Board.CheckIfSomeoneCanWin() != null) {
             reader.Close();
             using var endgameCmd = new MySqlCommand("UPDATE `games` SET `game_state` = 'ENDGAME' WHERE `uuid` = @uuid", conn);
             endgameCmd.Parameters.AddWithValue("@uuid", uuid);
