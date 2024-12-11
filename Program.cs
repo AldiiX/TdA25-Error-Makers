@@ -71,7 +71,7 @@ public static class Program {
         
         // Konfigurace HttpContextService
         var httpContextAccessor = App.Services.GetRequiredService<IHttpContextAccessor>();
-        HttpContextService.Configure(httpContextAccessor);
+        HCS.Configure(httpContextAccessor);
         
 
         
