@@ -19,10 +19,15 @@ public class Game {
     // vlastnosti
     public string UUID { get; private set; }
     public string Name { get; private set; }
-    public List<List<string>> Board { get; private set; }
     public ushort Round { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
+
+    [JsonIgnore]
+    public GameBoard Board { get; private set; }
+
+    [JsonInclude, JsonPropertyName("board")]
+    private List<List<string>> json_Board => Board.ToList();
 
     [JsonIgnore]
     public GameState State { get; private set; }
@@ -39,7 +44,7 @@ public class Game {
 
 
     // constructory
-    public Game(string uuid, string name, List<List<string>> board, GameDifficulty difficulty, DateTime createdAt, DateTime updatedAt, GameState state, ushort round) {
+    public Game(string uuid, string name, GameBoard board, GameDifficulty difficulty, DateTime createdAt, DateTime updatedAt, GameState state, ushort round) {
         UUID = uuid;
         Name = name;
         Difficulty = difficulty;
@@ -67,7 +72,7 @@ public class Game {
                 new Game(
                     reader.GetString("uuid"),
                     reader.GetString("name"),
-                    JsonSerializer.Deserialize<List<List<string>>>(reader.GetValueOrNull<string?>("board") ?? "[]") ?? [],
+                     GameBoard.Parse(reader.GetValueOrNull<string?>("board")),
                     Enum.Parse<GameDifficulty>(reader.GetString("difficulty")),
                     reader.GetDateTime("created_at"),
                     reader.GetDateTime("updated_at"),
@@ -94,7 +99,7 @@ public class Game {
         return new Game(
             reader.GetString("uuid"),
             reader.GetString("name"),
-            JsonSerializer.Deserialize<List<List<string>>>(reader.GetValueOrNull<string?>("board") ?? "[]") ?? [],
+            GameBoard.Parse(reader.GetValueOrNull<string?>("board")),
             Enum.Parse<GameDifficulty>(reader.GetString("difficulty")),
             reader.GetDateTime("created_at"),
             reader.GetDateTime("updated_at"),
@@ -105,22 +110,22 @@ public class Game {
 
     public static Game? GetByUUID(in string uuid) => GetByUUIDAsync(uuid).Result;
 
-    public static Game? Create(string name, string difficulty, string? board, bool insertToDatabase = false) {
+    public static Game? Create(string name, string difficulty, GameBoard board, bool insertToDatabase = false) {
+
         // zpracování boardy
-        var boardObj = new GameBoard(board);
-        if (!boardObj.ValidateBoard()) return null;
-        GameState gmss = boardObj.GetRound() + 1 > 6 ? GameState.MIDGAME : GameState.OPENING;
-        if(boardObj.CheckIfSomeoneCanWin() != null || boardObj.CheckIfSomeoneWon() != null) gmss = GameState.ENDGAME;
+        if (!board.IsValid()) return null;
+        GameState gmss = board.GetRound() + 1 > 6 ? GameState.MIDGAME : GameState.OPENING;
+        if(board.CheckIfSomeoneCanWin() != null || board.CheckIfSomeoneWon() != null) gmss = GameState.ENDGAME;
 
         var game = new Game(
             Guid.NewGuid().ToString(),
             name,
-            board != null ? JsonSerializer.Deserialize<List<List<string>>>(board) ?? [] : [],
+            board,
             !Enum.TryParse<GameDifficulty>(difficulty.ToUpper(), out var diff) ? GameDifficulty.BEGINNER : diff,
             DateTime.Now,
             DateTime.Now,
             gmss,
-            boardObj.GetRound()
+            board.GetRound()
         );
 
 
@@ -133,11 +138,11 @@ public class Game {
         cmd.Parameters.AddWithValue("@uuid", game.UUID);
         cmd.Parameters.AddWithValue("@name", game.Name);
         cmd.Parameters.AddWithValue("@difficulty", game.Difficulty.ToString());
-        cmd.Parameters.AddWithValue("@board", JsonSerializer.Serialize(game.Board));
+        cmd.Parameters.AddWithValue("@board", game.Board.ToString());
         cmd.Parameters.AddWithValue("@created_at", game.CreatedAt);
         cmd.Parameters.AddWithValue("@updated_at", game.UpdatedAt);
         cmd.Parameters.AddWithValue("@game_state", gmss.ToString());
-        cmd.Parameters.AddWithValue("@round", boardObj.GetRound());
+        cmd.Parameters.AddWithValue("@round", board.GetRound());
 
         int res = 0;
         try {
