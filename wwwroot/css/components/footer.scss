@@ -1,6 +1,18 @@
 ﻿.footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 {
-    background-color: #f8f9fa;
+    background-color: var(--background-color);
     color: #6c757d;
     padding: 20px 0;
     text-align: center;
+    
+    
+    .content{
+        
+        
+        .content-flex{
+            display: flex;
+            justify-content: space-around;
+            width: calc(75vw - (7.5% * 1.5));
+            margin: 0 auto;
+        }
+    }
 }

@@ -1,6 +1,6 @@
 .header-5F015D44-0984-4A50-B52B-5319AE57C19C {
   position: fixed;
-  background: white;
+  background: var(--background-color);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
   border-radius: 40px;
   width: 85%;
@@ -35,6 +35,18 @@
   aspect-ratio: 150/47;
   display: flex;
   pointer-events: none;
+}
+.header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Header-Menu {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: fit-content;
+}
+.header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Header-Menu a {
+  text-decoration: none;
+  color: var(--text-color-primary);
 }
 
 /*# sourceMappingURL=header.css.map */
