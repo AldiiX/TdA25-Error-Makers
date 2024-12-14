@@ -1,4 +1,5 @@
 ﻿html {
+    --bg: black;
     --text-color-primary: #FFFFFF;
     --text-color: var(--text-color-primary);
     --text-color-secondary: #F6F6F6;
@@ -13,6 +14,7 @@
     --accent-color-additional-1: #AB2E58;
     --accent-color-additional-2: #724479;
     --accent-color-additional-3: #395A9A;
+    --footer-tda-logo: url("/images/svg/Think-different-Academy_LOGO_oficialni-bile.svg");
 }
 
 

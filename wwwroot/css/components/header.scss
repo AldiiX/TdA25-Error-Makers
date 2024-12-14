@@ -40,6 +40,10 @@
             aspect-ratio: 150/47;
             display: flex;
             pointer-events: none;
+            background-image: var(--footer-tda-logo);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
         }
         
         >.Header-Menu {

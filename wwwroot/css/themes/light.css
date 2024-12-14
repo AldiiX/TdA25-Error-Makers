@@ -1,4 +1,5 @@
 ﻿html {
+    --bg: var(--background-color-primary);
     --text-color-primary: #080808;
     --text-color: var(--text-color-primary);
     --text-color-secondary: #1A1A1A;
@@ -13,6 +14,7 @@
     --accent-color-additional-1: #AB2E58;
     --accent-color-additional-2: #724479;
     --accent-color-additional-3: #395A9A;
+    --footer-tda-logo: url("/images/svg/Think-different-Academy_LOGO_oficialni-cerne.svg");
 }
 
 

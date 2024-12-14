@@ -35,6 +35,10 @@
   aspect-ratio: 150/47;
   display: flex;
   pointer-events: none;
+  background-image: var(--footer-tda-logo);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Header-Menu {
   display: flex;

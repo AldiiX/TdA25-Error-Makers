@@ -14,5 +14,17 @@
             width: calc(75vw - (7.5% * 1.5));
             margin: 0 auto;
         }
+
+        .footer-logo {
+            height: 100px;
+            aspect-ratio: 150/47;
+            display: flex;
+            pointer-events: none;
+            background-image: var(--footer-tda-logo);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 0 auto;
+        }
     }
 }
