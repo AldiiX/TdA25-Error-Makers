@@ -6,6 +6,8 @@
     --background-color-primary: #F6F6F6;
     --background-color: var(--background-color-primary);
     --background-color-secondary: #FFFFFF;
+    --background-color-3: #efefef;
+    --color-gray: #666;
     --accent-color-primary: #0070BB;
     --accent-color-primary-darker: #005288;
     --accent-color: var(--accent-color-primary);
@@ -15,6 +17,7 @@
     --accent-color-additional-2: #724479;
     --accent-color-additional-3: #395A9A;
     --footer-tda-logo: url("/images/svg/Think-different-Academy_LOGO_oficialni-cerne.svg");
+    --tda-logo-small: url("/images/svg/Think-different-Academy_LOGO_cerny.svg");
 }
 
 

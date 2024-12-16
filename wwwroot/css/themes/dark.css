@@ -5,7 +5,9 @@
     --text-color-secondary: #F6F6F6;
     --background-color-primary: #080808;
     --background-color: var(--background-color-primary);
-    --background-color-secondary: #1A1A1A;
+    --background-color-secondary: #111111;
+    --background-color-3: #0b0b0b;
+    --color-gray: #666;
     --accent-color-primary: #0070BB;
     --accent-color-primary-darker: #005288;
     --accent-color: var(--accent-color-primary);
@@ -15,6 +17,7 @@
     --accent-color-additional-2: #724479;
     --accent-color-additional-3: #395A9A;
     --footer-tda-logo: url("/images/svg/Think-different-Academy_LOGO_oficialni-bile.svg");
+    --tda-logo-small: url("/images/svg/Think-different-Academy_LOGO_bily.svg");
 }
 
 

@@ -1,82 +1,54 @@
 ﻿.footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 {
-    background-color: var(--background-color);
-    color: #6c757d;
-    padding: 20px 0;
+    background-color: var(--background-color-3);
+    color: var(--text-color);
+    padding: 48px 0;
     text-align: center;
-    
-    
+
+
     .content{
-        
-        
         .content-flex{
             display: flex;
             justify-content: space-around;
             width: calc(75vw - (7.5% * 1.5));
             margin: 0 auto;
-            
-            .navigation{
+
+            p {
+                margin: 0;
+            }
+
+            >.navigation,
+            >.other,
+            >.team {
+                p:not(.upper) {
+                    margin: 10px 0;
+                    text-align: left;
+                }
+
                 .upper{
-                    font-size: 32px;
-                    font-weight: 600;
+                    font-size: 24px;
+                    font-weight: 700;
                     margin-bottom: 20px;
                     border-bottom: solid 2px;
-                    border-bottom-color: var(--accent-color-secondary-darker);
+                    border-bottom-color: var(--accent-color-secondary);
                     pointer-events: none;
                 }
                 a{
-                    color: var(--accent-color-secondary);
+                    color: var(--accent-color-primary);
                     text-decoration: none;
                     margin: 10px 0;
                 }
                 a:hover{
-                    color: var(--accent-color-primary);
-                }
-            }
-            
-            .other{
-                .upper{
-                    font-size: 32px;
-                    font-weight: 600;
-                    margin-bottom: 20px;
-                    border-bottom: solid 2px;
-                    border-bottom-color: var(--accent-color-secondary-darker);
-                    pointer-events: none;
-                }
-                a{
-                    color: var(--accent-color-secondary);
-                    text-decoration: none;
-                    margin: 10px 0;
-                }
-                a:hover{
-                    color: var(--accent-color-primary);
-                }
-            }
-            
-            .team{
-                .upper{
-                    font-size: 32px;
-                    font-weight: 600;
-                    margin-bottom: 20px;
-                    border-bottom: solid 2px;
-                    border-bottom-color: var(--accent-color-secondary-darker);
-                    pointer-events: none;
-                    
-                }
-                p{
-                    margin: 10px 0;
-                }
-                span{
                     color: var(--accent-color-secondary);
                 }
             }
-        ;
         }
         
         .line{
-            background-color: #333333;
-            height: 2px;
+            background-color: var(--color-gray);
+            border-radius: 100%;
+            height: 1px;
             width: calc(75vw - 11.25%);
-            margin: 50px auto;
+            margin: 48px auto;
             position: relative;
         }
         
@@ -85,11 +57,24 @@
             aspect-ratio: 150/47;
             display: flex;
             pointer-events: none;
-            background-image: var(--footer-tda-logo);
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            margin: 0 auto;
+            mask-image: var(--tda-logo-small);
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            margin: 24px auto;
+            position: relative;
+
+            &::before{
+                content: "";
+                display: block;
+                width: 100%;
+                height: 100%;
+                background-color: var(--accent-color-primary);
+                mask-image: var(--tda-logo-small);
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                mask-position: center;
+            }
         }
 
         .copyright-tda{
@@ -97,6 +82,7 @@
             text-align: center;
             font-weight: 500;
             margin: 0 auto;
+            margin-bottom: 12px;
             
             span{
                 color: var(--accent-color-primary);
@@ -110,8 +96,17 @@
             text-align: center;
             font-family: Dosis, sans-serif;
             
-            a{
-                color: var(--accent-color-secondary);
+            a {
+                color: var(--accent-color-primary);
+                text-decoration: none;
+
+                &:hover{
+                    color: var(--accent-color-secondary);
+                }
+            }
+
+            span {
+                color: var(--accent-color-primary);
                 text-decoration: none;
             }
         }
