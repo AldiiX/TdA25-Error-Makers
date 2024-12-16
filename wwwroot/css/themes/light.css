@@ -23,4 +23,8 @@
 
 .bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433 {
     filter: blur(10vw) !important;
+
+    .one, .two {
+        width: 32vw;
+    }
 }
