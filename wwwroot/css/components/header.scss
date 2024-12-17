@@ -1,7 +1,7 @@
 ﻿.header-5F015D44-0984-4A50-B52B-5319AE57C19C {
     position: fixed;
-    background: white;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+    background: var(--background-color-3);
+    //box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
     border-radius: 40px;
     width: 85%;
     height: 80px;
@@ -40,8 +40,33 @@
             aspect-ratio: 150/47;
             display: flex;
             pointer-events: none;
+            background-image: var(--footer-tda-logo);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        >.Header-Menu {
+            position: absolute;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: fit-content;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            a{
+                text-decoration: none;
+                font-weight: 1000;
+                color: var(--text-color-primary);
+            }
         }
     }
-
-
+        
+        
 }
+    
+

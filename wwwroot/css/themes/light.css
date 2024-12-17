@@ -1,10 +1,13 @@
 ﻿html {
+    --bg: var(--background-color-primary);
     --text-color-primary: #080808;
     --text-color: var(--text-color-primary);
     --text-color-secondary: #1A1A1A;
     --background-color-primary: #F6F6F6;
     --background-color: var(--background-color-primary);
     --background-color-secondary: #FFFFFF;
+    --background-color-3: #efefef;
+    --color-gray: #666;
     --accent-color-primary: #0070BB;
     --accent-color-primary-darker: #005288;
     --accent-color: var(--accent-color-primary);
@@ -13,9 +16,17 @@
     --accent-color-additional-1: #AB2E58;
     --accent-color-additional-2: #724479;
     --accent-color-additional-3: #395A9A;
+    --footer-tda-logo: url("/images/svg/Think-different-Academy_LOGO_oficialni-cerne.svg");
+    --tda-logo-small: url("/images/svg/Think-different-Academy_LOGO_cerny.svg");
+    --tda-icon-x: url("/images/icons/X_cerne.svg");
+    --tda-icon-o: url("/images/icons/O_cerne.svg");
 }
 
 
 .bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433 {
     filter: blur(10vw) !important;
+
+    .one, .two {
+        width: 32vw;
+    }
 }

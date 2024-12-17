@@ -1,9 +1,8 @@
-﻿@using TdA25_Error_Makers
+@using TdA25_Error_Makers
 @using TdA25_Error_Makers.Classes
-@using TdA25_Error_Makers.Classes.Objects
 @{
     var webTheme = Utilities.WebTheme.Get();
-    var loggedAccount = Utilities.GetLoggedAccountFromContextOrNull();
+
 
     // části stránky
     var background = Html.PartialAsync("/Views/Components/BlurBackground.cshtml");
@@ -17,32 +16,42 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Domů • Think Different Academy</title> <!-- minulý rok jsme dostali minus body za to, že to bylo „Home‟ a ne „Domů‟, tak to neměňte :D  -->
+    <title>Cookies • Think Different Academy</title>
     <link rel="icon" href="/favicon.ico">
+
+    <script src="/libs/vue@(Program.DEVELOPMENT_MODE ? "_dev" : "").js"></script>
     <link rel="stylesheet" href="/libs/purecss.css">
+    <link rel="stylesheet" href="/css/mainstyles.css">
+    <link rel="stylesheet" href="/css/games.css">
     <link rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()">
-    <link rel="stylesheet" href="/css/home.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
-    <link rel="stylesheet" href="/css/mainstyles.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
 </head>
-<body>
+<body id="COOKIES-PAGE">
+<div id="app">
     @await background
     @await header
 
-    <div class="sections" style="min-height: calc(100vh - 25vh - 40px)">
-        <section>
-            <h1>Think Different Academy</h1>
-            <p>Organizace, která se zabývá volnočasovými a vzdělávacími aktivitami pro děti a mládež.</p>
-            @if (loggedAccount is not null) {
-                <p>Vítej, @(loggedAccount.DisplayName)!</p>
-            }
+
+    <div class="sections">
+        <section class="mainsection">
+            <div class="texts">
+                <h1>Cookies</h1>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci blanditiis dolores eveniet hic illum minus modi molestias ratione repudiandae, unde! Dolore doloremque iure repellendus voluptate? Asperiores consectetur culpa magnam odio.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci blanditiis dolores eveniet hic illum minus modi molestias ratione repudiandae, unde! Dolore doloremque iure repellendus voluptate? Asperiores consectetur culpa magnam odio.</p>
+            </div>
         </section>
     </div>
 
+
     @await footer
+</div>
 </body>
 <script type="module">
     import * as f from "/scripts/functions.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
+    import { vue } from "/scripts/games.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
+
     window.addCookie = f.addCookie;
+    console.warn(vue);
     if (window.history.replaceState) window.history.replaceState( null, null, window.location.href );
 </script>
 </html>
