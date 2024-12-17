@@ -2,7 +2,7 @@
 
 section:is(.top) {
     position: relative;
-    height: 90vh;
+    height: 95vh;
     width: 100%;
     overflow: hidden;
 
@@ -71,41 +71,63 @@ section:is(.top) {
 
     >.center {
         position: absolute;
-        width: 85%;
+        width: 80%;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-        >h1 {
-            width: 50vw;
-            font-size: 6vw;
-            line-height: 5.5vw;
+        >.left {
+            >h1 {
+                width: clamp(0px, 50vw, 700px);
+                font-size: clamp(0px, 6vw, 96px);
+                line-height: clamp(0px, 5.5vw, 90px);
+                position: relative;
 
-            &::before {
-                content: 'X O O X X O';
-                position: absolute;
-                bottom: 100%;
-                left: 0;
-                font-size: 2vw;
-                color: var(--accent-color-secondary);
+                &::before {
+                    content: 'X O O X X O';
+                    position: absolute;
+                    bottom: 100%;
+                    left: 0;
+                    font-size: clamp(0px, 1.5vw, 32px);
+                    color: var(--accent-color-secondary);
+                }
+            }
+
+            >p {
+                width: 30vw;
+                font-size: clamp(0px, 1.5vw, 24px);
+
+                margin-top: 2vw;
+                opacity: 0.7;
+            }
+
+            >button{
+                border-radius: 12px;
+                padding: 0.8vw 3vw;
+                font-size: clamp(0px, 1.5vw, 24px);
+                cursor: pointer;
+                margin: 0;
+                margin-top: 2vw;
             }
         }
 
-        >p {
-            width: 30vw;
-            font-size: 1.5vw;
+        >.right {
+            position: relative;
+            flex-grow: 1;
 
-            margin-top: 2vw;
-            opacity: 0.7;
-        }
-
-        >button{
-            border-radius: 12px;
-            padding: 0.8vw 3vw;
-            font-size: 1.5vw;
-            cursor: pointer;
-            margin: 0;
-            margin-top: 2vw;
+            >.img {
+                width: 100%;
+                max-width: 30vw;
+                aspect-ratio: 1/1;
+                background-image: url("/images/icons/zarivka_playing_bile.svg");
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+                margin-left: auto;
+            }
         }
     }
 }

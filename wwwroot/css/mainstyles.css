@@ -25,6 +25,25 @@ body {
   text-shadow: none;
 }
 
+::-webkit-scrollbar {
+  width: 8px;
+  transition-duration: 0.3s;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-color);
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+  transition-duration: 0.3s;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(120deg, var(--accent-color), var(--accent-color-secondary));
+  transition-duration: 0.3s;
+  border-radius: 100px;
+}
+
 @font-face {
   font-family: "Dosis";
   src: url("/fonts/dosis.ttf") format("truetype");
