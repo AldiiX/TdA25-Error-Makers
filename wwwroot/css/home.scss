@@ -85,6 +85,7 @@ section:is(.top) {
                 font-size: clamp(0px, 6vw, 96px);
                 line-height: clamp(0px, 5.5vw, 90px);
                 position: relative;
+                color: white;
 
                 &::before {
                     content: 'X O O X X O';
