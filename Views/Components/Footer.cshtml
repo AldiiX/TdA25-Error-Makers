@@ -5,7 +5,8 @@
 <footer class="footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1">
     <link rel="stylesheet" href="/css/components/footer.css" />
     <link rel="stylesheet" href="/css/mainstyles.css" />
-    
+
+    <div class="divider"></div>
     <div class="content">
         <div class="Header-Main-Section">
                 <p class="text">Think Different Academy</p>
@@ -53,7 +54,7 @@
             <div class="login">
                 @if(loggedAccount != null) {
                     <p class="upper">Přihlášení</p>
-                    <p>Vítej,<span>@(loggedAccount.DisplayName)</span>!</p>
+                    <p>Vítej, @(loggedAccount.DisplayName)!</p>
                     <p>
                         <a href="/logout">Odhlásit se</a>
                     </p>
@@ -65,7 +66,7 @@
                 }
             </div>
         </div>
-        @* <div class="footer-logo"></div> *@
+
         <div class="copyright">
             <div class="copyright-tda">
                 <span>©</span>
@@ -74,7 +75,7 @@
             </div>
             <div class="copyright-team">
                 Vytvořeno týmem
-                <span>Error Makers</span>
+                Error Makers
                 ze školy
                 <a href="https://educhem.cz" target="_blank">Střední škola EDUCHEM, a.s.</a>
                 pro

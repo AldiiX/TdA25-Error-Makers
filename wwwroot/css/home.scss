@@ -2,7 +2,7 @@
 
 section:is(.top) {
     position: relative;
-    height: 95vh;
+    height: calc(100vh + 80px);
     width: 100%;
     overflow: hidden;
 

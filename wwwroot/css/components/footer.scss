@@ -2,9 +2,19 @@
     background-color: var(--background-color-3);
     color: var(--text-color);
     padding: 48px 0;
+    position: relative;
     text-align: center;
     font-family: Dosis, sans-serif;
 
+    .divider {
+        position: absolute;
+        bottom: 100%;
+        width: 100%;
+        height: 80px;
+        background-image: var(--footer-divider);
+        background-repeat: repeat-x;
+        background-position: bottom;
+    }
 
     .content{
         .Header-Main-Section{
@@ -15,7 +25,7 @@
             
             .text{
                 font-size: 28px;
-                font-weight: 700;
+                font-weight: 1000;
             }
             
             .Icons{
@@ -66,45 +76,23 @@
                     color: var(--text-color-primary);
                     text-decoration: none;
                     margin: 10px 0;
+                    transition-duration: 0.3s;
                 }
                 a:hover{
-                    color: var(--accent-color-secondary);
+                    color: var(--accent-color-primary);
+                    transition-duration: 0.3s;
                 }
                 span{
-                    color: var(--accent-color-secondary);
+                    color: var(--accent-color-primary);
+                    transition-duration: 0.3s;
                 }
             }
         }
-        
-        .footer-logo {
-            height: 100px;
-            aspect-ratio: 150/47;
-            display: flex;
-            pointer-events: none;
-            mask-image: var(--tda-logo-small);
-            mask-size: contain;
-            mask-repeat: no-repeat;
-            mask-position: center;
-            margin: 24px auto;
-            position: relative;
 
-            &::before{
-                content: "";
-                display: block;
-                width: 100%;
-                height: 100%;
-                background-color: var(--accent-color-primary);
-                mask-image: var(--tda-logo-small);
-                mask-size: contain;
-                mask-repeat: no-repeat;
-                mask-position: center;
-            }
-        }
-        
         .copyright{
             display: flex;
             font-size: 12px;
-            
+
             .copyright-tda{
                 text-align: left;
                 font-weight: 500;
@@ -128,19 +116,20 @@
                     color: var(--text-color-primary);
                     text-decoration: none;
                     font-size: 12px;
+                    transition-duration: 0.3s;
 
                     &:hover{
                         color: var(--accent-color-secondary);
+                        transition-duration: 0.3s;
                     }
                 }
 
                 span {
                     color: var(--accent-color-secondary);
                     text-decoration: none;
-                    
                 }
             }
-            
+
         }
     }
 }
