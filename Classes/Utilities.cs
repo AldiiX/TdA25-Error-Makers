@@ -105,7 +105,7 @@ public static class Utilities {
         return sb.ToString();
     }
 
-    public static string EncryptPassword(in string password) => EncryptWithSHA512(password) + EncryptWithMD5(password[0] + "" + password[2]);
+    public static string EncryptPassword(in string password) => EncryptWithSHA512(password) + EncryptWithMD5(password[0] + "" + password[1] + "" + password[^1]);
 
     public static void SetObject<T>(this ISession session, in string key, in T value) {
         session.SetString(key, JsonSerializer.Serialize(value));

@@ -1,5 +1,5 @@
 "use strict";
-window.onscroll = function () {
+function sdfdsfoisdj() {
     const header = document.querySelector('header');
     if (header === null)
         return;
@@ -8,4 +8,6 @@ window.onscroll = function () {
     }
     else
         header.classList.remove('ontop');
-};
+}
+window.onscroll = sdfdsfoisdj;
+window.onload = sdfdsfoisdj;
