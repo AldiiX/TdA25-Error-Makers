@@ -50,7 +50,7 @@ public static class Utilities {
             return wt switch {
                 "light" => "light",
                 "dark" => "dark",
-                _ => "light"
+                _ => "dark"
             };
         }
 

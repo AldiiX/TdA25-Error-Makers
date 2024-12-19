@@ -31,3 +31,40 @@
         width: 32vw;
     }
 }
+
+
+#HOME-PAGE {
+    .header-5F015D44-0984-4A50-B52B-5319AE57C19C {
+        &:not(.ontop) {
+            > .flex {
+                > .Header-Menu > a {
+                    color: white !important;
+                }
+
+                > .Header-Logo {
+                    background-image: url("/images/svg/Think-different-Academy_LOGO_oficialni-bile.svg");
+                }
+            }
+        }
+
+        &:is(.ontop) {
+            >.flex {
+                >.Login > button {
+                    background-color: rgba(0, 0, 0, 0.3);
+                    transition-duration: 0.3s;
+                }
+            }
+        }
+    }
+
+    .background {
+
+        &::after {
+            background: none;
+        }
+    }
+
+    section:is(.top) > .center > .left > p {
+        color: #e3e3e3;
+    }
+}
