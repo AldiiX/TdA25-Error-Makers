@@ -13,5 +13,11 @@ public class HomeController : Controller {
      HttpGet("index.php")
     ]
     public IActionResult Home_Page() => Redirect("/");
-    
+
+
+    [HttpGet("/privacy/gdpr")]
+    public IActionResult GDPR() => View("/Views/GDPR.cshtml");
+
+    [HttpGet("/privacy/cookies")]
+    public IActionResult Cookies() => View("/Views/Cookies.cshtml");
 }

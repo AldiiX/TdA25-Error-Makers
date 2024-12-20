@@ -18,10 +18,11 @@
 html {
     font-size: 14px;
     color: var(--text-color);
-    background-color: var(--background-color);
+    background-color: var(--bg);
     margin: 0;
     position: relative;
     min-height: 100%;
+    overflow-x: hidden;
 }
 
 * {
@@ -29,6 +30,7 @@ html {
 }
 
 body {
+    overflow-x: hidden;
     margin:0;
 }
 
@@ -36,6 +38,26 @@ body {
     background-color: var(--accent-color-secondary);
     color: white;
     text-shadow: none;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    transition-duration: 0.3s;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-color);
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    transition-duration: 0.3s;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(120deg, var(--accent-color), var(--accent-color-secondary));
+    //background: var(--background-color-secondary);
+    transition-duration: 0.3s;
+    border-radius: 100px;
 }
 
 @font-face {

@@ -1,3 +1,113 @@
-
+section:is(.top) {
+  position: relative;
+  height: calc(100vh + 80px);
+  width: 100%;
+  overflow: hidden;
+}
+section:is(.top) .background {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 110%;
+  height: 110%;
+  overflow: hidden;
+  background: rgb(255, 105, 128);
+  background: linear-gradient(320deg, rgb(255, 105, 128) 0%, rgb(227, 24, 55) 10%, rgb(0, 112, 187) 90%, rgb(34, 151, 230) 100%);
+  filter: brightness(0.85) blur(20px);
+  background-position: center;
+  background-size: cover;
+  z-index: -1;
+}
+section:is(.top) .background::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(0deg, var(--background-color), transparent);
+  opacity: 0.7;
+}
+section:is(.top) .background .blob {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  filter: blur(5vw);
+  opacity: 0.4;
+  animation: float 6s ease-in-out infinite alternate;
+}
+section:is(.top) .background .one {
+  rotate: -45deg;
+}
+section:is(.top) .background .two {
+  bottom: -15%;
+  right: -30%;
+  opacity: 0;
+}
+@keyframes float {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  100% {
+    transform: scale(1.1) translate(5%, 5%);
+  }
+}
+section:is(.top) h1, section:is(.top) p {
+  margin: 0;
+}
+section:is(.top) > .center {
+  position: absolute;
+  width: 80%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+section:is(.top) > .center > .left > h1 {
+  width: clamp(0px, 50vw, 700px);
+  font-size: clamp(0px, 6vw, 96px);
+  line-height: clamp(0px, 5.5vw, 90px);
+  position: relative;
+  color: white;
+}
+section:is(.top) > .center > .left > h1::before {
+  content: "X O O X X O";
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  font-size: clamp(0px, 1.5vw, 32px);
+  color: var(--accent-color-secondary);
+}
+section:is(.top) > .center > .left > p {
+  width: 30vw;
+  font-size: clamp(0px, 1.5vw, 24px);
+  margin-top: 2vw;
+  opacity: 0.7;
+}
+section:is(.top) > .center > .left > button {
+  border-radius: 12px;
+  padding: 0.8vw 3vw;
+  font-size: clamp(0px, 1.5vw, 24px);
+  cursor: pointer;
+  margin: 0;
+  margin-top: 2vw;
+}
+section:is(.top) > .center > .right {
+  position: relative;
+  flex-grow: 1;
+}
+section:is(.top) > .center > .right > .img {
+  width: 100%;
+  max-width: 30vw;
+  aspect-ratio: 1/1;
+  background-image: url("/images/icons/zarivka_playing_bile.svg");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-left: auto;
+}
 
 /*# sourceMappingURL=home.css.map */
