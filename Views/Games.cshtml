@@ -37,14 +37,14 @@
                     <h1>Piškvorky</h1>
 
                     <div class="inputs">
-                        <input style="width: 270px" type="text" placeholder="Najít...">
+                        <input style="width: 270px" type="text" placeholder="Najít..." v-on:input="filterGames($event.target.value)">
                         <button class="button-primary-col-sec">Vytvořit</button>
                     </div>
                 </div>
 
                 <div class="content">
                     <div class="games-parent">
-                        <div class="child" v-for="game in games" v-cloak>
+                        <div class="child" v-for="game in gamesFiltered" v-cloak>
                             <h2>{{ game.name }}</h2>
                             <p>difficulty: {{ game.difficulty }}</p>
                             <p>game state: {{ game.gameState }}</p>
