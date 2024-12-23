@@ -11,7 +11,7 @@ namespace TdA25_Error_Makers;
 
 public static class Program {
 
-    public static Microsoft.AspNetCore.Builder.WebApplication App { get; private set; } = null!;
+    public static WebApplication App { get; private set; } = null!;
     public static IDictionary<string, string> ENV { get; private set; } = null!;
     public static ILogger Logger => App.Logger;
 
@@ -26,7 +26,7 @@ public static class Program {
     
 
     public static void Main(string[] args) {
-        var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
+        var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllersWithViews();
         builder.Services.AddHttpContextAccessor();
@@ -56,9 +56,9 @@ public static class Program {
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
         #if DEBUG
-                builder.Configuration.AddJsonFile("appsettings.Debug.json", optional: true, reloadOnChange: true);
+            builder.Configuration.AddJsonFile("appsettings.Debug.json", optional: true, reloadOnChange: true);
         #elif RELEASE
-                builder.Configuration.AddJsonFile("appsettings.Release.json", optional: true, reloadOnChange: true);
+            builder.Configuration.AddJsonFile("appsettings.Release.json", optional: true, reloadOnChange: true);
         #elif TESTING
             builder.Configuration.AddJsonFile("appsettings.Testing.json", optional: true, reloadOnChange: true);
         #endif

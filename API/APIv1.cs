@@ -18,7 +18,7 @@ public class APIv1 : Controller {
     [HttpGet("games")]
     public IActionResult GetGames() {
         var games = Game.GetAll();
-        return new JsonResult(games) { ContentType = "application/json" };
+        return new JsonResult(games.Where(g => g.IsSaved)) { ContentType = "application/json" };
     }
 
     [HttpPost("games")]
@@ -33,7 +33,7 @@ public class APIv1 : Controller {
 
 
         // formátování dat
-        string name = data["name"]?.ToString() ?? $"New Game {Random.Shared.Next()}";
+        string name = data["name"]?.ToString() ?? Game.GenerateRandomGameName();
         string difficulty = data["difficulty"]?.ToString() ?? "medium";
         GameBoard? board =
             !data.TryGetValue("board", out var _bb) ?
@@ -46,7 +46,7 @@ public class APIv1 : Controller {
 
 
         // vytvoření hry
-        var createdGame = Game.Create(name, difficulty, board, true);
+        var createdGame = Game.Create(name, Game.ParseDifficulty(difficulty), board, true, true);
         if(createdGame == null) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Failed to create game." });
 
         return new JsonResult(createdGame){ StatusCode = 201, ContentType = "application/json" };
@@ -61,7 +61,7 @@ public class APIv1 : Controller {
     }
 
     [HttpPut("games/{uuid}")]
-    public IActionResult EditGame(string uuid, [FromBody] Dictionary<string, object> data) {
+    public IActionResult EditGame(string uuid, [FromBody] Dictionary<string, object?> data) {
         if (!data.TryGetValue("name", out object? _name) || !data.TryGetValue("difficulty", out object? _difficulty) || !data.TryGetValue("board", out object? _board)) {
             return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Missing required data." });
         }
@@ -70,13 +70,14 @@ public class APIv1 : Controller {
         if (conn == null) return new StatusCodeResult(500);
         
 
-        var name = _name.ToString();
-        var difficulty = _difficulty.ToString();
-        var board = _board.ToString();
+        var name = _name?.ToString();
+        var difficulty = _difficulty?.ToString();
+        var board = _board?.ToString();
+        bool? saved = data.TryGetValue("saved", out object? _saved) ? _saved?.ToString()?.ToLower() == "true" : null;
 
         // kontrola validity boardu
         if(!GameBoard.TryParse(board, out var _b)) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Failed to parse board." });
-        if (!_b.IsValid()) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Board is not 15x15." });
+        if (!_b.IsValid()) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Board is not valid." });
         var gameState = _b.GetGameState();
 
 
@@ -87,9 +88,10 @@ public class APIv1 : Controller {
                 `difficulty` = @difficulty,
                 `board` = @board,
                 `round` = @round,
-                `game_state` = @gameState
+                `game_state` = @gameState,
+                `saved` = IF(@saved IS NOT NULL, @saved, `saved`)
             WHERE `uuid` = @uuid;
-            SELECT * FROM games WHERE uuid = @uuid;
+            SELECT * FROM games WHERE uuid = @uuid LIMIT 1;
         ", conn);
 
         cmd.Parameters.AddWithValue("@name", name);
@@ -98,6 +100,7 @@ public class APIv1 : Controller {
         cmd.Parameters.AddWithValue("@uuid", uuid);
         cmd.Parameters.AddWithValue("@round", _b.GetRound());
         cmd.Parameters.AddWithValue("@gameState", gameState.ToString());
+        cmd.Parameters.AddWithValue("@saved", saved);
 
         using var reader = cmd.ExecuteReader();
         if (!reader.Read()) return new NotFoundObjectResult(new { code = NotFound().StatusCode, message = "Game not found." });
@@ -111,15 +114,17 @@ public class APIv1 : Controller {
             reader.GetDateTime("created_at"),
             reader.GetDateTime("updated_at"),
             Enum.Parse<Game.GameState>(reader.GetString("game_state")),
-            reader.GetUInt16("round")
+            reader.GetUInt16("round"),
+            reader.GetBoolean("saved")
         );
 
-        var gameJson = JsonNode.Parse(JsonSerializer.Serialize(game));
+        var gameJson = JsonNode.Parse(JsonSerializer.Serialize(game, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase}));
         if (gameJson == null) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Failed to serialize game." });
 
 
         // nastavení hry na endgame
         /*Console.WriteLine($"\n---------{DateTime.Now.ToLocalTime()}-----------");
+        Console.WriteLine("Board: " + game.Board);
         Console.WriteLine("Aktuální kolo: " + game.Board.GetRound());
         Console.WriteLine("Další tah: " + game.Board.GetNextPlayer());
         Console.WriteLine("Může vyhrát: " + game.Board.CheckIfSomeoneCanWin());

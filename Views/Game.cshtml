@@ -1,6 +1,13 @@
-﻿@using TdA25_Error_Makers.Classes.Objects
+﻿@using TdA25_Error_Makers
+@using TdA25_Error_Makers.Classes
+@using TdA25_Error_Makers.Classes.Objects
 @{
     Game? game = ViewBag.Game as Game;
+
+    // komponenty
+    var headerComponent = Html.PartialAsync("/Views/Components/Header.cshtml");
+    var footerComponent = Html.PartialAsync("/Views/Components/Footer.cshtml");
+    var backgroundComponent = Html.PartialAsync("/Views/Components/ColoredBackground.cshtml");
 }
 <!doctype html>
 <html lang="en">
@@ -10,21 +17,87 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/css/game.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="/css/mainstyles.css">
+    <link rel="stylesheet" href="/libs/purecss.css">
+    <link rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()" id="webtheme-link">
+    <script src="/libs/vue@(Program.DEVELOPMENT_MODE ? "_dev" : "").js"></script>
+    <title>@(game != null ? $"{game.Name} - Hra" : "Nová hra") • Think Different Academy</title>
 </head>
 <body>
-    @if (game != null) {
-        <p>Game loaded: @game.Name</p>
-    }
-<div class="grid"></div>
-</body>
-<script>
-    const grid = document.querySelector('.grid');
+    <div id="app">
+        @await backgroundComponent
+        @await headerComponent
+        <div class="mainsection">
+            <div class="loading" v-show="!gameLoaded">Hra se načítá</div>
+            <div class="flex" v-bind:class="{ locked: gameLocked }" v-show="gameLoaded" v-bind:style="{ '--mcolor': currentPlayer == 'x' ? 'var(--accent-color-secondary)' : 'var(--accent-color-primary)'}">
+                <div class="left">
+                    <div class="grid">
+                        <div class="cell" v-cloak v-for="(cell, i) in 15*15" v-on:click="updateCell($event.target, i)"></div>
+                    </div>
+                </div>
 
-    for (let i = 0; i < 15 * 15; i++) {
-        const cell = document.createElement('div');
-        cell.classList.add('cell');
-        grid.appendChild(cell);
-    }
+                <div class="right">
+                    <div>
+                        <div class="top">
+                            <p class="name" v-cloak>{{ game.name }}</p>
+                            <p class="name" v-if="!game.name">Nová hra</p>
+                            <p class="r">Aktuálně je na tahu hráč <span v-cloak>{{ String(currentPlayer).toUpperCase() }}</span></p>
+                        </div>
+
+                        <div class="texts">
+                            <p>Aktuální kolo: <span v-cloak>{{ game.round + 1 }}.</span></p>
+                            <p>Obtížnost: <span v-cloak>{{ String(game.difficulty).toUpperCase() }}</span></p>
+                            <p>Hra vytvořena: <span v-cloak>{{ (new Date(game.createdAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</span></p>
+                            <p>Poslední aktualizace: <span v-cloak>{{ (new Date(game.updatedAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</span></p>
+                        </div>
+                    </div>
+
+                    <div class="settings" v-if="editMode">
+                        <h2>Nastavení</h2>
+
+                        <div class="pair">
+                            <p>Název hry</p>
+                            <input type="text" v-model="game.name" maxlength="40" id="input-game-name" placeholder="Piškvorky s.r.o.">
+                        </div>
+
+                        <div class="pair">
+                            <p>Obtížnost</p>
+                            <select id="input-game-difficulty" v-model="game.difficulty">
+                                <option value="beginner">Začátečník</option>
+                                <option value="easy">Lehká</option>
+                                <option value="medium">Střední</option>
+                                <option value="hard">Těžká</option>
+                                <option value="extreme">Extrémně těžká</option>
+                            </select>
+                        </div>
+
+                        <div class="buttons" v-if="!game.isSaved">
+                            <button v-on:click="saveGame()">Uložit hru</button>
+                            <button v-on:click="createNewGame()">Nová hra</button>
+                        </div>
+
+                        <div class="buttons" v-if="game.isSaved">
+                            <button v-on:click="cancelEditMode()">Zrušit</button>
+                            <button v-on:click="saveGame()">Uložit</button>
+                        </div>
+                    </div>
+
+                    <div class="presettings" v-if="!editMode">
+                        <button v-on:click="editMode = true">Upravit</button>
+                        <button v-on:click="deleteGame()">Smazat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @await footerComponent
+    </div>
+</body>
+<script type="module">
+    import * as f from "/scripts/functions.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
+    import { vue } from "/scripts/game.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
+
+    window.addCookie = f.addCookie;
+    //console.warn(vue);
+    if (window.history.replaceState) window.history.replaceState( null, null, window.location.href );
 </script>
 </html>

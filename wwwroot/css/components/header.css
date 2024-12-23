@@ -1,86 +1,17 @@
-.header-5F015D44-0984-4A50-B52B-5319AE57C19C {
-  position: fixed;
-  background: none;
-  border-radius: 40px;
-  width: 90%;
-  height: 80px;
-  margin-top: 2.5vh;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 0;
-  z-index: 3;
-  transition-property: background;
-  transition-duration: 0.3s;
-}
-.header-5F015D44-0984-4A50-B52B-5319AE57C19C:is(.ontop) {
-  background: var(--background-color-3);
-}
-.header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex {
-  position: relative;
-  display: flex;
-  height: 100%;
-  width: 90%;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 auto;
-}
-.header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Login {
-  width: fit-content;
-}
-.header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Login button {
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  border-radius: 12px;
-  padding: 10px 20px;
-  cursor: pointer;
-  margin: 0;
-}
-.header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Header-Logo {
-  height: 50px;
-  aspect-ratio: 150/47;
-  display: flex;
-  pointer-events: none;
-  background-image: var(--footer-tda-logo);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Header-Menu {
-  position: absolute;
-  display: flex;
-  gap: 40px;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: fit-content;
-  top: 50%;
-  left: 280px;
-  transform: translate(-50%, -50%);
-}
-.header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Header-Menu a {
-  position: relative;
-  text-decoration: none;
-  font-weight: 1000;
-  color: var(--text-color-primary);
-}
-.header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Header-Menu a:hover::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 2px;
-  background: var(--accent-color-secondary);
-  margin-top: 5px;
-  position: absolute;
-  border-radius: 10px;
-  animation: asdfsdf 0.3s forwards ease-in-out;
-}
-@keyframes asdfsdf {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
+/* Error: expected "{".
+ *    ,
+ * 14 |     transition-property: background;
+ *    |                                    ^
+ *    '
+ *   header.scss 14:36  root stylesheet */
 
-/*# sourceMappingURL=header.css.map */
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: 'Error: expected "{".\a    \2577 \a 14 \2502      transition-property: background;\d\a    \2502                                     ^\a    \2575 \a   header.scss 14:36  root stylesheet';
+}
