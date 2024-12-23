@@ -150,9 +150,8 @@ export const vue = new Vue({
             setTimeout(() => {
                 fetch(`/api/v1/games/${_this.game.uuid}/`, {
                     method: "DELETE",
-                }).then(_ => {
-                    window.location.href = "/game";
-                });
+                }).then();
+                window.location.href = "/game";
             }, 1500);
         },
     },

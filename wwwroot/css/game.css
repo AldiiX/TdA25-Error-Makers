@@ -16,7 +16,7 @@ header:not(.scrolled) {
   }
 }
 .background-f55288d9-4dcf-456d-87c4-26be60c16cdb:is(.fade-out) {
-  animation: fade-out 1.5s ease;
+  animation: fade-out 1.5s ease-in;
   animation-iteration-count: 1;
   opacity: 0;
 }
