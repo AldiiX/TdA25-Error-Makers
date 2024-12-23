@@ -35,7 +35,7 @@
 
 #HOME-PAGE {
     .header-5F015D44-0984-4A50-B52B-5319AE57C19C {
-        &:not(.ontop) {
+        &:not(.scrolled) {
             > .flex {
                 > .Header-Menu > a {
                     color: white !important;
@@ -47,7 +47,7 @@
             }
         }
 
-        &:is(.ontop) {
+        &:is(.scrolled) {
             >.flex {
                 >.Login > button {
                     background-color: rgba(0, 0, 0, 0.3);

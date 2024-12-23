@@ -12,7 +12,7 @@
   transition-property: background, opacity;
   transition-duration: 0.3s;
 }
-.header-5F015D44-0984-4A50-B52B-5319AE57C19C:is(.ontop) {
+.header-5F015D44-0984-4A50-B52B-5319AE57C19C:is(.scrolled) {
   background: var(--background-color-3);
 }
 .header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex {

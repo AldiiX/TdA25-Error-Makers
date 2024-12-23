@@ -23,6 +23,9 @@
     <link rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()">
     <link rel="stylesheet" href="/css/home.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
     <link rel="stylesheet" href="/css/mainstyles.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
+
+    @*  scripty pro komponenty *@
+    <script src="/scripts/components/header.js"></script>
 </head>
 <body id="HOME-PAGE">
      @await header

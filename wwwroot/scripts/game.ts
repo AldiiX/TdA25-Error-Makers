@@ -18,6 +18,7 @@ export const vue = new Vue({
         game: {},
         gameLoaded: false,
         gameLocked: true,
+        gameFadeOut: false,
         editMode: false,
     },
 
@@ -29,23 +30,9 @@ export const vue = new Vue({
         main: function(): void {
             const _this = this as any;
 
-            this.getGame();
-            this.registerHeaderFunction();
-        },
-
-        registerHeaderFunction: function(): void {
-            function r() {
-                if (window.scrollY == 0) {
-                    document.querySelector("header")?.style.setProperty("opacity", "0");
-                    document.querySelector("header")?.style.setProperty("pointer-events", "none");
-                } else {
-                    document.querySelector("header")?.style.setProperty("opacity", "1");
-                    document.querySelector("header")?.style.setProperty("pointer-events", "all");
-                }
-            }
-
-            window.onscroll = r;
-            window.onload = r;
+            setTimeout(() => { // fake loading jen tak for fun aby to vypadalo pěkně
+                this.getGame();
+            }, 1150);
         },
 
         updateCell: function(_cell: any, index: number): void {
@@ -106,6 +93,7 @@ export const vue = new Vue({
                     // vyrenderování boardy
                     const parent = document.querySelector(".mainsection .flex > .left .grid") as HTMLElement;
                     const cells = parent.querySelectorAll(".cell");
+                    cells.forEach(cell => { cell.classList.remove("x", "o"); });
 
                     data.board.forEach((row: any, x: number) => {
                         row.forEach((cell: any, y: number) => {
@@ -141,7 +129,7 @@ export const vue = new Vue({
                 body: JSON.stringify({
                     board: _this.game.board,
                     name: (document.getElementById("input-game-name") as HTMLInputElement)?.value ?? "Nová hra",
-                    difficulty: (document.getElementById("input-game-difficulty") as HTMLInputElement)?.value ?? "Nová hra",
+                    difficulty: (document.getElementById("input-game-difficulty") as HTMLInputElement)?.value ?? "medium",
                     saved: true,
                 })
             }).then(response => response.json()).then(data => {
@@ -160,6 +148,28 @@ export const vue = new Vue({
             });
         },
 
+        resetGame: function (): void {
+            const _this = this as any;
+            if(_this.gameLocked) return;
+
+            _this.gameLocked = true;
+            fetch(`/api/v1/games/${_this.game.uuid}/`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    board: Array.from({ length: 15 }, () => Array.from({ length: 15 }, () => "")),
+                    name: _this.game.name,
+                    difficulty: _this.game.difficulty,
+                    saved: true,
+                })
+            }).then(response => {
+                _this.gameLocked = false;
+                this.getGame();
+            });
+        },
+
         cancelEditMode: function() {
             const _this = this as any;
             _this.editMode = false;
@@ -169,12 +179,29 @@ export const vue = new Vue({
 
         createNewGame: function(): void {
             const _this = this as any;
+            _this.gameLocked = true;
 
-            fetch(`/api/v1/games/${_this.game.uuid}/`, {
-                method: "DELETE",
-            }).then(_ => {
-                window.location.href = "/game";
-            });
+            // preload /game stránku
+            const preloadLink = document.createElement("link");
+            preloadLink.href = "/game";
+            preloadLink.rel = "prefetch";
+            //preloadLink.as = "document";
+            document.head.appendChild(preloadLink);
+
+
+            const bgDiv = document.querySelector(".background-f55288d9-4dcf-456d-87c4-26be60c16cdb") as HTMLElement;
+            const blurBgDiv = document.querySelector(".bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433") as HTMLElement;
+            bgDiv.classList.add("fade-out");
+            _this.gameFadeOut = true;
+            blurBgDiv.classList.add("disableanimations");
+
+            setTimeout(() => {
+                fetch(`/api/v1/games/${_this.game.uuid}/`, {
+                    method: "DELETE",
+                }).then(_ => {
+                    window.location.href = "/game";
+                });
+            }, 1500);
         },
     },
 

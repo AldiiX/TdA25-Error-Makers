@@ -1,16 +1,133 @@
+header:not(.scrolled) {
+  opacity: 0;
+  transition-duration: 0.5s;
+}
+
+.background-f55288d9-4dcf-456d-87c4-26be60c16cdb {
+  animation: appear 4s ease-in-out;
+  animation-iteration-count: 1;
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.background-f55288d9-4dcf-456d-87c4-26be60c16cdb:is(.fade-out) {
+  animation: fade-out 1.5s ease;
+  animation-iteration-count: 1;
+  opacity: 0;
+}
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 .mainsection {
   position: relative;
   height: calc(100vh + 80px);
+}
+.mainsection > .loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  margin-top: -40px;
+  display: flex;
+  flex-direction: column;
+  padding: 64px;
+  border-radius: 12px;
+  min-width: 600px;
+  -webkit-animation: appear 0.4s ease-out;
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.mainsection > .loading > .img {
+  width: 250px;
+  aspect-ratio: 1/1;
+  mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
+  mask-size: contain;
+  background-color: var(--text-color);
+  animation: loading-img-anim 3s ease infinite;
+  margin: 0 auto;
+}
+@keyframes loading-img-anim {
+  0% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-20deg);
+  }
+  60% {
+    transform: rotate(20deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+.mainsection > .loading p, .mainsection > .loading h1 {
+  text-align: center;
+  margin: 0;
+}
+.mainsection > .loading h1 {
+  margin-top: 32px;
+  margin-bottom: 8px;
+}
+.mainsection > .loading p {
+  color: var(--color-gray);
 }
 .mainsection .flex {
   position: absolute;
   display: flex;
   top: 50%;
   left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   gap: 12px;
   align-content: start;
   margin-top: -40px;
+  animation: appear 1s ease;
+  animation-iteration-count: 1;
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.mainsection .flex:is(.fade-out) {
+  animation: fade-out 0.5s ease;
+  animation-iteration-count: 1;
+  opacity: 0;
+}
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 .mainsection .flex:is(.locked) > .left .grid {
   cursor: not-allowed;
@@ -118,7 +235,7 @@
 .mainsection .flex > .right div:nth-child(1) > .texts {
   padding: 24px;
   border-radius: 0 0 12px 12px;
-  background-color: var(--background-color-secondary);
+  background-color: var(--background-color);
   transition-duration: 0.3s;
 }
 .mainsection .flex > .right div:nth-child(1) > .texts > p {

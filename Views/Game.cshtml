@@ -2,12 +2,16 @@
 @using TdA25_Error_Makers.Classes
 @using TdA25_Error_Makers.Classes.Objects
 @{
-    Game? game = ViewBag.Game as Game;
+    if (ViewBag.Game is not Game game) {
+        throw new Exception("Game is null");
+        return;
+    }
 
     // komponenty
     var headerComponent = Html.PartialAsync("/Views/Components/Header.cshtml");
     var footerComponent = Html.PartialAsync("/Views/Components/Footer.cshtml");
     var backgroundComponent = Html.PartialAsync("/Views/Components/ColoredBackground.cshtml");
+    var backgroundBlur = Html.PartialAsync("/Views/Components/BlurBackground.cshtml");
 }
 <!doctype html>
 <html lang="en">
@@ -22,14 +26,30 @@
     <link rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()" id="webtheme-link">
     <script src="/libs/vue@(Program.DEVELOPMENT_MODE ? "_dev" : "").js"></script>
     <title>@(game != null ? $"{game.Name} - Hra" : "Nová hra") • Think Different Academy</title>
+
+    @*  scripty pro komponenty *@
+    <script src="/scripts/components/header.js"></script>
 </head>
 <body>
     <div id="app">
-        @await backgroundComponent
+        @await backgroundBlur
+
+        <div v-show="gameLoaded">
+            @await backgroundComponent
+        </div>
+
         @await headerComponent
         <div class="mainsection">
-            <div class="loading" v-show="!gameLoaded">Hra se načítá</div>
-            <div class="flex" v-bind:class="{ locked: gameLocked }" v-show="gameLoaded" v-bind:style="{ '--mcolor': currentPlayer == 'x' ? 'var(--accent-color-secondary)' : 'var(--accent-color-primary)'}">
+
+            <!-- div který se ukaze pred nactenim -->
+            <div class="loading" v-show="!gameLoaded">
+                <div class="img"></div>
+                <h1>Hra „@(game?.Name)” se načítá</h1>
+                <p>... připravte se na pořádný piškvorkový zápas! :) ...</p>
+            </div>
+
+            <!-- herní pole + controls -->
+            <div class="flex" v-bind:class="{ locked: gameLocked, 'fade-out': gameFadeOut }" v-show="gameLoaded" v-bind:style="{ '--mcolor': currentPlayer == 'x' ? 'var(--accent-color-secondary)' : 'var(--accent-color-primary)'}">
                 <div class="left">
                     <div class="grid">
                         <div class="cell" v-cloak v-for="(cell, i) in 15*15" v-on:click="updateCell($event.target, i)"></div>
@@ -84,6 +104,7 @@
 
                     <div class="presettings" v-if="!editMode">
                         <button v-on:click="editMode = true">Upravit</button>
+                        <button v-on:click="resetGame()">Resetovat</button>
                         <button v-on:click="deleteGame()">Smazat</button>
                     </div>
                 </div>

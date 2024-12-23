@@ -8,27 +8,15 @@ export const vue = new Vue({
         game: {},
         gameLoaded: false,
         gameLocked: true,
+        gameFadeOut: false,
         editMode: false,
     },
     methods: {
         main: function () {
             const _this = this;
-            this.getGame();
-            this.registerHeaderFunction();
-        },
-        registerHeaderFunction: function () {
-            function r() {
-                if (window.scrollY == 0) {
-                    document.querySelector("header")?.style.setProperty("opacity", "0");
-                    document.querySelector("header")?.style.setProperty("pointer-events", "none");
-                }
-                else {
-                    document.querySelector("header")?.style.setProperty("opacity", "1");
-                    document.querySelector("header")?.style.setProperty("pointer-events", "all");
-                }
-            }
-            window.onscroll = r;
-            window.onload = r;
+            setTimeout(() => {
+                this.getGame();
+            }, 1150);
         },
         updateCell: function (_cell, index) {
             const cell = _cell;
@@ -75,6 +63,7 @@ export const vue = new Vue({
                 _this.game.original.difficulty = _this.game.difficulty;
                 const parent = document.querySelector(".mainsection .flex > .left .grid");
                 const cells = parent.querySelectorAll(".cell");
+                cells.forEach(cell => { cell.classList.remove("x", "o"); });
                 data.board.forEach((row, x) => {
                     row.forEach((cell, y) => {
                         if (cell === "X") {
@@ -103,7 +92,7 @@ export const vue = new Vue({
                 body: JSON.stringify({
                     board: _this.game.board,
                     name: document.getElementById("input-game-name")?.value ?? "Nová hra",
-                    difficulty: document.getElementById("input-game-difficulty")?.value ?? "Nová hra",
+                    difficulty: document.getElementById("input-game-difficulty")?.value ?? "medium",
                     saved: true,
                 })
             }).then(response => response.json()).then(data => {
@@ -119,6 +108,27 @@ export const vue = new Vue({
                 window.location.href = "/games";
             });
         },
+        resetGame: function () {
+            const _this = this;
+            if (_this.gameLocked)
+                return;
+            _this.gameLocked = true;
+            fetch(`/api/v1/games/${_this.game.uuid}/`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    board: Array.from({ length: 15 }, () => Array.from({ length: 15 }, () => "")),
+                    name: _this.game.name,
+                    difficulty: _this.game.difficulty,
+                    saved: true,
+                })
+            }).then(response => {
+                _this.gameLocked = false;
+                this.getGame();
+            });
+        },
         cancelEditMode: function () {
             const _this = this;
             _this.editMode = false;
@@ -127,11 +137,23 @@ export const vue = new Vue({
         },
         createNewGame: function () {
             const _this = this;
-            fetch(`/api/v1/games/${_this.game.uuid}/`, {
-                method: "DELETE",
-            }).then(_ => {
-                window.location.href = "/game";
-            });
+            _this.gameLocked = true;
+            const preloadLink = document.createElement("link");
+            preloadLink.href = "/game";
+            preloadLink.rel = "prefetch";
+            document.head.appendChild(preloadLink);
+            const bgDiv = document.querySelector(".background-f55288d9-4dcf-456d-87c4-26be60c16cdb");
+            const blurBgDiv = document.querySelector(".bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433");
+            bgDiv.classList.add("fade-out");
+            _this.gameFadeOut = true;
+            blurBgDiv.classList.add("disableanimations");
+            setTimeout(() => {
+                fetch(`/api/v1/games/${_this.game.uuid}/`, {
+                    method: "DELETE",
+                }).then(_ => {
+                    window.location.href = "/game";
+                });
+            }, 1500);
         },
     },
     computed: {},
