@@ -27,13 +27,11 @@ public class GameBoard {
         }
     }
 
-    private GameBoard(string? boardJson) {
+    private GameBoard(string boardJson) {
         List<List<string>>? deserializedBoard = null;
-        try {
-            JsonSerializer.Deserialize<List<List<string>>>(boardJson);
-        } catch { /*_*/ }
+        deserializedBoard = JsonSerializer.Deserialize<List<List<string>>>(boardJson);
 
-        if (deserializedBoard == null || boardJson == null) {
+        if (deserializedBoard == null) {
             Board = new string[15, 15];
             InitializeBoard();
             return;
@@ -60,9 +58,14 @@ public class GameBoard {
     // metody
     public static GameBoard Parse(string[,] board) => new GameBoard(board);
     public static GameBoard Parse(List<List<string>> board) => new GameBoard(board);
-    public static GameBoard Parse(string? board) => new GameBoard(board);
+    public static GameBoard Parse(string board) => new GameBoard(board);
 
     public static bool TryParse(string? board, out GameBoard gameBoard) {
+        if (board == null) {
+            gameBoard = new GameBoard();
+            return false;
+        }
+
         try {
             gameBoard = new GameBoard(board);
             return true;

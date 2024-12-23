@@ -5,6 +5,7 @@
     position: relative;
     text-align: center;
     font-family: Dosis, sans-serif;
+    transition-duration: 0.3s;
 
     .divider {
         position: absolute;
@@ -14,6 +15,7 @@
         background-image: var(--footer-divider);
         background-repeat: repeat-x;
         background-position: bottom;
+        transition-duration: 0.3s;
     }
 
     .content{

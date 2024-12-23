@@ -9,7 +9,7 @@
   transform: translateX(-50%);
   top: 0;
   z-index: 3;
-  transition-property: background;
+  transition-property: background, opacity;
   transition-duration: 0.3s;
 }
 .header-5F015D44-0984-4A50-B52B-5319AE57C19C:is(.ontop) {
