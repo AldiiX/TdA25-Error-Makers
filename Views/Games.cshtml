@@ -44,11 +44,12 @@
 
                 <div class="content">
                     <div class="games-parent">
-                        <div class="child" v-for="game in gamesFiltered" v-cloak>
+                        <a class="child" v-for="game in gamesFiltered" v-cloak v-bind:href="'/game/'+ game.uuid">
                             <h2>{{ game.name }}</h2>
                             <p>difficulty: {{ game.difficulty }}</p>
+                            <p>Poslední aktualizace: <span v-cloak>{{ (new Date(game.updatedAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</span></p>
                             <p>game state: {{ game.gameState }}</p>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </section>
