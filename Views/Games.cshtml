@@ -1,5 +1,6 @@
 ﻿@using TdA25_Error_Makers
 @using TdA25_Error_Makers.Classes
+@using TdA25_Error_Makers.Classes.Objects
 @{
     var webTheme = Utilities.WebTheme.Get();
 
@@ -44,11 +45,31 @@
 
                 <div class="content">
                     <div class="games-parent">
-                        <a class="child" v-for="game in gamesFiltered" v-cloak v-bind:href="'/game/'+ game.uuid">
-                            <h2>{{ game.name }}</h2>
-                            <p>difficulty: {{ game.difficulty }}</p>
-                            <p>Poslední aktualizace: <span v-cloak>{{ (new Date(game.updatedAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</span></p>
-                            <p>game state: {{ game.gameState }}</p>
+                        <a class="child" v-for="game in gamesFiltered" v-cloak v-bind:href="'/game/'+ game.uuid"> @* cely to musi byt display flex          *@
+                            <div class="icon">
+                                <div class="x"></div>
+                                <div class="o"></div>
+                            </div>
+                            <div class="texts"> @* display flex, flex-direction column *@
+                                <h2>{{ game.name }}</h2>
+
+                                <div class="flex">
+                                    <div class="pair difficulty">
+                                        <div class="icon" v-bind:style="setDifficultyIconStyle(game)"></div>
+                                        <p>{{ game.difficulty }}</p>
+                                    </div>
+
+                                    <div class="pair updateat">
+                                        <div class="icon" style="mask-image: url(/images/icons/update.svg)"></div>
+                                        <p>{{ (new Date(game.updatedAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</p>
+                                    </div>
+
+                                    <div class="pair gamestate">
+                                        <div class="icon" style="mask-image: url(/images/icons/gamestate.svg)"></div>
+                                        <p>{{ game.gameState }}</p>
+                                    </div>
+                                </div>
+                            </div>
                         </a>
                     </div>
                 </div>

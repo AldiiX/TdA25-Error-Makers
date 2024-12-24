@@ -53,7 +53,22 @@ export const vue = new Vue({
             _this.gamesFiltered = _this.games?.filter((game: any) => {
                 return game.name.toLowerCase().includes(prop.toLowerCase());
             });
-        }
+        },
+
+        setDifficultyIconStyle: function(game: any): any {
+            const obj: any = {};
+            if(game === null) return;
+
+            switch(game?.difficulty) {
+                case "beginner": obj["maskImage"] = "url(/images/icons/zarivka_beginner_bile.svg)"; break;
+                case "easy": obj["maskImage"] = "url(/images/icons/zarivka_easy_bile.svg)"; break;
+                case "medium": obj["maskImage"] = "url(/images/icons/zarivka_medium_bile.svg)"; break;
+                case "hard": obj["maskImage"] = "url(/images/icons/zarivka_hard_bile.svg)"; break;
+                case "extreme": obj["maskImage"] = "url(/images/icons/zarivka_extreme_bile.svg)"; break;
+            }
+
+            return obj;
+        },
     },
 
     computed: {
