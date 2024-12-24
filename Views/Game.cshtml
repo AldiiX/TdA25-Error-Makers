@@ -25,7 +25,11 @@
     <link rel="stylesheet" href="/libs/purecss.css">
     <link rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()" id="webtheme-link">
     <script src="/libs/vue@(Program.DEVELOPMENT_MODE ? "_dev" : "").js"></script>
-    <title>@(game != null ? $"{game.Name} - Hra" : "Nová hra") • Think Different Academy</title>
+    @if (game.Name.ToLower().Contains("hra")) {
+        <title>@(game?.Name) • Think Different Academy</title>
+    } else {
+        <title>@(game?.Name) - Hra • Think Different Academy</title>
+    }
 
     @*  scripty pro komponenty *@
     <script src="/scripts/components/header.js"></script>
