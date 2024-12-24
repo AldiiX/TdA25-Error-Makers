@@ -1,5 +1,6 @@
 header:not(.scrolled) {
   opacity: 0;
+  pointer-events: none;
   transition-duration: 0.5s;
 }
 
@@ -136,6 +137,9 @@ header:not(.scrolled) {
 .mainsection .flex:is(.locked) > .left .grid .cell {
   pointer-events: none;
 }
+.mainsection .flex:is(.locked) > .right {
+  pointer-events: none;
+}
 .mainsection .flex > .left {
   padding: 24px;
   border-radius: 12px;
@@ -207,7 +211,7 @@ header:not(.scrolled) {
   overflow: hidden;
 }
 .mainsection .flex > .right div:nth-child(1) {
-  min-width: 310px;
+  min-width: 320px;
 }
 .mainsection .flex > .right div:nth-child(1) > .top {
   padding: 24px;
@@ -247,14 +251,44 @@ header:not(.scrolled) {
   font-size: 18px;
 }
 .mainsection .flex > .right > .settings {
-  padding: 20px;
+  padding: 24px;
+  gap: 24px;
+  display: flex;
+  flex-direction: column;
 }
 .mainsection .flex > .right > .settings > h2 {
   margin: 0;
   font-size: 24px;
 }
+.mainsection .flex > .right > .settings > .pair {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mainsection .flex > .right > .settings > .pair > p {
+  margin: 0;
+}
+.mainsection .flex > .right > .settings > .pair > input, .mainsection .flex > .right > .settings > .pair > select {
+  max-width: 250px;
+}
+.mainsection .flex > .right > .settings > .buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mainsection .flex > .right > .settings > .buttons > button {
+  flex-grow: 1;
+}
 .mainsection .flex > .right > .presettings {
-  padding: 20px;
+  padding: 24px;
+  gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+.mainsection .flex > .right > .presettings > button {
+  width: 120px;
 }
 
 /*# sourceMappingURL=game.css.map */

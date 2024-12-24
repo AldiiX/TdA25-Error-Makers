@@ -116,6 +116,19 @@ p,a,button,input,textarea {
     }
 }
 
+.button-secondary {
+    background: none;
+    color: var(--text-color);
+    border: 1px solid var(--button-outline-color);
+    border-radius: 12px;
+    padding: 10px 20px;
+    cursor: pointer;
+
+    &:hover {
+        background: var(--button-bg);
+    }
+}
+
 .sections {
     position: relative;
     min-height: 100vh;
@@ -124,8 +137,15 @@ p,a,button,input,textarea {
     margin-top: 25vh;
 }
 
-input {
+input, select {
     border: none;
     border-radius: 12px;
     padding: 10px 20px;
+    background-color: var(--button-bg);
+    color: var(--text-color);
+
+    &:focus {
+        outline: none;
+        background-color: var(--button-bg-hover);
+    }
 }

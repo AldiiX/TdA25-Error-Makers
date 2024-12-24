@@ -1,5 +1,6 @@
 ﻿header:not(.scrolled) {
     opacity: 0;
+    pointer-events: none;
     transition-duration: 0.5s;
 }
 
@@ -163,6 +164,10 @@
                     }
                 }
             }
+
+            >.right {
+                pointer-events: none;
+            }
         }
 
         >.left {
@@ -255,7 +260,7 @@
             }
 
             div:nth-child(1) {
-                min-width: 310px;
+                min-width: 320px;
 
                 >.top {
                     padding: 24px;
@@ -303,16 +308,53 @@
             }
 
             >.settings {
-                padding: 20px;
+                padding: 24px;
+                gap: 24px;
+                display: flex;
+                flex-direction: column;
 
                 >h2 {
                     margin: 0;
                     font-size: 24px;
                 }
+
+                >.pair {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 6px;
+
+                    >p {
+                        margin: 0;
+                    }
+
+                    >input, >select {
+                        max-width: 250px;
+                    }
+                }
+
+                >.buttons {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    >button {
+                        flex-grow: 1;
+                    }
+                }
             }
 
             >.presettings {
-                padding: 20px;
+                padding: 24px;
+                gap: 8px;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+
+                >button {
+                    //flex-grow: 2;
+                    width: 120px;
+                }
             }
         }
     }

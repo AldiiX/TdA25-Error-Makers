@@ -92,20 +92,20 @@
                         </div>
 
                         <div class="buttons" v-if="!game.isSaved">
-                            <button v-on:click="saveGame()">Uložit hru</button>
-                            <button v-on:click="createNewGame()">Nová hra</button>
+                            <button class="button-secondary" v-on:click="createNewGame()">Nová hra</button>
+                            <button class="button-primary" v-on:click="saveGame()">Uložit hru</button>
                         </div>
 
                         <div class="buttons" v-if="game.isSaved">
-                            <button v-on:click="cancelEditMode()">Zrušit</button>
-                            <button v-on:click="saveGame()">Uložit</button>
+                            <button v-on:click="cancelEditMode()" class="button-secondary">Zrušit</button>
+                            <button v-on:click="saveGame()" class="button-primary">Uložit</button>
                         </div>
                     </div>
 
                     <div class="presettings" v-if="!editMode">
-                        <button v-on:click="editMode = true">Upravit</button>
-                        <button v-on:click="resetGame()">Resetovat</button>
-                        <button v-on:click="deleteGame()">Smazat</button>
+                        <button class="button-secondary" v-on:click="editMode = true">Upravit</button>
+                        <button class="button-secondary" v-on:click="resetGame()">Resetovat</button>
+                        <button class="button-secondary" v-on:click="deleteGame()">Smazat</button>
                     </div>
                 </div>
             </div>

@@ -22,6 +22,9 @@
     --tda-logo-small: url("/images/svg/Think-different-Academy_LOGO_bily.svg");
     --tda-icon-x: url("/images/icons/X_bile.svg");
     --tda-icon-o: url("/images/icons/O_bile.svg");
+    --button-bg: #191919;
+    --button-bg-hover: #212121;
+    --button-outline-color: #2d2d2d;
 }
 
 .background-f55288d9-4dcf-456d-87c4-26be60c16cdb {
