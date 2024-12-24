@@ -9,6 +9,7 @@ namespace TdA25_Error_Makers.Classes.Objects;
 public class GameBoard {
 
     private string[,] Board { get; set; }
+    private HashSet<(int row, int col)>? WinningCells { get; set; }
     public enum Player { X, O }
     //private byte Size { get; set; } = 15;
 
@@ -211,7 +212,16 @@ public class GameBoard {
         return boardToList;
     }
 
-    public Game.GameState GetGameState() => CheckIfSomeoneCanWin() != null || CheckIfSomeoneWon() != null ? Game.GameState.ENDGAME : GetRound() > 5 ? Game.GameState.MIDGAME : Game.GameState.OPENING;
+    public Game.GameState GetGameState() {
+        if (CheckIfSomeoneWon() != null) return Game.GameState.FINISHED;
+        if (CheckIfSomeoneCanWin() != null) return Game.GameState.ENDGAME;
+
+        return GetRound() > 5 ? Game.GameState.MIDGAME : Game.GameState.OPENING;
+    }
+
+    public Player? GetWinner() => CheckIfSomeoneWon();
+
+    public HashSet<(int row, int col)>? GetWinningCells() => WinningCells != null ? [..WinningCells] : null;
 
     public void ResetBoard() {
         InitializeBoard();
@@ -242,9 +252,13 @@ public class GameBoard {
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
                 if (Board[row, col] != "") {
-                    if (CheckHorizontal(row, col) || CheckVertical(row, col) || CheckDiagonal(row, col)) {
-                        return Board[row, col] == "X" ? Player.X : Player.O;
+                    if (CheckHorizontal(row, col) ||
+                        CheckVertical(row, col) ||
+                        CheckDiagonal(row, col)) {
+                        return (Board[row, col] == "X" ? Player.X : Player.O);
                     }
+
+                    WinningCells = null; // pokud nebyla vyhra, nastavi se na null
                 }
             }
         }
@@ -296,21 +310,31 @@ public class GameBoard {
 
     private bool CheckHorizontal(int row, int col) {
         if (col + 4 >= 15) return false;
+
         for (int i = 0; i < 5; i++) {
             if (Board[row, col + i] != Board[row, col] || Board[row, col] == "") {
                 return false;
             }
+
+            WinningCells ??= [];
+            WinningCells.Add((row, col + i));
         }
+
         return true;
     }
 
     private bool CheckVertical(int row, int col) {
         if (row + 4 >= 15) return false;
+
         for (int i = 0; i < 5; i++) {
             if (Board[row + i, col] != Board[row, col] || Board[row, col] == "") {
                 return false;
             }
+
+            WinningCells ??= [];
+            WinningCells.Add((row + i, col));
         }
+
         return true;
     }
 
@@ -323,8 +347,13 @@ public class GameBoard {
                     diagonalMatch1 = false;
                     break;
                 }
+
+                WinningCells ??= [];
+                WinningCells.Add((row + i, col + i));
             }
+
             if (diagonalMatch1) return true;
+            WinningCells = null;
         }
 
         // 2. diagonální směr (/)
@@ -335,8 +364,13 @@ public class GameBoard {
                     diagonalMatch2 = false;
                     break;
                 }
+
+                WinningCells ??= [];
+                WinningCells.Add((row + i, col - i));
             }
+
             if (diagonalMatch2) return true;
+            WinningCells = null; // Vyčisti seznam, pokud výhra nenastala
         }
 
         return false;

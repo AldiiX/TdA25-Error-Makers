@@ -65,7 +65,7 @@ header:not(.scrolled) {
   mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
   mask-size: contain;
   background-color: var(--text-color);
-  animation: loading-img-anim 3s ease infinite;
+  animation: loading-img-anim 3s ease-in-out infinite;
   margin: 0 auto;
 }
 @keyframes loading-img-anim {
@@ -147,6 +147,9 @@ header:not(.scrolled) {
   flex-grow: 1;
   border: 1px solid var(--background-color-primary);
 }
+.mainsection .flex > .left:is(.locked) {
+  pointer-events: none;
+}
 .mainsection .flex > .left .grid {
   display: grid;
   grid-template-columns: repeat(15, 45px);
@@ -159,17 +162,43 @@ header:not(.scrolled) {
 .mainsection .flex > .left .grid .cell {
   width: 45px;
   height: 45px;
-  background-color: var(--background-color-secondary);
-  border-radius: 4px;
+  background-color: var(--button-bg);
+  border-radius: 8px;
   border: 3px solid var(--background-color-primary);
   cursor: pointer;
   position: relative;
 }
 .mainsection .flex > .left .grid .cell:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: var(--button-bg-hover);
 }
 .mainsection .flex > .left .grid .cell:is(.x), .mainsection .flex > .left .grid .cell:is(.o) {
   pointer-events: none;
+  transition-duration: 0.3s;
+}
+.mainsection .flex > .left .grid .cell:is(.x):is(.winning-cell), .mainsection .flex > .left .grid .cell:is(.o):is(.winning-cell) {
+  animation: dsadasasdsa 2s ease 1;
+  animation-delay: 0.5s;
+}
+.mainsection .flex > .left .grid .cell:is(.x):is(.winning-cell)::after, .mainsection .flex > .left .grid .cell:is(.o):is(.winning-cell)::after {
+  background-color: white;
+}
+@keyframes dsadasasdsa {
+  0% {
+    transform: scale(1);
+    z-index: 2;
+  }
+  40% {
+    transform: scale(1.5);
+    z-index: 2;
+  }
+  60% {
+    transform: scale(1.5);
+    z-index: 2;
+  }
+  100% {
+    transform: scale(1);
+    z-index: 2;
+  }
 }
 .mainsection .flex > .left .grid .cell:is(.x)::after, .mainsection .flex > .left .grid .cell:is(.o)::after {
   content: "";
@@ -196,9 +225,15 @@ header:not(.scrolled) {
   mask-image: url("/images/icons/X_bile.svg");
   background: var(--accent-color-secondary);
 }
+.mainsection .flex > .left .grid .cell:is(.x):is(.winning-cell) {
+  background-color: var(--accent-color-secondary);
+}
 .mainsection .flex > .left .grid .cell:is(.o)::after {
   mask-image: url("/images/icons/O_bile.svg");
   background: var(--accent-color-primary);
+}
+.mainsection .flex > .left .grid .cell:is(.o):is(.winning-cell) {
+  background-color: var(--accent-color-primary);
 }
 .mainsection .flex > .right {
   display: flex;
@@ -224,7 +259,10 @@ header:not(.scrolled) {
   margin: 0;
   font-size: 24px;
   font-weight: 1000;
-  min-width: max-content;
+  max-width: 320px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   width: 100%;
   text-align: center;
 }
@@ -247,7 +285,7 @@ header:not(.scrolled) {
   font-size: 16px;
 }
 .mainsection .flex > .right div:nth-child(1) > .texts > p > span {
-  font-weight: 1000;
+  font-weight: 700;
   font-size: 18px;
 }
 .mainsection .flex > .right > .settings {
@@ -267,9 +305,10 @@ header:not(.scrolled) {
 }
 .mainsection .flex > .right > .settings > .pair > p {
   margin: 0;
+  font-weight: 600;
 }
 .mainsection .flex > .right > .settings > .pair > input, .mainsection .flex > .right > .settings > .pair > select {
-  max-width: 250px;
+  width: 100%;
 }
 .mainsection .flex > .right > .settings > .buttons {
   display: flex;

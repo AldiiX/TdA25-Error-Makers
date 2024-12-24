@@ -72,7 +72,7 @@ export const vue = new Vue({
                     difficulty: _this.game.difficulty,
                 })
             }).then(response => response.json()).then(data => {
-                this.getGame();
+                this.initializeGame(data);
             });
 
         },
@@ -84,38 +84,51 @@ export const vue = new Vue({
             fetch(`/api/v1/games/${gameUUID}`)
                 .then(response => response.json())
                 .then(data => {
-                    _this.game = data;
-
-                    if (!_this.game.original) _this.game.original = {};
-                    _this.game.original.name = _this.game.name;
-                    _this.game.original.difficulty = _this.game.difficulty;
-
-                    // vyrenderování boardy
-                    const parent = document.querySelector(".mainsection .flex > .left .grid") as HTMLElement;
-                    const cells = parent.querySelectorAll(".cell");
-                    cells.forEach(cell => { cell.classList.remove("x", "o"); });
-
-                    data.board.forEach((row: any, x: number) => {
-                        row.forEach((cell: any, y: number) => {
-                            if (cell === "X") {
-                                cells[x * 15 + y].classList.add("x");
-                            } else if (cell === "O") {
-                                cells[x * 15 + y].classList.add("o");
-                            }
-                        });
-                    });
-
-
-                    // zjištění, kdo je na tahu
-                    const x = data.board.flat().filter((cell: any) => cell === "X").length;
-                    const o = data.board.flat().filter((cell: any) => cell === "O").length;
-
-                    _this.currentPlayer = x > o ? "o" : "x";
-                    _this.editMode = !data.isSaved;
-                    _this.gameLoaded = true;
-                    _this.gameLocked = false;
+                    this.initializeGame(data);
                 }
             );
+        },
+
+        initializeGame: function(data: any): void {
+            const _this = this as any;
+            _this.game = data;
+            console.log(data);
+
+            if (!_this.game.original) _this.game.original = {};
+            _this.game.original.name = _this.game.name;
+            _this.game.original.difficulty = _this.game.difficulty;
+
+            // vyrenderování boardy
+            const parent = document.querySelector(".mainsection .flex > .left .grid") as HTMLElement;
+            const cells = parent.querySelectorAll(".cell");
+            cells.forEach(cell => { cell.classList.remove("x", "o", "winning-cell"); });
+
+            data.board.forEach((row: any, x: number) => {
+                row.forEach((cell: any, y: number) => {
+                    if (cell === "X") {
+                        cells[x * 15 + y].classList.add("x");
+                    } else if (cell === "O") {
+                        cells[x * 15 + y].classList.add("o");
+                    }
+                });
+            });
+
+            // podle data.winningcells vykreslit výherní buňky
+            if(data.winningCells) {
+                data.winningCells.forEach((cell: any) => {
+                    cells[cell[0] * 15 + cell[1]]?.classList.add("winning-cell");
+                });
+            }
+
+
+            // zjištění, kdo je na tahu
+            const x = data.board.flat().filter((cell: any) => cell === "X").length;
+            const o = data.board.flat().filter((cell: any) => cell === "O").length;
+
+            _this.currentPlayer = x > o ? "o" : "x";
+            _this.editMode = !data.isSaved;
+            _this.gameLoaded = true;
+            _this.gameLocked = false;
         },
 
         saveGame: function(): void {
@@ -154,19 +167,12 @@ export const vue = new Vue({
 
             _this.gameLocked = true;
             fetch(`/api/v1/games/${_this.game.uuid}/`, {
-                method: "PUT",
+                method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    board: Array.from({ length: 15 }, () => Array.from({ length: 15 }, () => "")),
-                    name: _this.game.name,
-                    difficulty: _this.game.difficulty,
-                    saved: true,
-                })
-            }).then(response => {
-                _this.gameLocked = false;
-                this.getGame();
+                }
+            }).then(response => response.json()).then(data => {
+                this.initializeGame(data);
             });
         },
 
@@ -202,6 +208,14 @@ export const vue = new Vue({
 
                 window.location.href = "/game";
             }, 1500);
+        },
+
+        setPlayerColor: function (): any {
+            const _this = this as any;
+            if(_this.game?.winner?.toUpperCase() === "X") return "var(--accent-color-secondary)";
+            if(_this.game?.winner?.toUpperCase() === "O") return "var(--accent-color-primary)";
+
+            return _this.currentPlayer == 'x' ? 'var(--accent-color-secondary)' : 'var(--accent-color-primary)'
         },
     },
 
