@@ -44,7 +44,11 @@
             <!-- div který se ukaze pred nactenim -->
             <div class="loading" v-show="!gameLoaded">
                 <div class="img"></div>
-                <h1>Hra „@(game?.Name)” se načítá</h1>
+                @if (game.Name.ToLower().Contains("hra")) {
+                    <h1>@(game?.Name) se načítá</h1>
+                } else {
+                    <h1>Hra „@(game?.Name)” se načítá</h1>
+                }
                 <p>... připravte se na pořádný piškvorkový zápas! :) ...</p>
             </div>
 
