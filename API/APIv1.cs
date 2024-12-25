@@ -81,12 +81,22 @@ public class APIv1 : Controller {
         var gameState = _b.GetGameState();
 
 
+        // získání původního boardu pro porovnání
+        using var cmd0 = new MySqlCommand("SELECT `game_state` FROM games WHERE uuid = @uuid LIMIT 1", conn);
+        cmd0.Parameters.AddWithValue("@uuid", uuid);
+        using var reader0 = cmd0.ExecuteReader();
+        if (!reader0.Read()) return new NotFoundObjectResult(new { code = NotFound().StatusCode, message = "Game not found." });
+        string actualGameState = reader0.GetString("game_state").ToUpper();
+        reader0.Close();
+
+
+        // updatnutí hry v db a získání nového stavu
         using var cmd = new MySqlCommand(@"
             UPDATE `games`
             SET 
                 `name` = @name,
                 `difficulty` = @difficulty,
-                `board` = @board,
+                `board` = IF(@actualGameState = 'FINISHED', `board`, @board),
                 `round` = @round,
                 `game_state` = @gameState,
                 `saved` = IF(@saved IS NOT NULL, @saved, `saved`)
@@ -97,6 +107,7 @@ public class APIv1 : Controller {
         cmd.Parameters.AddWithValue("@name", name);
         cmd.Parameters.AddWithValue("@difficulty", difficulty);
         cmd.Parameters.AddWithValue("@board", board);
+        cmd.Parameters.AddWithValue("@actualGameState", actualGameState);
         cmd.Parameters.AddWithValue("@uuid", uuid);
         cmd.Parameters.AddWithValue("@round", _b.GetRound());
         cmd.Parameters.AddWithValue("@gameState", gameState.ToString());
@@ -121,7 +132,6 @@ public class APIv1 : Controller {
         var gameJson = JsonNode.Parse(JsonSerializer.Serialize(game, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase}));
         if (gameJson == null) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Failed to serialize game." });
 
-
         // nastavení hry na endgame
         /*Console.WriteLine($"\n---------{DateTime.Now.ToLocalTime()}-----------");
         Console.WriteLine("Board: " + game.Board);
@@ -131,13 +141,24 @@ public class APIv1 : Controller {
         Console.WriteLine("Vyhrál: " + game.Board.CheckIfSomeoneWon());
         Console.WriteLine("------------------------------------");*/
 
-        if(game.Board.CheckIfSomeoneCanWin() != null) {
+        // nastavení hry na endgame / finished
+        if (game.Board.CheckIfSomeoneWon() != null) {
+            reader.Close();
+            using var endgameCmd = new MySqlCommand("UPDATE `games` SET `game_state` = 'FINISHED' WHERE `uuid` = @uuid", conn);
+            endgameCmd.Parameters.AddWithValue("@uuid", uuid);
+            endgameCmd.ExecuteNonQuery();
+            gameJson["gameState"] = "finished";
+        }
+
+        else if(game.Board.CheckIfSomeoneCanWin() != null) {
             reader.Close();
             using var endgameCmd = new MySqlCommand("UPDATE `games` SET `game_state` = 'ENDGAME' WHERE `uuid` = @uuid", conn);
             endgameCmd.Parameters.AddWithValue("@uuid", uuid);
             endgameCmd.ExecuteNonQuery();
             gameJson["gameState"] = "endgame";
-        } else {
+        }
+
+        else {
             reader.Close();
             using var endgameCmd = new MySqlCommand($@"
                 UPDATE `games`
@@ -150,6 +171,39 @@ public class APIv1 : Controller {
         }
 
         return new OkObjectResult(gameJson);
+    }
+
+    [HttpPatch("games/{uuid}")]
+    public IActionResult ResetGame(string uuid) {
+        using var conn = Database.GetConnection();
+        if (conn == null) return new StatusCodeResult(500);
+
+        using var cmd = new MySqlCommand(@"
+            UPDATE `games`
+            SET `board` = @board, `round` = 0, `game_state` = 'OPENING'
+            WHERE `uuid` = @uuid;
+            SELECT * FROM games WHERE uuid = @uuid LIMIT 1;
+        ", conn);
+
+        cmd.Parameters.AddWithValue("@board", GameBoard.CreateNew().ToString());
+        cmd.Parameters.AddWithValue("@uuid", uuid);
+
+        using var reader = cmd.ExecuteReader();
+        if (!reader.Read()) return new NotFoundObjectResult(new { code = NotFound().StatusCode, message = "Game not found." });
+
+        var game = new Game(
+            reader.GetString("uuid"),
+            reader.GetString("name"),
+            GameBoard.Parse(reader.GetValueOrNull<string?>("board")),
+            Enum.Parse<Game.GameDifficulty>(reader.GetString("difficulty")),
+            reader.GetDateTime("created_at"),
+            reader.GetDateTime("updated_at"),
+            Enum.Parse<Game.GameState>(reader.GetString("game_state")),
+            reader.GetUInt16("round"),
+            reader.GetBoolean("saved")
+        );
+
+        return new OkObjectResult(game);
     }
 
     [HttpDelete("games/{uuid}")]

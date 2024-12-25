@@ -10,6 +10,12 @@
     pointer-events: none;
     z-index: -1;
 
+    &:is(.disableanimations) {
+        .one, .two {
+            animation: none !important;
+        }
+    }
+
 
     .one, .two {
         width: 34vw;

@@ -48,8 +48,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(120deg, var(--accent-color), var(--accent-color-secondary));
-    //background: var(--background-color-secondary);
+    background: var(--scrollbar-color);
     transition-duration: 0.3s;
     border-radius: 100px;
 }
@@ -58,26 +57,6 @@ body {
     background-color: var(--accent-color-secondary);
     color: white;
     text-shadow: none;
-}
-
-::-webkit-scrollbar {
-    width: 8px;
-    transition-duration: 0.3s;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--background-color);
-    border: none;
-    box-shadow: none;
-    text-shadow: none;
-    transition-duration: 0.3s;
-}
-
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(120deg, var(--accent-color), var(--accent-color-secondary));
-    //background: var(--background-color-secondary);
-    transition-duration: 0.3s;
-    border-radius: 100px;
 }
 
 @font-face {
@@ -103,7 +82,7 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 32px;
 }
 
-p,a,button,input,textarea {
+p,a,button,input,textarea,select {
     font-family: Dosis, sans-serif;
     font-size: 16px;
     font-weight: 500;
@@ -137,6 +116,19 @@ p,a,button,input,textarea {
     }
 }
 
+.button-secondary {
+    background: none;
+    color: var(--text-color);
+    border: 1px solid var(--button-outline-color);
+    border-radius: 12px;
+    padding: 10px 20px;
+    cursor: pointer;
+
+    &:hover {
+        background: var(--button-bg);
+    }
+}
+
 .sections {
     position: relative;
     min-height: 100vh;
@@ -145,8 +137,15 @@ p,a,button,input,textarea {
     margin-top: 25vh;
 }
 
-input {
+input, select {
     border: none;
     border-radius: 12px;
     padding: 10px 20px;
+    background-color: var(--button-bg);
+    color: var(--text-color);
+
+    &:focus {
+        outline: none;
+        background-color: var(--button-bg-hover);
+    }
 }

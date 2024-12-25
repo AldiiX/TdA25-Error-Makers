@@ -18,6 +18,7 @@ export const vue = new Vue({
         game: {},
         gameLoaded: false,
         gameLocked: true,
+        gameFadeOut: false,
         editMode: false,
     },
 
@@ -29,23 +30,11 @@ export const vue = new Vue({
         main: function(): void {
             const _this = this as any;
 
-            this.getGame();
-            this.registerHeaderFunction();
-        },
+            setTimeout(() => { // fake loading jen tak for fun aby to vypadalo pěkně
+                this.getGame();
+            }, 1150);
 
-        registerHeaderFunction: function(): void {
-            function r() {
-                if (window.scrollY == 0) {
-                    document.querySelector("header")?.style.setProperty("opacity", "0");
-                    document.querySelector("header")?.style.setProperty("pointer-events", "none");
-                } else {
-                    document.querySelector("header")?.style.setProperty("opacity", "1");
-                    document.querySelector("header")?.style.setProperty("pointer-events", "all");
-                }
-            }
-
-            window.onscroll = r;
-            window.onload = r;
+            window.scrollTo(0, 0);
         },
 
         updateCell: function(_cell: any, index: number): void {
@@ -85,7 +74,7 @@ export const vue = new Vue({
                     difficulty: _this.game.difficulty,
                 })
             }).then(response => response.json()).then(data => {
-                this.getGame();
+                this.initializeGame(data);
             });
 
         },
@@ -97,37 +86,52 @@ export const vue = new Vue({
             fetch(`/api/v1/games/${gameUUID}`)
                 .then(response => response.json())
                 .then(data => {
-                    _this.game = data;
-
-                    if (!_this.game.original) _this.game.original = {};
-                    _this.game.original.name = _this.game.name;
-                    _this.game.original.difficulty = _this.game.difficulty;
-
-                    // vyrenderování boardy
-                    const parent = document.querySelector(".mainsection .flex > .left .grid") as HTMLElement;
-                    const cells = parent.querySelectorAll(".cell");
-
-                    data.board.forEach((row: any, x: number) => {
-                        row.forEach((cell: any, y: number) => {
-                            if (cell === "X") {
-                                cells[x * 15 + y].classList.add("x");
-                            } else if (cell === "O") {
-                                cells[x * 15 + y].classList.add("o");
-                            }
-                        });
-                    });
-
-
-                    // zjištění, kdo je na tahu
-                    const x = data.board.flat().filter((cell: any) => cell === "X").length;
-                    const o = data.board.flat().filter((cell: any) => cell === "O").length;
-
-                    _this.currentPlayer = x > o ? "o" : "x";
-                    _this.editMode = !data.isSaved;
-                    _this.gameLoaded = true;
-                    _this.gameLocked = false;
+                    this.initializeGame(data);
                 }
             );
+        },
+
+        initializeGame: function(data: any): void {
+            const _this = this as any;
+            _this.game = data;
+            //console.log(data);
+            window.scroll({top: 0, left: 0, behavior: "smooth"});
+
+            if (!_this.game.original) _this.game.original = {};
+            _this.game.original.name = _this.game.name;
+            _this.game.original.difficulty = _this.game.difficulty;
+
+            // vyrenderování boardy
+            const parent = document.querySelector(".mainsection .flex > .left .grid") as HTMLElement;
+            const cells = parent.querySelectorAll(".cell");
+            cells.forEach(cell => { cell.classList.remove("x", "o", "winning-cell"); });
+
+            data.board.forEach((row: any, x: number) => {
+                row.forEach((cell: any, y: number) => {
+                    if (cell === "X") {
+                        cells[x * 15 + y].classList.add("x");
+                    } else if (cell === "O") {
+                        cells[x * 15 + y].classList.add("o");
+                    }
+                });
+            });
+
+            // podle data.winningcells vykreslit výherní buňky
+            if(data.winningCells) {
+                data.winningCells.forEach((cell: any) => {
+                    cells[cell[0] * 15 + cell[1]]?.classList.add("winning-cell");
+                });
+            }
+
+
+            // zjištění, kdo je na tahu
+            const x = data.board.flat().filter((cell: any) => cell === "X").length;
+            const o = data.board.flat().filter((cell: any) => cell === "O").length;
+
+            _this.currentPlayer = x > o ? "o" : "x";
+            _this.editMode = !data.isSaved;
+            _this.gameLoaded = true;
+            _this.gameLocked = false;
         },
 
         saveGame: function(): void {
@@ -141,7 +145,7 @@ export const vue = new Vue({
                 body: JSON.stringify({
                     board: _this.game.board,
                     name: (document.getElementById("input-game-name") as HTMLInputElement)?.value ?? "Nová hra",
-                    difficulty: (document.getElementById("input-game-difficulty") as HTMLInputElement)?.value ?? "Nová hra",
+                    difficulty: (document.getElementById("input-game-difficulty") as HTMLInputElement)?.value ?? "medium",
                     saved: true,
                 })
             }).then(response => response.json()).then(data => {
@@ -160,6 +164,21 @@ export const vue = new Vue({
             });
         },
 
+        resetGame: function (): void {
+            const _this = this as any;
+            if(_this.gameLocked) return;
+
+            _this.gameLocked = true;
+            fetch(`/api/v1/games/${_this.game.uuid}/`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(response => response.json()).then(data => {
+                this.initializeGame(data);
+            });
+        },
+
         cancelEditMode: function() {
             const _this = this as any;
             _this.editMode = false;
@@ -169,12 +188,37 @@ export const vue = new Vue({
 
         createNewGame: function(): void {
             const _this = this as any;
+            _this.gameLocked = true;
 
-            fetch(`/api/v1/games/${_this.game.uuid}/`, {
-                method: "DELETE",
-            }).then(_ => {
+            // preload /game stránku
+            const preloadLink = document.createElement("link");
+            preloadLink.href = "/game";
+            preloadLink.rel = "prefetch";
+            //preloadLink.as = "document";
+            document.head.appendChild(preloadLink);
+
+
+            const bgDiv = document.querySelector(".background-f55288d9-4dcf-456d-87c4-26be60c16cdb") as HTMLElement;
+            const blurBgDiv = document.querySelector(".bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433") as HTMLElement;
+            bgDiv.classList.add("fade-out");
+            _this.gameFadeOut = true;
+            blurBgDiv.classList.add("disableanimations");
+
+            setTimeout(() => {
+                fetch(`/api/v1/games/${_this.game.uuid}/`, {
+                    method: "DELETE",
+                }).then();
+
                 window.location.href = "/game";
-            });
+            }, 1500);
+        },
+
+        setPlayerColor: function (): any {
+            const _this = this as any;
+            if(_this.game?.winner?.toUpperCase() === "X") return "var(--accent-color-secondary)";
+            if(_this.game?.winner?.toUpperCase() === "O") return "var(--accent-color-primary)";
+
+            return _this.currentPlayer == 'x' ? 'var(--accent-color-secondary)' : 'var(--accent-color-primary)'
         },
     },
 

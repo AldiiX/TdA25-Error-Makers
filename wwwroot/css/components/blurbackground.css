@@ -10,6 +10,9 @@
   pointer-events: none;
   z-index: -1;
 }
+.bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433:is(.disableanimations) .one, .bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433:is(.disableanimations) .two {
+  animation: none !important;
+}
 .bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433 .one, .bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433 .two {
   width: 34vw;
 }

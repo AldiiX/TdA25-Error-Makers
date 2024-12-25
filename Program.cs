@@ -3,7 +3,6 @@ using dotenv.net;
 using StackExchange.Redis;
 using TdA25_Error_Makers.Classes;
 using TdA25_Error_Makers.Middlewares;
-using TdA25_Error_Makers.Services;
 
 namespace TdA25_Error_Makers;
 

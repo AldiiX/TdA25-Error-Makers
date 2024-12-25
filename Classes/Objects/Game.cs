@@ -23,6 +23,7 @@ public class Game {
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     public bool IsSaved { get; private set; }
+    public string? Winner { get; private set; }
 
     [JsonIgnore]
     public GameBoard Board { get; private set; }
@@ -42,6 +43,15 @@ public class Game {
     [JsonInclude, JsonPropertyName("difficulty")]
     private string json_DifficultyLevel => Difficulty.ToString().ToLower();
 
+    [JsonInclude, JsonPropertyName("winningCells")]
+    private HashSet<List<int>>? json_WinningCells {
+        get {
+            if (Winner == null) return null;
+
+            return Board.GetWinningCells()?.Select(cell => new List<int> { cell.row, cell.col }).ToHashSet();
+        }
+    }
+
 
 
     // constructory
@@ -55,6 +65,7 @@ public class Game {
         State = state;
         Round = round;
         IsSaved = isSaved;
+        Winner = board.GetWinner() != null ? board.GetWinner().ToString()?.ToUpper() : null;
     }
 
 
