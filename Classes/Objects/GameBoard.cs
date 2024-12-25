@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace TdA25_Error_Makers.Classes.Objects;
 
@@ -10,7 +9,10 @@ namespace TdA25_Error_Makers.Classes.Objects;
 public class GameBoard {
 
     private string[,] Board { get; set; }
+    private HashSet<(int row, int col)>? WinningCells { get; set; }
+
     public enum Player { X, O }
+
     //private byte Size { get; set; } = 15;
 
     private GameBoard(string[,] board) {
@@ -104,6 +106,7 @@ public class GameBoard {
             for (int col = 0; col < 15; col++) {
                 rowList.Add(Board[row, col]);
             }
+
             boardToList.Add(rowList);
         }
 
@@ -164,10 +167,8 @@ public class GameBoard {
     }
 
     private void InitializeBoard() {
-        for (int row = 0; row < 15; row++)
-        {
-            for (int col = 0; col < 15; col++)
-            {
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
                 Board[row, col] = "";
             }
         }
@@ -206,13 +207,23 @@ public class GameBoard {
             for (int col = 0; col < 15; col++) {
                 rowList.Add(Board[row, col]);
             }
+
             boardToList.Add(rowList);
         }
 
         return boardToList;
     }
 
-    public Game.GameState GetGameState() => CheckIfSomeoneCanWin() != null || CheckIfSomeoneWon() != null ? Game.GameState.ENDGAME : GetRound() > 5 ? Game.GameState.MIDGAME : Game.GameState.OPENING;
+    public Game.GameState GetGameState() {
+        if (CheckIfSomeoneWon() != null) return Game.GameState.FINISHED;
+        if (CheckIfSomeoneCanWin() != null) return Game.GameState.ENDGAME;
+
+        return GetRound() > 5 ? Game.GameState.MIDGAME : Game.GameState.OPENING;
+    }
+
+    public Player? GetWinner() => CheckIfSomeoneWon();
+
+    public HashSet<(int row, int col)>? GetWinningCells() => WinningCells != null ? [..WinningCells] : null;
 
     public void ResetBoard() {
         InitializeBoard();
@@ -243,9 +254,15 @@ public class GameBoard {
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
                 if (Board[row, col] != "") {
-                    if (CheckHorizontal(row, col) || CheckVertical(row, col) || CheckDiagonal(row, col)) {
-                        return Board[row, col] == "X" ? Player.X : Player.O;
+                    WinningCells = new HashSet<(int, int)>();
+
+                    if (CheckHorizontal(row, col) ||
+                        CheckVertical(row, col) ||
+                        CheckDiagonal(row, col)) {
+                        return (Board[row, col] == "X" ? Player.X : Player.O);
                     }
+
+                    WinningCells = null;
                 }
             }
         }
@@ -284,7 +301,6 @@ public class GameBoard {
                     }
                 }
 
-                // reset pole
                 Board[row, col] = "";
             }
         }
@@ -292,52 +308,79 @@ public class GameBoard {
         return null;
     }
 
-
-    private bool CheckWin(int row, int col) => CheckHorizontal(row, col) || CheckVertical(row, col) || CheckDiagonal(row, col);
-
     private bool CheckHorizontal(int row, int col) {
         if (col + 4 >= 15) return false;
+
+        var tempWinningCells = new HashSet<(int, int)>();
+
         for (int i = 0; i < 5; i++) {
             if (Board[row, col + i] != Board[row, col] || Board[row, col] == "") {
                 return false;
             }
+
+            tempWinningCells.Add((row, col + i));
         }
+
+        WinningCells = tempWinningCells;
         return true;
     }
 
     private bool CheckVertical(int row, int col) {
         if (row + 4 >= 15) return false;
+
+        var tempWinningCells = new HashSet<(int, int)>();
+
         for (int i = 0; i < 5; i++) {
             if (Board[row + i, col] != Board[row, col] || Board[row, col] == "") {
                 return false;
             }
+
+            tempWinningCells.Add((row + i, col));
         }
+
+        WinningCells = tempWinningCells;
         return true;
     }
 
     private bool CheckDiagonal(int row, int col) {
         // 1. diagonální směr (\)
         if (row + 4 < 15 && col + 4 < 15) {
+            var tempWinningCells = new HashSet<(int row, int col)>();
             bool diagonalMatch1 = true;
+
             for (int i = 0; i < 5; i++) {
                 if (Board[row + i, col + i] != Board[row, col] || Board[row, col] == "") {
                     diagonalMatch1 = false;
                     break;
                 }
+
+                tempWinningCells.Add((row + i, col + i));
             }
-            if (diagonalMatch1) return true;
+
+            if (diagonalMatch1) {
+                WinningCells = tempWinningCells;
+                return true;
+            }
         }
 
         // 2. diagonální směr (/)
         if (row + 4 < 15 && col - 4 >= 0) {
+            var tempWinningCells = new HashSet<(int, int)>();
             bool diagonalMatch2 = true;
+
             for (int i = 0; i < 5; i++) {
                 if (Board[row + i, col - i] != Board[row, col] || Board[row, col] == "") {
                     diagonalMatch2 = false;
                     break;
                 }
+
+                tempWinningCells.Add((row + i, col - i));
             }
-            if (diagonalMatch2) return true;
+
+            if (diagonalMatch2) {
+                WinningCells = tempWinningCells;
+                return true;
+            }
         }
 
         return false;

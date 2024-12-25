@@ -1,16 +1,157 @@
-﻿.mainsection {
+﻿header:not(.scrolled) {
+    opacity: 0;
+    pointer-events: none;
+    transition-duration: 0.5s;
+}
+
+.background-f55288d9-4dcf-456d-87c4-26be60c16cdb {
+    animation: appear 4s ease-in-out;
+    animation-iteration-count: 1;
+
+    @keyframes appear {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    &:is(.fade-out) {
+        animation: fade-out 1.5s ease-in;
+        animation-iteration-count: 1;
+        opacity: 0;
+
+        @keyframes fade-out {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+    }
+}
+
+.mainsection {
     position: relative;
     height: calc(100vh + 80px);
+
+    >.loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        margin-top: -40px;
+        //background-color: var(--background-color);
+        //border: 1px solid var(--background-color-primary);
+        display: flex;
+        flex-direction: column;
+        padding: 64px;
+        border-radius: 12px;
+        min-width: 600px;
+        -webkit-animation: appear 0.4s ease-out;
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        >.img {
+            width: 250px;
+            aspect-ratio: 1/1;
+            mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
+            mask-size: contain;
+            background-color: var(--text-color);//var(--accent-color);
+            animation: loading-img-anim 3s ease-in-out infinite;
+            margin: 0 auto;
+
+            @keyframes loading-img-anim {
+                0% {
+                    transform: rotate(0deg);
+                }
+
+                20% {
+                    transform: rotate(-20deg);
+                }
+
+                60% {
+                    transform: rotate(20deg);
+                }
+
+                100% {
+                    transform: rotate(0deg);
+                }
+            }
+        }
+
+        p, h1 {
+            text-align: center;
+            margin: 0;
+        }
+
+        h1 {
+            margin-top: 32px;
+            margin-bottom: 8px;
+        }
+
+        p {
+            color: var(--color-gray);
+        }
+    }
 
     .flex {
         position: absolute;
         display: flex;
         top: 50%;
         left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
         gap: 12px;
         align-content: start;
         margin-top: -40px;
+        animation: appear 1s ease;
+        animation-iteration-count: 1;
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        &:is(.fade-out) {
+            animation: fade-out 0.5s ease;
+            animation-iteration-count: 1;
+            opacity: 0;
+
+            @keyframes fade-out {
+                from {
+                    opacity: 1;
+                }
+
+                to {
+                    opacity: 0;
+                }
+            }
+        }
 
         &:is(.locked) {
             >.left {
@@ -23,6 +164,10 @@
                     }
                 }
             }
+
+            >.right {
+                pointer-events: none;
+            }
         }
 
         >.left {
@@ -32,6 +177,10 @@
             flex-grow: 1;
             border: 1px solid var(--background-color-primary);
 
+            &:is(.locked) {
+                pointer-events: none;
+            }
+
             .grid {
                 display: grid;
                 grid-template-columns: repeat(15, 45px);
@@ -39,26 +188,58 @@
                 gap: 0;
                 width: fit-content;
                 border-radius: 12px;
-                overflow: hidden;
+                //overflow: hidden;
 
                 .cell {
                     width: 45px;
                     height: 45px;
-                    background-color: var(--background-color-secondary);
+                    background-color: var(--button-bg);
                     //background-color: rgba(0, 0, 0, 0.3);
-                    border-radius: 4px;
+                    border-radius: 8px;
                     border: 3px solid var(--background-color-primary);
                     //box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
                     cursor: pointer;
                     position: relative;
 
                     &:hover {
-                        background-color: rgba(255,255,255,0.05);
+                        background-color: var(--button-bg-hover);
                     }
 
                     &:is(.x),
                     &:is(.o) {
                         pointer-events: none;
+                        transition-duration: 0.5s;
+
+                        &:is(.winning-cell) {
+                            animation: dsadasasdsa 2s ease 1;
+                            animation-delay: 0.5s;
+
+                            &::after {
+                                background-color: white;
+                            }
+
+                            @keyframes dsadasasdsa {
+                                0% {
+                                    transform: scale(1);
+                                    z-index: 2;
+                                }
+
+                                40% {
+                                    transform: scale(1.5);
+                                    z-index: 2;
+                                }
+
+                                60% {
+                                    transform: scale(1.5);
+                                    z-index: 2;
+                                }
+
+                                100% {
+                                    transform: scale(1);
+                                    z-index: 2;
+                                }
+                            }
+                        }
 
                         &::after {
                             content: "";
@@ -72,6 +253,7 @@
                             mask-size: 60%;
                             background: var(--accent-color-secondary);
                             animation: xoappear 0.2s ease-out;
+                            transition-duration: 0.5s;
 
                             @keyframes xoappear {
                                 0% {
@@ -90,12 +272,20 @@
                             mask-image: url('/images/icons/X_bile.svg');
                             background: var(--accent-color-secondary);
                         }
+
+                        &:is(.winning-cell) {
+                             background-color: var(--accent-color-secondary);
+                        }
                     }
 
                     &:is(.o) {
                         &::after {
                             mask-image: url('/images/icons/O_bile.svg');
                             background: var(--accent-color-primary);
+                        }
+
+                        &:is(.winning-cell) {
+                            background-color: var(--accent-color-primary);
                         }
                     }
                 }
@@ -106,15 +296,16 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            $bg: var(--background-color);
 
             >div {
-                background-color: var(--background-color);
+                background-color: $bg;
                 border-radius: 12px;
                 overflow: hidden;
             }
 
             div:nth-child(1) {
-                min-width: 310px;
+                min-width: 320px;
 
                 >.top {
                     padding: 24px;
@@ -127,7 +318,10 @@
                         margin: 0;
                         font-size: 24px;
                         font-weight: 1000;
-                        min-width: max-content;
+                        max-width: 320px;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
                         width: 100%;
                         text-align: center;
                     }
@@ -146,7 +340,7 @@
                 >.texts {
                     padding: 24px;
                     border-radius: 0 0 12px 12px;
-                    background-color: var(--background-color-secondary);
+                    background-color: $bg;
                     transition-duration: 0.3s;
 
                     >p {
@@ -154,7 +348,7 @@
                         font-size: 16px;
 
                         >span {
-                            font-weight: 1000;
+                            font-weight: 700;
                             font-size: 18px;
                         }
                     }
@@ -162,16 +356,54 @@
             }
 
             >.settings {
-                padding: 20px;
+                padding: 24px;
+                gap: 24px;
+                display: flex;
+                flex-direction: column;
 
                 >h2 {
                     margin: 0;
                     font-size: 24px;
                 }
+
+                >.pair {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 6px;
+
+                    >p {
+                        margin: 0;
+                        font-weight: 600;
+                    }
+
+                    >input, >select {
+                        width: 100%;
+                    }
+                }
+
+                >.buttons {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    >button {
+                        flex-grow: 1;
+                    }
+                }
             }
 
             >.presettings {
-                padding: 20px;
+                padding: 24px;
+                gap: 8px;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+
+                >button {
+                    //flex-grow: 2;
+                    width: 120px;
+                }
             }
         }
     }

@@ -4,7 +4,6 @@ using System.Text;
 using System.Text.Json;
 using MySql.Data.MySqlClient;
 using TdA25_Error_Makers.Classes.Objects;
-using TdA25_Error_Makers.Services;
 
 namespace TdA25_Error_Makers.Classes;
 

@@ -4,10 +4,10 @@ function sdfdsfoisdj() {
     if (header === null)
         return;
     if (window.scrollY > 0) {
-        header.classList.add('ontop');
+        header.classList.add('scrolled');
     }
     else
-        header.classList.remove('ontop');
+        header.classList.remove('scrolled');
 }
 window.onscroll = sdfdsfoisdj;
 window.onload = sdfdsfoisdj;

@@ -14,7 +14,7 @@
     transition-duration: 0.3s;
 
 
-    &:is(.ontop) {
+    &:is(.scrolled) {
         background: var(--background-color-3);
     }
 
