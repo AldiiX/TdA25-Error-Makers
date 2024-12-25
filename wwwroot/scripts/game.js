@@ -17,7 +17,6 @@ export const vue = new Vue({
             setTimeout(() => {
                 this.getGame();
             }, 1150);
-            window.scrollTo(0, 0);
         },
         updateCell: function (_cell, index) {
             const cell = _cell;

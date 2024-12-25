@@ -33,8 +33,6 @@ export const vue = new Vue({
             setTimeout(() => { // fake loading jen tak for fun aby to vypadalo pěkně
                 this.getGame();
             }, 1150);
-
-            window.scrollTo(0, 0);
         },
 
         updateCell: function(_cell: any, index: number): void {
