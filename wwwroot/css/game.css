@@ -157,7 +157,6 @@ header:not(.scrolled) {
   gap: 0;
   width: fit-content;
   border-radius: 12px;
-  overflow: hidden;
 }
 .mainsection .flex > .left .grid .cell {
   width: 45px;
@@ -173,7 +172,7 @@ header:not(.scrolled) {
 }
 .mainsection .flex > .left .grid .cell:is(.x), .mainsection .flex > .left .grid .cell:is(.o) {
   pointer-events: none;
-  transition-duration: 0.3s;
+  transition-duration: 0.5s;
 }
 .mainsection .flex > .left .grid .cell:is(.x):is(.winning-cell), .mainsection .flex > .left .grid .cell:is(.o):is(.winning-cell) {
   animation: dsadasasdsa 2s ease 1;
@@ -212,6 +211,7 @@ header:not(.scrolled) {
   mask-size: 60%;
   background: var(--accent-color-secondary);
   animation: xoappear 0.2s ease-out;
+  transition-duration: 0.5s;
 }
 @keyframes xoappear {
   0% {

@@ -12,6 +12,7 @@
     var footerComponent = Html.PartialAsync("/Views/Components/Footer.cshtml");
     var backgroundComponent = Html.PartialAsync("/Views/Components/ColoredBackground.cshtml");
     var backgroundBlur = Html.PartialAsync("/Views/Components/BlurBackground.cshtml");
+    var confetti = Html.PartialAsync("/Views/Components/Confetti.cshtml");
 }
 <!doctype html>
 <html lang="en">
@@ -44,6 +45,11 @@
 
         @await headerComponent
         <div class="mainsection">
+
+            <!-- confetti při výhře -->
+            <div v-if="gameLoaded && game.winner">
+                @await confetti
+            </div>
 
             <!-- div který se ukaze pred nactenim -->
             <div class="loading" v-show="!gameLoaded">
@@ -122,11 +128,17 @@
         @await footerComponent
     </div>
 </body>
+<script>
+
+</script>
 <script type="module">
     import * as f from "/scripts/functions.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
     import { vue } from "/scripts/game.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
 
     window.addCookie = f.addCookie;
+    setTimeout(() => {
+        window.scroll({ top: 0, left: 0});
+    }, 150);
     //console.warn(vue);
     if (window.history.replaceState) window.history.replaceState( null, null, window.location.href );
 </script>

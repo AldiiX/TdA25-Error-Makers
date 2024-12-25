@@ -188,7 +188,7 @@
                 gap: 0;
                 width: fit-content;
                 border-radius: 12px;
-                overflow: hidden;
+                //overflow: hidden;
 
                 .cell {
                     width: 45px;
@@ -208,7 +208,7 @@
                     &:is(.x),
                     &:is(.o) {
                         pointer-events: none;
-                        transition-duration: 0.3s;
+                        transition-duration: 0.5s;
 
                         &:is(.winning-cell) {
                             animation: dsadasasdsa 2s ease 1;
@@ -253,6 +253,7 @@
                             mask-size: 60%;
                             background: var(--accent-color-secondary);
                             animation: xoappear 0.2s ease-out;
+                            transition-duration: 0.5s;
 
                             @keyframes xoappear {
                                 0% {

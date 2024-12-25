@@ -33,6 +33,8 @@ export const vue = new Vue({
             setTimeout(() => { // fake loading jen tak for fun aby to vypadalo pěkně
                 this.getGame();
             }, 1150);
+
+            window.scrollTo(0, 0);
         },
 
         updateCell: function(_cell: any, index: number): void {
@@ -92,7 +94,8 @@ export const vue = new Vue({
         initializeGame: function(data: any): void {
             const _this = this as any;
             _this.game = data;
-            console.log(data);
+            //console.log(data);
+            window.scroll({top: 0, left: 0, behavior: "smooth"});
 
             if (!_this.game.original) _this.game.original = {};
             _this.game.original.name = _this.game.name;
