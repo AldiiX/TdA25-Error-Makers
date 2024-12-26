@@ -69,6 +69,38 @@ export const vue = new Vue({
 
             return obj;
         },
+
+        howLongSinceLastUpdate(game: any): string {
+            const updatedAt = new Date(game.updatedAt);
+            const now = new Date();
+            const diffMs = now.getTime() - updatedAt.getTime();
+
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24)); 
+            const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); 
+            const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60)); 
+
+            let timeAgo = '';
+            if (diffDays > 0) {
+                timeAgo = `${diffDays} ${this.getCzechDeclension(diffDays, 'den', 'dny', 'dní')} nazpět`;
+            } else if (diffHours > 0) {
+                timeAgo = `${diffHours} ${this.getCzechDeclension(diffHours, 'hodina', 'hodiny', 'hodin')} nazpět`;
+            } else {
+                timeAgo = `${diffMinutes} ${this.getCzechDeclension(diffMinutes, 'minuta', 'minuty', 'minut')} nazpět`;
+            }
+            return timeAgo;
+        },
+
+        getCzechDeclension(count: number, singular: string, few: string, plural: string): string {
+            if (count === 1) {
+                return singular;
+            } else if (count >= 2 && count <= 4) {
+                return few;
+            } else {
+                return plural;
+            }
+        }
+
+
     },
 
     computed: {

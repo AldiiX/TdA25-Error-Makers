@@ -23,8 +23,8 @@
 }
 
 .games-parent {
-    display: grid;
-    width: fit-content;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     margin-top: 20px;
     gap: 20px;
@@ -39,17 +39,47 @@
     >.child {
         padding: 10px;
         border-radius: 5px;
-        min-height: 200px;
         display: flex;
         align-items: center;
         text-align: center;
         background-color: var(--background-color);
         transition: all 0.3s ease-in-out;
+        
+        >.icon {
+            display: flex;
+            >.x{
+                width: 30px;
+                height: 30px;
+                mask-position: center;
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                background-color: var(--text-color);
+            }
+            >.o{
+                width: 30px;
+                height: 30px;
+                mask-position: center;
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                background-color: var(--text-color);
+            }
+        }
 
         >.texts {
+            display: flex;
+            flex-direction: column;
+            margin-left: 16px;
             >.flex {
-                >.pair {
-                    >.icon {
+                display: flex;
+                justify-content: center;
+                margin-left: 16px;
+                
+                .pair-difficulty{
+                    display: flex;
+                    gap: 10px;
+                    align-items: center;
+                    margin-right: 10px;
+                    .icon{
                         width: 30px;
                         height: 30px;
                         mask-position: center;
@@ -57,6 +87,37 @@
                         mask-repeat: no-repeat;
                         background-color: var(--text-color);
                     }
+                }
+                
+                .pair-updateat{
+                   display: flex;
+                    align-items: center;
+                    
+                    p{
+                        width: 100%;
+                    }
+                    .icon{
+                        width: 30px;
+                        height: 30px;
+                        mask-position: center;
+                        mask-size: contain;
+                        mask-repeat: no-repeat;
+                        background-color: var(--text-color);
+                    }
+                }
+            }
+            .pair-gamestate{
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                justify-content: center;
+                .icon{
+                    width: 30px;
+                    height: 30px;
+                    mask-position: center;
+                    mask-size: contain;
+                    mask-repeat: no-repeat;
+                    background-color: var(--text-color);
                 }
             }
         }

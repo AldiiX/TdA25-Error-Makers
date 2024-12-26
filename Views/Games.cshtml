@@ -50,28 +50,29 @@
                     <div class="games-parent">
                         <a class="child" v-for="game in gamesFiltered" v-cloak v-bind:href="'/game/'+ game.uuid"> @* cely to musi byt display flex          *@
                             <div class="icon">
-                                <div class="x"></div>
-                                <div class="o"></div>
+                                <div class="x" style="mask-image: url(/images/icons/X_bile.svg)"></div>
+                                <div class="o" style="mask-image: url(/images/icons/O_bile.svg)"></div>
                             </div>
                             <div class="texts"> @* display flex, flex-direction column *@
                                 <h2>{{ game.name }}</h2>
 
                                 <div class="flex">
-                                    <div class="pair difficulty">
+                                    <div class="pair-difficulty">
                                         <div class="icon" v-bind:style="setDifficultyIconStyle(game)"></div>
                                         <p>{{ game.difficulty }}</p>
                                     </div>
 
-                                    <div class="pair updateat">
+                                    <div class="pair-updateat">
                                         <div class="icon" style="mask-image: url(/images/icons/update.svg)"></div>
-                                        <p>{{ (new Date(game.updatedAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</p>
-                                    </div>
-
-                                    <div class="pair gamestate">
-                                        <div class="icon" style="mask-image: url(/images/icons/gamestate.svg)"></div>
-                                        <p>{{ game.gameState }}</p>
-                                    </div>
+                                        <p>{{ howLongSinceLastUpdate(game) }}</p>
+                                    </div> 
                                 </div>
+                                
+                                <div class="pair-gamestate">
+                                    <div class="icon" style="mask-image: url(/images/icons/gamestate.svg)"></div>
+                                    <p>{{ game.gameState }}</p>
+                                </div>
+                                
                             </div>
                         </a>
                     </div>

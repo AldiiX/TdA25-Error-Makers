@@ -19,8 +19,8 @@
 }
 
 .games-parent {
-  display: grid;
-  width: fit-content;
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   margin-top: 20px;
   gap: 20px;
@@ -34,14 +34,77 @@
 .games-parent > .child {
   padding: 10px;
   border-radius: 5px;
-  min-height: 200px;
   display: flex;
   align-items: center;
   text-align: center;
   background-color: var(--background-color);
   transition: all 0.3s ease-in-out;
 }
-.games-parent > .child > .texts > .flex > .pair > .icon {
+.games-parent > .child > .icon {
+  display: flex;
+}
+.games-parent > .child > .icon > .x {
+  width: 30px;
+  height: 30px;
+  mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  background-color: var(--text-color);
+}
+.games-parent > .child > .icon > .o {
+  width: 30px;
+  height: 30px;
+  mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  background-color: var(--text-color);
+}
+.games-parent > .child > .texts {
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
+}
+.games-parent > .child > .texts > .flex {
+  display: flex;
+  justify-content: center;
+  margin-left: 16px;
+}
+.games-parent > .child > .texts > .flex .pair-difficulty {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-right: 10px;
+}
+.games-parent > .child > .texts > .flex .pair-difficulty .icon {
+  width: 30px;
+  height: 30px;
+  mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  background-color: var(--text-color);
+}
+.games-parent > .child > .texts > .flex .pair-updateat {
+  display: flex;
+  align-items: center;
+}
+.games-parent > .child > .texts > .flex .pair-updateat p {
+  width: 100%;
+}
+.games-parent > .child > .texts > .flex .pair-updateat .icon {
+  width: 30px;
+  height: 30px;
+  mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  background-color: var(--text-color);
+}
+.games-parent > .child > .texts .pair-gamestate {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+.games-parent > .child > .texts .pair-gamestate .icon {
   width: 30px;
   height: 30px;
   mask-position: center;
