@@ -92,6 +92,41 @@
   color: var(--accent-color-primary);
   transition-duration: 0.3s;
 }
+.footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 .content .content-flex > .team > p > a::after {
+  width: 600px;
+  height: 600px;
+  content: "";
+  bottom: 0;
+  position: absolute;
+  display: none;
+  pointer-events: none;
+  background-image: var(--team-image);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0;
+  transition-duration: 0.3s;
+  animation: adsadsadsasa 1.75s 1;
+}
+@keyframes adsadsadsasa {
+  0% {
+    transform: translateX(50vw);
+    opacity: 0;
+  }
+  80% {
+    transform: translateX(50vw);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+}
+.footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 .content .content-flex > .team > p > a:active::after {
+  display: grid;
+  opacity: 1;
+  transition-duration: 0.3s;
+}
 .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 .content .copyright {
   display: flex;
   font-size: 12px;

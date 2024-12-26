@@ -23,7 +23,7 @@ public class ErrorHandlingMiddleware(RequestDelegate next, IViewRenderService vr
                 404 => $"Stránka „{path}” nebyla nalezena",
                 403 => "K tomuto obsahu nemáš přístup",
                 500 => "Něco na serveru se pokazilo, zkuste to prosím později",
-                _ => ReasonPhrases.GetReasonPhrase(context.Response.StatusCode),
+                _ => ReasonPhrases.GetReasonPhrase(context.Response.StatusCode) != "" ? ReasonPhrases.GetReasonPhrase(context.Response.StatusCode) : "Něco se pokazilo",
             };
 
             if (path.StartsWith("/api") || path.StartsWith("/iapi")) {
