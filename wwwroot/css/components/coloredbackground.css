@@ -27,7 +27,7 @@
   width: 100%;
   height: 100%;
   filter: blur(5vw);
-  opacity: 0.4;
+  opacity: 0.3;
   animation: float 6s ease-in-out infinite alternate;
 }
 .background-f55288d9-4dcf-456d-87c4-26be60c16cdb .one {

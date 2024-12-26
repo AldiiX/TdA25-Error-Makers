@@ -1,0 +1,63 @@
+.main {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+.main > .centerdiv {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.main > .centerdiv > h1 {
+  font-size: 32px;
+  margin: 0;
+  margin-bottom: 8px;
+}
+.main > .centerdiv > button {
+  font-size: 20px;
+  margin: 0;
+  margin-top: 32px;
+  padding: 12px 48px;
+  text-transform: uppercase;
+}
+.main > .centerdiv > p {
+  margin: 0;
+  color: var(--color-gray);
+}
+.main > .centerdiv > .code {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  font-size: 200px;
+  margin: 0;
+  margin-bottom: 24px;
+}
+.main > .centerdiv > .code > .icon {
+  width: 250px;
+  height: 250px;
+  mask-image: url(/images/icons/zarivka_sad_bile.svg);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  background-color: var(--text-color);
+  margin: 0 48px;
+  animation: float 3s ease-in-out infinite alternate;
+}
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/*# sourceMappingURL=error.css.map */

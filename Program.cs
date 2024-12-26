@@ -3,6 +3,7 @@ using dotenv.net;
 using StackExchange.Redis;
 using TdA25_Error_Makers.Classes;
 using TdA25_Error_Makers.Middlewares;
+using TdA25_Error_Makers.Services;
 
 namespace TdA25_Error_Makers;
 
@@ -49,7 +50,7 @@ public static class Program {
             //options.Cookie.Expiration = TimeSpan.FromDays(365);
             options.Cookie.Name = "tda25_error_makers_session";
         });
-
+        builder.Services.AddSingleton<IViewRenderService, ViewRenderService>();
         builder.Configuration
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
@@ -89,7 +90,7 @@ public static class Program {
         App.UseSession();
         App.UseRouting();
         App.UseAuthorization();
-        //App.UseMiddleware<ErrorHandlingMiddleware>();
+        App.UseMiddleware<ErrorHandlingMiddleware>();
         App.UseMiddleware<BeforeInitMiddleware>();
         App.MapControllerRoute(name: "default", pattern: "/");
 

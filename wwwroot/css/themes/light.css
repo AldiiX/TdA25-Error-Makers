@@ -38,7 +38,7 @@
 
 .background-f55288d9-4dcf-456d-87c4-26be60c16cdb {
     &::after {
-        background: linear-gradient(45deg, var(--background-color), transparent 50%);
+        background: linear-gradient(45deg, var(--background-color), transparent 50%) !important;
     }
 }
 
