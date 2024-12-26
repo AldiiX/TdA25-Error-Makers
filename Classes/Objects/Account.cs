@@ -9,19 +9,27 @@ namespace TdA25_Error_Makers.Classes.Objects;
 
 
 public sealed class Account {
+    public enum TypeOfAccount { USER, ADMIN }
+
     public string Username { get; private set; }
     public string Password { get; private set; }
     public string? Email { get; private set; }
     public string DisplayName { get; private set; }
     public string? Avatar { get; private set; }
 
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public TypeOfAccount AccountType { get; private set; }
+
+
+
     [JsonConstructor]
-    private Account(string username, string password, string displayName, string? email = null, string? avatar = null) {
+    private Account(string username, string password, string displayName, string? email, string? avatar, TypeOfAccount accountType) {
         Username = username;
         Password = password;
         Email = email;
         DisplayName = displayName;
         Avatar = avatar;
+        AccountType = accountType;
     }
 
     public override string ToString() => JsonSerializer.Serialize(this);
@@ -43,7 +51,8 @@ public sealed class Account {
             reader.GetString("password"),
             reader.GetValueOrNull<string>("display_name") ?? reader.GetString("username"),
             reader.GetValueOrNull<string>("email"),
-            reader.GetValueOrNull<string>("avatar")
+            reader.GetValueOrNull<string>("avatar"),
+            Enum.TryParse(reader.GetString("type"), out TypeOfAccount _e) ? _e : TypeOfAccount.USER
         );
 
         HCS.Current.Session.SetObject("loggeduser", acc);

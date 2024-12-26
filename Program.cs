@@ -12,10 +12,11 @@ namespace TdA25_Error_Makers;
 
 public static class Program {
 
+    public static DateTime AppStartTime { get; } = DateTime.Now;
     public static WebApplication App { get; private set; } = null!;
     public static IDictionary<string, string> ENV { get; private set; } = null!;
     public static ILogger Logger => App.Logger;
-
+    public static TimeSpan AppUptime => DateTime.Now - AppStartTime;
     
     #if DEBUG || TESTING
         public const bool DEVELOPMENT_MODE = true;

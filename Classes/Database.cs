@@ -12,6 +12,7 @@ public static class Database {
     public static string CONNECTION_STRING = ORIGINAL_CONNECTION_STRING + "";
     public static bool LAST_CONNECTION_FAILED = false;
     public const int MAX_POOL_SIZE = 300;
+    public static bool IsUsingFallbackServer => CONNECTION_STRING.Contains("localhost");
 
 
 
