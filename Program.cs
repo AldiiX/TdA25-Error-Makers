@@ -97,31 +97,31 @@ public static class Program {
 
 
 
-        // Vyzkoušení připojení k databázi
+        // test připojení k databázi, pokud selže, zkusí se fallback
         MySqlConnection? conn = null;
 
         try {
             conn = new MySqlConnection(Database.CONNECTION_STRING);
             conn.Open();
             Logger.Log(LogLevel.Information, $"Database connection to {Database.DATABASE_IP} successful.");
-        } catch (Exception _) {
-            Logger.Log(LogLevel.Error, "Database connection error, trying fallback.");
+        } catch (Exception e) {
+            Logger.Log(LogLevel.Error, $"Database connection „{conn?.DataSource}” error: {e.Message}, trying fallback.");
 
             try {
-                string fallbackConnectionString = $"server=localhost;userid=tda25;password=password;database=tda25;pooling=true;Max Pool Size={Database.MAX_POOL_SIZE};";
-                conn = new MySqlConnection(fallbackConnectionString);
+                Database.SwitchToFallbackServer();
+                conn = new MySqlConnection(Database.CONNECTION_STRING);
                 conn.Open();
                 Logger.Log(LogLevel.Information, "Fallback database connection successful.");
-                Database.CONNECTION_STRING = fallbackConnectionString;
-            } catch (Exception __) {
-                Logger.Log(LogLevel.Error, "Database connection error, fallback failed.");
-                return;
+            } catch (Exception e2) {
+                Logger.Log(LogLevel.Error, $"Database connection „{conn?.DataSource}” error: {e2.Message}, fallback failed.");
+                Database.SwitchToNormalServer();
+                Database.LAST_CONNECTION_FAILED = true;
             }
 
-            return;
+            Database.LAST_CONNECTION_FAILED = true;
         }
 
-        conn.Close();
+        conn?.Close();
 
         
 

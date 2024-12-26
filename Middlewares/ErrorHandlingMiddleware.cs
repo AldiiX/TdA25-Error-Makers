@@ -20,6 +20,7 @@ public class ErrorHandlingMiddleware(RequestDelegate next, IViewRenderService vr
         // Pokud je odpověď chybová a ještě nebyla odeslána
         if (context.Response is { HasStarted: false, StatusCode: >= 400 and < 600 }) {
             string errorReasonPhrase = context.Response.StatusCode switch {
+                400 => "Objevila se nějaká chyba",
                 404 => $"Stránka „{path}” nebyla nalezena",
                 403 => "K tomuto obsahu nemáš přístup",
                 500 => "Něco na serveru se pokazilo, zkuste to prosím později",
