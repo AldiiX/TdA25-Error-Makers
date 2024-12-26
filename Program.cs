@@ -1,5 +1,6 @@
 global using HCS = TdA25_Error_Makers.Services.HttpContextService;
 using dotenv.net;
+using MySql.Data.MySqlClient;
 using StackExchange.Redis;
 using TdA25_Error_Makers.Classes;
 using TdA25_Error_Makers.Middlewares;
@@ -97,10 +98,30 @@ public static class Program {
 
 
         // Vyzkoušení připojení k databázi
-        using var conn = Database.GetConnection(false);
-        if (conn == null) Logger.Log(LogLevel.Critical, $"Database connection ({Database.DATABASE_IP}) error při spouštění aplikace.");
-        else Logger.Log(LogLevel.Information, $"Database connection ({Database.DATABASE_IP}) successful při spouštění aplikace.");
-        conn?.Close();
+        MySqlConnection? conn = null;
+
+        try {
+            conn = new MySqlConnection(Database.CONNECTION_STRING);
+            conn.Open();
+            Logger.Log(LogLevel.Information, $"Database connection to {Database.DATABASE_IP} successful.");
+        } catch (Exception _) {
+            Logger.Log(LogLevel.Error, "Database connection error, trying fallback.");
+
+            try {
+                string fallbackConnectionString = $"server=localhost;userid=tda25;password=password;database=tda25;pooling=true;Max Pool Size={Database.MAX_POOL_SIZE};";
+                conn = new MySqlConnection(fallbackConnectionString);
+                conn.Open();
+                Logger.Log(LogLevel.Information, "Fallback database connection successful.");
+                Database.CONNECTION_STRING = fallbackConnectionString;
+            } catch (Exception __) {
+                Logger.Log(LogLevel.Error, "Database connection error, fallback failed.");
+                return;
+            }
+
+            return;
+        }
+
+        conn.Close();
 
         
 
