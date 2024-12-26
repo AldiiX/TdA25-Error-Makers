@@ -12,7 +12,7 @@ public class APIController : Controller {
 
     public IActionResult Index() => new JsonResult(new { organization = "Student Cyber Games" });
 
-    [HttpGet("app/restartmysql")]
+    [HttpPost("app/restartmysql")]
     public IActionResult RestartMySQL() {
         var user = Auth.ReAuthUser();
         if(user is not { AccountType: Account.TypeOfAccount.ADMIN }) return new StatusCodeResult(403);
