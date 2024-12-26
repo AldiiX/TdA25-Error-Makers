@@ -5,14 +5,19 @@ using Microsoft.AspNetCore.Mvc;
 
 public class AuthController : Controller {
     [Route("/login")]
-    public IActionResult Login_Page() => View("/Views/Login.cshtml");
+    public IActionResult Login_Page()
+    {
+        ViewBag.AuthType = "login";
+        return View("/Views/Auth.cshtml");
+    } 
     
     [HttpPost("/login")]
     public IActionResult Login_Post([FromForm] string username, [FromForm] string password) {
+        ViewBag.AuthType = "login";
         var acc = Auth.AuthUser(username, Utilities.EncryptPassword(password));
         if (acc == null) {
             ViewBag.ErrorMessage = "Uživatel neexistuje.";
-            return View("/Views/Login.cshtml");
+            return View("/Views/Auth.cshtml");
         }
 
         return Redirect("/");
@@ -25,26 +30,32 @@ public class AuthController : Controller {
     }
 
     [Route("/register")]
-    public IActionResult Register_Page() => View("/Views/Register.cshtml");
+    public IActionResult Register_Page()
+    {
+        ViewBag.AuthType = "register";
+        return View("/Views/Auth.cshtml");
+    }
 
     [HttpPost("/register")]
     public IActionResult Register_Post([FromForm] string username, [FromForm] string email, [FromForm] string password, [FromForm] string passwordConfirm) {
+        ViewBag.AuthType = "register";
+
         // validace dat
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(passwordConfirm)) {
             ViewBag.ErrorMessage = "Všechna pole musí být vyplněna.";
-            return View("/Views/Register.cshtml");
+            return View("/Views/Auth.cshtml");
         }
 
         if (password != passwordConfirm) {
             ViewBag.ErrorMessage = "Hesla se neshodují.";
-            return View("/Views/Register.cshtml");
+            return View("/Views/Auth.cshtml");
         }
 
         // vytvoření uživatele
         using var conn = Database.GetConnection();
         if (conn == null) {
             ViewBag.ErrorMessage = "Nepodařilo se připojit k databázi.";
-            return View("/Views/Register.cshtml");
+            return View("/Views/Auth.cshtml");
         }
 
         using var cmd = conn.CreateCommand();
@@ -55,7 +66,7 @@ public class AuthController : Controller {
 
         if (cmd.ExecuteNonQuery() == 0) {
             ViewBag.ErrorMessage = "Nepodařilo se vytvořit uživatele.";
-            return View("/Views/Register.cshtml");
+            return View("/Views/Auth.cshtml");
         }
 
         Auth.AuthUser(username, Utilities.EncryptPassword(password));

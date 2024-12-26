@@ -1,0 +1,10 @@
+#AUTH-PAGE .mainsection {
+  position: relative;
+}
+#AUTH-PAGE .mainsection .auth-box {
+  width: fit-content;
+  position: relative;
+  margin: 0 auto;
+}
+
+/*# sourceMappingURL=auth.css.map */
