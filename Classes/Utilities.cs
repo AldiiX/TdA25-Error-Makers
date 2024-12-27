@@ -13,6 +13,8 @@ namespace TdA25_Error_Makers.Classes;
 
 public static class Utilities {
 
+    public const string DEFAULT_WEBTHEME = "light";
+
 
     public static class Cookie {
         public static void Set(in string key, in string? value, in bool saveToTemp = true) {
@@ -44,16 +46,22 @@ public static class Utilities {
 
         public static string Get() {
             var wt = Cookie.Get("webtheme");
-            if(wt == null) Cookie.Set("webtheme", "light");
+            if(wt == null) Cookie.Set("webtheme", DEFAULT_WEBTHEME);
 
             return wt switch {
                 "light" => "light",
                 "dark" => "dark",
-                _ => "dark"
+                _ => DEFAULT_WEBTHEME
             };
         }
 
-        public static string GetCSSFile() => Get() == "light" ? "/css/themes/light.css" : "/css/themes/dark.css";
+        public static string GetCSSFile() {
+            return Get() switch {
+                "light" => "/css/themes/light.css",
+                "dark" => "/css/themes/dark.css",
+                _ => $"/css/themes/{DEFAULT_WEBTHEME.ToLower()}.css"
+            };
+        }
     }
 
 
