@@ -37,7 +37,7 @@
             @if (authType == "login") {
                 <div class="auth-box">
                     <h1>Login</h1>
-                    <p>Nemáš účet? <a href="/register">registruj se!</a></p>
+                    <p>Nemáš účet? <a href="/register">Registruj se!</a></p>
                     <form method="post">
                         <div class="input">
                             <label for="username">Uživatel nebo Email:</label><br>
@@ -64,15 +64,25 @@
                     <h1>Registrace</h1>
                     <p>Máš účet? <a href="/login">Přihlaš se!</a></p>
                     <form method="post">
-                        <label for="username">Username:</label><br>
-                        <input type="text" name="username"><br>
-                        <label for="email">Email:</label><br>
-                        <input type="email" name="email"><br>
-                        <label for="password">Password:</label><br>
-                        <input type="password" name="password"><br><br>
-                        <label for="passwordconfirm">Confirm Password:</label><br>
-                        <input type="password" name="passwordconfirm">
-                        <input type="submit" value="Submit">
+                        <div class="input">
+                            <label for="username">Uživatel:</label><br>
+                            <input type="text" name="username"><br>
+                        </div>
+                        <div class="input">
+                            <label for="email">Email:</label><br>
+                            <input type="email" name="email"><br>
+                        </div>
+                        <div class="input">
+                            <label for="password">Heslo:</label><br>
+                            <input type="password" name="password"><br><br>
+                        </div>
+                        <div class="input">
+                            <label for="passwordconfirm">Potvrďte heslo:</label><br>
+                            <input type="password" name="passwordconfirm">
+                        </div>
+                        <div class="submit">
+                        <input type="submit" value="Potvrdit">
+                        </div>
                     </form>
                     @if (ViewBag.ErrorMessage != null) {
                         <p style="color: red">@ViewBag.ErrorMessage</p>
