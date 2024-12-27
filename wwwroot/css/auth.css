@@ -6,5 +6,32 @@
   position: relative;
   margin: 0 auto;
 }
+#AUTH-PAGE .mainsection h1 {
+  font-size: 5vw;
+  margin: 0;
+}
+#AUTH-PAGE .mainsection p {
+  font-size: 16px;
+  margin-top: 2vw;
+  text-align: center;
+}
+#AUTH-PAGE .mainsection a {
+  color: var(--accent-color-secondary);
+  text-decoration: none;
+  text-weight: bold;
+  font-size: 18px;
+}
+#AUTH-PAGE .mainsection .input {
+  text-align: center;
+  margin: 1vw auto;
+}
+#AUTH-PAGE .mainsection .submit {
+  text-align: center;
+  margin: 0 auto;
+}
+#AUTH-PAGE .mainsection .submit input:hover {
+  background-color: var(--accent-color-secondary);
+  color: white;
+}
 
 /*# sourceMappingURL=auth.css.map */

@@ -7,5 +7,43 @@
             position: relative;
             margin: 0 auto;
         }
+
+        h1 {
+            font-size: 5vw;
+            margin: 0;
+        }
+
+        p {
+            font-size: 16px;
+            margin-top: 2vw;
+            text-align: center;
+        }
+
+        a {
+            color: var(--accent-color-secondary);
+            text-decoration: none;
+            text-weight: bold;
+            font-size: 18px;
+        }
+
+        .input {
+            text-align: center;
+            margin: 1vw auto;
+        }
+
+        .submit {
+            text-align: center;
+            margin: 0 auto;
+        }
+        
+        .submit{
+            input:hover{
+                background-color: var(--accent-color-secondary);
+                color: white;
+            }
+        }
     }
 }
+
+
+
