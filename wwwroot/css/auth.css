@@ -11,7 +11,7 @@
   margin: 0;
 }
 #AUTH-PAGE .mainsection p {
-  font-size: 16px;
+  font-size: 20px;
   margin-top: 2vw;
   text-align: center;
 }
@@ -19,15 +19,17 @@
   color: var(--accent-color-secondary);
   text-decoration: none;
   text-weight: bold;
-  font-size: 18px;
+  font-size: 20px;
 }
 #AUTH-PAGE .mainsection .input {
   text-align: center;
   margin: 1vw auto;
+  font-size: 16px;
 }
 #AUTH-PAGE .mainsection .submit {
   text-align: center;
   margin: 0 auto;
+  font-size: 16px;
 }
 #AUTH-PAGE .mainsection .submit input:hover {
   background-color: var(--accent-color-secondary);

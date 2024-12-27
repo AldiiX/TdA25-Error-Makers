@@ -14,7 +14,7 @@
         }
 
         p {
-            font-size: 16px;
+            font-size: 20px;
             margin-top: 2vw;
             text-align: center;
         }
@@ -23,17 +23,19 @@
             color: var(--accent-color-secondary);
             text-decoration: none;
             text-weight: bold;
-            font-size: 18px;
+            font-size: 20px;
         }
 
         .input {
             text-align: center;
             margin: 1vw auto;
+            font-size: 16px;
         }
 
         .submit {
             text-align: center;
             margin: 0 auto;
+            font-size: 16px;    
         }
         
         .submit{
