@@ -51,6 +51,26 @@ public class AuthController : Controller {
             return View("/Views/Auth.cshtml");
         }
 
+        using var checkUsernameCmd = Database.GetConnection().CreateCommand();
+        checkUsernameCmd.CommandText = "SELECT COUNT(*) FROM `users` WHERE `username` = @username";
+        checkUsernameCmd.Parameters.AddWithValue("@username", username);
+        var usernameExists = Convert.ToInt32(checkUsernameCmd.ExecuteScalar()) > 0;
+
+        if (usernameExists) {
+            ViewBag.ErrorMessage = "Uživatelské jméno už je zabrané.";
+            return View("/Views/Auth.cshtml");
+        }
+        
+        using var checkEmailCmd = Database.GetConnection().CreateCommand();
+        checkEmailCmd.CommandText = "SELECT COUNT(*) FROM `users` WHERE `email` = @email";
+        checkEmailCmd.Parameters.AddWithValue("@email", email);
+        var emailExists = Convert.ToInt32(checkEmailCmd.ExecuteScalar()) > 0;
+
+        if (emailExists) {
+            ViewBag.ErrorMessage = "Email už byl použit.";
+            return View("/Views/Auth.cshtml");
+        }
+        
         // vytvoření uživatele
         using var conn = Database.GetConnection();
         if (conn == null) {
