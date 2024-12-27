@@ -16,11 +16,21 @@ export const vue = new Vue({
     data: {
         temp: {
             filterText: "",
+            filterDifficulty: "",
+            filterStartDate: "",
+            filterEndDate: ""
         },
 
+        filterName: "",
+        filterDifficulty: "",
+        filterStartDate: "",  
+        filterEndDate: "",    
+        selectedDateRange: "",  
+
         games: [],
-        gamesFiltered:  [],
+        gamesFiltered: [],
     },
+
 
 
 
@@ -42,17 +52,87 @@ export const vue = new Vue({
             );
         },
 
-        filterGames: function(prop: string): void {
+        filterGames: function (name: string, difficulty: string, startDate: string, endDate: string): void {
             const _this = this as any;
-            if(prop === "") {
+    
+            
+            if (!name && !difficulty && !startDate && !endDate) {
                 _this.gamesFiltered = _this.games;
                 return;
             }
 
-            _this.temp.filterText = prop;
-            _this.gamesFiltered = _this.games?.filter((game: any) => {
-                return game.name.toLowerCase().includes(prop.toLowerCase());
+            _this.gamesFiltered = _this.games.filter((game: any) => {
+                const matchesName = name
+                    ? game.name?.toLowerCase().includes(name.toLowerCase())
+                    : true;
+
+                const matchesDifficulty = difficulty
+                    ? game.difficulty?.toLowerCase() === difficulty.toLowerCase()
+                    : true;
+
+                const matchesDate = _this.filterByDate(game.updatedAt, startDate, endDate);
+
+                return matchesName && matchesDifficulty && matchesDate;
             });
+        },
+
+        filterByDate: function(gameDate: string, startDate: string, endDate: string): boolean {
+            const gameUpdated = new Date(gameDate);
+            
+            if (!startDate && !endDate) {
+                return true;
+            }
+
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            
+            if (startDate && endDate) {
+                return gameUpdated >= start && gameUpdated <= end;
+            }
+
+            return true; 
+        },
+
+        updateFilters: function(): void {
+            const _this = this as any;
+            _this.filterGames(_this.filterName, _this.filterDifficulty, _this.filterStartDate, _this.filterEndDate);
+        },
+
+        setDateRange: function(range: string): void {
+            const _this = this as any;
+            const now = new Date();
+            let startDate = new Date();
+
+            switch (range) {
+                case 'last7days':
+                    startDate.setDate(now.getDate() - 7);
+                    break;
+                case 'last30days':
+                    startDate.setDate(now.getDate() - 30);
+                    break;
+                case 'lastYear':
+                    startDate.setFullYear(now.getFullYear() - 1);
+                    break;
+                case 'custom':
+                    
+                    break;
+                case '':  
+                    _this.filterStartDate = "";
+                    _this.filterEndDate = "";
+                    break;
+                default:
+                    startDate = now;
+                    break;
+            }
+            
+            if (range !== 'custom' && range !== '') {
+                _this.filterStartDate = startDate.toISOString().split('T')[0];
+                _this.filterEndDate = now.toISOString().split('T')[0];
+            }
+
+            _this.selectedDateRange = range;
+
+            _this.updateFilters();
         },
 
         setDifficultyIconStyle: function(game: any): any {

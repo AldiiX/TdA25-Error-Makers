@@ -41,8 +41,34 @@
                     <h1>Piškvorky</h1>
 
                     <div class="inputs">
-                        <input style="width: 270px" type="text" placeholder="Najít..." v-on:input="filterGames($event.target.value)">
+                        <input style="width: 270px" type="text" placeholder="Najít..." v-model="filterName" v-on:input="updateFilters">
                         <button class="button-primary-col-sec">Vytvořit</button>
+                        
+                        <div class="filter-container">
+                            <label for="difficulty-filter">Filtrovat dle obtížnosti</label>
+                            <select id="difficulty-filter" v-model="filterDifficulty" v-on:change="updateFilters">
+                                <option value="" selected>Všechny</option>
+                                <option value="beginner">Začátečník</option>
+                                <option value="easy">Jednoduchá</option>
+                                <option value="medium">Střední</option>
+                                <option value="hard">Těžká</option>
+                                <option value="extreme">Extrémní</option>
+                            </select>
+                            
+                            <select id="date-filter" v-model="selectedDateRange" v-on:change="setDateRange(selectedDateRange)">
+                                <option value="" selected>Kdykoliv</option>
+                                <option value="last7days">Posledních 7 dní</option>
+                                <option value="last30days">Posledních 30 dní</option>
+                                <option value="lastYear">Poslední Rok</option>
+                                <option value="custom">Vlastní</option>
+                            </select>
+                            
+                            <div v-cloak v-if="selectedDateRange === 'custom'">
+                                <input type="date" v-model="filterStartDate" v-on:change="updateFilters" placeholder="Datum od"/>
+                                <input type="date" v-model="filterEndDate" v-on:change="updateFilters" placeholder="Datum do"/>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
 
@@ -65,14 +91,14 @@
                                     <div class="pair-updateat">
                                         <div class="icon" style="mask-image: url(/images/icons/update.svg)"></div>
                                         <p>{{ howLongSinceLastUpdate(game) }}</p>
-                                    </div> 
+                                    </div>
                                 </div>
-                                
+
                                 <div class="pair-gamestate">
                                     <div class="icon" style="mask-image: url(/images/icons/gamestate.svg)"></div>
                                     <p>{{ game.gameState }}</p>
                                 </div>
-                                
+
                             </div>
                         </a>
                     </div>
