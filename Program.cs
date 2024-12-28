@@ -50,7 +50,7 @@ public static class Program {
 
             options.Cookie.MaxAge = TimeSpan.FromDays(365); // Trvání cookie na 365 dní
             //options.Cookie.Expiration = TimeSpan.FromDays(365);
-            options.Cookie.Name = "tda25_error_makers_session";
+            options.Cookie.Name = "SESSION";
         });
         builder.Services.AddSingleton<IViewRenderService, ViewRenderService>();
         builder.Configuration
