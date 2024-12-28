@@ -38,7 +38,7 @@ public sealed class Account {
         await using var conn = await Database.GetConnectionAsync();
         if (conn == null) return null;
 
-        await using var cmd = new MySqlCommand($"SELECT * FROM `users` WHERE `username` = @username AND `password` = @password", conn);
+        await using var cmd = new MySqlCommand($"SELECT * FROM `users` WHERE (`username` = @username OR `email` = @username) AND `password` = @password", conn);
         cmd.Parameters.AddWithValue("@username", username);
         cmd.Parameters.AddWithValue("@password", hashedPassword);
 

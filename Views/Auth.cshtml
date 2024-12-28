@@ -1,0 +1,107 @@
+﻿@using TdA25_Error_Makers
+@using TdA25_Error_Makers.Classes
+@{
+    var webTheme = Utilities.WebTheme.Get();
+    var authType = ViewBag.AuthType ?? "login";
+
+
+    // části stránky
+    var background = Html.PartialAsync("/Views/Components/BlurBackground.cshtml");
+    var header = Html.PartialAsync("/Views/Components/Header.cshtml");
+    var footer = Html.PartialAsync("/Views/Components/Footer.cshtml");
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login • Think Different Academy</title>
+    <link rel="icon" href="/favicon.ico">
+
+    <script src="/libs/vue@(Program.DEVELOPMENT_MODE ? "_dev" : "").js"></script>
+    <link rel="stylesheet" href="/libs/purecss.css">
+    <link rel="stylesheet" href="/css/mainstyles.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()">
+</head>
+<body id="AUTH-PAGE">
+<div id="app">
+    @await background
+    @await header
+
+
+    <div class="sections">
+        <section class="mainsection">
+            @if (authType == "login") {
+                <div class="auth-box">
+                    <h1>Login</h1>
+                    <p>Nemáš účet? <a href="/register">Registruj se!</a></p>
+                    <form method="post">
+                        <div class="input">
+                            <label for="username">Uživatel nebo Email:</label><br>
+                            <input type="text" id="username" name="username"><br>
+                        </div>
+                        <div class="input">
+                            <label for="password">Heslo:</label><br>
+                            <input type="password" id="password" name="password">
+                        </div>
+                        <br><br>
+                        <div class="submit">
+                            <input type="submit" value="Potvrdit">
+                        </div>
+                    </form>
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <p style="color: red">@ViewBag.ErrorMessage</p>
+                    }
+                </div>
+            } 
+            
+            else if(authType == "register") {
+                <div class="auth-box">
+                    <h1>Registrace</h1>
+                    <p>Máš účet? <a href="/login">Přihlaš se!</a></p>
+                    <form method="post">
+                        <div class="input">
+                            <label for="username">Uživatel:</label><br>
+                            <input type="text" name="username"><br>
+                        </div>
+                        <div class="input">
+                            <label for="email">Email:</label><br>
+                            <input type="email" name="email"><br>
+                        </div>
+                        <div class="input">
+                            <label for="password">Heslo:</label><br>
+                            <input type="password" name="password"><br><br>
+                        </div>
+                        <div class="input">
+                            <label for="passwordconfirm">Potvrďte heslo:</label><br>
+                            <input type="password" name="passwordconfirm">
+                        </div>
+                        <div class="submit">
+                        <input type="submit" value="Potvrdit">
+                        </div>
+                    </form>
+                    @if (ViewBag.ErrorMessage != null) {
+                        <p style="color: red">@ViewBag.ErrorMessage</p>
+                    }
+                </div>
+            }
+        </section>
+    </div>
+
+
+    @await footer
+</div>
+</body>
+<script type="module">
+    import * as f from "/scripts/functions.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
+    import { vue } from "/scripts/games.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
+
+    window.addCookie = f.addCookie;
+    console.warn(vue);
+    if (window.history.replaceState) window.history.replaceState( null, null, window.location.href );
+</script>
+</html>

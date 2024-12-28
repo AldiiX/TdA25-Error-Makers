@@ -1,0 +1,51 @@
+﻿#AUTH-PAGE {
+    .mainsection {
+        position: relative;
+
+        .auth-box {
+            width: fit-content;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 5vw;
+            margin: 0;
+        }
+
+        p {
+            font-size: 20px;
+            margin-top: 2vw;
+            text-align: center;
+        }
+
+        a {
+            color: var(--accent-color-secondary);
+            text-decoration: none;
+            text-weight: bold;
+            font-size: 20px;
+        }
+
+        .input {
+            text-align: center;
+            margin: 1vw auto;
+            font-size: 16px;
+        }
+
+        .submit {
+            text-align: center;
+            margin: 0 auto;
+            font-size: 16px;    
+        }
+        
+        .submit{
+            input:hover{
+                background-color: var(--accent-color-secondary);
+                color: white;
+            }
+        }
+    }
+}
+
+
+
