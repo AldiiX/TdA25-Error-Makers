@@ -95,7 +95,6 @@ p,a,button,input,textarea,select,label {
     border: none;
     border-radius: 12px;
     padding: 10px 20px;
-    margin: 10px;
     cursor: pointer;
 
     &:hover {
@@ -109,7 +108,6 @@ p,a,button,input,textarea,select,label {
     border: none;
     border-radius: 12px;
     padding: 10px 20px;
-    margin: 10px;
     cursor: pointer;
     &:hover {
         background: var(--accent-color-secondary-darker);

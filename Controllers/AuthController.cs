@@ -4,10 +4,14 @@ using TdA25_Error_Makers.Classes;
 namespace TdA25_Error_Makers.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
+
+
+
+
 public class AuthController : Controller {
+
     [Route("/login")]
-    public IActionResult Login_Page()
-    {
+    public IActionResult Login_Page() {
         ViewBag.AuthType = "login";
         return View("/Views/Auth.cshtml");
     } 
@@ -17,7 +21,7 @@ public class AuthController : Controller {
         ViewBag.AuthType = "login";
         var acc = Auth.AuthUser(username, Utilities.EncryptPassword(password));
         if (acc == null) {
-            ViewBag.ErrorMessage = "Uživatel neexistuje.";
+            ViewBag.ErrorMessage = "Účet s tímto jménem a heslem neexistuje.";
             return View("/Views/Auth.cshtml");
         }
 

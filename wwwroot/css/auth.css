@@ -12,26 +12,49 @@
 }
 #AUTH-PAGE .mainsection p {
   font-size: 20px;
-  margin-top: 2vw;
   text-align: center;
+  margin-top: 16px;
+  margin-bottom: 48px;
 }
 #AUTH-PAGE .mainsection a {
   color: var(--accent-color-secondary);
   text-decoration: none;
-  text-weight: bold;
+  font-weight: 700;
   font-size: 20px;
+}
+#AUTH-PAGE .mainsection form {
+  width: auto;
+  position: relative;
 }
 #AUTH-PAGE .mainsection .input {
   text-align: center;
-  margin: 1vw auto;
+  margin: 16px auto;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+}
+#AUTH-PAGE .mainsection .input > input {
+  width: 250px;
+}
+#AUTH-PAGE .mainsection .input > label {
+  text-align: left;
+  margin-bottom: 4px;
+}
+#AUTH-PAGE .mainsection .errortxt {
+  color: var(--accent-color-secondary);
   font-size: 16px;
 }
 #AUTH-PAGE .mainsection .submit {
   text-align: center;
   margin: 0 auto;
   font-size: 16px;
+  margin-top: 32px;
 }
-#AUTH-PAGE .mainsection .submit input:hover {
+#AUTH-PAGE .mainsection .submit > input {
+  width: 250px;
+}
+#AUTH-PAGE .mainsection .submit > input:hover {
   background-color: var(--accent-color-secondary);
   color: white;
 }

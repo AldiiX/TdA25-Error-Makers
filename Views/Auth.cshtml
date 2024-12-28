@@ -25,6 +25,9 @@
     <link rel="stylesheet" href="/css/mainstyles.css">
     <link rel="stylesheet" href="/css/auth.css">
     <link rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()">
+
+    @*  scripty pro komponenty *@
+    <script src="/scripts/components/header.js"></script>
 </head>
 <body id="AUTH-PAGE">
 <div id="app">
@@ -40,21 +43,19 @@
                     <p>Nemáš účet? <a href="/register">Registruj se!</a></p>
                     <form method="post">
                         <div class="input">
-                            <label for="username">Uživatel nebo Email:</label><br>
-                            <input type="text" id="username" name="username"><br>
+                            <label for="username">Uživatel nebo Email:</label>
+                            <input type="text" id="username" name="username">
                         </div>
                         <div class="input">
-                            <label for="password">Heslo:</label><br>
+                            <label for="password">Heslo:</label>
                             <input type="password" id="password" name="password">
                         </div>
-                        <br><br>
                         <div class="submit">
-                            <input type="submit" value="Potvrdit">
+                            <input type="submit" class="button-primary" value="Potvrdit">
                         </div>
                     </form>
-                    @if (ViewBag.ErrorMessage != null)
-                    {
-                        <p style="color: red">@ViewBag.ErrorMessage</p>
+                    @if (ViewBag.ErrorMessage != null) {
+                        <p class="errortxt">@ViewBag.ErrorMessage</p>
                     }
                 </div>
             } 
@@ -65,27 +66,27 @@
                     <p>Máš účet? <a href="/login">Přihlaš se!</a></p>
                     <form method="post">
                         <div class="input">
-                            <label for="username">Uživatel:</label><br>
-                            <input type="text" name="username"><br>
+                            <label for="username">Uživatel:</label>
+                            <input type="text" name="username">
                         </div>
                         <div class="input">
-                            <label for="email">Email:</label><br>
-                            <input type="email" name="email"><br>
+                            <label for="email">Email:</label>
+                            <input type="email" name="email">
                         </div>
                         <div class="input">
-                            <label for="password">Heslo:</label><br>
-                            <input type="password" name="password"><br><br>
+                            <label for="password">Heslo:</label>
+                            <input type="password" name="password">
                         </div>
                         <div class="input">
-                            <label for="passwordconfirm">Potvrďte heslo:</label><br>
+                            <label for="passwordconfirm">Potvrďte heslo:</label>
                             <input type="password" name="passwordconfirm">
                         </div>
                         <div class="submit">
-                        <input type="submit" value="Potvrdit">
+                            <input type="submit" class="button-primary" value="Potvrdit">
                         </div>
                     </form>
                     @if (ViewBag.ErrorMessage != null) {
-                        <p style="color: red">@ViewBag.ErrorMessage</p>
+                        <p class="errortxt">@ViewBag.ErrorMessage</p>
                     }
                 </div>
             }

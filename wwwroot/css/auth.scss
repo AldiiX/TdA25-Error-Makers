@@ -15,37 +15,60 @@
 
         p {
             font-size: 20px;
-            margin-top: 2vw;
             text-align: center;
+            margin-top: 16px;
+            margin-bottom: 48px;
         }
 
         a {
             color: var(--accent-color-secondary);
             text-decoration: none;
-            text-weight: bold;
+            font-weight: 700;
             font-size: 20px;
+        }
+
+        form {
+            width: auto;
+            position: relative;
         }
 
         .input {
             text-align: center;
-            margin: 1vw auto;
+            margin: 16px auto;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            width: fit-content;
+
+            >input {
+                width: 250px;
+            }
+
+            >label {
+                text-align: left;
+                margin-bottom: 4px;
+            }
+        }
+
+        .errortxt {
+            color: var(--accent-color-secondary);
             font-size: 16px;
         }
 
         .submit {
             text-align: center;
             margin: 0 auto;
-            font-size: 16px;    
-        }
-        
-        .submit{
-            input:hover{
-                background-color: var(--accent-color-secondary);
-                color: white;
+            font-size: 16px;
+            margin-top: 32px;
+
+            >input {
+                width: 250px;
+
+                &:hover {
+                    background-color: var(--accent-color-secondary);
+                    color: white;
+                }
             }
         }
     }
 }
-
-
-

@@ -77,7 +77,6 @@ p, a, button, input, textarea, select, label {
   border: none;
   border-radius: 12px;
   padding: 10px 20px;
-  margin: 10px;
   cursor: pointer;
 }
 .button-primary:hover, .button-primary-col-prim:hover {
@@ -90,7 +89,6 @@ p, a, button, input, textarea, select, label {
   border: none;
   border-radius: 12px;
   padding: 10px 20px;
-  margin: 10px;
   cursor: pointer;
 }
 .button-primary-col-sec:hover {
