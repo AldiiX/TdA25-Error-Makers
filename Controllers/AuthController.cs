@@ -1,4 +1,5 @@
-﻿using TdA25_Error_Makers.Classes;
+﻿using MySql.Data.MySqlClient;
+using TdA25_Error_Makers.Classes;
 
 namespace TdA25_Error_Makers.Controllers;
 using Microsoft.AspNetCore.Mvc;
@@ -51,44 +52,38 @@ public class AuthController : Controller {
             return View("/Views/Auth.cshtml");
         }
 
-        using var checkUsernameCmd = Database.GetConnection().CreateCommand();
-        checkUsernameCmd.CommandText = "SELECT COUNT(*) FROM `users` WHERE `username` = @username";
-        checkUsernameCmd.Parameters.AddWithValue("@username", username);
-        var usernameExists = Convert.ToInt32(checkUsernameCmd.ExecuteScalar()) > 0;
 
-        if (usernameExists) {
-            ViewBag.ErrorMessage = "Uživatelské jméno už je zabrané.";
-            return View("/Views/Auth.cshtml");
-        }
-        
-        using var checkEmailCmd = Database.GetConnection().CreateCommand();
-        checkEmailCmd.CommandText = "SELECT COUNT(*) FROM `users` WHERE `email` = @email";
-        checkEmailCmd.Parameters.AddWithValue("@email", email);
-        var emailExists = Convert.ToInt32(checkEmailCmd.ExecuteScalar()) > 0;
 
-        if (emailExists) {
-            ViewBag.ErrorMessage = "Email už byl použit.";
-            return View("/Views/Auth.cshtml");
-        }
-        
-        // vytvoření uživatele
         using var conn = Database.GetConnection();
-        if (conn == null) {
+        if(conn == null) {
             ViewBag.ErrorMessage = "Nepodařilo se připojit k databázi.";
             return View("/Views/Auth.cshtml");
         }
 
-        using var cmd = conn.CreateCommand();
-        cmd.CommandText = "INSERT INTO `users` (`username`, `email`, `password`) VALUES (@username, @email, @password)";
-        cmd.Parameters.AddWithValue("@username", username);
-        cmd.Parameters.AddWithValue("@email", email);
-        cmd.Parameters.AddWithValue("@password", Utilities.EncryptPassword(password));
+        try {
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "INSERT INTO `users` (`username`, `email`, `password`) VALUES (@username, @email, @password)";
+            cmd.Parameters.AddWithValue("@username", username);
+            cmd.Parameters.AddWithValue("@email", email);
+            cmd.Parameters.AddWithValue("@password", Utilities.EncryptPassword(password));
 
-        if (cmd.ExecuteNonQuery() == 0) {
+            if (cmd.ExecuteNonQuery() == 0) {
+                ViewBag.ErrorMessage = "Nepodařilo se vytvořit uživatele.";
+                return View("/Views/Auth.cshtml");
+            }
+        } catch(MySqlException e) {
+            if (e.Number == 1062) {
+                ViewBag.ErrorMessage = "Uživatel s tímto jménem nebo emailem již existuje.";
+                return View("/Views/Auth.cshtml");
+            }
+
             ViewBag.ErrorMessage = "Nepodařilo se vytvořit uživatele.";
             return View("/Views/Auth.cshtml");
         }
 
+
+
+        // všechno je ok, takže se uživatel přihlásí
         Auth.AuthUser(username, Utilities.EncryptPassword(password));
         return Redirect("/");
     }
