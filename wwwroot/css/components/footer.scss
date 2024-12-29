@@ -3,7 +3,6 @@
     color: var(--text-color);
     padding: 48px 0;
     position: relative;
-    text-align: center;
     font-family: Dosis, sans-serif;
     transition-duration: 0.3s;
 
@@ -162,7 +161,11 @@
                         }
                     }
                 }
-                
+                .logout{
+                    position: relative;
+                    text-align: left;
+                    margin: 0;
+                }
             }
         }
         

@@ -3,7 +3,6 @@
   color: var(--text-color);
   padding: 48px 0;
   position: relative;
-  text-align: center;
   font-family: Dosis, sans-serif;
   transition-duration: 0.3s;
 }
@@ -163,6 +162,11 @@
 }
 .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 .content .content-flex .login .UserInformation .Texts .bot p {
   font-weight: 700;
+}
+.footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 .content .content-flex .login .logout {
+  position: relative;
+  text-align: left;
+  margin: 0;
 }
 .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 .content .copyright {
   display: flex;
