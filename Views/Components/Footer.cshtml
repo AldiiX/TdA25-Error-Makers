@@ -54,7 +54,13 @@
             <div class="login">
                 @if(loggedAccount != null) {
                     <p class="upper">Přihlášení</p>
-                    <p>Vítej, @(loggedAccount.DisplayName)!</p>
+                    <p> Přihlášen jako</p>
+                    <span class="UserIcon">
+                        @loggedAccount.DisplayName[0].ToString().ToUpper()
+                    </span>
+                    <p>
+                        @(loggedAccount.DisplayName)
+                    </p>
                     <p>
                         <a href="/logout">Odhlásit se</a>
                     </p>
