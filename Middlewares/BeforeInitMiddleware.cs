@@ -18,11 +18,7 @@ public class BeforeInitMiddleware(RequestDelegate next){
         // specifické případy
         if (path.StartsWith("/game/") && path != "/game/") {
             var uuid = path.Split("/")[2];
-            var game = Game.GetByUUID(uuid);
-            if (game == null) {
-                context.Response.StatusCode = 404;
-                return;
-            }
+            Game? game = Game.GetByUUID(uuid);
 
             context.Items["game"] = game;
         }

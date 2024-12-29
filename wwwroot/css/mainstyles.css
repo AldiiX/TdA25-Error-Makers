@@ -65,7 +65,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 32px;
 }
 
-p, a, button, input, textarea, select {
+p, a, button, input, textarea, select, label {
   font-family: Dosis, sans-serif;
   font-size: 16px;
   font-weight: 500;
@@ -77,7 +77,6 @@ p, a, button, input, textarea, select {
   border: none;
   border-radius: 12px;
   padding: 10px 20px;
-  margin: 10px;
   cursor: pointer;
 }
 .button-primary:hover, .button-primary-col-prim:hover {
@@ -90,7 +89,6 @@ p, a, button, input, textarea, select {
   border: none;
   border-radius: 12px;
   padding: 10px 20px;
-  margin: 10px;
   cursor: pointer;
 }
 .button-primary-col-sec:hover {
@@ -111,7 +109,7 @@ p, a, button, input, textarea, select {
 
 .sections {
   position: relative;
-  min-height: 100vh;
+  min-height: 75vh;
   width: 76.5%;
   margin: 0 auto;
   margin-top: 25vh;

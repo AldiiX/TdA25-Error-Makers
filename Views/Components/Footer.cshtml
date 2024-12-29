@@ -1,4 +1,6 @@
+@using TdA25_Error_Makers
 @using TdA25_Error_Makers.Classes
+@using TdA25_Error_Makers.Classes.Objects
 @{
     var loggedAccount = Utilities.GetLoggedAccountFromContextOrNull();
 }
@@ -40,15 +42,15 @@
                 <p class="upper">Team</p>
                 <p>
                     Fullstack:&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="https://stanislavskudrna.cz" target="_blank"> Stanislav Škudrna</a>
+                    <a href="https://stanislavskudrna.cz" target="_blank" style="--team-image: url(/images/team/standa.png)"> Stanislav Škudrna</a>
                 </p>
                 <p>
                     Frontend:&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="https://github.com/dgkuba657" target="_blank"> Jakub Funk</a>
+                    <a href="https://github.com/dgkuba657" target="_blank" style="--team-image: url(/images/team/kuba.png)"> Jakub Funk</a>
                 </p>
                 <p>
                     Frontend:&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="https://github.com/wedralda" target="_blank"> Pavel Andrle</a>
+                    <a href="https://github.com/wedralda" target="_blank" style="--team-image: url(/images/team/paja.png)"> Pavel Andrle</a>
                 </p>
             </div>
             <div class="login">
@@ -71,6 +73,27 @@
                     </P>
                 }
             </div>
+
+            @if (loggedAccount is { AccountType: Account.TypeOfAccount.ADMIN }) {
+                <div class="admintools">
+                    <p class="upper">Admin Info</p>
+                    <p>Uptime aplikace: @($"{Program.AppUptime.Days:D2}:{Program.AppUptime.Hours:D2}:{Program.AppUptime.Minutes:D2}:{Program.AppUptime.Seconds:D2}")</p>
+                    <p>MySQL Server: @(Database.IsUsingFallbackServer ? "Fallback" : "Externí")</p>
+                    <button onclick="
+                        this.disabled = true;
+                        fetch('/api/app/restartmysql', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(() => {
+                            window.location.reload();
+                        }).catch(() => {
+                            alert('Nepodařilo se restartovat MySQL server.');
+                        });
+                    ">Restartovat MySQL</button>
+                </div>
+            }
         </div>
 
         <div class="copyright">

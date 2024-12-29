@@ -8,6 +8,7 @@ namespace TdA25_Error_Makers.Classes.Objects;
 
 public class GameBoard {
 
+    // propy
     private string[,] Board { get; set; }
     private HashSet<(int row, int col)>? WinningCells { get; set; }
 
@@ -15,6 +16,13 @@ public class GameBoard {
 
     //private byte Size { get; set; } = 15;
 
+    private HashSet<(int row, int col)>? WinningCells { get; set; }
+
+    public enum Player { X, O }
+
+
+
+    // konstruktory
     private GameBoard(string[,] board) {
         Board = board;
     }
@@ -49,18 +57,20 @@ public class GameBoard {
         Board = board;
     }
 
-    private GameBoard(byte size = 15) {
+    private GameBoard() {
+        byte size = 15;
         Board = new string[size, size];
-        //Size = size;
         InitializeBoard();
     }
 
 
 
-    // metody
-    public static GameBoard Parse(string[,] board) => new GameBoard(board);
-    public static GameBoard Parse(List<List<string>> board) => new GameBoard(board);
-    public static GameBoard Parse(string board) => new GameBoard(board);
+    // statické metody
+    public static GameBoard Parse(string[,] board) => new(board);
+
+    public static GameBoard Parse(List<List<string>> board) => new(board);
+
+    public static GameBoard Parse(string board) => new(board);
 
     public static bool TryParse(string? board, out GameBoard gameBoard) {
         if (board == null) {
@@ -97,8 +107,11 @@ public class GameBoard {
         }
     }
 
-    public static GameBoard CreateNew() => new GameBoard();
+    public static GameBoard CreateNew() => new();
 
+
+
+    // instance metody
     public override string ToString() {
         var boardToList = new List<List<string>>();
         for (int row = 0; row < 15; row++) {
@@ -166,6 +179,9 @@ public class GameBoard {
         return sumCheck && boardSizeCheck && validValues;
     }
 
+    /**
+     * metoda, která nastaví všechny hodnoty na "" (prázdné)
+     */
     private void InitializeBoard() {
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
@@ -174,31 +190,11 @@ public class GameBoard {
         }
     }
 
-
-
-    /*public void SetCell(int row, int col, string value) {
-        if(value != "X" && value != "O" && value != "") {
-            throw new ArgumentOutOfRangeException("Invalid value.");
-        }
-
-        if (!IsValidPosition(row, col)) {
-            throw new ArgumentOutOfRangeException("Invalid board position.");
-        }
-
-        Board[row, col] = value;
-    }
-
-    public string GetCell(int row, int col) {
-        if (IsValidPosition(row, col)) {
-            return Board[row, col];
-        }
-
-        throw new ArgumentOutOfRangeException("Invalid board position.");
-    }*/
-
-    private bool IsValidPosition(int row, int col) {
-        return row >= 0 && row < 15 && col >= 0 && col < 15;
-    }
+    /**
+     * metoda, která nastaví všechny hodnoty na "" (prázdné);
+     * alias pro InitializeBoard()
+     */
+    private void ResetBoard() { InitializeBoard(); }
 
     public List<List<string>> ToList() {
         var boardToList = new List<List<string>>();
@@ -225,9 +221,12 @@ public class GameBoard {
 
     public HashSet<(int row, int col)>? GetWinningCells() => WinningCells != null ? [..WinningCells] : null;
 
-    public void ResetBoard() {
-        InitializeBoard();
+        return GetRound() > 5 ? Game.GameState.MIDGAME : Game.GameState.OPENING;
     }
+
+    public Player? GetWinner() => CheckIfSomeoneWon();
+
+    public HashSet<(int row, int col)>? GetWinningCells() => WinningCells != null ? [..WinningCells] : null;
 
     /**
      * metoda na zjištění, kdo je na tahu (vždy začíná X)
@@ -247,8 +246,6 @@ public class GameBoard {
 
         return xCount == oCount ? Player.X : Player.O;
     }
-
-
 
     public Player? CheckIfSomeoneWon() {
         for (int row = 0; row < 15; row++) {

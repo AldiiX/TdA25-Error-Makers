@@ -15,7 +15,8 @@ $height: 300px;
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 {
     justify-content: center;
     align-items: center;
-    position: relative;
+    position: absolute;
+    pointer-events: none;
     width: 100%;
     height: $height;
     overflow: hidden;

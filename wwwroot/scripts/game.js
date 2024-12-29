@@ -17,7 +17,6 @@ export const vue = new Vue({
             setTimeout(() => {
                 this.getGame();
             }, 1150);
-            window.scrollTo(0, 0);
         },
         updateCell: function (_cell, index) {
             const cell = _cell;
@@ -47,21 +46,32 @@ export const vue = new Vue({
                     name: _this.game.name,
                     difficulty: _this.game.difficulty,
                 })
-            }).then(response => response.json()).then(data => {
+            }).then(async (response) => {
+                const data = await response.json();
+                if (!response.ok)
+                    throw new Error();
                 this.initializeGame(data);
+            }).catch(_ => {
+                this.getGame();
             });
         },
         getGame: function () {
             const _this = this;
             const gameUUID = window.location.pathname.split("/")[2];
             fetch(`/api/v1/games/${gameUUID}`)
-                .then(response => response.json())
-                .then(data => {
+                .then(async (response) => {
+                const data = await response.json();
+                if (!response.ok)
+                    throw new Error();
                 this.initializeGame(data);
+            }).catch(error => {
+                location.href = `/error?code=404&message=Chyba při spouštění hry&buttonLink=/games`;
             });
         },
         initializeGame: function (data) {
             const _this = this;
+            if (data === null)
+                throw new Error("Data is null");
             _this.game = data;
             window.scroll({ top: 0, left: 0, behavior: "smooth" });
             if (!_this.game.original)
@@ -106,8 +116,12 @@ export const vue = new Vue({
                     difficulty: document.getElementById("input-game-difficulty")?.value ?? "medium",
                     saved: true,
                 })
-            }).then(response => response.json()).then(data => {
-                _this.editMode = false;
+            }).then(async (response) => {
+                const data = await response.json();
+                if (!response.ok)
+                    throw new Error();
+                this.initializeGame(data);
+            }).catch(_ => {
                 this.getGame();
             });
         },
@@ -129,8 +143,13 @@ export const vue = new Vue({
                 headers: {
                     "Content-Type": "application/json"
                 }
-            }).then(response => response.json()).then(data => {
+            }).then(async (response) => {
+                const data = await response.json();
+                if (!response.ok)
+                    throw new Error();
                 this.initializeGame(data);
+            }).catch(_ => {
+                this.getGame();
             });
         },
         cancelEditMode: function () {

@@ -1,5 +1,6 @@
 global using HCS = TdA25_Error_Makers.Services.HttpContextService;
 using dotenv.net;
+using MySql.Data.MySqlClient;
 using StackExchange.Redis;
 using TdA25_Error_Makers.Classes;
 using TdA25_Error_Makers.Middlewares;
@@ -10,10 +11,11 @@ namespace TdA25_Error_Makers;
 
 public static class Program {
 
+    public static DateTime AppStartTime { get; } = DateTime.Now;
     public static WebApplication App { get; private set; } = null!;
     public static IDictionary<string, string> ENV { get; private set; } = null!;
     public static ILogger Logger => App.Logger;
-
+    public static TimeSpan AppUptime => DateTime.Now - AppStartTime;
     
     #if DEBUG || TESTING
         public const bool DEVELOPMENT_MODE = true;
@@ -47,9 +49,9 @@ public static class Program {
 
             options.Cookie.MaxAge = TimeSpan.FromDays(365); // Trvání cookie na 365 dní
             //options.Cookie.Expiration = TimeSpan.FromDays(365);
-            options.Cookie.Name = "tda25_error_makers_session";
+            options.Cookie.Name = "SESSION";
         });
-
+        builder.Services.AddSingleton<IViewRenderService, ViewRenderService>();
         builder.Configuration
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
@@ -89,16 +91,36 @@ public static class Program {
         App.UseSession();
         App.UseRouting();
         App.UseAuthorization();
-        //App.UseMiddleware<ErrorHandlingMiddleware>();
+        App.UseMiddleware<ErrorHandlingMiddleware>();
         App.UseMiddleware<BeforeInitMiddleware>();
         App.MapControllerRoute(name: "default", pattern: "/");
 
 
 
-        // Vyzkoušení připojení k databázi
-        using var conn = Database.GetConnection(false);
-        if (conn == null) Logger.Log(LogLevel.Critical, $"Database connection ({Database.DATABASE_IP}) error při spouštění aplikace.");
-        else Logger.Log(LogLevel.Information, $"Database connection ({Database.DATABASE_IP}) successful při spouštění aplikace.");
+        // test připojení k databázi, pokud selže, zkusí se fallback
+        MySqlConnection? conn = null;
+
+        try {
+            conn = new MySqlConnection(Database.CONNECTION_STRING);
+            conn.Open();
+            Logger.Log(LogLevel.Information, $"Database connection to {Database.DATABASE_IP} successful.");
+        } catch (Exception e) {
+            Logger.Log(LogLevel.Error, $"Database connection „{conn?.DataSource}” error: {e.Message}, trying fallback.");
+
+            try {
+                Database.SwitchToFallbackServer();
+                conn = new MySqlConnection(Database.CONNECTION_STRING);
+                conn.Open();
+                Logger.Log(LogLevel.Information, "Fallback database connection successful.");
+            } catch (Exception e2) {
+                Logger.Log(LogLevel.Error, $"Database connection „{conn?.DataSource}” error: {e2.Message}, fallback failed.");
+                Database.SwitchToNormalServer();
+                Database.LAST_CONNECTION_FAILED = true;
+            }
+
+            Database.LAST_CONNECTION_FAILED = true;
+        }
+
         conn?.Close();
 
         

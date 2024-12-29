@@ -52,7 +52,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends tzdata \
 #       pak se to musí změnit v souboru .github/workflows/pipeline.yml
 #       a pak v github actions secrets -> https://github.com/AldiiX/TdA25-Error-Makers/settings/secrets/actions
 ARG DATABASE_IP=localhost
-ARG DATABASE_PASSWORD=default
+ARG DATABASE_PASSWORD=password
 #ARG REDIS_PASSWORD=default
 #ARG REDIS_PORT=6379
 ARG CACHE_VERSION=1
