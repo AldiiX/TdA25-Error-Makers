@@ -74,6 +74,7 @@ p, a, button, input, textarea, select, label {
 .button-primary, .button-primary-col-prim {
   background: var(--accent-color-primary);
   color: white;
+  text-decoration: none;
   border: none;
   border-radius: 12px;
   padding: 10px 20px;
@@ -87,6 +88,7 @@ p, a, button, input, textarea, select, label {
   background: var(--accent-color-secondary);
   color: white;
   border: none;
+  text-decoration: none;
   border-radius: 12px;
   padding: 10px 20px;
   cursor: pointer;
@@ -102,6 +104,7 @@ p, a, button, input, textarea, select, label {
   border-radius: 12px;
   padding: 10px 20px;
   cursor: pointer;
+  text-decoration: none;
 }
 .button-secondary:hover {
   background: var(--button-bg);

@@ -27,7 +27,7 @@ export const vue = new Vue({
         filterEndDate: "",    
         selectedDateRange: "",  
 
-        games: [],
+        games: null,
         gamesFiltered: [],
     },
 
@@ -84,7 +84,10 @@ export const vue = new Vue({
             }
 
             const start = new Date(startDate);
+            start.setHours(0, 0, 0, 0);
+
             const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999);
             
             if (startDate && endDate) {
                 return gameUpdated >= start && gameUpdated <= end;
@@ -102,8 +105,15 @@ export const vue = new Vue({
             const _this = this as any;
             const now = new Date();
             let startDate = new Date();
+            startDate.setHours(0, 0, 0, 0);
+
+            let endDate = new Date();
+            endDate.setHours(23, 59, 59, 999);
 
             switch (range) {
+                case 'today':
+                    startDate = now;
+                    break;
                 case 'last7days':
                     startDate.setDate(now.getDate() - 7);
                     break;
@@ -127,11 +137,10 @@ export const vue = new Vue({
             
             if (range !== 'custom' && range !== '') {
                 _this.filterStartDate = startDate.toISOString().split('T')[0];
-                _this.filterEndDate = now.toISOString().split('T')[0];
+                _this.filterEndDate = endDate.toISOString().split('T')[0];
             }
 
             _this.selectedDateRange = range;
-
             _this.updateFilters();
         },
 
@@ -150,23 +159,50 @@ export const vue = new Vue({
             return obj;
         },
 
+        setGameDifficultyText: function(game: any): string {
+            switch(game?.difficulty) {
+                case "beginner": return "Začátečník";
+                case "easy": return "Lehká";
+                case "medium": return "Střední";
+                case "hard": return "Těžká";
+                case "extreme": return "Extrémní";
+            }
+
+            return "Neznámá";
+        },
+
+        setGameStateText: function(game: any): string {
+            switch(game?.gameState) {
+                case "opening": return "Zahájení";
+                case "midgame": return "V průběhu";
+                case "endgame": return "Koncovka";
+                case "finished": return "Dohraná";
+            }
+
+            return "Neznámý";
+        },
+
         howLongSinceLastUpdate(game: any): string {
             const updatedAt = new Date(game.updatedAt);
             const now = new Date();
             const diffMs = now.getTime() - updatedAt.getTime();
 
-            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24)); 
-            const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); 
-            const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60)); 
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+            const diffSeconds = Math.floor((diffMs % (1000 * 60)) / 1000);
 
             let timeAgo = '';
             if (diffDays > 0) {
                 timeAgo = `${diffDays} ${this.getCzechDeclension(diffDays, 'den', 'dny', 'dní')} nazpět`;
             } else if (diffHours > 0) {
                 timeAgo = `${diffHours} ${this.getCzechDeclension(diffHours, 'hodina', 'hodiny', 'hodin')} nazpět`;
-            } else {
+            } else if (diffMinutes > 0) {
                 timeAgo = `${diffMinutes} ${this.getCzechDeclension(diffMinutes, 'minuta', 'minuty', 'minut')} nazpět`;
+            } else {
+                timeAgo = `před pár sekundama`;
             }
+
             return timeAgo;
         },
 
@@ -179,7 +215,6 @@ export const vue = new Vue({
                 return plural;
             }
         }
-
 
     },
 

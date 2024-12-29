@@ -4,7 +4,7 @@
 }
 
 .sections {
-  padding-bottom: 80px;
+  padding-bottom: 160px;
 }
 .sections > .mainsection > .texts {
   margin-bottom: 96px;
@@ -18,11 +18,61 @@
 .sections > .mainsection > .texts > .inputs {
   text-align: center;
 }
-.sections > .mainsection > .texts > .inputs > input {
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+.sections > .mainsection > .content > .loadingdiv {
+  position: relative;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  min-width: 600px;
+  -webkit-animation: appear 1s ease-out;
 }
-
-.games-parent {
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  70% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.sections > .mainsection > .content > .loadingdiv > .img {
+  width: 250px;
+  aspect-ratio: 1/1;
+  mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
+  mask-size: contain;
+  background-color: var(--text-color);
+  animation: loading-img-anim 3s ease-in-out infinite;
+  margin: 0 auto;
+}
+@keyframes loading-img-anim {
+  0% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-20deg);
+  }
+  60% {
+    transform: rotate(20deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+.sections > .mainsection > .content > .loadingdiv p, .sections > .mainsection > .content > .loadingdiv h1 {
+  text-align: center;
+  margin: 0;
+}
+.sections > .mainsection > .content > .loadingdiv h1 {
+  margin-top: 32px;
+  margin-bottom: 8px;
+}
+.sections > .mainsection > .content > .loadingdiv p {
+  color: var(--color-gray);
+}
+.sections > .mainsection > .content > .games-parent {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -30,91 +80,111 @@
   gap: 20px;
   margin: 0 auto;
   grid-template-columns: repeat(6, 1fr); /* 6 sloupců stejné šířky */
+  animation: sfapodij 0.8s ease-in-out;
 }
-.games-parent a {
-  text-decoration: none;
-  color: var(--text-color-primary);
+@keyframes sfapodij {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-.games-parent > .child {
-  padding: 10px;
-  border-radius: 5px;
+.sections > .mainsection > .content > .games-parent > .child {
+  padding: 24px;
   display: flex;
   align-items: center;
   text-align: center;
-  background-color: var(--background-color);
+  background-color: var(--background-color-secondary);
   transition: all 0.3s ease-in-out;
+  border-radius: 10px;
+  gap: 24px;
+  box-shadow: 0 0 7px rgba(0, 0, 0, 0.05);
+  width: calc(33.3333333333% - 20px);
 }
-.games-parent > .child > .icon {
-  display: flex;
+.sections > .mainsection > .content > .games-parent > .child > .icon {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
 }
-.games-parent > .child > .icon > .x {
-  width: 30px;
-  height: 30px;
+.sections > .mainsection > .content > .games-parent > .child > .icon > .x, .sections > .mainsection > .content > .games-parent > .child > .icon > .o {
+  position: absolute;
+  width: 40px;
+  height: 40px;
   mask-position: center;
   mask-size: contain;
   mask-repeat: no-repeat;
   background-color: var(--text-color);
 }
-.games-parent > .child > .icon > .o {
-  width: 30px;
-  height: 30px;
-  mask-position: center;
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  background-color: var(--text-color);
+.sections > .mainsection > .content > .games-parent > .child > .icon > .x {
+  background-color: var(--accent-color-secondary);
 }
-.games-parent > .child > .texts {
+.sections > .mainsection > .content > .games-parent > .child > .icon > .o {
+  background-color: var(--accent-color-primary);
+}
+.sections > .mainsection > .content > .games-parent > .child > .icon > div:nth-child(1) {
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.sections > .mainsection > .content > .games-parent > .child > .icon > div:nth-child(2) {
+  right: 0;
+  bottom: 0;
+}
+.sections > .mainsection > .content > .games-parent > .child > .texts {
   display: flex;
   flex-direction: column;
-  margin-left: 16px;
+  overflow: hidden;
+  gap: 8px;
+  flex-grow: 1;
 }
-.games-parent > .child > .texts > .flex {
-  display: flex;
-  justify-content: center;
-  margin-left: 16px;
+.sections > .mainsection > .content > .games-parent > .child > .texts > h2 {
+  font-size: 24px;
+  margin: 0;
+  text-align: left;
 }
-.games-parent > .child > .texts > .flex .pair-difficulty {
+.sections > .mainsection > .content > .games-parent > .child > .texts > .flex {
   display: flex;
-  gap: 10px;
+  justify-content: left;
+  gap: 2px 12px;
+  flex-wrap: wrap;
+}
+.sections > .mainsection > .content > .games-parent > .child > .texts > .flex .pair {
+  display: flex;
+  gap: 4px;
   align-items: center;
-  margin-right: 10px;
 }
-.games-parent > .child > .texts > .flex .pair-difficulty .icon {
-  width: 30px;
-  height: 30px;
+.sections > .mainsection > .content > .games-parent > .child > .texts > .flex .pair .icon {
+  width: 20px;
+  height: 20px;
   mask-position: center;
   mask-size: contain;
   mask-repeat: no-repeat;
   background-color: var(--text-color);
 }
-.games-parent > .child > .texts > .flex .pair-updateat {
+.sections > .mainsection > .content > .games-parent > .child > .texts > .flex .pair p {
+  margin: 0;
+  text-align: left;
+  flex-shrink: 0;
+}
+.sections > .mainsection > .content > .games-parent > .child > .texts > .flex .pair:not(.pair-difficulty) .icon {
+  mask-size: 80%;
+}
+.sections > .mainsection > .content > .games-parent > .child > .texts > .flex .pair:is(.pair-difficulty) .icon {
+  margin-right: 2px;
+}
+.sections > .mainsection > .content > .games-parent > .child > .texts > .buttons {
   display: flex;
-  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
 }
-.games-parent > .child > .texts > .flex .pair-updateat p {
-  width: 100%;
-}
-.games-parent > .child > .texts > .flex .pair-updateat .icon {
-  width: 30px;
-  height: 30px;
-  mask-position: center;
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  background-color: var(--text-color);
-}
-.games-parent > .child > .texts .pair-gamestate {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
-}
-.games-parent > .child > .texts .pair-gamestate .icon {
-  width: 30px;
-  height: 30px;
-  mask-position: center;
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  background-color: var(--text-color);
+.sections > .mainsection > .content > .games-parent > .child > .texts > .buttons a, .sections > .mainsection > .content > .games-parent > .child > .texts > .buttons button {
+  display: block;
+  font-size: 14px;
+  padding: 8px 16px;
 }
 
 /*# sourceMappingURL=games.css.map */

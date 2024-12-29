@@ -24,6 +24,7 @@ public class Game {
     public DateTime UpdatedAt { get; private set; }
     public bool IsSaved { get; private set; }
     public string? Winner { get; private set; }
+    public string CurrentPlayer => Board.GetNextPlayer().ToString().ToUpper();
 
     [JsonIgnore]
     public GameBoard Board { get; private set; }
