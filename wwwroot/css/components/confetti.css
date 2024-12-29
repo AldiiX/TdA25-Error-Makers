@@ -1,7 +1,8 @@
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 {
   justify-content: center;
   align-items: center;
-  position: relative;
+  position: absolute;
+  pointer-events: none;
   width: 100%;
   height: 300px;
   overflow: hidden;
@@ -37,353 +38,353 @@
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(1) {
   left: 7%;
-  transform: rotate(-55deg);
+  transform: rotate(-5deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 423ms;
-  animation-duration: 791ms;
+  animation-delay: 276ms;
+  animation-duration: 1063ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(2) {
   left: 14%;
-  transform: rotate(61deg);
+  transform: rotate(60deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 469ms;
-  animation-duration: 801ms;
+  animation-delay: 367ms;
+  animation-duration: 916ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(3) {
   left: 21%;
-  transform: rotate(15deg);
+  transform: rotate(59deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 419ms;
-  animation-duration: 835ms;
+  animation-delay: 88ms;
+  animation-duration: 969ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(4) {
   left: 28%;
-  transform: rotate(-20deg);
+  transform: rotate(-26deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 299ms;
-  animation-duration: 1146ms;
+  animation-delay: 287ms;
+  animation-duration: 770ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(5) {
   left: 35%;
-  transform: rotate(43deg);
+  transform: rotate(-66deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 415ms;
-  animation-duration: 896ms;
+  animation-delay: 386ms;
+  animation-duration: 826ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(6) {
   left: 42%;
-  transform: rotate(7deg);
+  transform: rotate(-49deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 101ms;
-  animation-duration: 723ms;
+  animation-delay: 431ms;
+  animation-duration: 1021ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(7) {
   left: 49%;
-  transform: rotate(-2deg);
+  transform: rotate(-42deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 137ms;
-  animation-duration: 896ms;
+  animation-delay: 225ms;
+  animation-duration: 844ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(8) {
   left: 56%;
-  transform: rotate(57deg);
+  transform: rotate(25deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 491ms;
-  animation-duration: 1030ms;
+  animation-delay: 416ms;
+  animation-duration: 1174ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(9) {
   left: 63%;
-  transform: rotate(53deg);
+  transform: rotate(-34deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 312ms;
-  animation-duration: 1012ms;
+  animation-delay: 114ms;
+  animation-duration: 792ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(10) {
   left: 70%;
-  transform: rotate(-16deg);
+  transform: rotate(-34deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 406ms;
-  animation-duration: 771ms;
+  animation-delay: 99ms;
+  animation-duration: 1190ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(11) {
   left: 77%;
-  transform: rotate(5deg);
+  transform: rotate(56deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 156ms;
-  animation-duration: 1146ms;
+  animation-delay: 394ms;
+  animation-duration: 965ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(12) {
   left: 84%;
-  transform: rotate(52deg);
+  transform: rotate(33deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 64ms;
-  animation-duration: 804ms;
+  animation-delay: 10ms;
+  animation-duration: 896ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(13) {
   left: 91%;
-  transform: rotate(-48deg);
+  transform: rotate(-32deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 475ms;
-  animation-duration: 1104ms;
+  animation-delay: 386ms;
+  animation-duration: 819ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(14) {
   left: 98%;
-  transform: rotate(-38deg);
+  transform: rotate(50deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 299ms;
-  animation-duration: 1181ms;
+  animation-delay: 272ms;
+  animation-duration: 1010ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(15) {
   left: 105%;
-  transform: rotate(25deg);
+  transform: rotate(-3deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 460ms;
-  animation-duration: 848ms;
+  animation-delay: 170ms;
+  animation-duration: 980ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(16) {
   left: 112%;
-  transform: rotate(72deg);
+  transform: rotate(-13deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 244ms;
-  animation-duration: 710ms;
+  animation-delay: 236ms;
+  animation-duration: 1143ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(17) {
   left: 119%;
-  transform: rotate(-24deg);
+  transform: rotate(-50deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 380ms;
-  animation-duration: 983ms;
+  animation-delay: 212ms;
+  animation-duration: 928ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(18) {
   left: 126%;
-  transform: rotate(-42deg);
+  transform: rotate(67deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 324ms;
-  animation-duration: 913ms;
+  animation-delay: 277ms;
+  animation-duration: 795ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(19) {
   left: 133%;
-  transform: rotate(27deg);
+  transform: rotate(-21deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 278ms;
-  animation-duration: 988ms;
+  animation-delay: 1ms;
+  animation-duration: 968ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(20) {
   left: 140%;
-  transform: rotate(-24deg);
+  transform: rotate(-62deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 293ms;
-  animation-duration: 840ms;
+  animation-delay: 122ms;
+  animation-duration: 887ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(21) {
   left: 147%;
-  transform: rotate(-68deg);
+  transform: rotate(-10deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 152ms;
-  animation-duration: 739ms;
+  animation-delay: 144ms;
+  animation-duration: 1177ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(22) {
   left: 154%;
-  transform: rotate(-27deg);
+  transform: rotate(-44deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 253ms;
-  animation-duration: 973ms;
+  animation-delay: 117ms;
+  animation-duration: 1007ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(23) {
   left: 161%;
-  transform: rotate(-28deg);
+  transform: rotate(15deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 361ms;
-  animation-duration: 1193ms;
+  animation-delay: 250ms;
+  animation-duration: 1007ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(24) {
   left: 168%;
-  transform: rotate(58deg);
+  transform: rotate(-19deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 291ms;
-  animation-duration: 860ms;
+  animation-delay: 339ms;
+  animation-duration: 928ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(25) {
   left: 175%;
-  transform: rotate(-43deg);
+  transform: rotate(23deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 193ms;
-  animation-duration: 901ms;
+  animation-delay: 106ms;
+  animation-duration: 1027ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(26) {
   left: 182%;
-  transform: rotate(-46deg);
+  transform: rotate(-33deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 308ms;
-  animation-duration: 1071ms;
+  animation-delay: 291ms;
+  animation-duration: 1072ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(27) {
   left: 189%;
-  transform: rotate(6deg);
+  transform: rotate(-72deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 495ms;
-  animation-duration: 929ms;
+  animation-delay: 38ms;
+  animation-duration: 962ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(28) {
   left: 196%;
-  transform: rotate(56deg);
+  transform: rotate(-23deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 382ms;
-  animation-duration: 939ms;
+  animation-delay: 181ms;
+  animation-duration: 919ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(29) {
   left: 203%;
-  transform: rotate(3deg);
+  transform: rotate(44deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 175ms;
-  animation-duration: 992ms;
+  animation-delay: 450ms;
+  animation-duration: 962ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(30) {
   left: 210%;
-  transform: rotate(-65deg);
+  transform: rotate(-78deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 56ms;
-  animation-duration: 1030ms;
+  animation-delay: 133ms;
+  animation-duration: 811ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(31) {
   left: 217%;
-  transform: rotate(-49deg);
+  transform: rotate(61deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 173ms;
-  animation-duration: 983ms;
+  animation-delay: 319ms;
+  animation-duration: 800ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(32) {
   left: 224%;
-  transform: rotate(-31deg);
+  transform: rotate(-12deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 404ms;
-  animation-duration: 973ms;
+  animation-delay: 372ms;
+  animation-duration: 1180ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(33) {
   left: 231%;
-  transform: rotate(-46deg);
+  transform: rotate(73deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 219ms;
-  animation-duration: 1117ms;
+  animation-delay: 163ms;
+  animation-duration: 965ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(34) {
   left: 238%;
-  transform: rotate(-13deg);
+  transform: rotate(-11deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 10ms;
-  animation-duration: 986ms;
+  animation-delay: 353ms;
+  animation-duration: 1112ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(35) {
   left: 245%;
-  transform: rotate(-62deg);
+  transform: rotate(27deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 492ms;
-  animation-duration: 1018ms;
+  animation-delay: 89ms;
+  animation-duration: 1005ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(36) {
   left: 252%;
-  transform: rotate(-39deg);
+  transform: rotate(3deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 156ms;
-  animation-duration: 1009ms;
+  animation-delay: 65ms;
+  animation-duration: 1065ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(37) {
   left: 259%;
-  transform: rotate(-28deg);
+  transform: rotate(-29deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 154ms;
-  animation-duration: 1085ms;
+  animation-delay: 487ms;
+  animation-duration: 808ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(38) {
   left: 266%;
-  transform: rotate(60deg);
+  transform: rotate(76deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 122ms;
-  animation-duration: 746ms;
+  animation-delay: 157ms;
+  animation-duration: 913ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(39) {
   left: 273%;
-  transform: rotate(-5deg);
+  transform: rotate(-48deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 339ms;
-  animation-duration: 784ms;
+  animation-delay: 303ms;
+  animation-duration: 807ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(40) {
   left: 280%;
-  transform: rotate(-80deg);
+  transform: rotate(-44deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 419ms;
-  animation-duration: 1036ms;
+  animation-delay: 60ms;
+  animation-duration: 966ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(41) {
   left: 287%;
-  transform: rotate(-45deg);
+  transform: rotate(-60deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 257ms;
-  animation-duration: 736ms;
+  animation-delay: 32ms;
+  animation-duration: 1064ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(42) {
   left: 294%;
-  transform: rotate(-80deg);
+  transform: rotate(53deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 439ms;
-  animation-duration: 1198ms;
+  animation-delay: 61ms;
+  animation-duration: 752ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(43) {
   left: 301%;
-  transform: rotate(77deg);
+  transform: rotate(6deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 162ms;
-  animation-duration: 805ms;
+  animation-delay: 272ms;
+  animation-duration: 840ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(44) {
   left: 308%;
-  transform: rotate(-52deg);
+  transform: rotate(-57deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 245ms;
-  animation-duration: 819ms;
+  animation-delay: 86ms;
+  animation-duration: 910ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(45) {
   left: 315%;
-  transform: rotate(5deg);
+  transform: rotate(-42deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 343ms;
-  animation-duration: 1128ms;
+  animation-delay: 71ms;
+  animation-duration: 992ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(46) {
   left: 322%;
-  transform: rotate(-71deg);
+  transform: rotate(52deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 81ms;
-  animation-duration: 1109ms;
+  animation-delay: 112ms;
+  animation-duration: 1101ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(47) {
   left: 329%;
-  transform: rotate(30deg);
+  transform: rotate(25deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 444ms;
-  animation-duration: 1054ms;
+  animation-delay: 131ms;
+  animation-duration: 879ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(48) {
   left: 336%;
-  transform: rotate(47deg);
+  transform: rotate(44deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 51ms;
-  animation-duration: 1117ms;
+  animation-delay: 108ms;
+  animation-duration: 1175ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(49) {
   left: 343%;
-  transform: rotate(50deg);
+  transform: rotate(-71deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 118ms;
-  animation-duration: 799ms;
+  animation-delay: 205ms;
+  animation-duration: 925ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(50) {
   left: 350%;
-  transform: rotate(-58deg);
+  transform: rotate(25deg);
   animation: makeItRain 1000ms infinite ease-out;
-  animation-delay: 322ms;
-  animation-duration: 812ms;
+  animation-delay: 475ms;
+  animation-duration: 829ms;
 }
 .confetti-8E2DA519-7758-4112-A060-09230DDBE988 .confetti-piece:nth-child(odd) {
   background: #17d3ff;

@@ -10,11 +10,6 @@ public class GameBoard {
 
     // propy
     private string[,] Board { get; set; }
-    private HashSet<(int row, int col)>? WinningCells { get; set; }
-
-    public enum Player { X, O }
-
-    //private byte Size { get; set; } = 15;
 
     private HashSet<(int row, int col)>? WinningCells { get; set; }
 
@@ -213,13 +208,6 @@ public class GameBoard {
     public Game.GameState GetGameState() {
         if (CheckIfSomeoneWon() != null) return Game.GameState.FINISHED;
         if (CheckIfSomeoneCanWin() != null) return Game.GameState.ENDGAME;
-
-        return GetRound() > 5 ? Game.GameState.MIDGAME : Game.GameState.OPENING;
-    }
-
-    public Player? GetWinner() => CheckIfSomeoneWon();
-
-    public HashSet<(int row, int col)>? GetWinningCells() => WinningCells != null ? [..WinningCells] : null;
 
         return GetRound() > 5 ? Game.GameState.MIDGAME : Game.GameState.OPENING;
     }
