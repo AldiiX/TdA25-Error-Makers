@@ -136,6 +136,9 @@
     import { vue } from "/scripts/game.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
 
     window.addCookie = f.addCookie;
+    setTimeout(() => {
+        window.scroll({ top: 0, left: 0});
+    }, 150);
     //console.warn(vue);
     if (window.history.replaceState) window.history.replaceState( null, null, window.location.href );
 </script>

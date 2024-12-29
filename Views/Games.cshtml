@@ -1,5 +1,6 @@
 ﻿@using TdA25_Error_Makers
 @using TdA25_Error_Makers.Classes
+@using TdA25_Error_Makers.Classes.Objects
 @{
     var webTheme = Utilities.WebTheme.Get();
 
@@ -40,19 +41,87 @@
                     <h1>Piškvorky</h1>
 
                     <div class="inputs">
-                        <input style="width: 270px" type="text" placeholder="Najít..." v-on:input="filterGames($event.target.value)">
+                        <input style="width: 270px" type="text" placeholder="Najít..." v-model="filterName" v-on:input="updateFilters">
                         <button class="button-primary-col-sec">Vytvořit</button>
+                        
+                        <div class="filter-container">
+                            <label for="difficulty-filter">Filtrovat dle obtížnosti</label>
+                            <select id="difficulty-filter" v-model="filterDifficulty" v-on:change="updateFilters">
+                                <option value="" selected>Všechny</option>
+                                <option value="beginner">Začátečník</option>
+                                <option value="easy">Lehká</option>
+                                <option value="medium">Střední</option>
+                                <option value="hard">Těžká</option>
+                                <option value="extreme">Extrémně těžká</option>
+                            </select>
+                            
+                            <select id="date-filter" v-model="selectedDateRange" v-on:change="setDateRange(selectedDateRange)">
+                                <option value="" selected>Kdykoliv</option>
+                                <option value="today">Dnes</option>
+                                <option value="last7days">Posledních 7 dní</option>
+                                <option value="last30days">Posledních 30 dní</option>
+                                <option value="lastYear">Poslední rok</option>
+                                <option value="custom">Vlastní</option>
+                            </select>
+                            
+                            <div v-cloak v-if="selectedDateRange === 'custom'">
+                                <input type="date" v-model="filterStartDate" v-on:change="updateFilters" placeholder="Datum od"/>
+                                <input type="date" v-model="filterEndDate" v-on:change="updateFilters" placeholder="Datum do"/>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
 
                 <div class="content">
-                    <div class="games-parent">
-                        <a class="child" v-for="game in gamesFiltered" v-cloak v-bind:href="'/game/'+ game.uuid">
-                            <h2>{{ game.name }}</h2>
-                            <p>difficulty: {{ game.difficulty }}</p>
-                            <p>Poslední aktualizace: <span v-cloak>{{ (new Date(game.updatedAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</span></p>
-                            <p>game state: {{ game.gameState }}</p>
-                        </a>
+                    <div class="loadingdiv" v-if="games === null">
+                        <div class="img"></div>
+                        <h1>Načítání všech her</h1>
+                    </div>
+
+                    <div v-if="games !== null" class="games-parent">
+                        <div class="child" v-for="game in gamesFiltered" v-cloak>
+                            <div class="icon">
+
+                                <!-- Když vyhrál nebo je na tahu X -->
+                                <template v-if="(game.winner && game.winner === 'X') || (!game.winner && game.currentPlayer?.toUpperCase() === 'X')">
+                                    <div class="x" style="mask-image: url(/images/icons/X_bile.svg)"></div>
+                                    <div class="o" style="mask-image: url(/images/icons/O_bile.svg)"></div>
+                                </template>
+
+                                <template v-else>
+                                    <div class="o" style="mask-image: url(/images/icons/O_bile.svg)"></div>
+                                    <div class="x" style="mask-image: url(/images/icons/X_bile.svg)"></div>
+                                </template>
+                            </div>
+
+                            <div class="texts"> @* display flex, flex-direction column *@
+                                <h2>{{ game.name }}</h2>
+
+                                <div class="flex">
+                                    <div class="pair pair-difficulty" title="Obtížnost">
+                                        <div class="icon" v-bind:style="setDifficultyIconStyle(game)"></div>
+                                        <p>{{ setGameDifficultyText(game) }}</p>
+                                    </div>
+
+                                    <div class="pair pair-updateat" title="Poslední úprava">
+                                        <div class="icon" style="mask-image: url(/images/icons/update.svg)"></div>
+                                        <p>{{ howLongSinceLastUpdate(game) }}</p>
+                                    </div>
+
+                                    <div class="pair pair-gamestate" title="Fáze hry">
+                                        <div class="icon" style="mask-image: url(/images/icons/gamestate.svg)"></div>
+                                        <p>{{ setGameStateText(game) }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="buttons">
+                                    <a class="button-primary" v-bind:href="'/game/'+ game.uuid">HRÁT</a>
+                                    @* <a class="button-primary-col-sec">SMAZAT</a> *@
+                                    <a class="button-secondary">UPRAVIT</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

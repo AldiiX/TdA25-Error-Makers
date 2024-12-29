@@ -30,6 +30,7 @@
 
 .bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433 {
     filter: blur(10vw) !important;
+    background-color: white;
 
     .one, .two {
         width: 32vw;
@@ -76,5 +77,13 @@
 
     section:is(.top) > .center > .left > p {
         color: #e3e3e3;
+    }
+}
+.header-5F015D44-0984-4A50-B52B-5319AE57C19C:is(.scrolled) {
+    >.flex {
+        >.Login > button {
+            background-color: rgba(0, 0, 0, 0.3);
+            transition-duration: 0.3s;
+        }
     }
 }

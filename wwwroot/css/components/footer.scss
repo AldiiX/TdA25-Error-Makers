@@ -129,8 +129,23 @@
                     transition-duration: 0.3s;
                 }
             }
+            .login{
+                .UserIcon{
+                    font-size: 24px;
+                    font-weight: 700;
+                    color: var(--text-color-primary);
+                    text-align: center;
+                    align-content: center;
+                    position: relative;
+                    display: block;
+                    background: rgb(0, 0, 0 , 0.1);
+                    border-radius: 50%;
+                    width: 50px;
+                    height: 50px;   
+                }
+            }
         }
-
+        
         .copyright{
             display: flex;
             font-size: 12px;
