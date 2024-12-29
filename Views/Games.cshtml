@@ -24,10 +24,10 @@
     <link rel="stylesheet" href="/libs/purecss.css">
     <link rel="stylesheet" href="/css/mainstyles.css">
     <link rel="stylesheet" href="/css/games.css">
-    <link rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()">
+    <link id="webtheme-link" rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()">
 
     @*  scripty pro komponenty *@
-    <script src="/scripts/components/header.js"></script>
+    <script type="module" src="/scripts/components/header.js"></script>
 </head>
 <body id="GAMES-PAGE">
     <div id="app">
@@ -42,7 +42,7 @@
 
                     <div class="inputs">
                         <input style="width: 270px" type="text" placeholder="Najít..." v-model="filterName" v-on:input="updateFilters">
-                        <button class="button-primary-col-sec">Vytvořit</button>
+                        <button class="button-primary-col-sec" onclick="location.href='/game'">Vytvořit</button>
                         
                         <div class="filter-container">
                             <label for="difficulty-filter">Filtrovat dle obtížnosti</label>

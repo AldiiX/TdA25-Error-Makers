@@ -58,7 +58,18 @@ export function removeCookie(prop) {
     });
 }
 export function setWebTheme(theme) {
-    addCookie('theme', theme);
+    addCookie('webtheme', theme);
+    const link = document.getElementById('webtheme-link');
+    if (!link)
+        return;
+    link.href = `/css/themes/${theme.toLowerCase()}.css`;
+}
+export function toggleWebTheme() {
+    const currentTheme = getCookie('webtheme');
+    if (currentTheme === 'dark')
+        setWebTheme('light');
+    else
+        setWebTheme('dark');
 }
 export function openModal(vue, modalId) {
     if (modalId === null) {

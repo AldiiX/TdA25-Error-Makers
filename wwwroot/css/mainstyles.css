@@ -71,7 +71,12 @@ p, a, button, input, textarea, select, label {
   font-weight: 500;
 }
 
+button, input, textarea, select {
+  transition-duration: 0.3s;
+}
+
 .button-primary, .button-primary-col-prim {
+  transition-duration: 0.3s;
   background: var(--accent-color-primary);
   color: white;
   text-decoration: none;
@@ -79,12 +84,15 @@ p, a, button, input, textarea, select, label {
   border-radius: 12px;
   padding: 10px 20px;
   cursor: pointer;
+  user-select: none;
 }
 .button-primary:hover, .button-primary-col-prim:hover {
   background: var(--accent-color-primary-darker);
+  transition-duration: 0.3s;
 }
 
 .button-primary-col-sec {
+  transition-duration: 0.3s;
   background: var(--accent-color-secondary);
   color: white;
   border: none;
@@ -92,12 +100,15 @@ p, a, button, input, textarea, select, label {
   border-radius: 12px;
   padding: 10px 20px;
   cursor: pointer;
+  user-select: none;
 }
 .button-primary-col-sec:hover {
   background: var(--accent-color-secondary-darker);
+  transition-duration: 0.3s;
 }
 
 .button-secondary {
+  transition-duration: 0.3s;
   background: none;
   color: var(--text-color);
   border: 1px solid var(--button-outline-color);
@@ -105,15 +116,17 @@ p, a, button, input, textarea, select, label {
   padding: 10px 20px;
   cursor: pointer;
   text-decoration: none;
+  user-select: none;
 }
 .button-secondary:hover {
   background: var(--button-bg);
+  transition-duration: 0.3s;
 }
 
 .sections {
   position: relative;
   min-height: 75vh;
-  width: 76.5%;
+  width: 80%;
   margin: 0 auto;
   margin-top: 25vh;
 }

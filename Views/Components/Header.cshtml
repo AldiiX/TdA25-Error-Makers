@@ -1,3 +1,7 @@
+@using TdA25_Error_Makers.Classes
+@{
+    string path = HCS.Current.Request.Path;
+}
 <header class="header-5F015D44-0984-4A50-B52B-5319AE57C19C">
     <link rel="stylesheet" href="/css/components/header.css" />
 
@@ -14,9 +18,19 @@
             @* <button> *@
             @*     <a href="/login">Login</a> *@
             @* </button> *@
-            <button class="button-primary">
-                <a>Nová hra</a>
-            </button>
+            <div class="changetheme" onclick="
+                import('/scripts/functions.js').then(module => {
+                    module.toggleWebTheme();
+                });
+
+                console.log('test');
+            "></div>
+
+            @if (!path.StartsWith("/game/")) {
+                <a class="newgame button-primary" href="/game">Nová hra</a>
+            } else {
+                <a class="newgame button-primary" v-cloak v-on:click="createNewGame()">Nová hra</a>
+            }
         </div>
     </div>
 </header>

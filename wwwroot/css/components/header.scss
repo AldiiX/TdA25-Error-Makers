@@ -14,24 +14,39 @@
     transition-duration: 0.3s;
 
 
-    &:is(.scrolled) {
-        background: var(--background-color-3);
-    }
-
-
     >.flex {
         position: relative;
         display: flex;
         height: 100%;
-        width: 90%;
+        width: 88.6%;
         align-items: center;
         justify-content: space-between;
         margin: 0 auto;
 
         >.Login {
             width: fit-content;
+            display: flex;
+            align-items: center;
+            gap: 24px;
 
-            button{
+            >.changetheme {
+                width: 30px;
+                height: 30px;
+                background-color: var(--text-color);
+                transition-duration: 0.3s;
+                mask-image: var(--theme-icon);
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: var(--color-gray);
+                    transition-duration: 0.3s;
+                }
+            }
+
+            >.newgame{
                 background: rgba(255,255,255, 0.2);
                 //color: var(--text-color-primary);
                 border: none;
@@ -39,6 +54,11 @@
                 padding: 10px 20px;
                 cursor: pointer;
                 margin: 0;
+
+                &:hover {
+                    background: rgba(255,255,255, 0.3);
+                    transition-duration: 0.3s;
+                }
             }
         }
 
@@ -92,8 +112,17 @@
             }
         }
     }
-        
-        
-}
-    
 
+    &:is(.scrolled) {
+        background: var(--background-color-3);
+
+        .newgame {
+            background-color: var(--accent-color-primary) !important;
+            transition-duration: 0.3s;
+
+            &:hover {
+                background-color: var(--accent-color-primary-darker) !important;
+            }
+        }
+    }
+}

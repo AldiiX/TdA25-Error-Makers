@@ -9,6 +9,8 @@
   opacity: 0.7;
   pointer-events: none;
   z-index: -1;
+  transition-duration: 0.3s;
+  transition-property: background-color;
 }
 .bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433:is(.disableanimations) .one, .bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433:is(.disableanimations) .two {
   animation: none !important;

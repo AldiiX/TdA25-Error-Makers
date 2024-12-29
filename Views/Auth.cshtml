@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="/libs/purecss.css">
     <link rel="stylesheet" href="/css/mainstyles.css">
     <link rel="stylesheet" href="/css/auth.css">
-    <link rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()">
+    <link id="webtheme-link" rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()">
 
     @*  scripty pro komponenty *@
     <script src="/scripts/components/header.js"></script>
@@ -51,7 +51,7 @@
                             <input type="password" id="password" name="password">
                         </div>
                         <div class="submit">
-                            <input type="submit" class="button-primary" value="Potvrdit">
+                            <input type="submit" class="button-primary" value="Přihlásit se">
                         </div>
                     </form>
                     @if (ViewBag.ErrorMessage != null) {
@@ -82,7 +82,7 @@
                             <input type="password" name="passwordconfirm">
                         </div>
                         <div class="submit">
-                            <input type="submit" class="button-primary" value="Potvrdit">
+                            <input type="submit" class="button-primary" value="Registrovat se">
                         </div>
                     </form>
                     @if (ViewBag.ErrorMessage != null) {

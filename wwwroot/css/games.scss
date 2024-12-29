@@ -1,6 +1,6 @@
 ﻿.header-5F015D44-0984-4A50-B52B-5319AE57C19C{
     >.flex {
-        >.Login {
+        >.Login >.newgame {
             display: none;
         }
     }
@@ -131,7 +131,7 @@
                     border-radius: 10px;
                     gap: 24px;
                     box-shadow: 0 0 7px rgba(0, 0, 0, 0.05);
-                    width: calc(100% / 3 - 20px);
+                    width: calc(100% / 3 - 15px);
 
                     >.icon {
                         position: relative;

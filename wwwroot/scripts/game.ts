@@ -143,49 +143,6 @@ export const vue = new Vue({
             _this.gameLocked = false;
         },
 
-        initializeGame: function(data: any): void {
-            const _this = this as any;
-            _this.game = data;
-            //console.log(data);
-            window.scroll({top: 0, left: 0, behavior: "smooth"});
-
-            if (!_this.game.original) _this.game.original = {};
-            _this.game.original.name = _this.game.name;
-            _this.game.original.difficulty = _this.game.difficulty;
-
-            // vyrenderování boardy
-            const parent = document.querySelector(".mainsection .flex > .left .grid") as HTMLElement;
-            const cells = parent.querySelectorAll(".cell");
-            cells.forEach(cell => { cell.classList.remove("x", "o", "winning-cell"); });
-
-            data.board.forEach((row: any, x: number) => {
-                row.forEach((cell: any, y: number) => {
-                    if (cell === "X") {
-                        cells[x * 15 + y].classList.add("x");
-                    } else if (cell === "O") {
-                        cells[x * 15 + y].classList.add("o");
-                    }
-                });
-            });
-
-            // podle data.winningcells vykreslit výherní buňky
-            if(data.winningCells) {
-                data.winningCells.forEach((cell: any) => {
-                    cells[cell[0] * 15 + cell[1]]?.classList.add("winning-cell");
-                });
-            }
-
-
-            // zjištění, kdo je na tahu
-            const x = data.board.flat().filter((cell: any) => cell === "X").length;
-            const o = data.board.flat().filter((cell: any) => cell === "O").length;
-
-            _this.currentPlayer = x > o ? "o" : "x";
-            _this.editMode = !data.isSaved;
-            _this.gameLoaded = true;
-            _this.gameLocked = false;
-        },
-
         saveGame: function(): void {
             const _this = this as any;
 
@@ -260,10 +217,12 @@ export const vue = new Vue({
 
 
             const bgDiv = document.querySelector(".background-f55288d9-4dcf-456d-87c4-26be60c16cdb") as HTMLElement;
+            const newGameHeaderButton = document.querySelector(".header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Login .newgame") as HTMLElement;
             const blurBgDiv = document.querySelector(".bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433") as HTMLElement;
             bgDiv.classList.add("fade-out");
             _this.gameFadeOut = true;
             blurBgDiv.classList.add("disableanimations");
+            newGameHeaderButton.style.pointerEvents = "none";
 
             setTimeout(() => {
                 fetch(`/api/v1/games/${_this.game.uuid}/`, {

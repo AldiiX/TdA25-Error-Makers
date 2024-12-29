@@ -141,6 +141,7 @@ header:not(.scrolled) {
   pointer-events: none;
 }
 .mainsection .flex > .left {
+  transition-duration: 0.3s;
   padding: 24px;
   border-radius: 12px;
   background-color: var(--background-color);
@@ -166,13 +167,14 @@ header:not(.scrolled) {
   border: 3px solid var(--background-color-primary);
   cursor: pointer;
   position: relative;
+  transition-duration: 0.3s;
 }
 .mainsection .flex > .left .grid .cell:hover {
   background-color: var(--button-bg-hover);
 }
 .mainsection .flex > .left .grid .cell:is(.x), .mainsection .flex > .left .grid .cell:is(.o) {
   pointer-events: none;
-  transition-duration: 0.5s;
+  transition-duration: 0.3s;
 }
 .mainsection .flex > .left .grid .cell:is(.x):is(.winning-cell), .mainsection .flex > .left .grid .cell:is(.o):is(.winning-cell) {
   animation: dsadasasdsa 2s ease 1;
@@ -293,6 +295,7 @@ header:not(.scrolled) {
   gap: 24px;
   display: flex;
   flex-direction: column;
+  transition-duration: 0.3s;
 }
 .mainsection .flex > .right > .settings > h2 {
   margin: 0;
@@ -314,6 +317,7 @@ header:not(.scrolled) {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
 }
 .mainsection .flex > .right > .settings > .buttons > button {
   flex-grow: 1;

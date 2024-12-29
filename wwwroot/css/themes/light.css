@@ -22,6 +22,7 @@
     --tda-logo-small: url("/images/svg/Think-different-Academy_LOGO_cerny.svg");
     --tda-icon-x: url("/images/icons/X_cerne.svg");
     --tda-icon-o: url("/images/icons/O_cerne.svg");
+    --theme-icon: url("/images/icons/moon.svg");
     --button-bg: #e8e8e8;
     --button-outline-color: #dadada;
     --button-bg-hover: #d2d2d2;
@@ -47,22 +48,17 @@
 #HOME-PAGE {
     .header-5F015D44-0984-4A50-B52B-5319AE57C19C {
         &:not(.scrolled) {
-            > .flex {
-                > .Header-Menu > a {
+            >.flex {
+                >.Header-Menu >a {
                     color: white !important;
                 }
 
-                > .Header-Logo {
-                    background-image: url("/images/svg/Think-different-Academy_LOGO_oficialni-bile.svg");
+                >.Login >.changetheme {
+                    background-color: white;
                 }
-            }
-        }
 
-        &:is(.scrolled) {
-            >.flex {
-                >.Login > button {
-                    background-color: rgba(0, 0, 0, 0.3);
-                    transition-duration: 0.3s;
+                >.Header-Logo {
+                    background-image: url("/images/svg/Think-different-Academy_LOGO_oficialni-bile.svg");
                 }
             }
         }
@@ -79,14 +75,7 @@
         color: #e3e3e3;
     }
 }
-.header-5F015D44-0984-4A50-B52B-5319AE57C19C:is(.scrolled) {
-    >.flex {
-        >.Login > button {
-            background-color: rgba(0, 0, 0, 0.3);
-            transition-duration: 0.3s;
-        }
-    }
-}
+
 .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1{
     .login{
         .UserIcon{

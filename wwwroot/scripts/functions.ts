@@ -78,7 +78,17 @@ export function removeCookie(prop: string): void {
 }
 
 export function setWebTheme(theme: string): void {
-    addCookie('theme', theme);
+    addCookie('webtheme', theme);
+    const link = document.getElementById('webtheme-link') as HTMLLinkElement;
+    if(!link) return;
+
+    link.href = `/css/themes/${theme.toLowerCase()}.css`;
+}
+
+export function toggleWebTheme(): void {
+    const currentTheme = getCookie('webtheme');
+    if(currentTheme === 'dark') setWebTheme('light');
+    else setWebTheme('dark');
 }
 
 export function openModal(vue: Vue|any, modalId: string): void {

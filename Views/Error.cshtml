@@ -24,9 +24,9 @@
     <title>Chyba@(ViewBag.ErrorCode != null ? $" {ViewBag.ErrorCode}" : "") • Think Different Academy</title>
     <link rel="icon" href="/favicon.ico">
     <link rel="stylesheet" href="/libs/purecss.css">
-    <link rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()">
     <link rel="stylesheet" href="/css/error.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
     <link rel="stylesheet" href="/css/mainstyles.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
+    <link id="webtheme-link" rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()">
 
     @*  scripty pro komponenty *@
     <script src="/scripts/components/header.js"></script>
