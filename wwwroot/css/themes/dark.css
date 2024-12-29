@@ -39,4 +39,10 @@
         opacity: 0.7 !important;
     }
 }
-
+.footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1{
+    .login{
+        .UserIcon{
+            background: rgb(255, 255, 255 , 0.2);
+        }
+    }
+}
