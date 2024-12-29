@@ -3,7 +3,6 @@
     color: var(--text-color);
     padding: 48px 0;
     position: relative;
-    text-align: center;
     font-family: Dosis, sans-serif;
     transition-duration: 0.3s;
 
@@ -130,18 +129,42 @@
                 }
             }
             .login{
-                .UserIcon{
-                    font-size: 24px;
-                    font-weight: 700;
-                    color: var(--text-color-primary);
-                    text-align: center;
-                    align-content: center;
+                .UserInformation{
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin-bottom: 24px;
+
+                    .UserIcon{
+                        font-size: 24px;
+                        font-weight: 700;
+                        color: var(--text-color-primary);
+                        text-align: center;
+                        align-content: center;
+                        position: relative;
+                        display: block;
+                        border-radius: 50%;
+                        width: 50px;
+                        height: 50px;
+                    }
+                    .Texts{
+                        >.top,
+                        >.bot{
+                            p{
+                                margin: 1px;
+                            }
+                        }
+                        .bot{
+                            p{
+                                font-weight: 700;
+                            }
+                        }
+                    }
+                }
+                .logout{
                     position: relative;
-                    display: block;
-                    background: rgb(0, 0, 0 , 0.1);
-                    border-radius: 50%;
-                    width: 50px;
-                    height: 50px;   
+                    text-align: left;
+                    margin: 0;
                 }
             }
         }

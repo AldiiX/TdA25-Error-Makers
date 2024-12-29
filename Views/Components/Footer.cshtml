@@ -56,16 +56,20 @@
             <div class="login">
                 @if(loggedAccount != null) {
                     <p class="upper">Přihlášení</p>
-                    <p> Přihlášen jako</p>
-                    <span class="UserIcon">
-                        @loggedAccount.DisplayName[0].ToString().ToUpper()
-                    </span>
-                    <p>
-                        @(loggedAccount.DisplayName)
-                    </p>
-                    <p>
-                        <a href="/logout">Odhlásit se</a>
-                    </p>
+                    <div class="UserInformation">
+                        <span class="UserIcon">
+                            @loggedAccount.DisplayName[0].ToString().ToUpper()
+                        </span>
+                        <div class="Texts">
+                            <div class="top">
+                                <p> Přihlášen jako</p>
+                            </div>
+                            <div class="bot">
+                                <p> @loggedAccount.DisplayName</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="logout" href="/logout">Odhlásit se</a>
                 } else {
                     <p class="upper">Přihlášení</p>
                     <P>
