@@ -209,6 +209,10 @@ export const vue = new Vue({
                 body: JSON.stringify({ name: game.name, difficulty: game.difficulty, board: game.board }),
             }).then(async (response) => {
                 const data = await response.json();
+                if (!response.ok) {
+                    console.error("Error: ", data.message);
+                    return;
+                }
                 _this.games.forEach((g, index) => {
                     if (g.uuid === game.uuid) {
                         _this.games[index] = data;

@@ -7,14 +7,14 @@
             <div class="img" v-bind:style="{ '--game-icon': `url(/images/icons/zarivka_${editingGame.difficulty.toLowerCase()}_bile.svg)` }"></div>
             <div class="texts">
                 <h1>Upravit hru</h1>
-                <p>{{ editingGame?.name }}</p>
+                <p v-if="editingGame?.name">{{ editingGame?.name }}</p>
             </div>
         </div>
 
         <div class="modal-content">
             <div class="input">
                 <p>Název hry:</p>
-                <input type="text" name="name" v-model="editingGame.name" maxlength="40" />
+                <input type="text" name="name" v-model="editingGame.name" maxlength="40" minlength="3" />
             </div>
 
             <div class="input">

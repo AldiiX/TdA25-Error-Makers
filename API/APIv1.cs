@@ -62,9 +62,13 @@ public class APIv1 : Controller {
 
     [HttpPut("games/{uuid}")]
     public IActionResult EditGame(string uuid, [FromBody] Dictionary<string, object?> data) {
-        if (!data.TryGetValue("name", out object? _name) || !data.TryGetValue("difficulty", out object? _difficulty) || !data.TryGetValue("board", out object? _board)) {
+        if (!data.TryGetValue("name", out object? _name) || !data.TryGetValue("difficulty", out object? _difficulty) || !data.TryGetValue("board", out object? _board))
             return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Missing required data." });
-        }
+
+        if(string.IsNullOrEmpty(_name?.ToString()) || string.IsNullOrEmpty(_difficulty?.ToString()))
+            return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Some required data is empty string." });
+
+
 
         using var conn = Database.GetConnection();
         if (conn == null) return new StatusCodeResult(500);

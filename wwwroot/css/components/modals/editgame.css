@@ -30,6 +30,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--color-gray);
 }
 .modal-editgame > .modal > .modal-content {
   display: flex;
