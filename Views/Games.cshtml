@@ -9,6 +9,7 @@
     var background = Html.PartialAsync("/Views/Components/BlurBackground.cshtml");
     var header = Html.PartialAsync("/Views/Components/Header.cshtml");
     var footer = Html.PartialAsync("/Views/Components/Footer.cshtml");
+    var editGameModal = Html.PartialAsync("/Views/Components/Modals/EditGame.cshtml");
 }
 <!doctype html>
 <html lang="en">
@@ -33,6 +34,8 @@
     <div id="app">
         @await background
         @await header
+        @await editGameModal
+
 
 
         <div class="sections">
@@ -118,7 +121,7 @@
                                 <div class="buttons">
                                     <a class="button-primary" v-bind:href="'/game/'+ game.uuid">HRÁT</a>
                                     @* <a class="button-primary-col-sec">SMAZAT</a> *@
-                                    <a class="button-secondary">UPRAVIT</a>
+                                    <a class="button-secondary" v-on:click="editingGame = deepClone(game); openModal('editgame');">UPRAVIT</a>
                                 </div>
                             </div>
                         </div>

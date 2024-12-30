@@ -1,0 +1,68 @@
+﻿.modal-editgame {
+    >.modal {
+        padding: 24px;
+
+        >.modal-header {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            margin-bottom: 24px;
+
+            >.img {
+                width: 90px;
+                height: 90px;
+                background-color: var(--text-color);
+                mask-image: var(--game-icon);
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                mask-position: center;
+            }
+
+            >.texts {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+
+                >h1 {
+                    margin: 0;
+                }
+
+                >p {
+                    margin: 0;
+                    max-width: 250px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+            }
+        }
+
+        >.modal-content {
+            display: flex;
+            gap: 24px;
+            position: relative;
+            flex-direction: column;
+
+            >.input {
+                >p {
+                    margin: 0;
+                    font-weight: 600;
+                    margin-bottom: 6px;
+                }
+
+                >input, >select {
+                    width: 100%;
+                }
+            }
+
+            >.buttons {
+                display: flex;
+                gap: 8px;
+
+                >input {
+                    flex-grow: 1;
+                }
+            }
+        }
+    }
+}

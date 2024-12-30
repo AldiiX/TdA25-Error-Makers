@@ -1,5 +1,5 @@
 ﻿// @ts-ignore
-import { scrollToElement } from "/scripts/functions.js";
+import { scrollToElement, openModal, deepClone } from "/scripts/functions.js";
 
 // @ts-ignore
 export const vue = new Vue({
@@ -29,6 +29,8 @@ export const vue = new Vue({
 
         games: null,
         gamesFiltered: [],
+        modalOpened: null,
+        editingGame: null,
     },
 
 
@@ -50,6 +52,21 @@ export const vue = new Vue({
                     console.error("Error:", error);
                 }
             );
+        },
+
+        openModal: function (modalId: string|null): void {
+            openModal(this, modalId);
+        },
+
+        resetFilters: function(): void {
+            const _this = this as any;
+            _this.filterName = "";
+            _this.filterDifficulty = "";
+            _this.filterStartDate = "";
+            _this.filterEndDate = "";
+            _this.selectedDateRange = "";
+
+            this.filterGames("", "", "", "");
         },
 
         filterGames: function (name: string, difficulty: string, startDate: string, endDate: string): void {
@@ -214,8 +231,35 @@ export const vue = new Vue({
             } else {
                 return plural;
             }
-        }
+        },
 
+        deepClone: function(obj: any): any {
+            return deepClone(obj);
+        },
+
+        saveEditedGame: function(game: any|null) {
+            const _this = this as any;
+            game ??= _this.editingGame;
+            this.openModal(null);
+
+            fetch(`/api/v1/games/${game.uuid}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: game.name, difficulty: game.difficulty, board: game.board }),
+            }).then(async response => {
+                const data = await response.json();
+
+                _this.games.forEach((g: any, index: number) => {
+                    if (g.uuid === game.uuid) {
+                        _this.games[index] = data;
+                    }
+                });
+
+                _this.filterGames(_this.filterName, _this.filterDifficulty, _this.filterStartDate, _this.filterEndDate);
+            });
+        },
     },
 
     computed: {

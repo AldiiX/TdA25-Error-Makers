@@ -91,16 +91,29 @@ export function toggleWebTheme(): void {
     else setWebTheme('dark');
 }
 
-export function openModal(vue: Vue|any, modalId: string): void {
+export function openModal(vue: Vue|any, modalId: string|null): void {
     if(modalId === null) {
-        vue.modalOpened = null;
+        const el = document.querySelector('.modal-' + vue.modalOpened);
+
+        if(el) {
+            el.classList.add("animation-fadeout-03");
+            setTimeout(() => {
+                vue.modalOpened = null;
+                el.classList.remove("animation-fadeout-03");
+            }, 300);
+        } else {
+            vue.modalOpened = null;
+        }
+
         return;
     }
 
     vue.modalOpened = modalId;
 }
 
-
+export function deepClone(obj: any): any {
+    return JSON.parse(JSON.stringify(obj));
+}
 
 export function generateUUID(): string {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'

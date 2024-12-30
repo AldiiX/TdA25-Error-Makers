@@ -1,3 +1,4 @@
+import { openModal, deepClone } from "/scripts/functions.js";
 export const vue = new Vue({
     el: "#app",
     mounted: function () {
@@ -17,6 +18,8 @@ export const vue = new Vue({
         selectedDateRange: "",
         games: null,
         gamesFiltered: [],
+        modalOpened: null,
+        editingGame: null,
     },
     methods: {
         main: function () {
@@ -30,6 +33,18 @@ export const vue = new Vue({
                 .catch(error => {
                 console.error("Error:", error);
             });
+        },
+        openModal: function (modalId) {
+            openModal(this, modalId);
+        },
+        resetFilters: function () {
+            const _this = this;
+            _this.filterName = "";
+            _this.filterDifficulty = "";
+            _this.filterStartDate = "";
+            _this.filterEndDate = "";
+            _this.selectedDateRange = "";
+            this.filterGames("", "", "", "");
         },
         filterGames: function (name, difficulty, startDate, endDate) {
             const _this = this;
@@ -178,7 +193,30 @@ export const vue = new Vue({
             else {
                 return plural;
             }
-        }
+        },
+        deepClone: function (obj) {
+            return deepClone(obj);
+        },
+        saveEditedGame: function (game) {
+            const _this = this;
+            game ??= _this.editingGame;
+            this.openModal(null);
+            fetch(`/api/v1/games/${game.uuid}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: game.name, difficulty: game.difficulty, board: game.board }),
+            }).then(async (response) => {
+                const data = await response.json();
+                _this.games.forEach((g, index) => {
+                    if (g.uuid === game.uuid) {
+                        _this.games[index] = data;
+                    }
+                });
+                _this.filterGames(_this.filterName, _this.filterDifficulty, _this.filterStartDate, _this.filterEndDate);
+            });
+        },
     },
     computed: {},
 });

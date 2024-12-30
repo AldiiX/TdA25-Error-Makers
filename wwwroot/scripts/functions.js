@@ -73,10 +73,23 @@ export function toggleWebTheme() {
 }
 export function openModal(vue, modalId) {
     if (modalId === null) {
-        vue.modalOpened = null;
+        const el = document.querySelector('.modal-' + vue.modalOpened);
+        if (el) {
+            el.classList.add("animation-fadeout-03");
+            setTimeout(() => {
+                vue.modalOpened = null;
+                el.classList.remove("animation-fadeout-03");
+            }, 300);
+        }
+        else {
+            vue.modalOpened = null;
+        }
         return;
     }
     vue.modalOpened = modalId;
+}
+export function deepClone(obj) {
+    return JSON.parse(JSON.stringify(obj));
 }
 export function generateUUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
