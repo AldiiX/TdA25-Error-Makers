@@ -149,7 +149,7 @@ public class Game {
             DateTime.Now,
             gmss,
             board.GetRound(),
-            false
+            isSaved
         );
 
 
@@ -158,7 +158,7 @@ public class Game {
         using var conn = Database.GetConnection();
         if (conn == null) return null;
 
-        using var cmd = new MySqlCommand("INSERT INTO `games` (`uuid`, `name`, `difficulty`, `board`, `created_at`, `updated_at`, `game_state`, `round`) VALUES (@uuid, @name, @difficulty, @board, @created_at, @updated_at, @game_state, @round)", conn);
+        using var cmd = new MySqlCommand("INSERT INTO `games` (`uuid`, `name`, `difficulty`, `board`, `created_at`, `updated_at`, `game_state`, `round`, `saved`) VALUES (@uuid, @name, @difficulty, @board, @created_at, @updated_at, @game_state, @round, @saved)", conn);
         cmd.Parameters.AddWithValue("@uuid", game.UUID);
         cmd.Parameters.AddWithValue("@name", game.Name);
         cmd.Parameters.AddWithValue("@difficulty", game.Difficulty.ToString());
@@ -167,6 +167,7 @@ public class Game {
         cmd.Parameters.AddWithValue("@updated_at", game.UpdatedAt);
         cmd.Parameters.AddWithValue("@game_state", gmss.ToString());
         cmd.Parameters.AddWithValue("@round", board.GetRound());
+        cmd.Parameters.AddWithValue("@saved", isSaved);
 
         int res = 0;
         try {

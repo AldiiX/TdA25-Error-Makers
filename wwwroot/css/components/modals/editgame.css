@@ -1,13 +1,23 @@
 .modal-editgame > .modal {
-  padding: 24px;
+  padding: 0;
+  display: flex;
+  overflow: hidden;
+  border: 1px solid var(--button-outline-color);
+  transition-duration: 0.3s;
 }
-.modal-editgame > .modal > .modal-header {
+.modal-editgame > .modal > .left {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border-right: 1px solid var(--button-outline-color);
+}
+.modal-editgame > .modal > .left > .modal-header {
   display: flex;
   gap: 24px;
   align-items: center;
   margin-bottom: 24px;
 }
-.modal-editgame > .modal > .modal-header > .img {
+.modal-editgame > .modal > .left > .modal-header > .img {
   width: 90px;
   height: 90px;
   background-color: var(--text-color);
@@ -16,15 +26,16 @@
   mask-repeat: no-repeat;
   mask-position: center;
 }
-.modal-editgame > .modal > .modal-header > .texts {
+.modal-editgame > .modal > .left > .modal-header > .texts {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
-.modal-editgame > .modal > .modal-header > .texts > h1 {
+.modal-editgame > .modal > .left > .modal-header > .texts > h1 {
   margin: 0;
+  width: max-content;
 }
-.modal-editgame > .modal > .modal-header > .texts > p {
+.modal-editgame > .modal > .left > .modal-header > .texts > p {
   margin: 0;
   max-width: 250px;
   overflow: hidden;
@@ -32,26 +43,118 @@
   white-space: nowrap;
   color: var(--color-gray);
 }
-.modal-editgame > .modal > .modal-content {
+.modal-editgame > .modal > .left > .modal-content {
   display: flex;
   gap: 24px;
   position: relative;
   flex-direction: column;
 }
-.modal-editgame > .modal > .modal-content > .input > p {
+.modal-editgame > .modal > .left > .modal-content > .input > p {
   margin: 0;
   font-weight: 600;
   margin-bottom: 6px;
 }
-.modal-editgame > .modal > .modal-content > .input > input, .modal-editgame > .modal > .modal-content > .input > select {
+.modal-editgame > .modal > .left > .modal-content > .input > input, .modal-editgame > .modal > .left > .modal-content > .input > select {
   width: 100%;
 }
-.modal-editgame > .modal > .modal-content > .buttons {
+.modal-editgame > .modal > .left > .modal-content > .buttons {
   display: flex;
   gap: 8px;
 }
-.modal-editgame > .modal > .modal-content > .buttons > input {
+.modal-editgame > .modal > .left > .modal-content > .buttons > input {
   flex-grow: 1;
+}
+.modal-editgame > .modal > .left > .errors p {
+  width: 260px;
+  color: var(--accent-color-secondary);
+}
+.modal-editgame > .modal > .right {
+  padding: 24px;
+}
+.modal-editgame > .modal > .right > .grid {
+  display: grid;
+  grid-template-columns: repeat(15, 38px);
+  grid-template-rows: repeat(15, 38px);
+  gap: 0;
+  width: fit-content;
+  border-radius: 12px;
+}
+.modal-editgame > .modal > .right > .grid .cell {
+  width: 38px;
+  height: 38px;
+  background-color: var(--button-bg);
+  border-radius: 6px;
+  border: 2px solid var(--background-color-primary);
+  cursor: pointer;
+  position: relative;
+  transition-duration: 0.3s;
+}
+.modal-editgame > .modal > .right > .grid .cell:hover {
+  background-color: var(--button-bg-hover);
+}
+.modal-editgame > .modal > .right > .grid .cell:is(.x), .modal-editgame > .modal > .right > .grid .cell:is(.o) {
+  transition-duration: 0.3s;
+}
+.modal-editgame > .modal > .right > .grid .cell:is(.x):is(.winning-cell), .modal-editgame > .modal > .right > .grid .cell:is(.o):is(.winning-cell) {
+  animation: dsadasasdsa 2s ease 1;
+  animation-delay: 0.5s;
+}
+.modal-editgame > .modal > .right > .grid .cell:is(.x):is(.winning-cell)::after, .modal-editgame > .modal > .right > .grid .cell:is(.o):is(.winning-cell)::after {
+  background-color: white;
+}
+@keyframes dsadasasdsa {
+  0% {
+    transform: scale(1);
+    z-index: 2;
+  }
+  40% {
+    transform: scale(1.5);
+    z-index: 2;
+  }
+  60% {
+    transform: scale(1.5);
+    z-index: 2;
+  }
+  100% {
+    transform: scale(1);
+    z-index: 2;
+  }
+}
+.modal-editgame > .modal > .right > .grid .cell:is(.x)::after, .modal-editgame > .modal > .right > .grid .cell:is(.o)::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  mask: url("/images/icons/X_bile.svg") no-repeat center;
+  mask-size: 60%;
+  background: var(--accent-color-secondary);
+  animation: xoappear 0.2s ease-out;
+  transition-duration: 0.5s;
+}
+@keyframes xoappear {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+.modal-editgame > .modal > .right > .grid .cell:is(.x)::after {
+  mask-image: url("/images/icons/X_bile.svg");
+  background: var(--accent-color-secondary);
+}
+.modal-editgame > .modal > .right > .grid .cell:is(.x):is(.winning-cell) {
+  background-color: var(--accent-color-secondary);
+}
+.modal-editgame > .modal > .right > .grid .cell:is(.o)::after {
+  mask-image: url("/images/icons/O_bile.svg");
+  background: var(--accent-color-primary);
+}
+.modal-editgame > .modal > .right > .grid .cell:is(.o):is(.winning-cell) {
+  background-color: var(--accent-color-primary);
 }
 
 /*# sourceMappingURL=editgame.css.map */

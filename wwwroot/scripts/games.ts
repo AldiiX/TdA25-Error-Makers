@@ -18,7 +18,10 @@ export const vue = new Vue({
             filterText: "",
             filterDifficulty: "",
             filterStartDate: "",
-            filterEndDate: ""
+            filterEndDate: "",
+            creatingNewGame: false,
+            editingGameIsInvalid: false,
+            editingGameError: null,
         },
 
         filterName: "",
@@ -42,6 +45,12 @@ export const vue = new Vue({
         main: function(): void {
             const _this = this as any;
 
+            this.fetchGamesFromAPI();
+        },
+
+        fetchGamesFromAPI: function (): void {
+            const _this = this as any;
+
             fetch("/api/v1/games")
                 .then(response => response.json())
                 .then(data => {
@@ -49,13 +58,37 @@ export const vue = new Vue({
                     _this.gamesFiltered = data;
                 })
                 .catch(error => {
-                    console.error("Error:", error);
-                }
-            );
+                        console.error("Error:", error);
+                    }
+                );
         },
 
         openModal: function (modalId: string|null): void {
+            const _this = this as any;
+
+
+            // před zavřením modalu
+            setTimeout(() => {
+                if(_this.modalOpened === "editgame" && modalId === null) {
+                    const board = document.querySelector(".modal-editgame > .modal > .right > .grid") as HTMLElement;
+                    const cells = board.querySelectorAll(".cell");
+                    cells.forEach(cell => { cell.classList.remove("x", "o", "winning-cell"); });
+                    _this.temp.creatingNewGame = false;
+                    _this.temp.editingGameIsInvalid = false;
+                }
+            }, 300);
+
+
             openModal(this, modalId);
+
+
+            // po otevření modalu
+            setTimeout(() => {
+                if (modalId === "editgame") {
+                    console.warn(_this.editingGame);
+                    this.renderBoard(_this.editingGame);
+                }
+            }, 300);
         },
 
         resetFilters: function(): void {
@@ -240,29 +273,177 @@ export const vue = new Vue({
         saveEditedGame: function(game: any|null) {
             const _this = this as any;
             game ??= _this.editingGame;
-            this.openModal(null);
 
-            fetch(`/api/v1/games/${game.uuid}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name: game.name, difficulty: game.difficulty, board: game.board }),
-            }).then(async response => {
-                const data = await response.json();
-                if(!response.ok) {
-                    console.error("Error: ", data.message);
-                    return;
+
+            // zpracování board
+            const board = document.querySelector(".modal-editgame > .modal > .right > .grid") as HTMLElement;
+            const cells = board.querySelectorAll(".cell");
+            game.board = [];
+            for (let i = 0; i < 15; i++) {
+                const row = [];
+                for (let j = 0; j < 15; j++) {
+                    row.push(cells[i * 15 + j].classList.contains("x") ? "X" : cells[i * 15 + j].classList.contains("o") ? "O" : "");
                 }
 
-                _this.games.forEach((g: any, index: number) => {
-                    if (g.uuid === game.uuid) {
-                        _this.games[index] = data;
+                game.board.push(row);
+            }
+
+
+            if(!_this.temp.creatingNewGame) {
+                fetch(`/api/v1/games/${game.uuid}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: game.name,
+                        difficulty: game.difficulty,
+                        board: game.board,
+                        saved: true
+                    }),
+                }).then(async response => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        console.error("Error: ", data.message);
+                        return;
+                    }
+
+                    _this.games.forEach((g: any, index: number) => {
+                        if (g.uuid === game.uuid) {
+                            _this.games[index] = data;
+                        }
+                    });
+
+                    _this.resetFilters();
+                    this.openModal(null);
+                });
+            }
+            else {
+                fetch(`/api/v1/games`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: game.name,
+                        difficulty: game.difficulty,
+                        board: game.board,
+                        saved: true
+                    }),
+                }).then(async response => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        console.error("Error: ", data.message);
+                        return;
+                    }
+
+                    fetch("/api/v1/games")
+                        .then(response => response.json())
+                        .then(data => {
+                            _this.games = data;
+                            _this.gamesFiltered = data;
+                            _this.resetFilters();
+                            this.openModal(null);
+                        })
+                        .catch(error => {
+                                console.error("Error:", error);
+                            }
+                        );
+                });
+            }
+        },
+
+        renderBoard: function (data: any) {
+            const _this = this as any;
+            const board = data.board;
+
+            // vyrenderování boardy
+            const parent = document.querySelector(".modal-editgame > .modal > .right > .grid") as HTMLElement;
+            const cells = parent.querySelectorAll(".cell");
+            cells.forEach(cell => { cell.classList.remove("x", "o", "winning-cell"); });
+
+            board.forEach((row: any, x: number) => {
+                row.forEach((cell: any, y: number) => {
+                    if (cell === "X") {
+                        cells[x * 15 + y].classList.add("x");
+                    } else if (cell === "O") {
+                        cells[x * 15 + y].classList.add("o");
                     }
                 });
-
-                _this.filterGames(_this.filterName, _this.filterDifficulty, _this.filterStartDate, _this.filterEndDate);
             });
+
+            // podle data.winningcells vykreslit výherní buňky
+            /*if(data.winningCells) {
+                data.winningCells.forEach((cell: any) => {
+                    cells[cell[0] * 15 + cell[1]]?.classList.add("winning-cell");
+                });
+            }*/
+
+            // checknutí validity
+            _this.checkBoardValidity();
+        },
+
+        updateCell: function(_cell: any, index: number): void {
+            const cell = _cell as HTMLElement;
+            const _this = this as any;
+
+            if(!cell.classList.contains("x") && !cell.classList.contains("o")) {
+                cell.classList.add("x");
+            }
+
+            else if(cell.classList.contains("o")) {
+                cell.classList.remove("o");
+            }
+
+            else if(cell.classList.contains("x")) {
+                cell.classList.remove("x");
+                cell.classList.add("o");
+            }
+
+            _this.checkBoardValidity();
+        },
+
+        checkBoardValidity: function(): void {
+            const _this = this as any;
+
+            // kontrola zda je počet křížků a koleček vyvážený
+            const cells = document.querySelectorAll(".modal-editgame > .modal > .right > .grid .cell");
+            let x = 0;
+            let o = 0;
+            cells.forEach(cell => {
+                if(cell.classList.contains("x")) x++;
+                if(cell.classList.contains("o")) o++;
+            });
+
+            if(x === o) {
+                _this.temp.editingGameIsInvalid = false;
+            } else if(x === o +1) {
+                _this.temp.editingGameIsInvalid = false;
+            } else _this.temp.editingGameIsInvalid = true;
+        },
+
+        createNewGame: function(): void {
+            const _this = this as any;
+
+            _this.editingGame = {
+                name: "asdasd",
+                difficulty: "beginner",
+            }
+
+            _this.temp.creatingNewGame = true;
+            openModal(_this, "editgame");
+        },
+
+        setEditGameModalStyle: function (): any {
+            const _this = this as any;
+            const obj: any = {};
+            const game = _this.editingGame;
+
+            if (_this.temp.editingGameIsInvalid) {
+                obj["border"] = "1px solid var(--accent-color-secondary)";
+            }
+
+            return obj;
         },
     },
 

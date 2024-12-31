@@ -52,6 +52,11 @@ public class APIv1 : Controller {
         return new JsonResult(createdGame){ StatusCode = 201, ContentType = "application/json" };
     }
 
+    [HttpGet("games/generate-name")]
+    public IActionResult GenerateGameName() {
+        return new OkObjectResult(new { name = Game.GenerateRandomGameName() });
+    }
+
     [HttpGet("games/{uuid}")]
     public IActionResult GetGame(string uuid) {
         var game = Game.GetByUUID(uuid);

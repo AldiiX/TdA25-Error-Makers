@@ -9,7 +9,10 @@ export const vue = new Vue({
             filterText: "",
             filterDifficulty: "",
             filterStartDate: "",
-            filterEndDate: ""
+            filterEndDate: "",
+            creatingNewGame: false,
+            editingGameIsInvalid: false,
+            editingGameError: null,
         },
         filterName: "",
         filterDifficulty: "",
@@ -24,6 +27,10 @@ export const vue = new Vue({
     methods: {
         main: function () {
             const _this = this;
+            this.fetchGamesFromAPI();
+        },
+        fetchGamesFromAPI: function () {
+            const _this = this;
             fetch("/api/v1/games")
                 .then(response => response.json())
                 .then(data => {
@@ -35,7 +42,23 @@ export const vue = new Vue({
             });
         },
         openModal: function (modalId) {
+            const _this = this;
+            setTimeout(() => {
+                if (_this.modalOpened === "editgame" && modalId === null) {
+                    const board = document.querySelector(".modal-editgame > .modal > .right > .grid");
+                    const cells = board.querySelectorAll(".cell");
+                    cells.forEach(cell => { cell.classList.remove("x", "o", "winning-cell"); });
+                    _this.temp.creatingNewGame = false;
+                    _this.temp.editingGameIsInvalid = false;
+                }
+            }, 300);
             openModal(this, modalId);
+            setTimeout(() => {
+                if (modalId === "editgame") {
+                    console.warn(_this.editingGame);
+                    this.renderBoard(_this.editingGame);
+                }
+            }, 300);
         },
         resetFilters: function () {
             const _this = this;
@@ -200,26 +223,145 @@ export const vue = new Vue({
         saveEditedGame: function (game) {
             const _this = this;
             game ??= _this.editingGame;
-            this.openModal(null);
-            fetch(`/api/v1/games/${game.uuid}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name: game.name, difficulty: game.difficulty, board: game.board }),
-            }).then(async (response) => {
-                const data = await response.json();
-                if (!response.ok) {
-                    console.error("Error: ", data.message);
-                    return;
+            const board = document.querySelector(".modal-editgame > .modal > .right > .grid");
+            const cells = board.querySelectorAll(".cell");
+            game.board = [];
+            for (let i = 0; i < 15; i++) {
+                const row = [];
+                for (let j = 0; j < 15; j++) {
+                    row.push(cells[i * 15 + j].classList.contains("x") ? "X" : cells[i * 15 + j].classList.contains("o") ? "O" : "");
                 }
-                _this.games.forEach((g, index) => {
-                    if (g.uuid === game.uuid) {
-                        _this.games[index] = data;
+                game.board.push(row);
+            }
+            if (!_this.temp.creatingNewGame) {
+                fetch(`/api/v1/games/${game.uuid}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: game.name,
+                        difficulty: game.difficulty,
+                        board: game.board,
+                        saved: true
+                    }),
+                }).then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        console.error("Error: ", data.message);
+                        return;
+                    }
+                    _this.games.forEach((g, index) => {
+                        if (g.uuid === game.uuid) {
+                            _this.games[index] = data;
+                        }
+                    });
+                    _this.resetFilters();
+                    this.openModal(null);
+                });
+            }
+            else {
+                fetch(`/api/v1/games`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: game.name,
+                        difficulty: game.difficulty,
+                        board: game.board,
+                        saved: true
+                    }),
+                }).then(async (response) => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        console.error("Error: ", data.message);
+                        return;
+                    }
+                    fetch("/api/v1/games")
+                        .then(response => response.json())
+                        .then(data => {
+                        _this.games = data;
+                        _this.gamesFiltered = data;
+                        _this.resetFilters();
+                        this.openModal(null);
+                    })
+                        .catch(error => {
+                        console.error("Error:", error);
+                    });
+                });
+            }
+        },
+        renderBoard: function (data) {
+            const _this = this;
+            const board = data.board;
+            const parent = document.querySelector(".modal-editgame > .modal > .right > .grid");
+            const cells = parent.querySelectorAll(".cell");
+            cells.forEach(cell => { cell.classList.remove("x", "o", "winning-cell"); });
+            board.forEach((row, x) => {
+                row.forEach((cell, y) => {
+                    if (cell === "X") {
+                        cells[x * 15 + y].classList.add("x");
+                    }
+                    else if (cell === "O") {
+                        cells[x * 15 + y].classList.add("o");
                     }
                 });
-                _this.filterGames(_this.filterName, _this.filterDifficulty, _this.filterStartDate, _this.filterEndDate);
             });
+            _this.checkBoardValidity();
+        },
+        updateCell: function (_cell, index) {
+            const cell = _cell;
+            const _this = this;
+            if (!cell.classList.contains("x") && !cell.classList.contains("o")) {
+                cell.classList.add("x");
+            }
+            else if (cell.classList.contains("o")) {
+                cell.classList.remove("o");
+            }
+            else if (cell.classList.contains("x")) {
+                cell.classList.remove("x");
+                cell.classList.add("o");
+            }
+            _this.checkBoardValidity();
+        },
+        checkBoardValidity: function () {
+            const _this = this;
+            const cells = document.querySelectorAll(".modal-editgame > .modal > .right > .grid .cell");
+            let x = 0;
+            let o = 0;
+            cells.forEach(cell => {
+                if (cell.classList.contains("x"))
+                    x++;
+                if (cell.classList.contains("o"))
+                    o++;
+            });
+            if (x === o) {
+                _this.temp.editingGameIsInvalid = false;
+            }
+            else if (x === o + 1) {
+                _this.temp.editingGameIsInvalid = false;
+            }
+            else
+                _this.temp.editingGameIsInvalid = true;
+        },
+        createNewGame: function () {
+            const _this = this;
+            _this.editingGame = {
+                name: "asdasd",
+                difficulty: "beginner",
+            };
+            _this.temp.creatingNewGame = true;
+            openModal(_this, "editgame");
+        },
+        setEditGameModalStyle: function () {
+            const _this = this;
+            const obj = {};
+            const game = _this.editingGame;
+            if (_this.temp.editingGameIsInvalid) {
+                obj["border"] = "1px solid var(--accent-color-secondary)";
+            }
+            return obj;
         },
     },
     computed: {},
