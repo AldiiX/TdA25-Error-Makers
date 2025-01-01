@@ -38,11 +38,18 @@
                 </div>
             </div>
 
-            <div class="errors">
-                <transition-group name="fade">
-                    <p v-show="temp.editingGameIsInvalid" v-bind:key="'editingGameIsInvalid'">Herní plocha není validní -> počet křížků se musí rovnat nebo být o 1 větší než počet koleček.</p>
-                    <p v-show="temp.editingGameError" v-bind:key="'editingGameError'">{{ temp.editingGameError }}</p>
-                </transition-group>
+            <div class="bottom">
+                <div class="errors">
+                    <transition-group name="fade">
+                        <p v-show="temp.editingGameIsInvalid" v-bind:key="'editingGameIsInvalid'">Herní plocha není validní -> počet křížků se musí rovnat nebo být o 1 větší než počet koleček.</p>
+                        <p v-show="temp.editingGameError" v-bind:key="'editingGameError'">{{ temp.editingGameError }}</p>
+                    </transition-group>
+                </div>
+
+                <a class="delete-button" v-on:click="deleteGame(editingGame)">
+                    <div></div>
+                    <span>Smazat hru</span>
+                </a>
             </div>
         </div>
 

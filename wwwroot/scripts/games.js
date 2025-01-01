@@ -392,6 +392,23 @@ export const vue = new Vue({
                 window.location.href = `/game/${data.uuid}`;
             });
         },
+        deleteGame: function (game = null) {
+            const _this = this;
+            game ??= _this.editingGame;
+            fetch(`/api/v2/games/${game.uuid}`, {
+                method: 'DELETE',
+            }).then(async (response) => {
+                if (!response.ok) {
+                    const data = await response.json();
+                    console.error("Error: ", data.message);
+                    return;
+                }
+                _this.games = _this.games.filter((g) => g.uuid !== game.uuid);
+                _this.gamesFiltered = _this.games;
+                _this.resetFilters();
+                this.openModal(null);
+            });
+        }
     },
     computed: {},
 });

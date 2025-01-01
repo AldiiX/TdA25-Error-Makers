@@ -64,9 +64,53 @@
 .modal-editgame > .modal > .left > .modal-content > .buttons > input {
   flex-grow: 1;
 }
-.modal-editgame > .modal > .left > .errors p {
+.modal-editgame > .modal > .left > .bottom {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.modal-editgame > .modal > .left > .bottom > .errors p {
   width: 260px;
   color: var(--accent-color-secondary);
+  /*&:is(.withfadeout) {
+      opacity: 0;
+      animation: asdfsdeuofsdiofh 4s forwards ease-in-out;
+
+      @keyframes asdfsdeuofsdiofh {
+          0% { opacity: 1; }
+          75% { opacity: 1; }
+          100% { opacity: 0; }
+      }
+  }*/
+}
+.modal-editgame > .modal > .left > .bottom > .delete-button {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--accent-color-secondary);
+  transition-duration: 0.3s;
+  align-items: center;
+}
+.modal-editgame > .modal > .left > .bottom > .delete-button > div {
+  width: 16px;
+  height: 16px;
+  background-color: var(--accent-color-secondary);
+  mask-image: url("/images/icons/trash.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  transition-duration: 0.3s;
+}
+.modal-editgame > .modal > .left > .bottom > .delete-button:hover {
+  color: var(--accent-color-secondary-darker);
+  transition-duration: 0.3s;
+}
+.modal-editgame > .modal > .left > .bottom > .delete-button:hover > div {
+  transition-duration: 0.3s;
+  background-color: var(--accent-color-secondary-darker);
 }
 .modal-editgame > .modal > .right {
   padding: 24px;

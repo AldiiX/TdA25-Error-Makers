@@ -23,9 +23,14 @@ public class APIv2 : Controller {
 
     [HttpPost("games")]
     public IActionResult CreateGame([FromBody] Dictionary<string, object?> data) {
-        if (!data.ContainsKey("name") || !data.ContainsKey("difficulty")) return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Chybí povinná data." });
+        if (!data.TryGetValue("name", out object? _name) || !data.TryGetValue("difficulty", out object? _difficulty)) return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Chybí povinná data." });
         if (!data.ContainsKey("board") || data["board"] == null)
             return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Chybí povinná board data." });
+
+        if(string.IsNullOrEmpty(_name?.ToString()) || string.IsNullOrEmpty(_difficulty?.ToString()))
+            return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Některá požadovaná data jsou prázdná." });
+
+
 
         using var conn = Database.GetConnection();
         if (conn == null) return new StatusCodeResult(500);
@@ -33,8 +38,8 @@ public class APIv2 : Controller {
 
 
         // formátování dat
-        string name = data["name"]?.ToString() ?? Game.GenerateRandomGameName();
-        string difficulty = data["difficulty"]?.ToString() ?? "medium";
+        string name = _name?.ToString() ?? Game.GenerateRandomGameName();
+        string difficulty = _difficulty?.ToString() ?? "medium";
         bool isSaved = data.TryGetValue("saved", out object? _saved) && _saved?.ToString()?.ToLower() == "true";
         bool isInstance = data.TryGetValue("isInstance", out object? _isinstance) && _isinstance?.ToString()?.ToLower() == "true";
         bool errorIfSavingFinishedGame = data.TryGetValue("errorIfSavingCompleted", out object? _errorIfSavingCompleted) && _errorIfSavingCompleted?.ToString()?.ToLower() == "true";
