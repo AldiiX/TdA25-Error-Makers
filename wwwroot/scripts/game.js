@@ -36,7 +36,7 @@ export const vue = new Vue({
                 const y = index % 15;
                 board[x][y] = cell.classList.contains("x") ? "X" : cell.classList.contains("o") ? "O" : "";
             });
-            fetch(`/api/v1/games/${_this.game.uuid}/`, {
+            fetch(`/api/v2/games/${_this.game.uuid}/`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
@@ -58,7 +58,7 @@ export const vue = new Vue({
         getGame: function () {
             const _this = this;
             const gameUUID = window.location.pathname.split("/")[2];
-            fetch(`/api/v1/games/${gameUUID}`)
+            fetch(`/api/v2/games/${gameUUID}`)
                 .then(async (response) => {
                 const data = await response.json();
                 if (!response.ok)
@@ -105,7 +105,7 @@ export const vue = new Vue({
         },
         saveGame: function () {
             const _this = this;
-            fetch(`/api/v1/games/${_this.game.uuid}/`, {
+            fetch(`/api/v2/games/${_this.game.uuid}/`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
@@ -127,7 +127,7 @@ export const vue = new Vue({
         },
         deleteGame: function () {
             const _this = this;
-            fetch(`/api/v1/games/${_this.game.uuid}/`, {
+            fetch(`/api/v2/games/${_this.game.uuid}/`, {
                 method: "DELETE",
             }).then(response => {
                 window.location.href = "/games";
@@ -138,7 +138,7 @@ export const vue = new Vue({
             if (_this.gameLocked)
                 return;
             _this.gameLocked = true;
-            fetch(`/api/v1/games/${_this.game.uuid}/`, {
+            fetch(`/api/v2/games/${_this.game.uuid}/`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
@@ -173,7 +173,7 @@ export const vue = new Vue({
             blurBgDiv.classList.add("disableanimations");
             newGameHeaderButton.style.pointerEvents = "none";
             setTimeout(() => {
-                fetch(`/api/v1/games/${_this.game.uuid}/`, {
+                fetch(`/api/v2/games/${_this.game.uuid}/`, {
                     method: "DELETE",
                 }).then();
                 window.location.href = "/game";

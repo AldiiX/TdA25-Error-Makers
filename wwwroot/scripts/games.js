@@ -31,7 +31,7 @@ export const vue = new Vue({
         },
         fetchGamesFromAPI: function () {
             const _this = this;
-            fetch("/api/v1/games")
+            fetch("/api/v2/games")
                 .then(response => response.json())
                 .then(data => {
                 _this.games = data;
@@ -50,12 +50,12 @@ export const vue = new Vue({
                     cells.forEach(cell => { cell.classList.remove("x", "o", "winning-cell"); });
                     _this.temp.creatingNewGame = false;
                     _this.temp.editingGameIsInvalid = false;
+                    _this.temp.editingGameError = null;
                 }
             }, 300);
             openModal(this, modalId);
             setTimeout(() => {
                 if (modalId === "editgame") {
-                    console.warn(_this.editingGame);
                     this.renderBoard(_this.editingGame);
                 }
             }, 300);
@@ -234,7 +234,7 @@ export const vue = new Vue({
                 game.board.push(row);
             }
             if (!_this.temp.creatingNewGame) {
-                fetch(`/api/v1/games/${game.uuid}`, {
+                fetch(`/api/v2/games/${game.uuid}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -243,12 +243,15 @@ export const vue = new Vue({
                         name: game.name,
                         difficulty: game.difficulty,
                         board: game.board,
-                        saved: true
+                        saved: true,
+                        saveIfFinished: true,
+                        errorIfSavingCompleted: true,
                     }),
                 }).then(async (response) => {
                     const data = await response.json();
                     if (!response.ok) {
                         console.error("Error: ", data.message);
+                        _this.temp.editingGameError = data.message;
                         return;
                     }
                     _this.games.forEach((g, index) => {
@@ -261,7 +264,7 @@ export const vue = new Vue({
                 });
             }
             else {
-                fetch(`/api/v1/games`, {
+                fetch(`/api/v2/games`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -270,15 +273,17 @@ export const vue = new Vue({
                         name: game.name,
                         difficulty: game.difficulty,
                         board: game.board,
-                        saved: true
+                        saved: true,
+                        errorIfSavingCompleted: true,
                     }),
                 }).then(async (response) => {
                     const data = await response.json();
                     if (!response.ok) {
                         console.error("Error: ", data.message);
+                        _this.temp.editingGameError = data.message;
                         return;
                     }
-                    fetch("/api/v1/games")
+                    fetch("/api/v2/games")
                         .then(response => response.json())
                         .then(data => {
                         _this.games = data;
@@ -345,11 +350,12 @@ export const vue = new Vue({
             else
                 _this.temp.editingGameIsInvalid = true;
         },
-        createNewGame: function () {
+        createNewGame: async function () {
             const _this = this;
+            const randomName = (await fetch("/api/v2/games/generate-name").then(response => response.json())).name;
             _this.editingGame = {
-                name: "asdasd",
-                difficulty: "beginner",
+                name: randomName,
+                difficulty: "medium",
             };
             _this.temp.creatingNewGame = true;
             openModal(_this, "editgame");
@@ -362,6 +368,29 @@ export const vue = new Vue({
                 obj["border"] = "1px solid var(--accent-color-secondary)";
             }
             return obj;
+        },
+        playGame: function (game) {
+            const _this = this;
+            fetch("/api/v2/games", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: game.name,
+                    difficulty: game.difficulty,
+                    board: game.board,
+                    saved: false,
+                    isInstance: true,
+                }),
+            }).then(async (response) => {
+                const data = await response.json();
+                if (!response.ok) {
+                    console.error("Error: ", data.message);
+                    return;
+                }
+                window.location.href = `/game/${data.uuid}`;
+            });
         },
     },
     computed: {},

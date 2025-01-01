@@ -25,6 +25,7 @@ public class Game {
     public bool IsSaved { get; private set; }
     public string? Winner { get; private set; }
     public string CurrentPlayer => Board.GetNextPlayer().ToString().ToUpper();
+    public bool IsInstance { get; private set; }
 
     [JsonIgnore]
     public GameBoard Board { get; private set; }
@@ -56,7 +57,7 @@ public class Game {
 
 
     // constructory
-    public Game(string uuid, string name, GameBoard board, GameDifficulty difficulty, DateTime createdAt, DateTime updatedAt, GameState state, ushort round, bool isSaved) {
+    public Game(string uuid, string name, GameBoard board, GameDifficulty difficulty, DateTime createdAt, DateTime updatedAt, GameState state, ushort round, bool isSaved, bool isInstance) {
         UUID = uuid;
         Name = name;
         Difficulty = difficulty;
@@ -67,6 +68,7 @@ public class Game {
         Round = round;
         IsSaved = isSaved;
         Winner = board.GetWinner() != null ? board.GetWinner().ToString()?.ToUpper() : null;
+        IsInstance = isInstance;
     }
 
 
@@ -95,7 +97,8 @@ public class Game {
                         reader.GetDateTime("updated_at"),
                         Enum.Parse<GameState>(reader.GetString("game_state")),
                         reader.GetUInt16("round"),
-                        reader.GetBoolean("saved")
+                        reader.GetBoolean("saved"),
+                        reader.GetBoolean("is_instance")
                     )
                 );
             } catch (Exception e) {
@@ -126,13 +129,14 @@ public class Game {
             reader.GetDateTime("updated_at"),
             Enum.Parse<GameState>(reader.GetString("game_state")),
             reader.GetUInt16("round"),
-            reader.GetBoolean("saved")
+            reader.GetBoolean("saved"),
+            reader.GetBoolean("is_instance")
         );
     }
 
     public static Game? GetByUUID(in string uuid) => GetByUUIDAsync(uuid).Result;
 
-    public static Game? Create(string? name, GameDifficulty difficulty, GameBoard board, bool isSaved = false, bool insertToDatabase = false) {
+    public static Game? Create(string? name, GameDifficulty difficulty, GameBoard board, bool isSaved = false, bool isInstance = false, bool insertToDatabase = false) {
         name ??= GenerateRandomGameName();
 
         // zpracování boardy
@@ -149,7 +153,8 @@ public class Game {
             DateTime.Now,
             gmss,
             board.GetRound(),
-            isSaved
+            isSaved,
+            isInstance
         );
 
 
@@ -158,7 +163,7 @@ public class Game {
         using var conn = Database.GetConnection();
         if (conn == null) return null;
 
-        using var cmd = new MySqlCommand("INSERT INTO `games` (`uuid`, `name`, `difficulty`, `board`, `created_at`, `updated_at`, `game_state`, `round`, `saved`) VALUES (@uuid, @name, @difficulty, @board, @created_at, @updated_at, @game_state, @round, @saved)", conn);
+        using var cmd = new MySqlCommand("INSERT INTO `games` (`uuid`, `name`, `difficulty`, `board`, `created_at`, `updated_at`, `game_state`, `round`, `saved`, `is_instance`) VALUES (@uuid, @name, @difficulty, @board, @created_at, @updated_at, @game_state, @round, @saved, @is_instance)", conn);
         cmd.Parameters.AddWithValue("@uuid", game.UUID);
         cmd.Parameters.AddWithValue("@name", game.Name);
         cmd.Parameters.AddWithValue("@difficulty", game.Difficulty.ToString());
@@ -168,6 +173,7 @@ public class Game {
         cmd.Parameters.AddWithValue("@game_state", gmss.ToString());
         cmd.Parameters.AddWithValue("@round", board.GetRound());
         cmd.Parameters.AddWithValue("@saved", isSaved);
+        cmd.Parameters.AddWithValue("@is_instance", isInstance);
 
         int res = 0;
         try {

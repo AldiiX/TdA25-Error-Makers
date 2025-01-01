@@ -11,7 +11,17 @@ namespace TdA25_Error_Makers.Middlewares;
 public class BeforeInitMiddleware(RequestDelegate next){
     public async Task InvokeAsync(HttpContext context) {
         string path = context.Request.Path.Value ?? "/";
-        
+
+
+
+        // věci před jakýkoliv requestem
+        if (path.StartsWith("/api/v2/")) {
+            await next(context);
+            return;
+        }
+
+
+
         // přihlášení
         var accTask = Auth.ReAuthUserAsync();
 

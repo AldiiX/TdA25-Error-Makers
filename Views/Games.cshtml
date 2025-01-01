@@ -20,6 +20,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Hry • Think Different Academy</title>
     <link rel="icon" href="/favicon.ico">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
 
     <script src="/libs/vue@(Program.DEVELOPMENT_MODE ? "_dev" : "").js"></script>
     <link rel="stylesheet" href="/libs/purecss.css">
@@ -130,7 +134,7 @@
                                 </div>
 
                                 <div class="buttons">
-                                    <a class="button-primary" v-bind:href="'/game/'+ game.uuid">HRÁT</a>
+                                    <a class="button-primary" v-on:click="playGame(game)">HRÁT</a>
                                     @* <a class="button-primary-col-sec">SMAZAT</a> *@
                                     <a class="button-secondary" v-on:click="editingGame = deepClone(game); openModal('editgame');">UPRAVIT</a>
                                 </div>
