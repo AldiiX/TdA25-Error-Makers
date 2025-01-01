@@ -35,6 +35,7 @@ public class APIv1 : Controller {
         // formátování dat
         string name = data["name"]?.ToString() ?? Game.GenerateRandomGameName();
         string difficulty = data["difficulty"]?.ToString() ?? "medium";
+        bool isSaved = data.TryGetValue("saved", out object? _saved) && _saved?.ToString()?.ToLower() == "true";
         GameBoard? board =
             !data.TryGetValue("board", out var _bb) ?
                 GameBoard.CreateNew() :
@@ -46,7 +47,7 @@ public class APIv1 : Controller {
 
 
         // vytvoření hry
-        var createdGame = Game.Create(name, Game.ParseDifficulty(difficulty), board, true, true);
+        var createdGame = Game.Create(name, Game.ParseDifficulty(difficulty), board, isSaved, true);
         if(createdGame == null) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Failed to create game." });
 
         return new JsonResult(createdGame){ StatusCode = 201, ContentType = "application/json" };
