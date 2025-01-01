@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace TdA25_Error_Makers.Classes.Objects;
 
@@ -203,6 +204,12 @@ public class GameBoard {
         }
 
         return boardToList;
+    }
+
+    public JsonNode ToJsonNode() {
+        var fallback = new GameBoard();
+
+        return JsonNode.Parse(this.ToString()) ?? JsonNode.Parse(fallback.ToString())!;
     }
 
     public Game.GameState GetGameState() {

@@ -61,7 +61,7 @@ export const vue = new Vue({
 
 
 
-            fetch(`/api/v1/games/${_this.game.uuid}/`, {
+            fetch(`/api/v2/games/${_this.game.uuid}/`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
@@ -85,7 +85,7 @@ export const vue = new Vue({
             const _this = this as any;
             const gameUUID = window.location.pathname.split("/")[2];
 
-            fetch(`/api/v1/games/${gameUUID}`)
+            fetch(`/api/v2/games/${gameUUID}`)
                 .then(async response => {
                     const data = await response.json();
                     if(!response.ok) throw new Error();
@@ -146,7 +146,7 @@ export const vue = new Vue({
         saveGame: function(): void {
             const _this = this as any;
 
-            fetch(`/api/v1/games/${_this.game.uuid}/`, {
+            fetch(`/api/v2/games/${_this.game.uuid}/`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
@@ -170,7 +170,7 @@ export const vue = new Vue({
         deleteGame: function(): void {
             const _this = this as any;
 
-            fetch(`/api/v1/games/${_this.game.uuid}/`, {
+            fetch(`/api/v2/games/${_this.game.uuid}/`, {
                 method: "DELETE",
             }).then(response => {
                 window.location.href = "/games";
@@ -182,7 +182,7 @@ export const vue = new Vue({
             if(_this.gameLocked) return;
 
             _this.gameLocked = true;
-            fetch(`/api/v1/games/${_this.game.uuid}/`, {
+            fetch(`/api/v2/games/${_this.game.uuid}/`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
@@ -225,7 +225,7 @@ export const vue = new Vue({
             newGameHeaderButton.style.pointerEvents = "none";
 
             setTimeout(() => {
-                fetch(`/api/v1/games/${_this.game.uuid}/`, {
+                fetch(`/api/v2/games/${_this.game.uuid}/`, {
                     method: "DELETE",
                 }).then();
 

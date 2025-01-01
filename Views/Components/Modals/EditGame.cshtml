@@ -2,35 +2,61 @@
     <link rel="stylesheet" href="/css/components/modals/editgame.css">
     <div class="blur" v-on:click="openModal(null)"></div>
 
-    <div class="modal" v-if="editingGame !== null">
-        <div class="modal-header">
-            <div class="img" v-bind:style="{ '--game-icon': `url(/images/icons/zarivka_${editingGame.difficulty.toLowerCase()}_bile.svg)` }"></div>
-            <div class="texts">
-                <h1>Upravit hru</h1>
-                <p v-if="editingGame?.name">{{ editingGame?.name }}</p>
+    <div class="modal" v-if="editingGame !== null" v-bind:style="setEditGameModalStyle()">
+
+        <!-- nastaveni -->
+        <div class="left">
+            <div class="modal-header">
+                <div class="img" v-bind:style="{ '--game-icon': `url(/images/icons/zarivka_${editingGame.difficulty.toLowerCase()}_bile.svg)` }"></div>
+                <div class="texts">
+                    <h1 v-if="!temp.creatingNewGame">Upravit hru</h1>
+                    <h1 v-if="temp.creatingNewGame">Vytvořit hru</h1>
+                    <p v-if="editingGame?.name">{{ editingGame?.name }}</p>
+                </div>
+            </div>
+
+            <div class="modal-content">
+                <div class="input">
+                    <p>Název hry:</p>
+                    <input type="text" name="name" v-model="editingGame.name" maxlength="40" minlength="3"/>
+                </div>
+
+                <div class="input">
+                    <p>Obtížnost:</p>
+                    <select name="difficulty" v-model="editingGame.difficulty">
+                        <option value="beginner">Začátečník</option>
+                        <option value="easy">Lehká</option>
+                        <option value="medium">Střední</option>
+                        <option value="hard">Těžká</option>
+                        <option value="extreme">Extrémně těžká</option>
+                    </select>
+                </div>
+
+                <div class="buttons">
+                    <input type="submit" class="button-secondary" value="Zrušit" v-on:click="openModal(null); editingGame = null"/>
+                    <input type="submit" class="button-primary" value="Uložit" v-on:click="saveEditedGame(editingGame)"/>
+                </div>
+            </div>
+
+            <div class="bottom">
+                <div class="errors">
+                    <transition-group name="fade">
+                        <p v-show="temp.editingGameIsInvalid" v-bind:key="'editingGameIsInvalid'">Herní plocha není validní -> počet křížků se musí rovnat nebo být o 1 větší než počet koleček.</p>
+                        <p v-show="temp.editingGameError" v-bind:key="'editingGameError'">{{ temp.editingGameError }}</p>
+                    </transition-group>
+                </div>
+
+                <a class="delete-button" v-on:click="deleteGame(editingGame)">
+                    <div></div>
+                    <span>Smazat hru</span>
+                </a>
             </div>
         </div>
 
-        <div class="modal-content">
-            <div class="input">
-                <p>Název hry:</p>
-                <input type="text" name="name" v-model="editingGame.name" maxlength="40" minlength="3" />
-            </div>
-
-            <div class="input">
-                <p>Obtížnost:</p>
-                <select name="difficulty" v-model="editingGame.difficulty">
-                    <option value="beginner">Začátečník</option>
-                    <option value="easy">Lehká</option>
-                    <option value="medium">Střední</option>
-                    <option value="hard">Těžká</option>
-                    <option value="extreme">Extrémně těžká</option>
-                </select>
-            </div>
-
-            <div class="buttons">
-                <input type="submit" class="button-secondary" value="Zrušit" v-on:click="openModal(null); editingGame = null" />
-                <input type="submit" class="button-primary" value="Uložit" v-on:click="saveEditedGame(editingGame)" />
+        <!-- gameboarda -->
+        <div class="right">
+            <div class="grid">
+                <div class="cell" v-cloak v-for="(cell, i) in 15*15" v-on:click="updateCell($event.target, i)"></div>
             </div>
         </div>
     </div>

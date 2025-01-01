@@ -1,13 +1,9 @@
 @charset "UTF-8";
-.header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Login > .newgame {
-  display: none;
-}
-
 .sections {
   padding-bottom: 160px;
 }
 .sections > .mainsection > .texts {
-  margin-bottom: 96px;
+  margin-bottom: 16px;
 }
 .sections > .mainsection > .texts > h1 {
   font-size: clamp(48px, 5vw, 128px);
@@ -16,7 +12,41 @@
   margin: 0;
 }
 .sections > .mainsection > .texts > .inputs {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+.sections > .mainsection > .texts > .inputs .SearchInput {
+  display: flex;
+  flex-direction: column;
+}
+.sections > .mainsection > .texts > .inputs .SearchInput .Search-top .SearchText {
+  display: flex;
+  justify-content: start;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+.sections > .mainsection > .texts > .inputs .SearchInput .Search-Bottom {
+  display: flex;
+  gap: 8px;
+}
+.sections > .mainsection > .texts > .inputs .SearchInput .Search-Bottom .CreateGame {
+  color: var(--accent-color-secondary);
+  text-decoration: none;
+}
+.sections > .mainsection > .texts > .inputs .filter-container {
+  display: flex;
+  flex-direction: column;
+}
+.sections > .mainsection > .texts > .inputs .filter-container .filter-top .FilterText {
+  display: flex;
+  justify-content: end;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom {
+  display: flex;
+  gap: 8px;
 }
 .sections > .mainsection > .content > .loadingdiv {
   position: relative;
@@ -102,7 +132,7 @@
   border-radius: 10px;
   gap: 24px;
   box-shadow: 0 0 7px rgba(0, 0, 0, 0.05);
-  width: calc(33.3333333333% - 15px);
+  width: calc(33.3333333333% - 13.3333333333px);
 }
 .sections > .mainsection > .content > .games-parent > .child > .icon {
   position: relative;
