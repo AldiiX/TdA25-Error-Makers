@@ -5,7 +5,7 @@ using MySql.Data.MySqlClient;
 using TdA25_Error_Makers.Classes;
 using TdA25_Error_Makers.Classes.Objects;
 
-namespace AdminSphere.API;
+namespace TdA25_Error_Makers.API;
 
 
 [ApiController]
@@ -206,16 +206,16 @@ public class APIv1 : Controller {
         }
 
         var r = new JsonObject() {
-            ["uuid"] = gameJson["uuid"],
-            ["createdAt"] = gameJson["createdAt"],
-            ["updatedAt"] = gameJson["updatedAt"],
-            ["name"] = gameJson["name"],
-            ["difficulty"] = gameJson["difficulty"],
-            ["gameState"] = gameJson["gameState"],
-            ["board"] = gameJson["board"],
+            ["uuid"] = JsonValue.Create(gameJson["uuid"]?.ToString()),
+            ["createdAt"] = JsonValue.Create(gameJson["createdAt"]?.ToString()),
+            ["updatedAt"] = JsonValue.Create(gameJson["updatedAt"]?.ToString()),
+            ["name"] = JsonValue.Create(gameJson["name"]?.ToString()),
+            ["difficulty"] = JsonValue.Create(gameJson["difficulty"]?.ToString()),
+            ["gameState"] = JsonValue.Create(gameJson["gameState"]?.ToString()),
+            ["board"] = gameJson["board"]?.DeepClone(),
         };
 
-        return new OkObjectResult(gameJson);
+        return new OkObjectResult(r);
     }
 
     [HttpDelete("games/{uuid}")]

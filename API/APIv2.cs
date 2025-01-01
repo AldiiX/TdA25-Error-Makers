@@ -5,7 +5,7 @@ using MySql.Data.MySqlClient;
 using TdA25_Error_Makers.Classes;
 using TdA25_Error_Makers.Classes.Objects;
 
-namespace AdminSphere.API;
+namespace TdA25_Error_Makers.API;
 
 
 [ApiController]
