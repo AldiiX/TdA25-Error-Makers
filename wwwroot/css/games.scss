@@ -319,7 +319,7 @@
                     align-items: center;
                     text-align: center;
                     background-color: var(--background-color-secondary);
-                    transition-duration: 0.3s;
+                    transition: background-color 0.3s ease;
                     border-radius: 10px;
                     gap: 24px;
                     box-shadow: 0 0 7px rgba(0, 0, 0, 0.05);

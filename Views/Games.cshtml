@@ -118,15 +118,8 @@
                         <p>... snad to bude co nejdřív :) ...</p>
                     </div>
 
-                    <div class="nogamesdiv" v-if="games !== null && gamesFiltered.length === 0" v-cloak>
-                        <div class="img"></div>
-                        <h1>Ajaj, nejsou tu žádné piškvorkové hry.</h1>
-                        @* <p>... snad to bude co nejdřív :) ...</p> *@
-                        <a class="button-primary" v-on:click="createNewGame()">Vytvořit hru</a>
-                    </div>
-
                     <div v-if="games !== null" v-cloak class="games-parent">
-                        <div class="child" v-for="game in gamesFiltered" v-cloak>
+                        <div class="child" v-for="game in gamesFiltered">
                             <div class="icon">
 
                                 <!-- Když vyhrál nebo je na tahu X -->
@@ -168,6 +161,13 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="nogamesdiv" v-if="games !== null && gamesFiltered.length === 0" v-cloak>
+                        <div class="img"></div>
+                        <h1>Ajaj, nejsou tu žádné piškvorkové hry.</h1>
+                        @* <p>... snad to bude co nejdřív :) ...</p> *@
+                        <a class="button-primary" v-on:click="createNewGame()">Vytvořit hru</a>
                     </div>
                 </div>
             </section>
