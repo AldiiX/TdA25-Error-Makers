@@ -35,8 +35,9 @@
     <script type="module" src="/scripts/components/header.js"></script>
 </head>
 <body id="GAMES-PAGE">
-    <div id="app">
-        @await background
+
+    @await background
+    <div id="app" v-bind:class="{ 'loadingGameLock': temp.loadingGame }">
         @await header
         @await editGameModal
 

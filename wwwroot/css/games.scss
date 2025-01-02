@@ -1,4 +1,24 @@
-﻿.header-5F015D44-0984-4A50-B52B-5319AE57C19C{
+﻿#app:is(.loadingGameLock) {
+    .header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Login > .newgame {
+        pointer-events: none;
+    }
+
+    .sections > .mainsection > .content > .games-parent > .child > .texts > .buttons a {
+        pointer-events: none;
+    }
+
+    .sections > .mainsection > .content > .games-parent > .child > .texts > .buttons >.button-primary {
+        pointer-events: none;
+        //background-color: var(--button-bg-hover);
+    }
+
+    .sections > .mainsection > .texts > .inputs .SearchInput .Search-Bottom > button {
+        pointer-events: none;
+    }
+}
+
+
+.header-5F015D44-0984-4A50-B52B-5319AE57C19C{
     >.flex {
 
     }

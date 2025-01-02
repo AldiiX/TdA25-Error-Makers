@@ -22,6 +22,7 @@ export const vue = new Vue({
             creatingNewGame: false,
             editingGameIsInvalid: false,
             editingGameError: null,
+            loadingGame: false,
         },
 
         filterName: "",
@@ -455,6 +456,7 @@ export const vue = new Vue({
 
         playGame: function(game: any) {
             const _this = this as any;
+            _this.temp.loadingGame = true;
 
             fetch("/api/v2/games", {
                 method: 'POST',
@@ -472,6 +474,7 @@ export const vue = new Vue({
                 const data = await response.json();
                 if (!response.ok) {
                     console.error("Error: ", data.message);
+                    _this.temp.loadingGame = false;
                     return;
                 }
 

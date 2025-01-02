@@ -13,6 +13,7 @@ export const vue = new Vue({
             creatingNewGame: false,
             editingGameIsInvalid: false,
             editingGameError: null,
+            loadingGame: false,
         },
         filterName: "",
         filterDifficulty: "",
@@ -371,6 +372,7 @@ export const vue = new Vue({
         },
         playGame: function (game) {
             const _this = this;
+            _this.temp.loadingGame = true;
             fetch("/api/v2/games", {
                 method: 'POST',
                 headers: {
@@ -387,6 +389,7 @@ export const vue = new Vue({
                 const data = await response.json();
                 if (!response.ok) {
                     console.error("Error: ", data.message);
+                    _this.temp.loadingGame = false;
                     return;
                 }
                 window.location.href = `/game/${data.uuid}`;

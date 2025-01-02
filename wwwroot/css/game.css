@@ -162,6 +162,7 @@ header:not(.scrolled) {
   text-decoration: none;
   border-radius: 12px 12px 0 0;
   transition-duration: 0.3s;
+  user-select: none;
 }
 .mainsection .flex > .left > .buttons > a:hover {
   background-color: var(--button-bg-hover);

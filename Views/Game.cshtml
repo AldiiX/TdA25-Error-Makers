@@ -132,7 +132,7 @@
                     </div>
 
                     <div class="presettings" v-else-if="game.gameState === 'finished'">
-                        <button class="button-secondary" v-on:click="createNewGame()">Nová hra</button>
+                        <button class="button-primary" v-on:click="createNewGame()">Nová hra</button>
                     </div>
 
                     <div class="presettings" v-else-if="!editMode && game.isInstance">
