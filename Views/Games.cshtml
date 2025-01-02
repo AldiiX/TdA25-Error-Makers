@@ -62,32 +62,50 @@
                             <div class="filter-top">
                                 <p class="FilterText">Filtrovat</p>
                             </div>
-                            <div class="filter-bottom">
-                                <select id="difficulty-filter" v-model="filterDifficulty" v-on:change="updateFilters">
-                                    <option value="" selected>Obtížnost</option>
-                                    <option value="beginner">Začátečník</option>
-                                    <option value="easy">Lehká</option>
-                                    <option value="medium">Střední</option>
-                                    <option value="hard">Těžká</option>
-                                    <option value="extreme">Extrémně těžká</option>
-                                </select>
 
-                                <select id="date-filter" v-model="selectedDateRange" v-on:change="setDateRange(selectedDateRange)">
-                                    <option value="" selected>Poslední úprava</option>
-                                    <option value="today">Dnes</option>
-                                    <option value="last7days">Posledních 7 dní</option>
-                                    <option value="last30days">Posledních 30 dní</option>
-                                    <option value="lastYear">Poslední rok</option>
-                                    <option value="custom">Vlastní</option>
-                                </select>
-
-                                <div v-cloak v-if="selectedDateRange === 'custom'">
-                                    <input type="date" v-model="filterStartDate" v-on:change="updateFilters" placeholder="Datum od"/>
-                                    <input type="date" v-model="filterEndDate" v-on:change="updateFilters" placeholder="Datum do"/>
+                            <transition-group name="custom-date" tag="div" class="filter-bottom">
+                                <div class="select-wrapper" v-bind:key="'difficulty'">
+                                    <select id="difficulty-filter" v-model="filterDifficulty" v-on:change="updateFilters">
+                                        <option value="" selected>Obtížnost</option>
+                                        <option value="beginner">Začátečník</option>
+                                        <option value="easy">Lehká</option>
+                                        <option value="medium">Střední</option>
+                                        <option value="hard">Těžká</option>
+                                        <option value="extreme">Extrémně těžká</option>
+                                    </select>
                                 </div>
-                            </div>
-                        </div>
 
+                                <div class="select-wrapper" v-bind:key="'time-filter'">
+                                    <select id="date-filter" v-model="selectedDateRange" v-on:change="setDateRange(selectedDateRange)">
+                                        <option value="" selected>Poslední úprava</option>
+                                        <option value="today">Dnes</option>
+                                        <option value="last7days">Posledních 7 dní</option>
+                                        <option value="last30days">Posledních 30 dní</option>
+                                        <option value="lastYear">Poslední rok</option>
+                                        <option value="custom">Vlastní</option>
+                                    </select>
+                                </div>
+
+                                <!-- Datum od -->
+                                <input v-if="selectedDateRange === 'custom'"
+                                       type="date"
+                                       class="custom-date-input"
+                                       v-bind:key="'input-start'"
+                                       v-model="filterStartDate"
+                                       v-on:change="updateFilters"
+                                       placeholder="Datum od"/>
+
+                                <!-- Datum do -->
+                                <input v-if="selectedDateRange === 'custom'"
+                                       type="date"
+                                       class="custom-date-input"
+                                       v-bind:key="'input-end'"
+                                       v-model="filterEndDate"
+                                       v-on:change="updateFilters"
+                                       placeholder="Datum do"/>
+                            </transition-group>
+
+                        </div>
                     </div>
                 </div>
 

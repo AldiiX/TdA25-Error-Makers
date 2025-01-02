@@ -30,6 +30,9 @@
   display: flex;
   gap: 8px;
 }
+.sections > .mainsection > .texts > .inputs .SearchInput .Search-Bottom > input, .sections > .mainsection > .texts > .inputs .SearchInput .Search-Bottom > button {
+  height: 40px;
+}
 .sections > .mainsection > .texts > .inputs .SearchInput .Search-Bottom .CreateGame {
   color: var(--accent-color-secondary);
   text-decoration: none;
@@ -47,6 +50,70 @@
 .sections > .mainsection > .texts > .inputs .filter-container .filter-bottom {
   display: flex;
   gap: 8px;
+  align-items: center;
+  /* Zajištění plynulého přechodu pro všechny elementy */
+  /* Přechody pro všechny prvky při animaci */
+  /* Animace při příjezdu */
+  /* Animace při odjezdu */
+}
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom select, .sections > .mainsection > .texts > .inputs .filter-container .filter-bottom input {
+  height: 40px;
+}
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .select-wrapper {
+  position: relative;
+  transition: margin 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+}
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .custom-date-enter-active,
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .custom-date-leave-active {
+  transition: margin 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+}
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .custom-date-enter-from {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .custom-date-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .custom-date-leave-from {
+  opacity: 1;
+  margin-left: 0;
+}
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .custom-date-leave-to {
+  opacity: 0;
+  margin-left: -163px;
+}
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom > .select-wrapper {
+  position: relative;
+}
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom > .select-wrapper > select {
+  appearance: none;
+  padding-right: 52px;
+}
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom > .select-wrapper::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  background-color: var(--text-color);
+  mask: url("/images/icons/arrow_down.svg") no-repeat center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+}
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .custom-date-input::-webkit-calendar-picker-indicator {
+  color: transparent;
+  opacity: 1;
+  display: block;
+  background: none;
+  background-color: var(--text-color);
+  mask: url("/images/icons/calendar.svg") no-repeat center;
+  width: 12px;
+  height: 12px;
+  border-width: thin;
 }
 .sections > .mainsection > .content > .loadingdiv {
   position: relative;

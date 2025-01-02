@@ -38,6 +38,11 @@
                     .Search-Bottom{
                         display: flex;
                         gap: 8px;
+
+                        >input, >button {
+                            height: 40px;
+                        }
+
                         .CreateGame{
                             color: var(--accent-color-secondary);
                             text-decoration: none;
@@ -63,10 +68,91 @@
                         }
                         
                     }
+
                     .filter-bottom{
                         display: flex;
                         gap: 8px;
-                    }
+                        align-items: center;
+
+                        select, input {
+                            height: 40px;
+                        }
+
+                        /* Zajištění plynulého přechodu pro všechny elementy */
+                        .select-wrapper {
+                            position: relative;
+                            transition: margin 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+                        }
+
+                        /* Přechody pro všechny prvky při animaci */
+                        .custom-date-enter-active,
+                        .custom-date-leave-active {
+                            transition: margin 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+                        }
+
+                        /* Animace při příjezdu */
+                        .custom-date-enter-from {
+                            opacity: 0;
+                            transform: translateX(-100%);
+                        }
+
+                        .custom-date-enter-to {
+                            opacity: 1;
+                            transform: translateX(0);
+                        }
+
+                        /* Animace při odjezdu */
+                        .custom-date-leave-from {
+                            opacity: 1;
+                            margin-left: 0;
+                        }
+
+                        .custom-date-leave-to {
+                            opacity: 0;
+                            margin-left: -163px;
+                        }
+
+
+
+
+
+                        >.select-wrapper {
+                            position: relative;
+                            
+                            >select {
+                                appearance: none;
+                                padding-right: 52px;
+                            }
+
+
+                            &::after {
+                                content: '';
+                                width: 12px;
+                                height: 12px;
+                                position: absolute;
+                                right: 20px;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                pointer-events: none;
+                                background-color: var(--text-color);
+                                mask: url("/images/icons/arrow_down.svg") no-repeat center;
+                                mask-size: contain;
+                                mask-repeat: no-repeat;
+                            }
+                        }
+
+                        .custom-date-input::-webkit-calendar-picker-indicator {
+                                color: transparent;
+                                opacity: 1;
+                                display: block;
+                                background: none;
+                                background-color: var(--text-color);
+                                mask: url("/images/icons/calendar.svg") no-repeat center;
+                                width: 12px;
+                                height: 12px;
+                                border-width: thin;
+                            }
+                        }
                 }
                 
             }
