@@ -73,6 +73,11 @@
 
                     >input {
                         flex-grow: 1;
+
+                        &:is(.locked) {
+                            background-color: var(--color-gray);
+                            pointer-events: none;
+                        }
                     }
                 }
             }
@@ -87,6 +92,7 @@
                     p {
                         width: 260px;
                         color: var(--accent-color-secondary);
+                        margin: 0;
 
                         /*&:is(.withfadeout) {
                             opacity: 0;

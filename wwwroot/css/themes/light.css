@@ -54,6 +54,10 @@
                     color: white !important;
                 }
 
+                >.Login >.newgame {
+                    background-color: rgba(255,255,255, 0.2);
+                }
+
                 >.Login >.changetheme {
                     background-color: white;
                 }
@@ -74,6 +78,12 @@
 
     section:is(.top) > .center > .left > p {
         color: #e3e3e3;
+    }
+}
+
+.header-5F015D44-0984-4A50-B52B-5319AE57C19C {
+    > .flex > .Login > .newgame {
+        background-color: rgba(0, 0, 0, 0.2);
     }
 }
 

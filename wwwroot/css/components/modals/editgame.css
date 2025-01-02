@@ -64,6 +64,10 @@
 .modal-editgame > .modal > .left > .modal-content > .buttons > input {
   flex-grow: 1;
 }
+.modal-editgame > .modal > .left > .modal-content > .buttons > input:is(.locked) {
+  background-color: var(--color-gray);
+  pointer-events: none;
+}
 .modal-editgame > .modal > .left > .bottom {
   display: flex;
   flex-grow: 1;
@@ -73,6 +77,7 @@
 .modal-editgame > .modal > .left > .bottom > .errors p {
   width: 260px;
   color: var(--accent-color-secondary);
+  margin: 0;
   /*&:is(.withfadeout) {
       opacity: 0;
       animation: asdfsdeuofsdiofh 4s forwards ease-in-out;
