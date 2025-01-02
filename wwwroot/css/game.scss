@@ -137,6 +137,10 @@
             }
         }
 
+        p::selection, span::selection, a::selection, h1::selection, h2::selection, input::selection, select::selection {
+            background-color: var(--hcolor);
+        }
+
         &:is(.fade-out) {
             animation: fade-out 0.5s ease;
             animation-iteration-count: 1;
@@ -180,7 +184,7 @@
 
             >.buttons {
                 position: absolute;
-                top: -24px;
+                top: -26px;
 
                 >a {
                     padding: 8px 24px;
@@ -334,6 +338,7 @@
                     transition-duration: 0.3s;
                     background-color: var(--mcolor);
                     color: white;
+
 
                     >.name {
                         margin: 0;

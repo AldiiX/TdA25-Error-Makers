@@ -26,6 +26,8 @@
   font-size: 16px;
   margin: 0;
   margin-bottom: 6px;
+  margin-left: 4px;
+  user-select: none;
 }
 .sections > .mainsection > .texts > .inputs .SearchInput .Search-Bottom {
   display: flex;
@@ -48,6 +50,8 @@
   font-size: 16px;
   margin: 0;
   margin-bottom: 6px;
+  margin-right: 4px;
+  user-select: none;
 }
 .sections > .mainsection > .texts > .inputs .filter-container .filter-bottom {
   display: flex;
@@ -116,13 +120,14 @@
 .sections > .mainsection > .content > .loadingdiv {
   position: relative;
   margin: 0 auto;
+  margin-top: 64px;
   display: flex;
   flex-direction: column;
   border-radius: 12px;
   min-width: 600px;
-  -webkit-animation: appear 1s ease-out;
+  -webkit-animation: hhfjaergdfvgdsfade 1s ease-out;
 }
-@keyframes appear {
+@keyframes hhfjaergdfvgdsfade {
   from {
     opacity: 0;
   }
@@ -167,6 +172,50 @@
 .sections > .mainsection > .content > .loadingdiv p {
   color: var(--color-gray);
 }
+.sections > .mainsection > .content > .nogamesdiv {
+  position: relative;
+  margin: 0 auto;
+  margin-top: 64px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  min-width: 600px;
+  -webkit-animation: efsfsdefsfsfdsfsf 0.3s ease-out;
+}
+@keyframes efsfsdefsfsfdsfsf {
+  from {
+    opacity: 0;
+  }
+  /*70% {
+      opacity: 0;
+  }*/
+  to {
+    opacity: 1;
+  }
+}
+.sections > .mainsection > .content > .nogamesdiv > .img {
+  width: 250px;
+  aspect-ratio: 1/1;
+  mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
+  mask-size: contain;
+  background-color: var(--text-color);
+  margin: 0 auto;
+}
+.sections > .mainsection > .content > .nogamesdiv p, .sections > .mainsection > .content > .nogamesdiv h1 {
+  text-align: center;
+  margin: 0;
+}
+.sections > .mainsection > .content > .nogamesdiv h1 {
+  margin-top: 32px;
+  margin-bottom: 24px;
+}
+.sections > .mainsection > .content > .nogamesdiv p {
+  color: var(--color-gray);
+}
+.sections > .mainsection > .content > .nogamesdiv a {
+  width: fit-content;
+  margin: 0 auto;
+}
 .sections > .mainsection > .content > .games-parent {
   display: flex;
   flex-wrap: wrap;
@@ -176,6 +225,7 @@
   margin: 0 auto;
   grid-template-columns: repeat(6, 1fr); /* 6 sloupců stejné šířky */
   animation: sfapodij 0.8s ease-in-out;
+  animation-iteration-count: 1;
 }
 @keyframes sfapodij {
   from {
@@ -193,7 +243,7 @@
   align-items: center;
   text-align: center;
   background-color: var(--background-color-secondary);
-  transition: all 0.3s ease-in-out;
+  transition-duration: 0.3s;
   border-radius: 10px;
   gap: 24px;
   box-shadow: 0 0 7px rgba(0, 0, 0, 0.05);
@@ -258,12 +308,13 @@
   mask-position: center;
   mask-size: contain;
   mask-repeat: no-repeat;
-  background-color: var(--text-color);
+  background-color: var(--color-gray);
 }
 .sections > .mainsection > .content > .games-parent > .child > .texts > .flex .pair p {
   margin: 0;
   text-align: left;
   flex-shrink: 0;
+  color: var(--color-gray);
 }
 .sections > .mainsection > .content > .games-parent > .child > .texts > .flex .pair:not(.pair-difficulty) .icon {
   mask-size: 80%;

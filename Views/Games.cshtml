@@ -53,7 +53,7 @@
                                 <p class="SearchText">Najít</p>
                             </div>
                             <div class="Search-Bottom">
-                                <input style="width: 270px" type="text" placeholder="Nějaký pěkný název hry..." v-model="filterName" v-on:input="updateFilters">
+                                <input style="width: 270px" type="text" placeholder="Nějaký pěkný název hry..." autocomplete="off" v-model="filterName" v-on:input="updateFilters">
                                 <button class="button-primary-col-sec" v-on:click="createNewGame()">+ Vytvořit</button>
                             </div>
                         </div>
@@ -93,6 +93,7 @@
                                        v-bind:key="'input-start'"
                                        v-model="filterStartDate"
                                        v-on:change="updateFilters"
+                                       v-cloak
                                        placeholder="Datum od"/>
 
                                 <!-- Datum do -->
@@ -102,6 +103,7 @@
                                        v-bind:key="'input-end'"
                                        v-model="filterEndDate"
                                        v-on:change="updateFilters"
+                                       v-cloak
                                        placeholder="Datum do"/>
                             </transition-group>
 
@@ -110,12 +112,20 @@
                 </div>
 
                 <div class="content">
-                    <div class="loadingdiv" v-if="games === null">
+                    <div class="loadingdiv" v-if="games === null" v-cloak>
                         <div class="img"></div>
-                        <h1>Načítání všech her</h1>
+                        <h1>Načítání piškvorkových her</h1>
+                        <p>... snad to bude co nejdřív :) ...</p>
                     </div>
 
-                    <div v-if="games !== null" class="games-parent">
+                    <div class="nogamesdiv" v-if="games !== null && gamesFiltered.length === 0" v-cloak>
+                        <div class="img"></div>
+                        <h1>Ajaj, nejsou tu žádné piškvorkové hry.</h1>
+                        @* <p>... snad to bude co nejdřív :) ...</p> *@
+                        <a class="button-primary" v-on:click="createNewGame()">Vytvořit hru</a>
+                    </div>
+
+                    <div v-if="games !== null" v-cloak class="games-parent">
                         <div class="child" v-for="game in gamesFiltered" v-cloak>
                             <div class="icon">
 

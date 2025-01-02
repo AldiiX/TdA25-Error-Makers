@@ -94,7 +94,7 @@ public class APIv2 : Controller {
         bool? saved = data.TryGetValue("saved", out object? _saved) ? _saved?.ToString()?.ToLower() == "true" : null;
         bool errorIfSavingFinishedGame = data.TryGetValue("errorIfSavingCompleted", out object? _errorIfSavingCompleted) && _errorIfSavingCompleted?.ToString()?.ToLower() == "true";
         bool saveIfFinished = data.TryGetValue("saveIfFinished", out object? _saveIfFinished) && _saveIfFinished?.ToString()?.ToLower() == "true";
-        bool isInstance = data.TryGetValue("isInstance", out object? _isinstance) && _isinstance?.ToString()?.ToLower() == "true";
+        bool? isInstance = data.TryGetValue("isInstance", out object? _isinstance) ? _isinstance?.ToString()?.ToLower() == "true" : null;
 
         // kontrola validity boardu
         if(!GameBoard.TryParse(board, out var _b)) return new UnprocessableEntityObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Chyba při parsování herní plochy." });
@@ -130,7 +130,7 @@ public class APIv2 : Controller {
         cmd.Parameters.AddWithValue("@name", name);
         cmd.Parameters.AddWithValue("@difficulty", difficulty);
         cmd.Parameters.AddWithValue("@board", board);
-        cmd.Parameters.AddWithValue("@actualGameState",  saveIfFinished ? "" : actualGameState);
+        cmd.Parameters.AddWithValue("@actualGameState", saveIfFinished ? "" : actualGameState);
         cmd.Parameters.AddWithValue("@uuid", uuid);
         cmd.Parameters.AddWithValue("@round", _b.GetRound());
         cmd.Parameters.AddWithValue("@gameState", gameState.ToString());

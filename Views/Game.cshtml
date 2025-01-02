@@ -63,7 +63,7 @@
             </div>
 
             <!-- herní pole + controls -->
-            <div class="flex" v-bind:class="{ locked: gameLocked, 'fade-out': gameFadeOut }" v-show="gameLoaded" v-bind:style="{ '--mcolor': setPlayerColor() }">
+            <div class="flex" v-bind:class="{ locked: gameLocked, 'fade-out': gameFadeOut }" v-show="gameLoaded" v-bind:style="{ '--mcolor': setPlayerColor(), '--hcolor': setPlayerColorHover() }">
                 <div class="left">
                     <transition name="fade">
                         <div class="buttons" v-show="!pageIsScrolled">
@@ -94,7 +94,8 @@
                     </div>
 
                     <div class="settings" v-if="editMode && game.gameState !== 'finished'">
-                        <h2>Nastavení</h2>
+                        <h2 v-if="!game.isInstance">Nastavení</h2>
+                        <h2 v-if="game.isInstance">Uložit jako novou hru</h2>
 
                         <div class="pair">
                             <p>Název hry</p>
@@ -113,7 +114,8 @@
                         </div>
 
                         <div class="buttons" v-if="!game.isSaved">
-                            <button class="button-secondary" v-on:click="createNewGame()">Nová hra</button>
+                            <button class="button-secondary" v-if="!game.isInstance" v-on:click="createNewGame()">Nová hra</button>
+                            <button class="button-secondary" v-if="game.isInstance" v-on:click="saveAsNewGameCancelButtonClick()">Zrušit</button>
                             <button class="button-primary" v-on:click="saveGame()" v-if="game.gameState !== 'finished'">Uložit hru</button>
                         </div>
 
@@ -123,14 +125,19 @@
                         </div>
                     </div>
 
-                    <div class="presettings" v-if="!editMode && game.gameState !== 'finished'">
+                    <div class="presettings" v-if="!editMode && !game.isInstance && game.gameState !== 'finished'">
                         <button class="button-secondary" v-on:click="editMode = true">Upravit</button>
                         <button class="button-secondary" v-on:click="resetGame()">Resetovat</button>
                         <button class="button-secondary" v-on:click="deleteGame()">Smazat</button>
                     </div>
 
-                    <div class="presettings" v-if="game.gameState === 'finished'">
+                    <div class="presettings" v-else-if="game.gameState === 'finished'">
                         <button class="button-secondary" v-on:click="createNewGame()">Nová hra</button>
+                    </div>
+
+                    <div class="presettings" v-else-if="!editMode && game.isInstance">
+                        <button class="button-secondary" v-on:click="createNewGame()">Nová hra</button>
+                        <button class="button-primary" v-on:click="saveAsNewGameButtonClick()">Uložit jako</button>
                     </div>
                 </div>
             </div>

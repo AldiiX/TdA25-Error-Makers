@@ -23,6 +23,7 @@
                 justify-content: space-between;
                 margin-top: 32px;
                 $text-margin-bottom: 6px;
+                $text-margin-side: 4px;
 
                 .SearchInput{
                     display: flex;
@@ -35,6 +36,8 @@
                             font-size: 16px;
                             margin: 0;
                             margin-bottom: $text-margin-bottom;
+                            margin-left:  $text-margin-side;
+                            user-select: none;
                         }
                     }
                     
@@ -68,6 +71,8 @@
                             font-size: 16px;
                             margin: 0;
                             margin-bottom: $text-margin-bottom;
+                            margin-right:  $text-margin-side;
+                            user-select: none;
                         }
                         
                     }
@@ -161,15 +166,16 @@
             >.loadingdiv {
                 position: relative;
                 margin: 0 auto;
+                margin-top: 64px;
                 //background-color: var(--background-color);
                 //border: 1px solid var(--background-color-primary);
                 display: flex;
                 flex-direction: column;
                 border-radius: 12px;
                 min-width: 600px;
-                -webkit-animation: appear 1s ease-out;
+                -webkit-animation: hhfjaergdfvgdsfade 1s ease-out;
 
-                @keyframes appear {
+                @keyframes hhfjaergdfvgdsfade {
                     from {
                         opacity: 0;
                     }
@@ -226,6 +232,63 @@
                 }
             }
 
+            >.nogamesdiv {
+                position: relative;
+                margin: 0 auto;
+                margin-top: 64px;
+                //background-color: var(--background-color);
+                //border: 1px solid var(--background-color-primary);
+                display: flex;
+                flex-direction: column;
+                border-radius: 12px;
+                min-width: 600px;
+                -webkit-animation: efsfsdefsfsfdsfsf 0.3s ease-out;
+
+                @keyframes efsfsdefsfsfdsfsf {
+                    from {
+                        opacity: 0;
+                    }
+
+                    /*70% {
+                        opacity: 0;
+                    }*/
+
+                    to {
+                        opacity: 1;
+                    }
+                }
+
+                >.img {
+                    width: 250px;
+                    aspect-ratio: 1/1;
+                    mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
+                    mask-size: contain;
+                    background-color: var(--text-color);//var(--accent-color);
+                    //animation: loading-img-anim 3s ease-in-out infinite;
+                    margin: 0 auto;
+                }
+
+                p, h1 {
+                    text-align: center;
+                    margin: 0;
+                }
+
+                h1 {
+                    margin-top: 32px;
+                    margin-bottom: 24px;
+                }
+
+                p {
+                    color: var(--color-gray);
+                }
+
+                a {
+                    width: fit-content;
+                    margin: 0 auto;
+                    //font-size: 20px;
+                }
+            }
+
             >.games-parent {
                 display: flex;
                 flex-wrap: wrap;
@@ -235,6 +298,7 @@
                 margin: 0 auto;
                 grid-template-columns: repeat(6, 1fr); /* 6 sloupců stejné šířky */
                 animation: sfapodij 0.8s ease-in-out;
+                animation-iteration-count: 1;
 
                 @keyframes sfapodij {
                     from {
@@ -255,7 +319,7 @@
                     align-items: center;
                     text-align: center;
                     background-color: var(--background-color-secondary);
-                    transition: all 0.3s ease-in-out;
+                    transition-duration: 0.3s;
                     border-radius: 10px;
                     gap: 24px;
                     box-shadow: 0 0 7px rgba(0, 0, 0, 0.05);
@@ -328,13 +392,14 @@
                                     mask-position: center;
                                     mask-size: contain;
                                     mask-repeat: no-repeat;
-                                    background-color: var(--text-color);
+                                    background-color: var(--color-gray);
                                 }
 
                                 p {
                                     margin: 0;
                                     text-align: left;
                                     flex-shrink: 0;
+                                    color: var(--color-gray);
                                 }
 
                                 &:not(.pair-difficulty) {

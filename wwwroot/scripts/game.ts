@@ -165,7 +165,7 @@ export const vue = new Vue({
             const o = data.board.flat().filter((cell: any) => cell === "O").length;
 
             _this.currentPlayer = x > o ? "o" : "x";
-            _this.editMode = !data.isSaved;
+            _this.editMode = !data.isSaved && !data.isInstance;
             _this.gameLoaded = true;
             _this.gameLocked = false;
 
@@ -265,12 +265,40 @@ export const vue = new Vue({
             }, 1500);
         },
 
+        saveAsNewGameButtonClick: function(): void {
+            const _this = this as any;
+
+            _this.editMode = true;
+            fetch(`/api/v2/games/generate-name`, {
+                method: "GET",
+            }).then(async response => {
+                const data = await response.json();
+                if(!response.ok) throw new Error();
+
+                _this.game.name = data.name;
+            });
+        },
+
+        saveAsNewGameCancelButtonClick: function (): void {
+            const _this = this as any;
+            _this.editMode = false;
+            _this.game.name = _this.game.original.name;
+        },
+
         setPlayerColor: function (): any {
             const _this = this as any;
             if(_this.game?.winner?.toUpperCase() === "X") return "var(--accent-color-secondary)";
             if(_this.game?.winner?.toUpperCase() === "O") return "var(--accent-color-primary)";
 
             return _this.currentPlayer == 'x' ? 'var(--accent-color-secondary)' : 'var(--accent-color-primary)'
+        },
+
+        setPlayerColorHover: function (): any {
+            const _this = this as any;
+            if(_this.game?.winner?.toUpperCase() === "X") return "var(--accent-color-primary)";
+            if(_this.game?.winner?.toUpperCase() === "O") return "var(--accent-color-secondary)";
+
+            return _this.currentPlayer == 'x' ? 'var(--accent-color-primary)' : 'var(--accent-color-secondary)'
         },
     },
 

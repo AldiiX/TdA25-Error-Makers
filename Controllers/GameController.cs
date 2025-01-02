@@ -12,7 +12,7 @@ public class GameController : Controller {
 
     [HttpGet("/game")]
     public IActionResult GameCreate() {
-        var g = Game.Create(null, Game.GameDifficulty.MEDIUM, GameBoard.CreateNew(), false, true);
+        var g = Game.Create(null, Game.GameDifficulty.MEDIUM, GameBoard.CreateNew(), false, false, true);
         if(g == null) return BadRequest();
 
         return Redirect($"/game/{g.UUID}");
