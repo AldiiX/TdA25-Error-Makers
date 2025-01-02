@@ -178,8 +178,23 @@
             flex-grow: 1;
             border: 1px solid var(--background-color-primary);
 
-            &:is(.locked) {
-                pointer-events: none;
+            >.buttons {
+                position: absolute;
+                top: -24px;
+
+                >a {
+                    padding: 8px 24px;
+                    background-color: var(--background-color);
+                    color: var(--text-color);
+                    text-decoration: none;
+                    border-radius: 12px 12px 0 0;
+                    transition-duration: 0.3s;
+
+                    &:hover {
+                        background-color: var(--button-bg-hover);
+                        transition-duration: 0.3s;
+                    }
+                }
             }
 
             .grid {
@@ -190,6 +205,10 @@
                 width: fit-content;
                 border-radius: 12px;
                 //overflow: hidden;
+
+                &:is(.locked) {
+                    pointer-events: none;
+                }
 
                 .cell {
                     width: 45px;

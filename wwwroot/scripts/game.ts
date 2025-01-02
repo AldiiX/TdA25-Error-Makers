@@ -5,7 +5,12 @@ import { scrollToElement } from "/scripts/functions.js";
 export const vue = new Vue({
     el: "#app",
     mounted: function(){
+        const _this = this as any;
         this.main();
+
+        window.addEventListener("scroll", () => {
+            _this.pageIsScrolled = window.scrollY > 0;
+        });
     },
 
 
@@ -20,6 +25,7 @@ export const vue = new Vue({
         gameLocked: true,
         gameFadeOut: false,
         editMode: false,
+        pageIsScrolled: false,
     },
 
 
@@ -34,6 +40,8 @@ export const vue = new Vue({
                 this.getGame();
             }, 1150);
         },
+
+
 
         updateCell: function(_cell: any, index: number): void {
             const cell = _cell as HTMLElement;
@@ -76,6 +84,25 @@ export const vue = new Vue({
                 if(!response.ok) throw new Error();
 
                 this.initializeGame(data);
+
+                if(data.gameState === "finished") {
+                    this.cancelEditMode();
+
+                    fetch(`/api/v2/games/${_this.game.uuid}/`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            name: _this.game.name,
+                            difficulty: _this.game.difficulty,
+                            saved: false,
+                            board: data.board,
+                        })
+                    });
+
+                    return;
+                }
             }).catch(_ => {
                 this.getGame();
             });
@@ -160,6 +187,7 @@ export const vue = new Vue({
                     name: (document.getElementById("input-game-name") as HTMLInputElement)?.value ?? "Nová hra",
                     difficulty: (document.getElementById("input-game-difficulty") as HTMLInputElement)?.value ?? "medium",
                     saved: true,
+                    errorIfSavingCompleted: true,
                 })
             }).then(async response => {
                 const data = await response.json();
@@ -247,5 +275,6 @@ export const vue = new Vue({
     },
 
     computed: {
+
     },
 })

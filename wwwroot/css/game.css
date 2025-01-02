@@ -148,8 +148,21 @@ header:not(.scrolled) {
   flex-grow: 1;
   border: 1px solid var(--background-color-primary);
 }
-.mainsection .flex > .left:is(.locked) {
-  pointer-events: none;
+.mainsection .flex > .left > .buttons {
+  position: absolute;
+  top: -24px;
+}
+.mainsection .flex > .left > .buttons > a {
+  padding: 8px 24px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  text-decoration: none;
+  border-radius: 12px 12px 0 0;
+  transition-duration: 0.3s;
+}
+.mainsection .flex > .left > .buttons > a:hover {
+  background-color: var(--button-bg-hover);
+  transition-duration: 0.3s;
 }
 .mainsection .flex > .left .grid {
   display: grid;
@@ -158,6 +171,9 @@ header:not(.scrolled) {
   gap: 0;
   width: fit-content;
   border-radius: 12px;
+}
+.mainsection .flex > .left .grid:is(.locked) {
+  pointer-events: none;
 }
 .mainsection .flex > .left .grid .cell {
   width: 45px;
