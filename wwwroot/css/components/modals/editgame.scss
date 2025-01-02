@@ -62,8 +62,33 @@
                         margin-bottom: 6px;
                     }
 
-                    >input, >select {
+                    input, select {
                         width: 100%;
+                    }
+
+                    >.select-wrapper {
+                        position: relative;
+
+                        >select {
+                            appearance: none;
+                            padding-right: 52px;
+                        }
+
+
+                        &::after {
+                            content: '';
+                            width: 12px;
+                            height: 12px;
+                            position: absolute;
+                            right: 20px;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            pointer-events: none;
+                            background-color: var(--text-color);
+                            mask: url("/images/icons/arrow_down.svg") no-repeat center;
+                            mask-size: contain;
+                            mask-repeat: no-repeat;
+                        }
                     }
                 }
 

@@ -54,8 +54,29 @@
   font-weight: 600;
   margin-bottom: 6px;
 }
-.modal-editgame > .modal > .left > .modal-content > .input > input, .modal-editgame > .modal > .left > .modal-content > .input > select {
+.modal-editgame > .modal > .left > .modal-content > .input input, .modal-editgame > .modal > .left > .modal-content > .input select {
   width: 100%;
+}
+.modal-editgame > .modal > .left > .modal-content > .input > .select-wrapper {
+  position: relative;
+}
+.modal-editgame > .modal > .left > .modal-content > .input > .select-wrapper > select {
+  appearance: none;
+  padding-right: 52px;
+}
+.modal-editgame > .modal > .left > .modal-content > .input > .select-wrapper::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  background-color: var(--text-color);
+  mask: url("/images/icons/arrow_down.svg") no-repeat center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
 }
 .modal-editgame > .modal > .left > .modal-content > .buttons {
   display: flex;

@@ -14,7 +14,7 @@
 .sections > .mainsection > .texts > .inputs {
   display: flex;
   justify-content: space-between;
-  margin-top: 24px;
+  margin-top: 32px;
 }
 .sections > .mainsection > .texts > .inputs .SearchInput {
   display: flex;
@@ -24,7 +24,8 @@
   display: flex;
   justify-content: start;
   font-size: 16px;
-  margin-bottom: 4px;
+  margin: 0;
+  margin-bottom: 6px;
 }
 .sections > .mainsection > .texts > .inputs .SearchInput .Search-Bottom {
   display: flex;
@@ -45,16 +46,13 @@
   display: flex;
   justify-content: end;
   font-size: 16px;
-  margin-bottom: 4px;
+  margin: 0;
+  margin-bottom: 6px;
 }
 .sections > .mainsection > .texts > .inputs .filter-container .filter-bottom {
   display: flex;
   gap: 8px;
   align-items: center;
-  /* Zajištění plynulého přechodu pro všechny elementy */
-  /* Přechody pro všechny prvky při animaci */
-  /* Animace při příjezdu */
-  /* Animace při odjezdu */
 }
 .sections > .mainsection > .texts > .inputs .filter-container .filter-bottom select, .sections > .mainsection > .texts > .inputs .filter-container .filter-bottom input {
   height: 40px;

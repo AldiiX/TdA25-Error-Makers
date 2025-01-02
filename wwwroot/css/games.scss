@@ -21,17 +21,20 @@
             >.inputs {
                 display: flex;
                 justify-content: space-between;
-                margin-top: 24px;
-                
+                margin-top: 32px;
+                $text-margin-bottom: 6px;
+
                 .SearchInput{
                     display: flex;
                     flex-direction: column;
+
                     .Search-top{
                         .SearchText {
                             display: flex;
                             justify-content: start;
                             font-size: 16px;
-                            margin-bottom: 4px;
+                            margin: 0;
+                            margin-bottom: $text-margin-bottom;
                         }
                     }
                     
@@ -59,12 +62,12 @@
                     flex-direction: column;
                     
                     .filter-top{
-                    
                         .FilterText {
                             display: flex;
                             justify-content: end;
                             font-size: 16px;
-                            margin-bottom: 4px;
+                            margin: 0;
+                            margin-bottom: $text-margin-bottom;
                         }
                         
                     }
@@ -78,19 +81,17 @@
                             height: 40px;
                         }
 
-                        /* Zajištění plynulého přechodu pro všechny elementy */
+                        // animace
                         .select-wrapper {
                             position: relative;
                             transition: margin 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
                         }
 
-                        /* Přechody pro všechny prvky při animaci */
                         .custom-date-enter-active,
                         .custom-date-leave-active {
                             transition: margin 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
                         }
 
-                        /* Animace při příjezdu */
                         .custom-date-enter-from {
                             opacity: 0;
                             transform: translateX(-100%);
@@ -101,7 +102,6 @@
                             transform: translateX(0);
                         }
 
-                        /* Animace při odjezdu */
                         .custom-date-leave-from {
                             opacity: 1;
                             margin-left: 0;
@@ -111,7 +111,7 @@
                             opacity: 0;
                             margin-left: -163px;
                         }
-
+                        //
 
 
 
@@ -154,7 +154,6 @@
                             }
                         }
                 }
-                
             }
         }
 

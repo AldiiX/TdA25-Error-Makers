@@ -102,6 +102,10 @@ export const vue = new Vue({
             _this.editMode = !data.isSaved;
             _this.gameLoaded = true;
             _this.gameLocked = false;
+            if (String(data.name).toLowerCase().includes("hra"))
+                document.title = `${data.name} • Think Different Academy`;
+            else
+                document.title = `${data.name} - Hra • Think Different Academy`;
         },
         saveGame: function () {
             const _this = this;

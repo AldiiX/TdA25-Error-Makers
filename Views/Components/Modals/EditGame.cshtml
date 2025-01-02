@@ -23,13 +23,15 @@
 
                 <div class="input">
                     <p>Obtížnost:</p>
-                    <select name="difficulty" v-model="editingGame.difficulty">
-                        <option value="beginner">Začátečník</option>
-                        <option value="easy">Lehká</option>
-                        <option value="medium">Střední</option>
-                        <option value="hard">Těžká</option>
-                        <option value="extreme">Extrémně těžká</option>
-                    </select>
+                    <div class="select-wrapper">
+                        <select name="difficulty" v-model="editingGame.difficulty">
+                            <option value="beginner">Začátečník</option>
+                            <option value="easy">Lehká</option>
+                            <option value="medium">Střední</option>
+                            <option value="hard">Těžká</option>
+                            <option value="extreme">Extrémně těžká</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="buttons">
