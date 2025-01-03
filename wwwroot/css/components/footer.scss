@@ -63,6 +63,10 @@
                 p:not(.upper) {
                     margin: 10px 0;
                     text-align: left;
+
+                    & a:is(.active) {
+                        color: var(--color-gray);
+                    }
                 }
 
                 .upper{

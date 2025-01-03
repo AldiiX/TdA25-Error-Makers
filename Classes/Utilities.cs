@@ -131,7 +131,12 @@ public static class Utilities {
 
 #region normální metody
 
+    public static string SetActiveClass(string p) {
+        string path = HCS.Current.Request.Path.ToString();
 
+        if (path == p) return "active";
+        return "";
+    }
 
 #endregion
 }

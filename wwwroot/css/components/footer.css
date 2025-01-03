@@ -57,6 +57,13 @@
   margin: 10px 0;
   text-align: left;
 }
+.footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 .content .content-flex > .navigation p:not(.upper) a:is(.active),
+.footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 .content .content-flex > .other p:not(.upper) a:is(.active),
+.footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 .content .content-flex > .login p:not(.upper) a:is(.active),
+.footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 .content .content-flex > .admintools p:not(.upper) a:is(.active),
+.footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 .content .content-flex > .team p:not(.upper) a:is(.active) {
+  color: var(--color-gray);
+}
 .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 .content .content-flex > .navigation .upper,
 .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 .content .content-flex > .other .upper,
 .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 .content .content-flex > .login .upper,
