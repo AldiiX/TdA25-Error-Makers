@@ -3,7 +3,9 @@ export const vue = new Vue({
     mounted: function () {
         this.main();
     },
-    data: {},
+    data: {
+        menuExpanded: false,
+    },
     methods: {
         main: function () {
             const _this = this;

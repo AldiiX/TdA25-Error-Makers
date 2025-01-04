@@ -15,9 +15,6 @@
         </div>
 
         <div class="Login">
-            @* <button> *@
-            @*     <a href="/login">Login</a> *@
-            @* </button> *@
             <div class="changetheme" onclick="
                 import('/scripts/functions.js').then(module => {
                     module.toggleWebTheme();
@@ -31,4 +28,31 @@
             }
         </div>
     </div>
+    <!-- Menu pro mobily a tablety -->
+    <div class="smallDevice" v-on:click="menuExpanded = true"></div>
+    
+    <transition name="fade">
+        <div class="ExpandedMenu" v-if="menuExpanded" v-cloak>
+            <div class="Header-Logo-Small"></div>
+            <div class="Close-Icon" v-on:click="menuExpanded = false"></div>
+            <div class="Header-Menu-Small">
+                <a href="/">Domů</a>
+                <a href="/games">Hry</a>
+                @*<a href="/multiplayer">Online</a>*@
+            </div>
+            <div class="Login-small">
+                <div class="changetheme" onclick="
+                    import('/scripts/functions.js').then(module => {
+                    module.toggleWebTheme();
+                    });
+                "></div>
+                
+                @if (!path.StartsWith("/game/")) {
+                    <a class="newgame button-primary" href="/game">Nová hra</a>
+                } else {
+                    <a class="newgame button-primary" v-cloak v-on:click="createNewGame()">Nová hra</a>
+                }
+            </div>         
+        </div>
+    </transition>       
 </header>

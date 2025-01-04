@@ -41,7 +41,7 @@ export const vue = new Vue({
             }, 1150);
         },
 
-
+        
 
         updateCell: function(_cell: any, index: number): void {
             const cell = _cell as HTMLElement;

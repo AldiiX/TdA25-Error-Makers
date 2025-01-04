@@ -14,7 +14,7 @@ export const vue = new Vue({
 
 
     data: {
-
+        menuExpanded: false,
     },
 
 
