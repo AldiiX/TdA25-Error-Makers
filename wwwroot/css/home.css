@@ -4,10 +4,6 @@ section:is(.top) {
   width: 100%;
   overflow: hidden;
 }
-section:is(.top) .background-f55288d9-4dcf-456d-87c4-26be60c16cdb {
-  position: absolute;
-  height: calc(110vh + 80px);
-}
 section:is(.top) h1, section:is(.top) p {
   margin: 0;
 }

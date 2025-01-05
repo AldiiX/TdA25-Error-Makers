@@ -29,6 +29,14 @@
     --modal-blur-color: rgba(0, 0, 0, 0.75);
 }
 
+/*#HOME-PAGE,
+#GAME-PAGE {
+    .background-f55288d9-4dcf-456d-87c4-26be60c16cdb {
+        position: absolute;
+        height: calc(110vh + 80px);
+    }
+}*/
+
 .background-f55288d9-4dcf-456d-87c4-26be60c16cdb {
     &::after {
         background: linear-gradient(0deg, var(--background-color), transparent);
