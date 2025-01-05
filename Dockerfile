@@ -1,6 +1,6 @@
 ﻿FROM ubuntu:22.04 AS base
 
-# Instalace Redis, MySQL, wget a .NET SDK
+# instalace Redis, MySQL, wget a .NET SDK
 RUN apt-get update && apt-get install -y \
     redis \
     mysql-server \
@@ -9,16 +9,17 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     && wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb \
     && dpkg -i packages-microsoft-prod.deb \
-    && apt-get update && apt-get install -y dotnet-sdk-8.0
+    && apt-get update && apt-get install -y dotnet-sdk-8.0 \
+    && apt-get clean
 
+# nastavení systémových limitů pro inotify
+RUN echo "fs.inotify.max_user_instances=512" >> /etc/sysctl.conf && \
+    echo "fs.inotify.max_user_watches=524288" >> /etc/sysctl.conf
 
-
-# Exponování portů
+# exposování portů
 EXPOSE 80
 
-
-
-# Sestavení projektu
+# buildnutí projektu
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["TdA25-Error-Makers.csproj", "./"]
@@ -29,23 +30,19 @@ COPY database.sql /app/
 COPY start.sh /app/
 RUN chmod +x /app/start.sh
 
-# Publikace aplikace do /app/
+# pushnutí aplikace do /app/
 RUN dotnet publish "TdA25-Error-Makers.csproj" -c $BUILD_CONFIGURATION -o /app/ --runtime linux-x64 /p:UseAppHost=false
 
-# Přepnutí do /app/ diru
+# přepnutí do /app/ diru
 WORKDIR /app/
 
-
-
-# Instalace balíčku tzdata a konfigurace časové zóny
+# instalace balíčku tzdata a konfigurace časové zóny
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends tzdata \
     && ln -sf /usr/share/zoneinfo/Europe/Prague /etc/localtime \
     && echo "Europe/Prague" > /etc/timezone \
     && dpkg-reconfigure -f noninteractive tzdata \
     && apt-get clean
-
-
 
 # build args aby fungovaly .env věci
 # ----- pokud to chce někdo měnit tak zkontrolujte že tohle a váš .env soubor má stejné názvy proměnných
@@ -57,17 +54,12 @@ ARG DATABASE_PASSWORD=password
 #ARG REDIS_PORT=6379
 ARG CACHE_VERSION=1
 
-# Vytvoření .env souboru ve složce /app
+# vytvoření .env souboru ve složce /app
 RUN echo "DATABASE_PASSWORD=${DATABASE_PASSWORD}" >> /app/.env && \
     #echo "REDIS_PASSWORD=${REDIS_PASSWORD}" >> /app/.env && \
     #echo "REDIS_PORT=${REDIS_PORT}" >> /app/.env && \
     echo "CACHE_VERSION=${CACHE_VERSION}" >> /app/.env && \
     echo "DATABASE_IP=${DATABASE_IP}" >> /app/.env
 
-
-
-
-
-
-# Spuštění všeho
-CMD /app/start.sh
+# použití systémových limitů v runtime kontejneru
+CMD sysctl -p && /app/start.sh
