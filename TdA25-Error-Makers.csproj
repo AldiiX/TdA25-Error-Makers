@@ -30,6 +30,7 @@
 
     <ItemGroup>
       <Folder Include="Models\" />
+      <Folder Include="wwwroot\images\wallpaper_blobs\" />
     </ItemGroup>
 
     <ItemGroup>

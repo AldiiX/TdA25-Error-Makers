@@ -9,8 +9,8 @@
             <div class="modal-header">
                 <div class="img" v-bind:style="{ '--game-icon': `url(/images/icons/zarivka_${editingGame.difficulty.toLowerCase()}_bile.svg)` }"></div>
                 <div class="texts">
-                    <h1 v-if="!temp.creatingNewGame">Upravit hru</h1>
-                    <h1 v-if="temp.creatingNewGame">Vytvořit hru</h1>
+                    <h1 v-if="!temp.creatingNewGame">Upravit úlohu</h1>
+                    <h1 v-if="temp.creatingNewGame">Vytvořit úlohu</h1>
                     <p v-if="editingGame?.name">{{ editingGame?.name }}</p>
                 </div>
             </div>

@@ -95,7 +95,7 @@
 
                     <div class="settings" v-if="editMode && game.gameState !== 'finished'">
                         <h2 v-if="!game.isInstance">Nastavení</h2>
-                        <h2 v-if="game.isInstance">Uložit jako novou hru</h2>
+                        <h2 v-if="game.isInstance">Uložit jako novou úlohu</h2>
 
                         <div class="pair">
                             <p>Název hry</p>
@@ -115,8 +115,10 @@
 
                         <div class="buttons" v-if="!game.isSaved">
                             <button class="button-secondary" v-if="!game.isInstance" v-on:click="createNewGame()">Nová hra</button>
+                            <button class="button-primary"   v-if="!game.isInstance && game.gameState !== 'finished'" v-on:click="saveGame()">Uložit jako úlohu</button>
+
                             <button class="button-secondary" v-if="game.isInstance" v-on:click="saveAsNewGameCancelButtonClick()">Zrušit</button>
-                            <button class="button-primary" v-on:click="saveGame()" v-if="game.gameState !== 'finished'">Uložit hru</button>
+                            <button class="button-primary"   v-if="game.isInstance && game.gameState !== 'finished'" v-on:click="saveGame()">Uložit</button>
                         </div>
 
                         <div class="buttons" v-if="game.isSaved">
