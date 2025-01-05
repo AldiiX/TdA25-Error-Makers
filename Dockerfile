@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y \
     && apt-get update && apt-get install -y dotnet-sdk-8.0 \
     && apt-get clean
 
-
+# env
+ENV DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
 
 # exposování portů
 EXPOSE 80

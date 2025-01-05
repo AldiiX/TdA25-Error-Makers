@@ -57,6 +57,11 @@ public static class Program {
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
 
+        builder.Host.ConfigureAppConfiguration((hostingContext, config) => {
+            config.Sources.OfType<FileConfigurationSource>().ToList().ForEach(source =>
+                source.ReloadOnChange = false);
+        });
+
         #if DEBUG
             builder.Configuration.AddJsonFile("appsettings.Debug.json", optional: true, reloadOnChange: true);
         #elif RELEASE
