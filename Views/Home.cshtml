@@ -22,40 +22,45 @@
     <link rel="stylesheet" href="/css/home.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
     <link rel="stylesheet" href="/css/mainstyles.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
     <link id="webtheme-link" rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()">
+    <script src="/libs/vue@(Program.DEVELOPMENT_MODE ? "_dev" : "").js"></script>
 
     @*  scripty pro komponenty *@
     <script src="/scripts/components/header.js"></script>
 </head>
 <body id="HOME-PAGE">
-     @await header
-
-    <section class="top">
-        <div class="background">
-            <svg class="blob one" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                <path fill="white" d="M56,-50.5C63.5,-35.2,54.4,-12.4,49.1,11.3C43.8,35.1,42.3,59.9,30.7,66.5C19.1,73.2,-2.6,61.7,-16.3,49.2C-30,36.7,-35.8,23.1,-38.9,9C-41.9,-5,-42.3,-19.5,-35.4,-34.7C-28.4,-49.9,-14.2,-65.8,5,-69.8C24.2,-73.8,48.4,-65.8,56,-50.5Z" transform="translate(100 100)"/>
-            </svg>
-            <svg class="blob two" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                <path fill="white" d="M49.9,-45.5C60.1,-26.9,60.8,-6.4,53.3,6.3C45.7,19.1,29.9,24.2,16.4,28.6C2.9,32.9,-8.3,36.7,-21.6,34.3C-34.9,31.9,-50.3,23.5,-54.6,10.7C-59,-2.1,-52.2,-19.2,-41.2,-37.9C-30.3,-56.7,-15.1,-77.1,2.3,-79C19.8,-80.8,39.6,-64.1,49.9,-45.5Z" transform="translate(100 100)"/>
-            </svg>
-        </div>
-
-        <div class="center">
-            <div class="left">
-                <h1>Think different Academy</h1>
-                <p>Organizace, která se zabývá volnočasovými a vzdělávacími aktivitami pro děti a mládež.</p>
-                <button class="button-primary-col-sec" onclick="location.href='/game'">HRÁT</button>
+    <div id="app">
+        @await header
+        
+        <section class="top">
+            <div class="background">
+                <svg class="blob one" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="white" d="M56,-50.5C63.5,-35.2,54.4,-12.4,49.1,11.3C43.8,35.1,42.3,59.9,30.7,66.5C19.1,73.2,-2.6,61.7,-16.3,49.2C-30,36.7,-35.8,23.1,-38.9,9C-41.9,-5,-42.3,-19.5,-35.4,-34.7C-28.4,-49.9,-14.2,-65.8,5,-69.8C24.2,-73.8,48.4,-65.8,56,-50.5Z" transform="translate(100 100)"/>
+                </svg>
+                <svg class="blob two" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="white" d="M49.9,-45.5C60.1,-26.9,60.8,-6.4,53.3,6.3C45.7,19.1,29.9,24.2,16.4,28.6C2.9,32.9,-8.3,36.7,-21.6,34.3C-34.9,31.9,-50.3,23.5,-54.6,10.7C-59,-2.1,-52.2,-19.2,-41.2,-37.9C-30.3,-56.7,-15.1,-77.1,2.3,-79C19.8,-80.8,39.6,-64.1,49.9,-45.5Z" transform="translate(100 100)"/>
+                </svg>
             </div>
 
-            <div class="right">
-                <div class="img"></div>
-            </div>
-        </div>
-    </section>
+            <div class="center">
+                <div class="left">
+                    <h1>Think different Academy</h1>
+                    <p>Organizace, která se zabývá volnočasovými a vzdělávacími aktivitami pro děti a mládež.</p>
+                    <button class="button-primary-col-sec" onclick="location.href='/game'">HRÁT</button>
+                </div>
 
-    @await footer
+                <div class="right">
+                    <div class="img"></div>
+                </div>
+            </div>
+        </section>
+
+        @await footer
+    </div>
 </body>
 <script type="module">
     import * as f from "/scripts/functions.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
+    import { vue } from "/scripts/home.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
+    
     window.addCookie = f.addCookie;
     if (window.history.replaceState) window.history.replaceState( null, null, window.location.href );
 </script>

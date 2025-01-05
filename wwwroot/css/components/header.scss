@@ -1,4 +1,50 @@
-﻿.header-5F015D44-0984-4A50-B52B-5319AE57C19C {
+﻿.ExpandedMenu {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background-color: var(--background-color);
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    z-index: 4;
+    top: 0;
+    
+    >.Close-Icon {
+        width: 50px;
+        height: 50px;
+        background-color: var(--text-color);
+        position: absolute;
+        right: calc(5vw + 7.5%);
+        top: 5vw;
+    }
+
+    >.Header-Logo-Small {
+        height: 50px;
+        width: 50px;
+        pointer-events: none;
+        background-image: var(--tda-logo-small);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: absolute;
+        top: 5vw;
+        left: calc(5vw + 7.5%);
+    }
+    
+    >.Header-Menu-Small {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        margin-top: 96px;
+        
+        >a {
+            font-size: 32px;
+            padding: 0 25vw;
+        }
+    }
+}
+
+.header-5F015D44-0984-4A50-B52B-5319AE57C19C {
     position: fixed;
     //box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
     background: none;
@@ -114,7 +160,7 @@
     }
     
     >.smallDevice{
-        display: unset;
+        display: none;
         width: 50px;
         height: 50px;
         position: absolute;
@@ -126,6 +172,19 @@
         background-position: center;
         background-repeat: no-repeat;
     }
+    
+    >.Header-Logo-Small {
+        height: 50px;
+        aspect-ratio: 150/47;
+        display: none;
+        pointer-events: none;
+        background-image: var(--tda-logo-small);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    
+    
 
     &:is(.scrolled) {
         background: var(--background-color-3);
@@ -145,8 +204,13 @@
 
 @media screen and (min-width: 600px) and (max-width: 960px) { 
     .header-5F015D44-0984-4A50-B52B-5319AE57C19C {
-        
-        >.ExpandedMenu {
+        >.flex {
+            display: none;
+        }
+        >.smallDevice {
+            display: unset;
+        }
+        >.Header-Logo-Small {
             display: grid;
         }
     }
