@@ -12,9 +12,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get update && apt-get install -y dotnet-sdk-8.0 \
     && apt-get clean
 
-# nastavení systémových limitů pro inotify
-RUN echo "fs.inotify.max_user_instances=512" >> /etc/sysctl.conf && \
-    echo "fs.inotify.max_user_watches=524288" >> /etc/sysctl.conf
+
 
 # exposování portů
 EXPOSE 80
@@ -62,4 +60,4 @@ RUN echo "DATABASE_PASSWORD=${DATABASE_PASSWORD}" >> /app/.env && \
     echo "DATABASE_IP=${DATABASE_IP}" >> /app/.env
 
 # použití systémových limitů v runtime kontejneru
-CMD sysctl -p && /app/start.sh
+CMD /app/start.sh
