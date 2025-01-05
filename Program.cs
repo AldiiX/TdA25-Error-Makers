@@ -55,14 +55,14 @@ public static class Program {
         builder.Services.AddSingleton<IViewRenderService, ViewRenderService>();
         builder.Configuration
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
 
         #if DEBUG
             builder.Configuration.AddJsonFile("appsettings.Debug.json", optional: true, reloadOnChange: true);
         #elif RELEASE
-            builder.Configuration.AddJsonFile("appsettings.Release.json", optional: true, reloadOnChange: true);
+            builder.Configuration.AddJsonFile("appsettings.Release.json", optional: true, reloadOnChange: false);
         #elif TESTING
-            builder.Configuration.AddJsonFile("appsettings.Testing.json", optional: true, reloadOnChange: true);
+            builder.Configuration.AddJsonFile("appsettings.Testing.json", optional: true, reloadOnChange: false);
         #endif
 
         builder.Configuration.AddEnvironmentVariables();
