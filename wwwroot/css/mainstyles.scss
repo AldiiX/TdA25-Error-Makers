@@ -29,7 +29,7 @@
 html {
     font-size: 14px;
     color: var(--text-color);
-    background-color: var(--bg);
+    background-color: var(--background-color-secondary);
     margin: 0;
     position: relative;
     min-height: 100%;
@@ -208,12 +208,103 @@ button,input,textarea,select {
 }
 
 .sections {
-    $margintop: 25vh;
     position: relative;
-    min-height: calc(100vh - $margintop);
-    width: 80%;
+    min-height: calc(100vh);
     margin: 0 auto;
-    margin-top: $margintop;
+    $dividerHeight: 100px;
+
+    >section:is(.top) {
+        background-size: cover;
+        width: 100vw;
+        height: calc(55vh + $dividerHeight);
+        top: 0;
+        left: 0;
+        position: relative;
+        overflow: hidden;
+        animation: wseiohfiusdouijasdnfodsajf 1s ease;
+        animation-iteration-count: 1;
+        
+        @keyframes wseiohfiusdouijasdnfodsajf {
+            from { height: calc(100vh + 100px) }
+            to { height: calc(55vh + $dividerHeight) }
+        }
+
+        .wallpaper {
+            overflow: hidden;
+            position: absolute;
+            background: url("/images/bg1.png");
+            background-position: center;
+            background-size: cover;
+            filter: blur(1vw);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 110%;
+            height: 110%;
+            z-index: 0;
+
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(0deg, black, transparent);
+                opacity: 0.7;
+                transition-duration: 0.3s;
+            }
+        }
+
+        &::after { // divider
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: $dividerHeight;
+            rotate: 180deg;
+            background-image: var(--divider1);
+            z-index: 1;
+        }
+
+        >.texts {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: apsldsadld 1s ease;
+            animation-iteration-count: 1;
+
+            @keyframes apsldsadld {
+                from { opacity: 0 }
+                to { opacity: 1 }
+            }
+
+            >h1, >p {
+                margin: 0;
+                text-align: center;
+                width: fit-content;
+                margin: 0 auto;
+                color: white;
+            }
+
+            >h1 {
+                font-size: clamp(32px, 6vw, 96px);
+            }
+
+            >p {
+                font-size: clamp(0px, 1.5vw, 24px);
+                opacity: 0.7;
+                margin: 8px 0;
+            }
+        }
+    }
+
+    >section:not(.top) {
+        width: 80%;
+        margin: 0 auto;
+    }
 }
 
 input, select {

@@ -18,6 +18,7 @@
     --accent-color-additional-3: #395A9A;
     --footer-tda-logo: url("/images/svg/Think-different-Academy_LOGO_oficialni-cerne.svg");
     --footer-divider: url("/images/wave_light.svg");
+    --divider1: url("/images/wave2_light.svg");
     --scrollbar-color: #b7b7b7;
     --tda-logo-small: url("/images/svg/Think-different-Academy_LOGO_cerny.svg");
     --tda-icon-x: url("/images/icons/X_cerne.svg");
@@ -48,28 +49,6 @@
 
 
 #HOME-PAGE {
-    .header-5F015D44-0984-4A50-B52B-5319AE57C19C {
-        &:not(.scrolled) {
-            >.flex {
-                >.Header-Menu >a {
-                    color: white !important;
-                }
-
-                >.Login >.newgame {
-                    background-color: rgba(255,255,255, 0.2);
-                }
-
-                >.Login >.changetheme {
-                    background-color: white;
-                }
-
-                >.Header-Logo {
-                    background-image: url("/images/svg/Think-different-Academy_LOGO_oficialni-bile.svg");
-                }
-            }
-        }
-    }
-
     .background {
 
         &::after {
@@ -94,4 +73,8 @@
             background: rgb(0, 0, 0 , 0.1);
         }
     }
+}
+
+.sections >section:is(.top) .wallpaper::after {
+    opacity: 0.0 !important;
 }

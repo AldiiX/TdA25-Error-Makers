@@ -1,3 +1,16 @@
+body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scrolled) > .flex > .Header-Menu > a {
+  color: white !important;
+}
+body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scrolled) > .flex > .Login > .newgame {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scrolled) > .flex > .Login > .changetheme {
+  background-color: white;
+}
+body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scrolled) > .flex > .Header-Logo {
+  background-image: url("/images/svg/Think-different-Academy_LOGO_oficialni-bile.svg");
+}
+
 .header-5F015D44-0984-4A50-B52B-5319AE57C19C {
   position: fixed;
   background: none;
@@ -11,6 +24,16 @@
   z-index: 3;
   transition-property: background, opacity;
   transition-duration: 0.3s;
+}
+.header-5F015D44-0984-4A50-B52B-5319AE57C19C:is(.scrolled) {
+  background: var(--background-color-3);
+}
+.header-5F015D44-0984-4A50-B52B-5319AE57C19C:is(.scrolled) .newgame {
+  background-color: var(--accent-color-primary) !important;
+  transition-duration: 0.3s;
+}
+.header-5F015D44-0984-4A50-B52B-5319AE57C19C:is(.scrolled) .newgame:hover {
+  background-color: var(--accent-color-primary-darker) !important;
 }
 .header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex {
   position: relative;
@@ -120,16 +143,6 @@
   to {
     width: 100%;
   }
-}
-.header-5F015D44-0984-4A50-B52B-5319AE57C19C:is(.scrolled) {
-  background: var(--background-color-3);
-}
-.header-5F015D44-0984-4A50-B52B-5319AE57C19C:is(.scrolled) .newgame {
-  background-color: var(--accent-color-primary) !important;
-  transition-duration: 0.3s;
-}
-.header-5F015D44-0984-4A50-B52B-5319AE57C19C:is(.scrolled) .newgame:hover {
-  background-color: var(--accent-color-primary-darker) !important;
 }
 
 /*# sourceMappingURL=header.css.map */

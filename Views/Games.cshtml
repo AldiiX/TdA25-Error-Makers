@@ -7,6 +7,7 @@
 
     // části stránky
     var background = Html.PartialAsync("/Views/Components/BlurBackground.cshtml");
+    var coloredBackground = Html.PartialAsync("/Views/Components/ColoredBackground.cshtml");
     var header = Html.PartialAsync("/Views/Components/Header.cshtml");
     var footer = Html.PartialAsync("/Views/Components/Footer.cshtml");
     var editGameModal = Html.PartialAsync("/Views/Components/Modals/EditGame.cshtml");
@@ -34,9 +35,9 @@
     @*  scripty pro komponenty *@
     <script type="module" src="/scripts/components/header.js"></script>
 </head>
-<body id="GAMES-PAGE">
+<body id="GAMES-PAGE" class="header-top-light">
 
-    @await background
+    @* @await background *@
     <div id="app" v-bind:class="{ 'loadingGameLock': temp.loadingGame }">
         @await header
         @await editGameModal
@@ -44,10 +45,16 @@
 
 
         <div class="sections">
+            <section class="top">
+                <div class="wallpaper"></div>
+
+                <div class="texts">
+                    <h1>Úlohy</h1>
+                    <p>Užij si hraní piškvorek s přednastaveným začátkem!</p>
+                </div>
+            </section>
             <section class="mainsection">
                 <div class="texts">
-                    <h1>Piškvorky</h1>
-
                     <div class="inputs">
                         <div class="SearchInput">
                             <div class="Search-top">

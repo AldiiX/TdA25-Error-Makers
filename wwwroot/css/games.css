@@ -255,11 +255,10 @@
   display: flex;
   align-items: center;
   text-align: center;
-  background-color: var(--background-color-secondary);
+  background-color: var(--background-color);
   transition: background-color 0.3s ease;
   border-radius: 10px;
   gap: 24px;
-  box-shadow: 0 0 7px rgba(0, 0, 0, 0.05);
   width: calc(33.3333333333% - 13.3333333333px);
 }
 .sections > .mainsection > .content > .games-parent > .child > .icon {

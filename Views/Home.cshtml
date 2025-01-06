@@ -27,7 +27,7 @@
     @*  scripty pro komponenty *@
     <script src="/scripts/components/header.js"></script>
 </head>
-<body id="HOME-PAGE">
+<body id="HOME-PAGE" class="header-top-light">
      @await header
 
     <section class="top">
@@ -50,6 +50,7 @@
 </body>
 <script type="module">
     import * as f from "/scripts/functions.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
+
     window.addCookie = f.addCookie;
     if (window.history.replaceState) window.history.replaceState( null, null, window.location.href );
 </script>

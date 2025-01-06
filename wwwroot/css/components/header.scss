@@ -1,4 +1,24 @@
-﻿.header-5F015D44-0984-4A50-B52B-5319AE57C19C {
+﻿body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scrolled) {
+    >.flex {
+        >.Header-Menu >a {
+            color: white !important;
+        }
+
+        >.Login >.newgame {
+            background-color: rgba(255,255,255, 0.2);
+        }
+
+        >.Login >.changetheme {
+            background-color: white;
+        }
+
+        >.Header-Logo {
+            background-image: url("/images/svg/Think-different-Academy_LOGO_oficialni-bile.svg");
+        }
+    }
+}
+
+.header-5F015D44-0984-4A50-B52B-5319AE57C19C {
     position: fixed;
     //box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
     background: none;
@@ -13,7 +33,18 @@
     transition-property: background, opacity;
     transition-duration: 0.3s;
 
+    &:is(.scrolled) {
+        background: var(--background-color-3);
 
+        .newgame {
+            background-color: var(--accent-color-primary) !important;
+            transition-duration: 0.3s;
+
+            &:hover {
+                background-color: var(--accent-color-primary-darker) !important;
+            }
+        }
+    }
 
     >.flex {
         position: relative;
@@ -132,19 +163,6 @@
                         }
                     }
                 }
-            }
-        }
-    }
-
-    &:is(.scrolled) {
-        background: var(--background-color-3);
-
-        .newgame {
-            background-color: var(--accent-color-primary) !important;
-            transition-duration: 0.3s;
-
-            &:hover {
-                background-color: var(--accent-color-primary-darker) !important;
             }
         }
     }
