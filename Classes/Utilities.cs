@@ -43,12 +43,13 @@ public static class Utilities {
 
     public static class WebTheme {
         public static void Set(in string theme) {
-            string domain = HCS.Current.Request.Host.Host;
+            string fullDomain = HCS.Current.Request.Host.Host;
+            string rootDomain = fullDomain.Split('.')[^2] + "." + fullDomain.Split('.')[^1];
 
             Cookie.Set("webtheme", theme, true, new CookieOptions() {
                 IsEssential = true,
                 MaxAge = TimeSpan.FromDays(365),
-                Domain = domain,
+                Domain = rootDomain,
             });
         }
 
