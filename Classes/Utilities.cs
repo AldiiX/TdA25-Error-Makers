@@ -17,11 +17,11 @@ public static class Utilities {
 
 
     public static class Cookie {
-        public static void Set(in string key, in string? value, in bool saveToTemp = true) {
+        public static void Set(in string key, in string? value, in bool saveToTemp = true, in CookieOptions? cookieOptions = null) {
             if (saveToTemp && HCS.Current.Items["tempcookie_" + key] != null) return;
 
             HCS.Current.Items["tempcookie_" + key] = value;
-            HCS.Current.Response.Cookies.Append(key, value ?? "null", new CookieOptions() {
+            HCS.Current.Response.Cookies.Append(key, value ?? "null", cookieOptions ?? new CookieOptions() {
                 IsEssential = true,
                 MaxAge = TimeSpan.FromDays(365),
             });
@@ -42,11 +42,19 @@ public static class Utilities {
     }
 
     public static class WebTheme {
-        public static void Set(in string theme) => Cookie.Set("webtheme", theme);
+        public static void Set(in string theme) {
+            string domain = HCS.Current.Request.Host.Host;
+
+            Cookie.Set("webtheme", theme, true, new CookieOptions() {
+                IsEssential = true,
+                MaxAge = TimeSpan.FromDays(365),
+                Domain = domain,
+            });
+        }
 
         public static string Get() {
             var wt = Cookie.Get("webtheme");
-            if(wt == null) Cookie.Set("webtheme", DEFAULT_WEBTHEME);
+            if(wt == null) WebTheme.Set(DEFAULT_WEBTHEME);
 
             return wt switch {
                 "light" => "light",
