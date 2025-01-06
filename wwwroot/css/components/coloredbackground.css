@@ -6,7 +6,7 @@
   width: 110vw;
   height: 110vh;
   overflow: hidden;
-  background: url("/images/bg1.svg");
+  background: url("/images/bg1.svg"), url("/images/bg1.png");
   background-position: center;
   background-size: cover;
   z-index: -1;
