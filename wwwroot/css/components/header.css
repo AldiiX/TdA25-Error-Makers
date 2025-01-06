@@ -1,6 +1,10 @@
 body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scrolled) > .flex > .Header-Menu > a {
   color: white !important;
 }
+body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scrolled) > .flex > .Header-Menu > a:is(.active)::before {
+  background: white !important;
+  transition-duration: 0.3s;
+}
 body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scrolled) > .flex > .Login > .newgame {
   background-color: rgba(255, 255, 255, 0.2);
 }
@@ -114,6 +118,7 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
   position: absolute;
   border-radius: 10px;
   pointer-events: none;
+  transition-duration: 0.3s;
   animation: asdfsdsadf 0.3s forwards ease-in-out;
 }
 @keyframes asdfsdsadf {
@@ -135,6 +140,7 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
   border-radius: 10px;
   animation: asdfsdf 0.3s forwards ease-in-out;
   pointer-events: none;
+  transition-duration: 0.3s;
 }
 @keyframes asdfsdf {
   from {

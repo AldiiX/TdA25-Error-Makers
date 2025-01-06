@@ -2,6 +2,11 @@
     >.flex {
         >.Header-Menu >a {
             color: white !important;
+
+            &:is(.active)::before {
+                background: white !important;
+                transition-duration: 0.3s;
+            }
         }
 
         >.Login >.newgame {
@@ -134,6 +139,7 @@
                         position: absolute;
                         border-radius: 10px;
                         pointer-events: none;
+                        transition-duration: 0.3s;
 
                         animation: asdfsdsadf 0.3s forwards ease-in-out;
 
@@ -156,6 +162,7 @@
                         border-radius: 10px;
                         animation: asdfsdf 0.3s forwards ease-in-out;
                         pointer-events: none;
+                        transition-duration: 0.3s;
 
                         @keyframes asdfsdf {
                             from { width: 0 }

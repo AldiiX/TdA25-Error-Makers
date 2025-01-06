@@ -1,33 +1,37 @@
-#AUTH-PAGE .mainsection {
-  position: relative;
+#AUTH-PAGE .sections {
+  min-height: 75vh;
 }
-#AUTH-PAGE .mainsection .auth-box {
+#AUTH-PAGE .sections .mainsection {
+  position: relative;
+  margin-top: 25vh;
+}
+#AUTH-PAGE .sections .mainsection .auth-box {
   width: fit-content;
   position: relative;
   margin: 0 auto;
 }
-#AUTH-PAGE .mainsection h1 {
+#AUTH-PAGE .sections .mainsection h1 {
   text-align: center;
   font-size: 5vw;
   margin: 0;
 }
-#AUTH-PAGE .mainsection p {
+#AUTH-PAGE .sections .mainsection p {
   font-size: 20px;
   text-align: center;
   margin-top: 16px;
   margin-bottom: 48px;
 }
-#AUTH-PAGE .mainsection a {
+#AUTH-PAGE .sections .mainsection a {
   color: var(--accent-color-secondary);
   text-decoration: none;
   font-weight: 700;
   font-size: 20px;
 }
-#AUTH-PAGE .mainsection form {
+#AUTH-PAGE .sections .mainsection form {
   width: auto;
   position: relative;
 }
-#AUTH-PAGE .mainsection .input {
+#AUTH-PAGE .sections .mainsection .input {
   text-align: center;
   margin: 16px auto;
   font-size: 16px;
@@ -35,27 +39,27 @@
   flex-direction: column;
   width: fit-content;
 }
-#AUTH-PAGE .mainsection .input > input {
+#AUTH-PAGE .sections .mainsection .input > input {
   width: 250px;
 }
-#AUTH-PAGE .mainsection .input > label {
+#AUTH-PAGE .sections .mainsection .input > label {
   text-align: left;
   margin-bottom: 4px;
 }
-#AUTH-PAGE .mainsection .errortxt {
+#AUTH-PAGE .sections .mainsection .errortxt {
   color: var(--accent-color-secondary);
   font-size: 16px;
 }
-#AUTH-PAGE .mainsection .submit {
+#AUTH-PAGE .sections .mainsection .submit {
   text-align: center;
   margin: 0 auto;
   font-size: 16px;
   margin-top: 32px;
 }
-#AUTH-PAGE .mainsection .submit > input {
+#AUTH-PAGE .sections .mainsection .submit > input {
   width: 250px;
 }
-#AUTH-PAGE .mainsection .submit > input:hover {
+#AUTH-PAGE .sections .mainsection .submit > input:hover {
   background-color: var(--accent-color-secondary);
   color: white;
 }
