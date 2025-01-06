@@ -8,7 +8,7 @@
 }
 .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 .divider {
   position: absolute;
-  bottom: 100%;
+  bottom: calc(100% - 2px);
   width: 100%;
   height: 80px;
   background-image: var(--footer-divider);

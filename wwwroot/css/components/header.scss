@@ -127,6 +127,7 @@
                 text-decoration: none;
                 font-weight: 1000;
                 color: var(--text-color-primary);
+                user-select: none;
 
                 &:is(.active) {
                     &::before {

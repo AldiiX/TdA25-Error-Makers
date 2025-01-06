@@ -232,7 +232,7 @@ button,input,textarea,select {
         .wallpaper {
             overflow: hidden;
             position: absolute;
-            background: url("/images/bg1.png");
+            background: url("/images/bg1.png"), linear-gradient(90deg, rgba(0,112,187,1) 0%, rgba(57,90,154,1) 25%, rgba(114,68,121,1) 50%, rgba(227,24,55,1) 100%);
             background-position: center;
             background-size: cover;
             filter: blur(1vw);
@@ -259,7 +259,7 @@ button,input,textarea,select {
         &::after { // divider
             content: "";
             position: absolute;
-            bottom: 0;
+            bottom: -2px;
             left: 0;
             width: 100%;
             height: $dividerHeight;

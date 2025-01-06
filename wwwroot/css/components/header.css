@@ -107,6 +107,7 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
   text-decoration: none;
   font-weight: 1000;
   color: var(--text-color-primary);
+  user-select: none;
 }
 .header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Header-Menu a:is(.active)::before {
   content: "";
