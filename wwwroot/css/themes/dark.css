@@ -64,6 +64,6 @@
 }
 
 .sections >section:is(.top) .wallpaper::after {
-    background: linear-gradient(0deg, var(--background-color), transparent 60%);
+    background: linear-gradient(0deg, var(--background-color), transparent 100%);
     opacity: 0.6 !important;
 }
