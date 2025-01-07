@@ -11,21 +11,29 @@
             <a href="/">Domů</a>
             <a href="/games">Hry</a>
             @*<a href="/multiplayer">Online</a>*@
-        </div>
-        @*<div class="Login-small">
+            @if (!path.StartsWith("/game/")) {
+                <a class="newgame button-primary" href="/game">Nová hra</a>
+            } else {
+                <a class="newgame button-primary" v-cloak v-on:click="createNewGame()">Nová hra</a>
+            }
+            <div class="line"></div>
+            <div class="Theme-Flex">
                 <div class="changetheme" onclick="
                     import('/scripts/functions.js').then(module => {
                     module.toggleWebTheme();
                     });
-                "></div>
-
-                @if (!path.StartsWith("/game/")) {
-                    <a class="newgame button-primary" href="/game">Nová hra</a>
-                } else {
-                    <a class="newgame button-primary" v-cloak v-on:click="createNewGame()">Nová hra</a>
-                }
-            </div> *@
-    </div>
+                ">
+                </div>
+                <p onclick="
+                    import('/scripts/functions.js').then(module => {
+                    module.toggleWebTheme();
+                    });
+                ">Změnit vzhled</p> 
+            </div>
+        </div> 
+        </div>
+        
+    
 </transition>
 
 <header class="header-5F015D44-0984-4A50-B52B-5319AE57C19C">

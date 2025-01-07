@@ -214,3 +214,29 @@
         }
     }
 }
+
+@media screen and (max-width: 600px) {
+    .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1{
+        >.content{
+            >.content-flex {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+            
+            >.copyright{
+                flex-direction: column;
+                width: 100%;
+                
+                >.copyright-tda,
+                >.copyright-team{
+                    text-align: center;
+                    font-weight: 500;
+                    margin-left: 0vw;
+                    margin-right: 0vw;
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+}

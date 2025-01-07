@@ -12,7 +12,10 @@
     >.Close-Icon {
         width: 50px;
         height: 50px;
-        background-color: var(--text-color);
+        background-image: var(--close-icon);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 75%;
         position: absolute;
         right: calc(5vw + 7.5%);
         top: 5vw;
@@ -35,11 +38,41 @@
         display: flex;
         flex-direction: column;
         position: relative;
-        margin-top: 96px;
+        margin-top: 17.5vw;
+        align-items: center;
+        gap: 16px;
+        
+        >.line{
+            width: 25%;
+            margin-top: 16px;
+            height: 2px;
+            background-color: var(--text-color);
+        }
+        
+        >.Theme-Flex{
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+            
+            
+            >.changetheme {
+                width: 30px;
+                height: 30px;
+                background-color: var(--text-color);
+                transition-duration: 0.3s;
+                mask-image: var(--theme-icon);
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                cursor: pointer;
+            }
+        }
         
         >a {
             font-size: 32px;
-            padding: 0 25vw;
+            color: var(--text-color-primary);
+            text-decoration: none;
         }
     }
 }
@@ -174,14 +207,17 @@
     }
     
     >.Header-Logo-Small {
-        height: 50px;
-        aspect-ratio: 150/47;
         display: none;
+        height: 50px;
+        width: 50px;
         pointer-events: none;
         background-image: var(--tda-logo-small);
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
+        transform: translateY(25%);
+        position: absolute;
+        left: 8.5%;
     }
     
     
@@ -214,5 +250,17 @@
             display: grid;
         }
     }
-    
+}
+@media screen and (max-width: 600px) {
+    .header-5F015D44-0984-4A50-B52B-5319AE57C19C {
+        >.flex {
+            display: none;
+        }
+        >.smallDevice {
+            display: unset;
+        }
+        >.Header-Logo-Small {
+            display: grid;
+        }
+    }
 }

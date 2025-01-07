@@ -27,6 +27,7 @@
     --button-bg-hover: #212121;
     --button-outline-color: #2d2d2d;
     --modal-blur-color: rgba(0, 0, 0, 0.75);
+    --close-icon: url("/images/svg/Close_Light.svg");
 }
 
 .background-f55288d9-4dcf-456d-87c4-26be60c16cdb {
