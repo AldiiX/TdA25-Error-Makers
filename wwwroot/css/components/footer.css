@@ -214,14 +214,14 @@
   .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 > .content > .copyright {
     flex-direction: column;
     width: 100%;
+    gap: 10px;
   }
   .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 > .content > .copyright > .copyright-tda,
   .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 > .content > .copyright > .copyright-team {
     text-align: center;
-    font-weight: 500;
-    margin-left: 0vw;
-    margin-right: 0vw;
-    margin-top: 10px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
   }
 }
 
