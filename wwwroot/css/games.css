@@ -1,4 +1,3 @@
-@charset "UTF-8";
 .sections {
   padding-bottom: 160px;
 }
@@ -6,7 +5,7 @@
   margin-bottom: 16px;
 }
 .sections > .mainsection > .texts > h1 {
-  font-size: clamp(48px, 5vw, 128px);
+  font-size: clamp(32px, 6vw, 128px);
   color: var(--accent-color-primary);
   text-align: center;
   margin: 0;
@@ -15,10 +14,13 @@
   display: flex;
   justify-content: space-between;
   margin-top: 32px;
+  gap: 16px;
+  flex-wrap: nowrap;
 }
 .sections > .mainsection > .texts > .inputs .SearchInput {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 .sections > .mainsection > .texts > .inputs .SearchInput .Search-top .SearchText {
   display: flex;
@@ -31,16 +33,23 @@
   display: flex;
   gap: 8px;
 }
-.sections > .mainsection > .texts > .inputs .SearchInput .Search-Bottom > input, .sections > .mainsection > .texts > .inputs .SearchInput .Search-Bottom > button {
+.sections > .mainsection > .texts > .inputs .SearchInput .Search-Bottom > input,
+.sections > .mainsection > .texts > .inputs .SearchInput .Search-Bottom > button {
   height: 40px;
+  width: 100%;
 }
 .sections > .mainsection > .texts > .inputs .SearchInput .Search-Bottom .CreateGame {
   color: var(--accent-color-secondary);
   text-decoration: none;
 }
+.sections > .mainsection > .texts > .inputs .SearchInput .Search-Bottom > input {
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+}
 .sections > .mainsection > .texts > .inputs .filter-container {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 .sections > .mainsection > .texts > .inputs .filter-container .filter-top .FilterText {
   display: flex;
@@ -54,41 +63,20 @@
   gap: 8px;
   align-items: center;
 }
-.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom select, .sections > .mainsection > .texts > .inputs .filter-container .filter-bottom input {
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom select,
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom input {
   height: 40px;
+  width: 100%;
 }
 .sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .select-wrapper {
   position: relative;
   transition: margin 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
 }
-.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .custom-date-enter-active,
-.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .custom-date-leave-active {
-  transition: margin 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
-}
-.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .custom-date-enter-from {
-  opacity: 0;
-  transform: translateX(-100%);
-}
-.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .custom-date-enter-to {
-  opacity: 1;
-  transform: translateX(0);
-}
-.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .custom-date-leave-from {
-  opacity: 1;
-  margin-left: 0;
-}
-.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .custom-date-leave-to {
-  opacity: 0;
-  margin-left: -163px;
-}
-.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom > .select-wrapper {
-  position: relative;
-}
-.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom > .select-wrapper > select {
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .select-wrapper > select {
   appearance: none;
   padding-right: 52px;
 }
-.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom > .select-wrapper::after {
+.sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .select-wrapper::after {
   content: "";
   width: 12px;
   height: 12px;
@@ -156,7 +144,8 @@
     transform: rotate(0deg);
   }
 }
-.sections > .mainsection > .content > .loadingdiv p, .sections > .mainsection > .content > .loadingdiv h1 {
+.sections > .mainsection > .content > .loadingdiv p,
+.sections > .mainsection > .content > .loadingdiv h1 {
   text-align: center;
   margin: 0;
 }
@@ -168,13 +157,10 @@
   color: var(--color-gray);
 }
 .sections > .mainsection > .content > .games-parent {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
-  margin: 0 auto;
-  grid-template-columns: repeat(6, 1fr); /* 6 sloupců stejné šířky */
+  margin-top: 20px;
   animation: sfapodij 0.8s ease-in-out;
 }
 @keyframes sfapodij {
@@ -197,37 +183,30 @@
   border-radius: 10px;
   gap: 24px;
   box-shadow: 0 0 7px rgba(0, 0, 0, 0.05);
-  width: calc(33.3333333333% - 13.3333333333px);
+  width: 100%;
 }
 .sections > .mainsection > .content > .games-parent > .child > .icon {
   position: relative;
-  width: 60px;
-  height: 60px;
+  width: clamp(40px, 8vw, 60px);
+  height: clamp(40px, 8vw, 60px);
   flex-shrink: 0;
-}
-.sections > .mainsection > .content > .games-parent > .child > .icon > .x, .sections > .mainsection > .content > .games-parent > .child > .icon > .o {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  mask-position: center;
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  background-color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .sections > .mainsection > .content > .games-parent > .child > .icon > .x {
   background-color: var(--accent-color-secondary);
+  width: 40px;
+  height: 40px;
+  mask: url("/images/icons/x.svg") no-repeat center;
+  mask-size: contain;
 }
 .sections > .mainsection > .content > .games-parent > .child > .icon > .o {
   background-color: var(--accent-color-primary);
-}
-.sections > .mainsection > .content > .games-parent > .child > .icon > div:nth-child(1) {
-  top: 0;
-  left: 0;
-  z-index: 1;
-}
-.sections > .mainsection > .content > .games-parent > .child > .icon > div:nth-child(2) {
-  right: 0;
-  bottom: 0;
+  width: 40px;
+  height: 40px;
+  mask: url("/images/icons/o.svg") no-repeat center;
+  mask-size: contain;
 }
 .sections > .mainsection > .content > .games-parent > .child > .texts {
   display: flex;
@@ -237,7 +216,7 @@
   flex-grow: 1;
 }
 .sections > .mainsection > .content > .games-parent > .child > .texts > h2 {
-  font-size: 24px;
+  font-size: clamp(18px, 4vw, 24px);
   margin: 0;
   text-align: left;
 }
@@ -276,10 +255,24 @@
   gap: 8px;
   margin-top: 8px;
 }
-.sections > .mainsection > .content > .games-parent > .child > .texts > .buttons a, .sections > .mainsection > .content > .games-parent > .child > .texts > .buttons button {
+.sections > .mainsection > .content > .games-parent > .child > .texts > .buttons a,
+.sections > .mainsection > .content > .games-parent > .child > .texts > .buttons button {
   display: block;
-  font-size: 14px;
-  padding: 8px 16px;
+  font-size: 12px;
+  padding: 6px 12px;
+}
+
+.custom-date-input {
+  width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .icon > .x {
+    left: 0;
+  }
+  .icon > .o {
+    right: 0;
+  }
 }
 
 /*# sourceMappingURL=games.css.map */
