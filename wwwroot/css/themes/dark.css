@@ -28,6 +28,7 @@
     --button-bg-hover: #212121;
     --button-outline-color: #2d2d2d;
     --modal-blur-color: rgba(0, 0, 0, 0.75);
+    --close-icon: url("/images/svg/Close_Light.svg");
 }
 
 /*#HOME-PAGE,

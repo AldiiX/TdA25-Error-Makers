@@ -1,4 +1,5 @@
-﻿function sdfdsfoisdj() {
+﻿
+function sdfdsfoisdj() {
     const header = document.querySelector('header') as HTMLElement;
     if(header === null) return;
 

@@ -28,6 +28,7 @@
     --button-outline-color: #dadada;
     --button-bg-hover: #d2d2d2;
     --modal-blur-color: rgba(0, 0, 0, 0.5);
+    --close-icon: url("/images/svg/Close_Dark.svg");
 }
 
 
@@ -46,7 +47,6 @@
         /*background: linear-gradient(45deg, black, transparent 50%) !important;*/
     }
 }
-
 
 #HOME-PAGE {
     .background {

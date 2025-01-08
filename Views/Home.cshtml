@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="/css/home.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
     <link rel="stylesheet" href="/css/mainstyles.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
     <link id="webtheme-link" rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()">
+    <script src="/libs/vue@(Program.DEVELOPMENT_MODE ? "_dev" : "").js"></script>
 
     @*  scripty pro komponenty *@
     <script src="/scripts/components/header.js"></script>
@@ -40,17 +41,26 @@
                 <button class="button-primary-col-sec" onclick="location.href='/game'">HRÁT</button>
             </div>
 
-            <div class="right">
-                <div class="img"></div>
-            </div>
-        </div>
-    </section>
+            <div class="center">
+                <div class="left">
+                    <h1>Think different Academy</h1>
+                    <p>Organizace, která se zabývá volnočasovými a vzdělávacími aktivitami pro děti a mládež.</p>
+                    <button class="button-primary-col-sec" onclick="location.href='/game'">HRÁT</button>
+                </div>
 
-    @await footer
+                <div class="right">
+                    <div class="img"></div>
+                </div>
+            </div>
+        </section>
+
+        @await footer
+    </div>
 </body>
 <script type="module">
     import * as f from "/scripts/functions.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
-
+    import { vue } from "/scripts/home.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
+    
     window.addCookie = f.addCookie;
     if (window.history.replaceState) window.history.replaceState( null, null, window.location.href );
 </script>

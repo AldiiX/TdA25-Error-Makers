@@ -27,6 +27,7 @@ export const vue = new Vue({
         filterStartDate: "",
         filterEndDate: "",
         selectedDateRange: "",
+        menuExpanded: false,
         games: null,
         gamesFiltered: [],
         modalOpened: null,

@@ -38,7 +38,8 @@ export const vue = new Vue({
         filterDifficulty: "",
         filterStartDate: "",  
         filterEndDate: "",    
-        selectedDateRange: "",  
+        selectedDateRange: "",
+        menuExpanded: false,
 
         games: null,
         gamesFiltered: [],
@@ -57,7 +58,7 @@ export const vue = new Vue({
 
             this.fetchGamesFromAPI();
         },
-
+        
         fetchGamesFromAPI: function (): void {
             const _this = this as any;
 
