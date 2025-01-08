@@ -41,6 +41,18 @@
             </div>
 
             <div class="bottom">
+                <div class="help">
+                    <div>
+                        <div style="mask-image: url(/images/icons/lmb.svg)"></div>
+                        <p>Změnění znaku</p>
+                    </div>
+
+                    <div>
+                        <div style="mask-image: url(/images/icons/rmb.svg)"></div>
+                        <p>Smazání znaku</p>
+                    </div>
+                </div>
+
                 <div class="errors">
                     <transition-group name="fade">
                         <p v-show="temp.editingGameIsInvalid" v-bind:key="'editingGameIsInvalid'">Herní plocha není validní -> počet křížků se musí rovnat nebo být o 1 větší než počet koleček.</p>
@@ -58,7 +70,7 @@
         <!-- gameboarda -->
         <div class="right">
             <div class="grid">
-                <div class="cell" v-cloak v-for="(cell, i) in 15*15" v-on:click="updateCell($event.target, i)"></div>
+                <div class="cell" v-cloak v-for="(cell, i) in 15*15" v-on:click="updateCell($event.target, i)" v-on:click.right="updateCellRightClick($event.target, i)"></div>
             </div>
         </div>
     </div>

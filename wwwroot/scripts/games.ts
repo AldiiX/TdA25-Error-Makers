@@ -6,6 +6,15 @@ export const vue = new Vue({
     el: "#app",
     mounted: function(){
         this.main();
+
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                if (this.modalOpened === "editgame") {
+                    this.openModal(null);
+                }
+            }
+        });
     },
 
 
@@ -406,6 +415,15 @@ export const vue = new Vue({
                 cell.classList.remove("x");
                 cell.classList.add("o");
             }
+
+            _this.checkBoardValidity();
+        },
+
+        updateCellRightClick: function(_cell: any, index: number): void {
+            const cell = _cell as HTMLElement;
+            const _this = this as any;
+
+            cell.classList.remove("x", "o");
 
             _this.checkBoardValidity();
         },

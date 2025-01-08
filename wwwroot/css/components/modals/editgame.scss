@@ -111,7 +111,33 @@
                 display: flex;
                 flex-grow: 1;
                 flex-direction: column;
-                justify-content: flex-end;
+                margin-top: 24px;
+
+                >.help {
+                    display: flex;
+                    flex-direction: column;
+                    flex-grow: 1;
+
+                    >div {
+                        display: flex;
+                        gap: 8px;
+                        align-items: center;
+
+                        >div {
+                            background-color: var(--text-color);
+                            width: 16px;
+                            height: 16px;
+                            mask-size: contain;
+                            mask-repeat: no-repeat;
+                            mask-position: center;
+                        }
+
+                        >p {
+                            margin: 0;
+                            color: var(--text-color);
+                        }
+                    }
+                }
 
                 >.errors {
                     p {

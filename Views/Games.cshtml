@@ -35,7 +35,7 @@
     @*  scripty pro komponenty *@
     <script type="module" src="/scripts/components/header.js"></script>
 </head>
-<body id="GAMES-PAGE" class="header-top-light">
+<body id="GAMES-PAGE" class="header-top-light" oncontextmenu="return false">
 
     @* @await background *@
     <div id="app" v-bind:class="{ 'loadingGameLock': temp.loadingGame }">
@@ -122,7 +122,7 @@
                 <div class="content">
                     <div class="loadingdiv" v-if="games === null" v-cloak>
                         <div class="img"></div>
-                        <h1>Načítání piškvorkových her</h1>
+                        <h1>Načítání piškvorkových úloh</h1>
                         <p>... snad to bude co nejdřív :) ...</p>
                     </div>
 
@@ -173,9 +173,9 @@
 
                     <div class="nogamesdiv" v-if="games !== null && gamesFiltered.length === 0" v-cloak>
                         <div class="img"></div>
-                        <h1>Ajaj, nejsou tu žádné piškvorkové hry.</h1>
+                        <h1>Ajaj, nejsou tu žádné piškvorkové úlohy.</h1>
                         @* <p>... snad to bude co nejdřív :) ...</p> *@
-                        <a class="button-primary" v-on:click="createNewGame()">Vytvořit hru</a>
+                        <a class="button-primary" v-on:click="createNewGame()">Vytvořit úlohu</a>
                     </div>
                 </div>
             </section>

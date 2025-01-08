@@ -3,6 +3,13 @@ export const vue = new Vue({
     el: "#app",
     mounted: function () {
         this.main();
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                if (this.modalOpened === "editgame") {
+                    this.openModal(null);
+                }
+            }
+        });
     },
     data: {
         temp: {
@@ -329,6 +336,12 @@ export const vue = new Vue({
                 cell.classList.remove("x");
                 cell.classList.add("o");
             }
+            _this.checkBoardValidity();
+        },
+        updateCellRightClick: function (_cell, index) {
+            const cell = _cell;
+            const _this = this;
+            cell.classList.remove("x", "o");
             _this.checkBoardValidity();
         },
         checkBoardValidity: function () {

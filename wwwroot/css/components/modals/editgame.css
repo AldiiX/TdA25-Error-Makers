@@ -93,7 +93,29 @@
   display: flex;
   flex-grow: 1;
   flex-direction: column;
-  justify-content: flex-end;
+  margin-top: 24px;
+}
+.modal-editgame > .modal > .left > .bottom > .help {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.modal-editgame > .modal > .left > .bottom > .help > div {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.modal-editgame > .modal > .left > .bottom > .help > div > div {
+  background-color: var(--text-color);
+  width: 16px;
+  height: 16px;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+.modal-editgame > .modal > .left > .bottom > .help > div > p {
+  margin: 0;
+  color: var(--text-color);
 }
 .modal-editgame > .modal > .left > .bottom > .errors p {
   width: 260px;
