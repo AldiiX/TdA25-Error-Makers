@@ -14,6 +14,9 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
 body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scrolled) > .flex > .Header-Logo {
   background-image: url("/images/svg/Think-different-Academy_LOGO_oficialni-bile.svg");
 }
+body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scrolled) > .Header-Logo-Small, body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scrolled) .smallDevice {
+  background-color: white;
+}
 
 .ExpandedMenu {
   width: 100vw;
@@ -53,9 +56,12 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-top: 17.5vw;
+  margin-top: 128px;
   align-items: center;
   gap: 16px;
+}
+.ExpandedMenu > .Header-Menu-Small > .button-primary {
+  color: white;
 }
 .ExpandedMenu > .Header-Menu-Small > .line {
   width: 25%;
@@ -68,6 +74,8 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
   gap: 8px;
   align-items: center;
   justify-content: center;
+  user-select: none;
+  cursor: pointer;
 }
 .ExpandedMenu > .Header-Menu-Small > .Theme-Flex > .changetheme {
   width: 30px;
@@ -79,6 +87,9 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
   mask-repeat: no-repeat;
   mask-position: center;
   cursor: pointer;
+}
+.ExpandedMenu > .Header-Menu-Small > .Theme-Flex > p {
+  margin: 0;
 }
 .ExpandedMenu > .Header-Menu-Small > a {
   font-size: 32px;
@@ -230,20 +241,22 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
   right: 7.5%;
   top: 50%;
   transform: translateY(-50%);
-  background-image: url(/images/svg/menu.svg);
-  background-size: 90%;
-  background-position: center;
-  background-repeat: no-repeat;
+  mask-image: url(/images/svg/menu.svg);
+  mask-size: 90%;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  background-color: var(--text-color);
 }
 .header-5F015D44-0984-4A50-B52B-5319AE57C19C > .Header-Logo-Small {
   display: none;
   height: 50px;
   width: 50px;
   pointer-events: none;
-  background-image: var(--tda-logo-small);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+  mask-image: var(--tda-logo-small);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  background-color: var(--text-color);
   transform: translateY(25%);
   position: absolute;
   left: 8.5%;

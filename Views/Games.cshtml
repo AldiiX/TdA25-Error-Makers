@@ -37,7 +37,6 @@
 </head>
 <body id="GAMES-PAGE" class="header-top-light" oncontextmenu="return false">
 
-    @* @await background *@
     <div id="app" v-bind:class="{ 'loadingGameLock': temp.loadingGame }">
         @await header
         @await editGameModal
@@ -143,7 +142,7 @@
                             </div>
 
                             <div class="texts"> @* display flex, flex-direction column *@
-                                <h2>{{ game.name }}</h2>
+                                <h2 v-bind:title="game.name">{{ game.name }}</h2>
 
                                 <div class="flex">
                                     <div class="pair pair-difficulty" title="Obtížnost">

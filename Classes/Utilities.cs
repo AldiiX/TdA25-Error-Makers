@@ -44,7 +44,14 @@ public static class Utilities {
     public static class WebTheme {
         public static void Set(in string theme) {
             string fullDomain = HCS.Current.Request.Host.Host;
-            string rootDomain = fullDomain.Split('.')[^2] + "." + fullDomain.Split('.')[^1];
+
+            // Rozdělení na části
+            string[] domainParts = fullDomain.Split('.');
+            string rootDomain;
+
+            if (domainParts.Length >= 2) rootDomain = domainParts[^2] + "." + domainParts[^1];
+            else rootDomain = fullDomain;
+
 
             Cookie.Set("webtheme", theme, true, new CookieOptions() {
                 IsEssential = true,
@@ -55,7 +62,7 @@ public static class Utilities {
 
         public static string Get() {
             var wt = Cookie.Get("webtheme");
-            if(wt == null) WebTheme.Set(DEFAULT_WEBTHEME);
+            if (wt == null) WebTheme.Set(DEFAULT_WEBTHEME);
 
             return wt switch {
                 "light" => "light",
