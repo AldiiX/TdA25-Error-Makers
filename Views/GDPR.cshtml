@@ -19,7 +19,16 @@
     <title>GDPR • Think Different Academy</title>
     <link rel="icon" href="/favicon.ico">
 
-    <script src="/libs/vue@(Program.DEVELOPMENT_MODE ? "_dev" : "").js"></script>
+
+    @{ // Vue.js definice
+        if (Program.DEVELOPMENT_MODE) {
+            <script src="/libs/vue_dev.js"></script>
+        } else {
+            <script src="/libs/vue.js"></script>
+        }
+    }
+
+
     <link rel="stylesheet" href="/libs/purecss.css">
     <link rel="stylesheet" href="/css/mainstyles.css">
     <link rel="stylesheet" href="/css/games.css">
@@ -57,7 +66,7 @@
 </body>
 <script type="module">
     import * as f from "/scripts/functions.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
-    //import { vue } from "/scripts/games.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
+    import { vue } from "/scripts/err.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
 
     window.addCookie = f.addCookie;
     //console.warn(vue);

@@ -45,7 +45,6 @@ public static class Utilities {
         public static void Set(in string theme) {
             string fullDomain = HCS.Current.Request.Host.Host;
 
-            // Rozdělení na části
             string[] domainParts = fullDomain.Split('.');
             string rootDomain;
 

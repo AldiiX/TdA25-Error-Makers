@@ -15,6 +15,7 @@ export const vue = new Vue({
         gameFadeOut: false,
         editMode: false,
         pageIsScrolled: false,
+        menuExpanded: false,
     },
     methods: {
         main: function () {

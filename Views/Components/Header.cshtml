@@ -12,9 +12,9 @@
             <a href="/games">Hry</a>
             @*<a href="/multiplayer">Online</a>*@
             @if (!path.StartsWith("/game/")) {
-                <a class="newgame button-primary" href="/game">Nová hra</a>
+                <button class="newgame button-primary" href="/game">Nová hra</button>
             } else {
-                <a class="newgame button-primary" v-cloak v-on:click="createNewGame()">Nová hra</a>
+                <button class="newgame button-primary" v-cloak v-on:click="createNewGame()">Nová hra</button>
             }
             <div class="line"></div>
             <div class="Theme-Flex">
@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="/css/components/header.css" />
 
     <div class="flex">
-        <div class="Header-Logo"></div>
+        <div class="Header-Logo" onclick="location.href='/'"></div>
 
         <div class="Header-Menu">
             <a href="/" class="@Utilities.SetActiveClass("/")">Domů</a>
@@ -66,6 +66,6 @@
 
     <!-- Menu pro mobily a tablety -->
     <div class="smallDevice" v-on:click="menuExpanded = true"></div>
-    <div class="Header-Logo-Small"></div>
+    <div class="Header-Logo-Small" onclick="location.href='/'"></div>
 
 </header>
