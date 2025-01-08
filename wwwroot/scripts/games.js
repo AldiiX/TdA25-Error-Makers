@@ -54,8 +54,8 @@ export const vue = new Vue({
             setTimeout(() => {
                 if (_this.modalOpened === "editgame" && modalId === null) {
                     const board = document.querySelector(".modal-editgame > .modal > .right > .grid");
-                    const cells = board.querySelectorAll(".cell");
-                    cells.forEach(cell => { cell.classList.remove("x", "o", "winning-cell"); });
+                    const cells = board?.querySelectorAll(".cell");
+                    cells?.forEach(cell => { cell.classList.remove("x", "o", "winning-cell"); });
                     _this.temp.creatingNewGame = false;
                     _this.temp.editingGameIsInvalid = false;
                     _this.temp.editingGameError = null;
@@ -231,6 +231,16 @@ export const vue = new Vue({
         saveEditedGame: function (game) {
             const _this = this;
             game ??= _this.editingGame;
+            const name = _this.editingGame.name;
+            const difficulty = _this.editingGame.difficulty;
+            if (!name) {
+                _this.temp.editingGameError = "Název hry nemůže být prázdný.";
+                return;
+            }
+            if (!difficulty) {
+                _this.temp.editingGameError = "Obtížnost hry nemůže být prázdná.";
+                return;
+            }
             const board = document.querySelector(".modal-editgame > .modal > .right > .grid");
             const cells = board.querySelectorAll(".cell");
             game.board = [];
@@ -240,6 +250,17 @@ export const vue = new Vue({
                     row.push(cells[i * 15 + j].classList.contains("x") ? "X" : cells[i * 15 + j].classList.contains("o") ? "O" : "");
                 }
                 game.board.push(row);
+            }
+            let empty = true;
+            game.board.forEach((row) => {
+                row.forEach((cell) => {
+                    if (cell !== "")
+                        empty = false;
+                });
+            });
+            if (empty) {
+                _this.temp.editingGameError = "Hra nemůže být prázdná.";
+                return;
             }
             if (!_this.temp.creatingNewGame) {
                 fetch(`/api/v2/games/${game.uuid}`, {

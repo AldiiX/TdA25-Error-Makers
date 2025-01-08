@@ -81,8 +81,8 @@ export const vue = new Vue({
             setTimeout(() => {
                 if(_this.modalOpened === "editgame" && modalId === null) {
                     const board = document.querySelector(".modal-editgame > .modal > .right > .grid") as HTMLElement;
-                    const cells = board.querySelectorAll(".cell");
-                    cells.forEach(cell => { cell.classList.remove("x", "o", "winning-cell"); });
+                    const cells = board?.querySelectorAll(".cell");
+                    cells?.forEach(cell => { cell.classList.remove("x", "o", "winning-cell"); });
                     _this.temp.creatingNewGame = false;
                     _this.temp.editingGameIsInvalid = false;
                     _this.temp.editingGameError = null;
@@ -286,6 +286,21 @@ export const vue = new Vue({
             game ??= _this.editingGame;
 
 
+            // zpracování jména a obtížnosti
+            const name: string = _this.editingGame.name;
+            const difficulty: string = _this.editingGame.difficulty;
+            if(!name) {
+                _this.temp.editingGameError = "Název hry nemůže být prázdný.";
+                return;
+            }
+
+            if(!difficulty) {
+                _this.temp.editingGameError = "Obtížnost hry nemůže být prázdná.";
+                return;
+            }
+
+
+
             // zpracování board
             const board = document.querySelector(".modal-editgame > .modal > .right > .grid") as HTMLElement;
             const cells = board.querySelectorAll(".cell");
@@ -300,6 +315,23 @@ export const vue = new Vue({
             }
 
 
+
+            // checknutí zda je boarda prázdná
+            let empty: boolean = true;
+            game.board.forEach((row: any) => {
+                row.forEach((cell: any) => {
+                    if(cell !== "") empty = false;
+                });
+            });
+
+            if(empty) {
+                _this.temp.editingGameError = "Hra nemůže být prázdná.";
+                return;
+            }
+
+
+
+            // request
             if(!_this.temp.creatingNewGame) {
                 fetch(`/api/v2/games/${game.uuid}`, {
                     method: 'PUT',
