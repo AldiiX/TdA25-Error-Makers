@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using MySql.Data.MySqlClient;
 
@@ -123,7 +124,7 @@ public class Game {
         return new Game(
             reader.GetString("uuid"),
             reader.GetString("name"),
-            GameBoard.Parse(reader.GetValueOrNull<string?>("board")),
+            GameBoard.Parse(reader.GetValueOrNull<string?>("board")!),
             Enum.Parse<GameDifficulty>(reader.GetString("difficulty")),
             reader.GetDateTime("created_at"),
             reader.GetDateTime("updated_at"),
@@ -136,7 +137,9 @@ public class Game {
 
     public static Game? GetByUUID(in string uuid) => GetByUUIDAsync(uuid).Result;
 
-    public static Game? Create(string? name, GameDifficulty difficulty, GameBoard board, bool isSaved = false, bool isInstance = false, bool insertToDatabase = false) {
+    public static async Task<Game?> CreateAsync(string? name, GameDifficulty difficulty, GameBoard board, bool isSaved = false, bool isInstance = false, bool insertToDatabase = false) {
+        /*var sw = new Stopwatch();
+        sw.Start();*/
         name ??= GenerateRandomGameName();
 
         // zpracování boardy
@@ -159,11 +162,10 @@ public class Game {
 
 
 
-
-        using var conn = Database.GetConnection();
+        await using var conn = await Database.GetConnectionAsync();
         if (conn == null) return null;
 
-        using var cmd = new MySqlCommand("INSERT INTO `games` (`uuid`, `name`, `difficulty`, `board`, `created_at`, `updated_at`, `game_state`, `round`, `saved`, `is_instance`) VALUES (@uuid, @name, @difficulty, @board, @created_at, @updated_at, @game_state, @round, @saved, @is_instance)", conn);
+        await using var cmd = new MySqlCommand("INSERT INTO `games` (`uuid`, `name`, `difficulty`, `board`, `created_at`, `updated_at`, `game_state`, `round`, `saved`, `is_instance`) VALUES (@uuid, @name, @difficulty, @board, @created_at, @updated_at, @game_state, @round, @saved, @is_instance)", conn);
         cmd.Parameters.AddWithValue("@uuid", game.UUID);
         cmd.Parameters.AddWithValue("@name", game.Name);
         cmd.Parameters.AddWithValue("@difficulty", game.Difficulty.ToString());
@@ -177,13 +179,17 @@ public class Game {
 
         int res = 0;
         try {
-            res = cmd.ExecuteNonQuery();
+            res = await cmd.ExecuteNonQueryAsync();
         } catch (Exception e) {
             Program.Logger.Log(LogLevel.Error, "Failed to insert new game to database: " + e.Message);
         }
 
+        /*sw.Stop();
+        Program.Logger.Log(LogLevel.Information, $"Game {game.UUID} created in {sw.ElapsedMilliseconds}ms.");*/
         return res <= 0 ? null : game;
     }
+
+    public static Game? Create(in string? name, GameDifficulty difficulty, GameBoard board, bool isSaved = false, bool isInstance = false, bool insertToDatabase = false) => CreateAsync(name, difficulty, board, isSaved, isInstance, insertToDatabase).Result;
 
     public static GameDifficulty ParseDifficulty(string difficulty) => !Enum.TryParse<GameDifficulty>(difficulty.ToUpper(), out var _diff) ? GameDifficulty.BEGINNER : _diff;
 

@@ -12,7 +12,7 @@
             <a href="/games">Hry</a>
             @*<a href="/multiplayer">Online</a>*@
             @if (!path.StartsWith("/game/")) {
-                <button class="newgame button-primary" href="/game">Nová hra</button>
+                <button class="newgame button-primary" onclick="location.href='/game'">Nová hra</button>
             } else {
                 <button class="newgame button-primary" v-cloak v-on:click="createNewGame()">Nová hra</button>
             }
