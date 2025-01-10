@@ -27,7 +27,7 @@
 .sections {
     padding-bottom: calc(80px*2);
 
-    >.mainsection {
+    >.pc-mainsection {
         >.texts {
             margin-bottom: 16px;
 
@@ -453,6 +453,466 @@
                     }
                 }
             }
+        }
+    }
+    
+    >.mobile-mainsection {
+        >.texts {
+            margin-bottom: 16px;
+
+            >h1 {
+                font-size: clamp(48px, 5vw, 128px);
+                color: var(--accent-color-primary);
+                text-align: center;
+                margin: 0;
+            }
+
+            >.inputs {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                margin-top: 32px;
+                $text-margin-bottom: 6px;
+                $text-margin-side: 4px;
+
+                .SearchInput{
+                    display: flex;
+                    flex-direction: column;
+                    margin: 0 auto;
+
+                    .Search-top{
+                        .SearchText {
+                            display: flex;
+                            justify-content: start;
+                            font-size: 16px;
+                            margin: 0;
+                            margin-bottom: $text-margin-bottom;
+                            margin-left:  $text-margin-side;
+                            user-select: none;
+                        }
+                    }
+
+                    .Search-Bottom{
+                        display: flex;
+                        gap: 8px;
+
+                        >input, >button {
+                            height: 40px;
+                        }
+
+                        .CreateGame{
+                            color: var(--accent-color-secondary);
+                            text-decoration: none;
+                        }
+
+                        >input {
+                            //box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+                        }
+                    }
+                }
+
+                .filter-container{
+                    display: flex;
+                    flex-direction: column;
+                    margin: 0 auto;
+
+                    .filter-top{
+                        .FilterText {
+                            display: flex;
+                            font-size: 16px;
+                            margin: 0;
+                            margin-bottom: $text-margin-bottom;
+                            margin-right:  $text-margin-side;
+                            user-select: none;
+                        }
+
+                    }
+
+                    .filter-bottom{
+                        display: flex;
+                        gap: 8px;
+                        align-items: center;
+                        flex-direction: column;
+
+                        select, input {
+                            height: 40px;
+                        }
+
+                        // animace
+                        .select-wrapper {
+                            position: relative;
+                            transition: margin 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+                        }
+
+                        .custom-date-enter-active,
+                        .custom-date-leave-active {
+                            transition: margin 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+                        }
+
+                        .custom-date-enter-from {
+                            opacity: 0;
+                            transform: translateX(-100%);
+                        }
+
+                        .custom-date-enter-to {
+                            opacity: 1;
+                            transform: translateX(0);
+                        }
+
+                        .custom-date-leave-from {
+                            opacity: 1;
+                            margin-left: 0;
+                        }
+
+                        .custom-date-leave-to {
+                            opacity: 0;
+                            margin-left: -163px;
+                        }
+                        //
+
+
+
+
+                        >.select-wrapper {
+                            position: relative;
+
+                            >select {
+                                appearance: none;
+                                padding-right: 52px;
+                            }
+
+
+                            &::after {
+                                content: '';
+                                width: 12px;
+                                height: 12px;
+                                position: absolute;
+                                right: 20px;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                pointer-events: none;
+                                background-color: var(--text-color);
+                                mask: url("/images/icons/arrow_down.svg") no-repeat center;
+                                mask-size: contain;
+                                mask-repeat: no-repeat;
+                            }
+                        }
+
+                        .custom-date-input::-webkit-calendar-picker-indicator {
+                            color: transparent;
+                            opacity: 1;
+                            display: block;
+                            background: none;
+                            background-color: var(--text-color);
+                            mask: url("/images/icons/calendar.svg") no-repeat center;
+                            width: 12px;
+                            height: 12px;
+                            border-width: thin;
+                        }
+                    }
+                }
+            }
+        }
+
+        >.content {
+            >.loadingdiv {
+                position: relative;
+                margin: 0 auto;
+                margin-top: 64px;
+                //background-color: var(--background-color);
+                //border: 1px solid var(--background-color-primary);
+                display: flex;
+                flex-direction: column;
+                border-radius: 12px;
+                min-width: 600px;
+                -webkit-animation: hhfjaergdfvgdsfade 1s ease-out;
+
+                @keyframes hhfjaergdfvgdsfade {
+                    from {
+                        opacity: 0;
+                    }
+
+                    70% {
+                        opacity: 0;
+                    }
+
+                    to {
+                        opacity: 1;
+                    }
+                }
+
+                >.img {
+                    width: 250px;
+                    aspect-ratio: 1/1;
+                    mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
+                    mask-size: contain;
+                    background-color: var(--text-color);//var(--accent-color);
+                    animation: loading-img-anim 3s ease-in-out infinite;
+                    margin: 0 auto;
+
+                    @keyframes loading-img-anim {
+                        0% {
+                            transform: rotate(0deg);
+                        }
+
+                        20% {
+                            transform: rotate(-20deg);
+                        }
+
+                        60% {
+                            transform: rotate(20deg);
+                        }
+
+                        100% {
+                            transform: rotate(0deg);
+                        }
+                    }
+                }
+
+                p, h1 {
+                    text-align: center;
+                    margin: 0;
+                }
+
+                h1 {
+                    margin-top: 32px;
+                    margin-bottom: 8px;
+                }
+
+                p {
+                    color: var(--color-gray);
+                }
+            }
+
+            >.nogamesdiv {
+                position: relative;
+                margin: 0 auto;
+                margin-top: 64px;
+                //background-color: var(--background-color);
+                //border: 1px solid var(--background-color-primary);
+                display: flex;
+                flex-direction: column;
+                border-radius: 12px;
+                min-width: 600px;
+                -webkit-animation: efsfsdefsfsfdsfsf 0.3s ease-out;
+
+                @keyframes efsfsdefsfsfdsfsf {
+                    from {
+                        opacity: 0;
+                    }
+
+                    /*70% {
+                        opacity: 0;
+                    }*/
+
+                    to {
+                        opacity: 1;
+                    }
+                }
+
+                >.img {
+                    width: 250px;
+                    aspect-ratio: 1/1;
+                    mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
+                    mask-size: contain;
+                    background-color: var(--text-color);//var(--accent-color);
+                    //animation: loading-img-anim 3s ease-in-out infinite;
+                    margin: 0 auto;
+                }
+
+                p, h1 {
+                    text-align: center;
+                    margin: 0;
+                }
+
+                h1 {
+                    margin-top: 32px;
+                    margin-bottom: 24px;
+                }
+
+                p {
+                    color: var(--color-gray);
+                }
+
+                a {
+                    width: fit-content;
+                    margin: 0 auto;
+                    //font-size: 20px;
+                }
+            }
+
+            >.games-parent {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin-top: 20px;
+                gap: 20px;
+                margin: 0 auto;
+                animation: sfapodij 0.8s ease-in-out;
+                animation-iteration-count: 1;
+
+                @keyframes sfapodij {
+                    from {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+
+                >.child {
+                    padding: 24px;
+                    display: flex;
+                    align-items: center;
+                    text-align: center;
+                    background-color: var(--background-color);
+                    transition: background-color 0.3s ease;
+                    border-radius: 10px;
+                    gap: 24px;
+                    //box-shadow: 0 0 7px rgba(0, 0, 0, 0.05);
+                    width: 100%;
+
+                    >.icon {
+                        position: relative;
+                        width: 60px;
+                        height: 60px;
+                        flex-shrink: 0;
+
+                        >.x, >.o {
+                            position: absolute;
+                            width: 40px;
+                            height: 40px;
+                            mask-position: center;
+                            mask-size: contain;
+                            mask-repeat: no-repeat;
+                            background-color: var(--text-color);
+                        }
+
+                        >.x{
+                            background-color: var(--accent-color-secondary);
+
+                        }
+
+                        >.o{
+                            background-color: var(--accent-color-primary);
+                        }
+
+                        >div:nth-child(1) {
+                            top: 0;
+                            left: 0;
+                            z-index: 1;
+                        }
+
+                        >div:nth-child(2) {
+                            right: 0;
+                            bottom: 0;
+                        }
+                    }
+
+                    >.texts {
+                        display: flex;
+                        flex-direction: column;
+                        overflow: hidden;
+                        gap: 8px;
+                        flex-grow: 1;
+
+                        >h2 {
+                            font-size: 24px;
+                            margin: 0;
+                            text-align: left;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+
+                        >.flex {
+                            display: flex;
+                            justify-content: left;
+                            gap: 2px 12px;
+                            flex-wrap: wrap;
+
+                            .pair {
+                                display: flex;
+                                gap: 4px;
+                                align-items: center;
+
+                                .icon{
+                                    width: 20px;
+                                    height: 20px;
+                                    mask-position: center;
+                                    mask-size: contain;
+                                    mask-repeat: no-repeat;
+                                    background-color: var(--color-gray);
+                                }
+
+                                p {
+                                    margin: 0;
+                                    text-align: left;
+                                    flex-shrink: 0;
+                                    color: var(--color-gray);
+                                }
+
+                                &:not(.pair-difficulty) {
+                                    .icon {
+                                        mask-size: 80%;
+                                    }
+                                }
+
+                                &:is(.pair-difficulty) {
+                                    .icon {
+                                        margin-right: 2px;
+                                    }
+                                }
+                            }
+                        }
+
+                        >.buttons {
+                            display: flex;
+                            gap: 8px;
+                            margin-top: 8px;
+
+                            a,button {
+                                display: block;
+                                font-size: 14px;
+                                padding: 8px 16px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+}
+
+@media screen and (min-width: 600px) and (max-width: 960px){
+    .sections{
+        >.pc-mainsection{
+            display: none;
+        }
+        >.mobile-mainsection{
+            display: block;
+        }
+    }
+    
+}
+@media screen and (max-width: 600px){
+    .sections{
+        >.pc-mainsection{
+            display: none;
+        }
+        >.mobile-mainsection{
+            display: block;
+             .texts > .inputs .SearchInput {
+                 display: flex;
+                 flex-direction: column;
+                 margin: 0 auto;
+                 width: 100%;
+             }
         }
     }
 }
