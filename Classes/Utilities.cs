@@ -94,6 +94,30 @@ public static class Utilities {
         return (T)reader[key];
     }
 
+    public static void SetObject<T>(this ISession session, in string key, in T value) {
+        session.SetString(key, JsonSerializer.Serialize(value));
+    }
+
+    public static T? GetObject<T>(this ISession session, in string key) where T : class? {
+        var value = session.GetString(key);
+        return value == null ? null : JsonSerializer.Deserialize<T>(value);
+    }
+
+    public static T? GetObject<T>(this ISession session, string key) where T : struct {
+        var value = session.GetString(key);
+        return value == null ? (T?)null : JsonSerializer.Deserialize<T>(value);
+    }
+#endregion
+
+#region normální metody
+
+    public static string SetActiveClass(string p) {
+        string path = HCS.Current.Request.Path.ToString();
+
+        if (path == p) return "active";
+        return "";
+    }
+
     public static Account GetLoggedAccountFromContext() {
         if(HCS.Current.Items["loggeduser"] is not Account account) throw new Exception("Account not found in context");
         return account;
@@ -129,29 +153,6 @@ public static class Utilities {
 
     public static string EncryptPassword(in string password) => EncryptWithSHA512(password) + EncryptWithMD5(password[0] + "" + password[1] + "" + password[^1]);
 
-    public static void SetObject<T>(this ISession session, in string key, in T value) {
-        session.SetString(key, JsonSerializer.Serialize(value));
-    }
-
-    public static T? GetObject<T>(this ISession session, in string key) where T : class? {
-        var value = session.GetString(key);
-        return value == null ? null : JsonSerializer.Deserialize<T>(value);
-    }
-
-    public static T? GetObject<T>(this ISession session, string key) where T : struct {
-        var value = session.GetString(key);
-        return value == null ? (T?)null : JsonSerializer.Deserialize<T>(value);
-    }
-#endregion
-
-#region normální metody
-
-    public static string SetActiveClass(string p) {
-        string path = HCS.Current.Request.Path.ToString();
-
-        if (path == p) return "active";
-        return "";
-    }
 
 #endregion
 }

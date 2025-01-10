@@ -1,3 +1,4 @@
+import { getCookie } from "/scripts/functions.js";
 export const vue = new Vue({
     el: "#app",
     mounted: function () {
@@ -79,7 +80,8 @@ export const vue = new Vue({
         },
         getGame: function () {
             const _this = this;
-            const gameUUID = window.location.pathname.split("/")[2];
+            const gameUUID = getCookie("gameuuid") ?? window.location.pathname.split("/")[2];
+            console.warn(gameUUID);
             fetch(`/api/v2/games/${gameUUID}`)
                 .then(async (response) => {
                 const data = await response.json();
@@ -147,6 +149,7 @@ export const vue = new Vue({
                 const data = await response.json();
                 if (!response.ok)
                     throw new Error();
+                window.history.pushState({}, '', `/game/${data.uuid}`);
                 this.initializeGame(data);
             }).catch(_ => {
                 this.getGame();

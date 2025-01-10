@@ -32,6 +32,16 @@ public class BeforeInitMiddleware(RequestDelegate next){
 
             context.Items["game"] = game;
         }
+        
+        else if(path is "/game" or "/game/") {
+            var game = Game.Create(null, Game.GameDifficulty.MEDIUM, GameBoard.CreateNew(), false, false, true);
+            if(game == null) {
+                context.Response.StatusCode = 400;
+                return;
+            }
+
+            context.Items["game"] = game;
+        }
 
         await accTask;
         await next(context);
