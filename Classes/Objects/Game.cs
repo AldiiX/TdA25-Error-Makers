@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using MySql.Data.MySqlClient;
 
@@ -219,7 +218,7 @@ public class Game {
             "Nezkrotná", "Nebývalá", "Nevšední", "Uvolněná", "Přímá", "Transformační",
             "Odvážná", "Chytrá", "Zdrcující", "Hustá", "Vědecká", "Filozofická", "Zákeřná",
             "Ironická", "Nezávislá", "Pochmurná", "Romantická", "Rozkošná", "Nostalgická", "Hrdinská",
-            "Rytmická", "Sofistikovaná", "Energetická", "Optimistická", "Pesimistická", "Prudká",
+            "Rytmická", "Sofistikovaná", "Optimistická", "Pesimistická", "Prudká",
             "Podmanivá", "Fascinující", "Otevřená", "Zavřená", "Uzavřená", "Nesmrtelná",
             "Hybridní", "Anonymní", "Odlišná", "Nenápadná", "Předvídatelná", "Nepředvídatelná",
             "Všestranná", "Jedinečná", "Nevysvětlitelná", "Srdcervoucí", "Tragická", "Okamžitá",
@@ -254,19 +253,19 @@ public class Game {
             "Spontánně", "Sympaticky", "Vzácně", "Úžasně", "Kvalitně", "Dokonale",
             "Osvěžujícím způsobem", "Trefně", "Nesmlouvavě", "Neústupně", "Zvláštně", "Globálně",
             "Virtuálně", "Tématicky", "Děsivě", "Magicky", "Okouzlujícím způsobem", "Oslnivě",
-            "Poutavě", "Komediálně", "Nevídaně", "Náročně", "Neskutečně", "Představitelně",
+            "Poutavě", "Komediálně", "Nevídaně", "Neskutečně", "Představitelně",
             "Odhodlaně", "Pravdivě", "Hbitě", "Neviditelně", "Bleskově", "Lidsky", "Roboticky",
             "Technicky", "Rušně", "Vesele", "Osudově", "Progresivně", "Nezkrotně", "Nebývale",
             "Nevšedně", "Uvolněně", "Přímo", "Transformačně", "Odvážně", "Chytře",
             "Zdrcujícím způsobem", "Hustě", "Hravě", "Vědecky", "Filozoficky", "Zákeřně",
             "Ironicky", "Nezávisle", "Pochmurně", "Romanticky", "Rozkošně", "Nostalgicky",
-            "Hrdinsky", "Rytmicky", "Sofistikovaně", "Energeticky", "Optimisticky", "Pesimisticky",
-            "Prudce", "Podmanivě", "Fascinujícím způsobem", "Hravě", "Vítězně", "Otevřeně",
+            "Hrdinsky", "Rytmicky", "Sofistikovaně", "Optimisticky", "Pesimisticky",
+            "Prudce", "Podmanivě", "Fascinujícím způsobem", "Otevřeně",
             "Hybridně", "Anonymně", "Odlišně", "Nenápadně", "Předvídatelně", "Nepředvídatelně",
             "Všestranně", "Jedinečně", "Nevysvětlitelně", "Srdcervoucím způsobem", "Tragicky",
             "Okamžitě", "Neznámě", "Podivně", "Zlověstně", "Primitivně", "Podrobně",
-            "Důležitě", "Symbolicky", "Neomezeně", "Smrtelně", "Podvodně", "Neutrálně",
-            "Pokrokově", "Starodávně", "Významně", "Evolučně", "Komplexně", "Průkopnicky",
+            "Důležitě", "Symbolicky", "Neomezeně", "Podvodně", "Neutrálně",
+            "Pokrokově", "Starodávně", "Významně", "Evolučně", "Průkopnicky",
             "Neúnavně", "Neotřele", "Charismaticky", "Elektrizujícím způsobem", "Prorocky",
             "Smysluplně", "Rychlopalně", "Spolupracujícím způsobem", "Stěžejně", "Útočně",
             "Defenzivně", "Rozhodujícím způsobem", "Hraničně", "Dlouhodobě", "Úderně",
