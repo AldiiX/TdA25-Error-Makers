@@ -59,6 +59,8 @@
             .errortxt {
                 color: var(--accent-color-secondary);
                 font-size: 16px;
+                max-width: 250px;
+                margin: 10px auto;
             }
 
             .submit {
