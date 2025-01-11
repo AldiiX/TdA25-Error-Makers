@@ -12,4 +12,15 @@
   font-size: 20px;
 }
 
+@media screen and (min-width: 600px) and (max-width: 960px) {
+  .sections .mainsection .texts p {
+    font-size: 16px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .sections .mainsection .texts p {
+    font-size: 16px;
+  }
+}
+
 /*# sourceMappingURL=GDPR.css.map */

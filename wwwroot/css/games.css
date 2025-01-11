@@ -683,6 +683,9 @@
 }
 
 @media screen and (min-width: 600px) and (max-width: 960px) {
+  .sections section:is(.top) > .texts > h1 {
+    font-size: clamp(32px, 14vw, 96px);
+  }
   .sections > .pc-mainsection {
     display: none;
   }
@@ -691,6 +694,14 @@
   }
 }
 @media screen and (max-width: 600px) {
+  .sections section:is(.top) > .texts h1 {
+    font-size: clamp(32px, 14vw, 96px);
+  }
+  .sections section:is(.top) > .texts p {
+    font-size: clamp(0px, 5.5vw, 24px);
+    opacity: 0.7;
+    margin: 8px 0;
+  }
   .sections > .pc-mainsection {
     display: none;
   }
