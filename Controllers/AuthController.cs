@@ -72,13 +72,19 @@ public partial class AuthController : Controller {
             return View("/Views/Auth.cshtml");
         }
         
+        if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+        {
+            ViewBag.ErrorMessage = "Zadejte platnou e-mailovou adresu.";
+            return View("/Views/Auth.cshtml");
+        }
+        
         if (password != passwordConfirm) {
             ViewBag.ErrorMessage = "Hesla se neshodují.";
             return View("/Views/Auth.cshtml");
         }
         
         if (password.Length <8) {
-            ViewBag.ErrorMessage = "Heslo musí obsahovat 8 znaků";
+            ViewBag.ErrorMessage = "Heslo musí obsahovat alespoň 8 znaků";
             return View("/Views/Auth.cshtml");
         }
         
