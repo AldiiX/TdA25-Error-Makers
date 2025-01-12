@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using MySql.Data.MySqlClient;
 using TdA25_Error_Makers.Classes;
 
@@ -10,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 
 
-public partial class AuthController : Controller {
+public class AuthController : Controller {
 
     [Route("/login")]
     public IActionResult Login_Page() {
@@ -48,47 +47,41 @@ public partial class AuthController : Controller {
         ViewBag.AuthType = "register";
 
         // validace dat
-
-
-            
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(passwordConfirm)) {
             ViewBag.ErrorMessage = "Všechna pole musí být vyplněna.";
             return View("/Views/Auth.cshtml");
         }
 
-        char[] allowedChars = 
-        {
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 
+        char[] allowedChars = [
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
             'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 
             'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
             '.', '_'
-        };
+        ];
 
-        if (username.Any(c => !allowedChars.Contains(c)))
-        {
+        if (username.Any(c => !allowedChars.Contains(c))) {
             ViewBag.ErrorMessage = "Uživatelské jméno nesmí obsahovat diakritiku, mezery a speciální znaky.";
             return View("/Views/Auth.cshtml");
         }
         
-        if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-        {
+        if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$")) {
             ViewBag.ErrorMessage = "Zadejte platnou e-mailovou adresu.";
             return View("/Views/Auth.cshtml");
         }
-        
+
         if (password != passwordConfirm) {
             ViewBag.ErrorMessage = "Hesla se neshodují.";
             return View("/Views/Auth.cshtml");
         }
-        
+
         if (password.Length <8) {
             ViewBag.ErrorMessage = "Heslo musí obsahovat alespoň 8 znaků";
             return View("/Views/Auth.cshtml");
         }
-        
-            
+
+
         username = username.ToLower();
         email = email.ToLower();
 
@@ -99,8 +92,7 @@ public partial class AuthController : Controller {
             return View("/Views/Auth.cshtml");
         }
 
-        try
-        {
+        try {
             using var cmd = conn.CreateCommand();
             cmd.CommandText =
                 "INSERT INTO `users` (`username`, `email`, `password`) VALUES (@username, @email, @password)";
@@ -109,18 +101,13 @@ public partial class AuthController : Controller {
             cmd.Parameters.AddWithValue("@password", Utilities.EncryptPassword(password));
 
 
-            
-            if (cmd.ExecuteNonQuery() == 0)
-            {
+
+            if (cmd.ExecuteNonQuery() == 0) {
                 ViewBag.ErrorMessage = "Nepodařilo se vytvořit uživatele.";
                 return View("/Views/Auth.cshtml");
             }
-            
-        }
-        catch (MySqlException e)
-        {
-            if (e.Number == 1062)
-            {
+        } catch (MySqlException e) {
+            if (e.Number == 1062) {
                 ViewBag.ErrorMessage = "Uživatel s tímto jménem nebo emailem již existuje.";
                 return View("/Views/Auth.cshtml");
             }
@@ -136,7 +123,4 @@ public partial class AuthController : Controller {
         Auth.AuthUser(username, Utilities.EncryptPassword(password));
         return Redirect("/");
     }
-
-    [System.Text.RegularExpressions.GeneratedRegex(@"^[a-zA-Z0-9_.]+$")]
-    private static partial System.Text.RegularExpressions.Regex MyRegex();
 }

@@ -97,7 +97,6 @@ export const vue = new Vue({
             if (data === null)
                 throw new Error("Data is null");
             _this.game = data;
-            window.scroll({ top: 0, left: 0, behavior: "smooth" });
             if (!_this.game.original)
                 _this.game.original = {};
             _this.game.original.name = _this.game.name;

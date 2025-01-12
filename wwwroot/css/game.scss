@@ -70,6 +70,7 @@
 
         >.img {
             width: 250px;
+            max-width: 90vw;
             aspect-ratio: 1/1;
             mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
             mask-size: contain;
@@ -98,7 +99,8 @@
 
         p, h1 {
             text-align: center;
-            margin: 0;
+            margin: 0 auto;
+            max-width: 90vw;
         }
 
         h1 {
@@ -212,7 +214,11 @@
                 //overflow: hidden;
 
                 &:is(.locked) {
-                    pointer-events: none;
+                    pointer-events: none !important;
+
+                    /*.cell {
+                        pointer-events: none !important;
+                    }*/
                 }
 
                 .cell {
@@ -342,7 +348,6 @@
 
 
                     >.name {
-                        margin: 0;
                         font-size: 24px;
                         font-weight: 1000;
                         max-width: 320px;
@@ -351,6 +356,7 @@
                         overflow: hidden;
                         width: 100%;
                         text-align: center;
+                        margin: 0 auto;
                     }
 
                     >.r {
@@ -432,6 +438,162 @@
                 >button {
                     //flex-grow: 2;
                     width: 120px;
+                }
+            }
+        }
+    }
+}
+
+
+
+// tablety
+@media screen and (min-width: 735px) and (max-width: 1100px) {
+    .mainsection {
+        height: auto;
+        min-height: 100vh;
+        padding-bottom: 160px;
+
+        >.flex {
+            flex-direction: column-reverse;
+            position: relative;
+            top: calc(5vh + 40px);
+            margin: 0 auto;
+            width: 90vw;
+            left: unset;
+            transform: unset;
+
+            >.left {
+                border-bottom: 12px solid var(--mcolor);
+
+                > .buttons > a {
+                    background-color: var(--mcolor);
+                    color: white;
+
+                    &:hover {
+                        background-color: var(--text-color);
+                        color: var(--bg);
+                    }
+                }
+
+                .grid {
+                    $cellsize: 5.3vw;
+                    margin: 0 auto;
+                    grid-template-columns: repeat(15, $cellsize);
+                    grid-template-rows: repeat(15, $cellsize);
+
+                    .cell {
+                        width: $cellsize;
+                        height: $cellsize;
+                        border-width: 0.3vw;
+                        border-radius: 1.2vw;
+                    }
+                }
+            }
+
+            >.right {
+                flex-direction: row;
+
+                >div {
+                    flex-grow: 1;
+                }
+
+                div:nth-child(1) > .top > .name {
+                    max-width: 420px;
+                }
+
+                .settings {
+                    min-width: 300px;
+                }
+            }
+        }
+    }
+}
+
+
+// mobil
+@media screen and (max-width: 735px) {
+    .mainsection {
+        height: auto;
+        min-height: 100vh;
+        padding-bottom: 160px;
+
+        >.flex {
+            flex-direction: column-reverse;
+            position: relative;
+            top: calc(5vh + 40px);
+            margin: 0 auto;
+            width: 90vw;
+            left: unset;
+            transform: unset;
+
+            >.left {
+                border-bottom: 12px solid var(--mcolor);
+
+                > .buttons > a {
+                    background-color: var(--mcolor);
+                    color: white;
+
+                    &:hover {
+                        background-color: var(--text-color);
+                        color: var(--bg);
+                    }
+                }
+
+                .grid {
+                    $cellsize: 5vw;
+                    margin: 0 auto;
+                    grid-template-columns: repeat(15, $cellsize);
+                    grid-template-rows: repeat(15, $cellsize);
+                    pointer-events: none;
+
+                    .cell {
+                        width: $cellsize;
+                        height: $cellsize;
+                        border-width: 0.3vw;
+                        border-radius: 1.2vw;
+                    }
+                }
+
+
+                &:has(.grid:not(.locked)):active,
+                &:has(.grid:not(.locked)):hover {
+                    overflow: auto;
+                    aspect-ratio: 1/1;
+
+                    .grid {
+                        $cellsize: 9vw;
+                        margin: 0 auto;
+                        grid-template-columns: repeat(15, $cellsize);
+                        grid-template-rows: repeat(15, $cellsize);
+                        pointer-events: all;
+                        animation: templockpoaiswdjsiaasoidj 1s;
+
+                        &:is(.locked) {
+                            pointer-events: none !important;
+                        }
+
+                        @keyframes templockpoaiswdjsiaasoidj {
+                            from {
+                                pointer-events: none;
+                            }
+                            to {
+                                pointer-events: all;
+                            }
+                        }
+
+                        .cell {
+                            width: $cellsize;
+                            height: $cellsize;
+                            border-width: 0.6vw;
+                            border-radius: 2vw;
+                        }
+                    }
+                }
+            }
+
+            >.right {
+                div:nth-child(1) > .top > .name {
+                    max-width: none;
                 }
             }
         }

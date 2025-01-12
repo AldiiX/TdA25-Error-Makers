@@ -61,6 +61,7 @@ header:not(.scrolled) {
 }
 .mainsection > .loading > .img {
   width: 250px;
+  max-width: 90vw;
   aspect-ratio: 1/1;
   mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
   mask-size: contain;
@@ -84,7 +85,8 @@ header:not(.scrolled) {
 }
 .mainsection > .loading p, .mainsection > .loading h1 {
   text-align: center;
-  margin: 0;
+  margin: 0 auto;
+  max-width: 90vw;
 }
 .mainsection > .loading h1 {
   margin-top: 32px;
@@ -177,7 +179,10 @@ header:not(.scrolled) {
   border-radius: 12px;
 }
 .mainsection .flex > .left .grid:is(.locked) {
-  pointer-events: none;
+  pointer-events: none !important;
+  /*.cell {
+      pointer-events: none !important;
+  }*/
 }
 .mainsection .flex > .left .grid .cell {
   width: 45px;
@@ -278,7 +283,6 @@ header:not(.scrolled) {
   color: white;
 }
 .mainsection .flex > .right div:nth-child(1) > .top > .name {
-  margin: 0;
   font-size: 24px;
   font-weight: 1000;
   max-width: 320px;
@@ -287,6 +291,7 @@ header:not(.scrolled) {
   overflow: hidden;
   width: 100%;
   text-align: center;
+  margin: 0 auto;
 }
 .mainsection .flex > .right div:nth-child(1) > .top > .r {
   margin: 0 auto;
@@ -352,6 +357,127 @@ header:not(.scrolled) {
 }
 .mainsection .flex > .right > .presettings > button {
   width: 120px;
+}
+
+@media screen and (min-width: 735px) and (max-width: 1100px) {
+  .mainsection {
+    height: auto;
+    min-height: 100vh;
+    padding-bottom: 160px;
+  }
+  .mainsection > .flex {
+    flex-direction: column-reverse;
+    position: relative;
+    top: calc(5vh + 40px);
+    margin: 0 auto;
+    width: 90vw;
+    left: unset;
+    transform: unset;
+  }
+  .mainsection > .flex > .left {
+    border-bottom: 12px solid var(--mcolor);
+  }
+  .mainsection > .flex > .left > .buttons > a {
+    background-color: var(--mcolor);
+    color: white;
+  }
+  .mainsection > .flex > .left > .buttons > a:hover {
+    background-color: var(--text-color);
+    color: var(--bg);
+  }
+  .mainsection > .flex > .left .grid {
+    margin: 0 auto;
+    grid-template-columns: repeat(15, 5.3vw);
+    grid-template-rows: repeat(15, 5.3vw);
+  }
+  .mainsection > .flex > .left .grid .cell {
+    width: 5.3vw;
+    height: 5.3vw;
+    border-width: 0.3vw;
+    border-radius: 1.2vw;
+  }
+  .mainsection > .flex > .right {
+    flex-direction: row;
+  }
+  .mainsection > .flex > .right > div {
+    flex-grow: 1;
+  }
+  .mainsection > .flex > .right div:nth-child(1) > .top > .name {
+    max-width: 420px;
+  }
+  .mainsection > .flex > .right .settings {
+    min-width: 300px;
+  }
+}
+@media screen and (max-width: 735px) {
+  .mainsection {
+    height: auto;
+    min-height: 100vh;
+    padding-bottom: 160px;
+  }
+  .mainsection > .flex {
+    flex-direction: column-reverse;
+    position: relative;
+    top: calc(5vh + 40px);
+    margin: 0 auto;
+    width: 90vw;
+    left: unset;
+    transform: unset;
+  }
+  .mainsection > .flex > .left {
+    border-bottom: 12px solid var(--mcolor);
+  }
+  .mainsection > .flex > .left > .buttons > a {
+    background-color: var(--mcolor);
+    color: white;
+  }
+  .mainsection > .flex > .left > .buttons > a:hover {
+    background-color: var(--text-color);
+    color: var(--bg);
+  }
+  .mainsection > .flex > .left .grid {
+    margin: 0 auto;
+    grid-template-columns: repeat(15, 5vw);
+    grid-template-rows: repeat(15, 5vw);
+    pointer-events: none;
+  }
+  .mainsection > .flex > .left .grid .cell {
+    width: 5vw;
+    height: 5vw;
+    border-width: 0.3vw;
+    border-radius: 1.2vw;
+  }
+  .mainsection > .flex > .left:has(.grid:not(.locked)):active, .mainsection > .flex > .left:has(.grid:not(.locked)):hover {
+    overflow: auto;
+    aspect-ratio: 1/1;
+  }
+  .mainsection > .flex > .left:has(.grid:not(.locked)):active .grid, .mainsection > .flex > .left:has(.grid:not(.locked)):hover .grid {
+    margin: 0 auto;
+    grid-template-columns: repeat(15, 9vw);
+    grid-template-rows: repeat(15, 9vw);
+    pointer-events: all;
+    animation: templockpoaiswdjsiaasoidj 1s;
+  }
+  .mainsection > .flex > .left:has(.grid:not(.locked)):active .grid:is(.locked), .mainsection > .flex > .left:has(.grid:not(.locked)):hover .grid:is(.locked) {
+    pointer-events: none !important;
+  }
+  @keyframes templockpoaiswdjsiaasoidj {
+    from {
+      pointer-events: none;
+    }
+    to {
+      pointer-events: all;
+    }
+  }
+  .mainsection > .flex > .left:has(.grid:not(.locked)):active .grid .cell, .mainsection > .flex > .left:has(.grid:not(.locked)):hover .grid .cell {
+    width: 9vw;
+    height: 9vw;
+    border-width: 0.6vw;
+    border-radius: 2vw;
+  }
+  .mainsection > .flex > .right div:nth-child(1) > .top > .name {
+    max-width: none;
+  }
 }
 
 /*# sourceMappingURL=game.css.map */

@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Nodes;
+using Google.Protobuf;
 
 namespace TdA25_Error_Makers.Classes.Objects;
 
@@ -7,7 +8,7 @@ namespace TdA25_Error_Makers.Classes.Objects;
 
 
 
-public class GameBoard {
+public class GameBoard : IDeepCloneable<GameBoard> {
 
     // propy
     private string[,] Board { get; set; }
@@ -105,9 +106,17 @@ public class GameBoard {
 
     public static GameBoard CreateNew() => new();
 
+    public GameBoard Clone() {
+        var newBoard = new string[15, 15];
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
+                newBoard[row, col] = Board[row, col];
+            }
+        }
 
+        return new GameBoard(newBoard);
+    }
 
-    // instance metody
     public override string ToString() {
         var boardToList = new List<List<string>>();
         for (int row = 0; row < 15; row++) {

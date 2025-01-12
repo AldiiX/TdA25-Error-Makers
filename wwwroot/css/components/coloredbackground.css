@@ -6,7 +6,7 @@
   width: 110vw;
   height: 110vh;
   overflow: hidden;
-  background: url("/images/bg1.svg"), url("/images/bg1.png"), linear-gradient(90deg, rgb(0, 112, 187) 0%, rgb(57, 90, 154) 25%, rgb(114, 68, 121) 50%, rgb(227, 24, 55) 100%);
+  background: url("/images/bg1.png"), linear-gradient(90deg, rgb(0, 112, 187) 0%, rgb(57, 90, 154) 25%, rgb(114, 68, 121) 50%, rgb(227, 24, 55) 100%);
   background-position: center;
   background-size: cover;
   z-index: -1;
