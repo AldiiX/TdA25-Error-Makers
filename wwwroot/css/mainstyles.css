@@ -126,11 +126,6 @@ body {
   font-family: "Dosis";
   src: url("/fonts/dosis.ttf") format("truetype");
 }
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
@@ -305,6 +300,30 @@ input, select {
 input:focus, select:focus {
   outline: none;
   background-color: var(--button-bg-hover);
+}
+
+@media screen and (min-width: 600px) and (max-width: 960px) {
+  .sections > section:is(.top) > .texts > h1 {
+    font-size: 86px;
+  }
+  .sections > section:is(.top) > .texts > p {
+    font-size: 24px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .sections > section:is(.top) > .texts > h1 {
+    font-size: 64px;
+  }
+  .sections > section:is(.top) > .texts > p {
+    font-size: 18px;
+  }
+  .sections > section:not(.top) {
+    width: 90%;
+  }
+  .sections > section:is(.top)::after {
+    height: 6vh;
+    bottom: -1px;
+  }
 }
 
 /*# sourceMappingURL=mainstyles.css.map */

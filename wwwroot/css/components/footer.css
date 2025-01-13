@@ -213,19 +213,52 @@
 }
 
 @media screen and (max-width: 600px) {
+  .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 .divider {
+    width: 300%;
+  }
   .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 > .content > .content-flex {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    grid-template-columns: auto auto;
+    gap: 24px;
+  }
+  .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 > .content > .content-flex > div:nth-child(even) > .upper {
+    text-align: right;
+    margin-left: auto;
+  }
+  .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 > .content > .content-flex > div:nth-child(even) > p {
+    text-align: right;
+  }
+  .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 > .content > .content-flex > div:nth-child(even) > p > a {
+    text-align: right;
+    margin: 0;
+    display: grid;
+    width: 100%;
+  }
+  .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 > .content > .content-flex > div:nth-child(even) .UserInformation {
+    flex-direction: row-reverse;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 > .content > .content-flex > div:nth-child(even) .UserInformation p {
+    text-align: right;
+  }
+  .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 > .content > .content-flex > div:nth-child(even) .logout {
+    text-align: right;
+    margin-left: auto;
+    display: grid;
+  }
+  .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 > .content > .content-flex > .team > p > a:active::after {
+    display: none !important;
   }
   .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 > .content > .copyright {
     flex-direction: column;
-    width: 100%;
+    width: 75vw;
     gap: 10px;
+    margin: 0 auto;
   }
   .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 > .content > .copyright > .copyright-tda,
   .footer-3AEC085F-28D0-4E88-B74C-1ED2EB5A13E1 > .content > .copyright > .copyright-team {
-    text-align: center;
+    text-align: justify;
     margin-left: 0;
     margin-right: 0;
     margin-top: 0;

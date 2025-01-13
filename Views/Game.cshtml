@@ -21,8 +21,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/libs/purecss.css">
-    <link rel="stylesheet" href="/css/game.css">
-    <link rel="stylesheet" href="/css/mainstyles.css">
+    <link rel="stylesheet" href="/css/game.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
+    <link rel="stylesheet" href="/css/mainstyles.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
     <link rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()" id="webtheme-link">
 
     @{ // Vue.js definice

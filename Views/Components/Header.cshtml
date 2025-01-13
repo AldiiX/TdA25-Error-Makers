@@ -1,3 +1,4 @@
+@using TdA25_Error_Makers
 @using TdA25_Error_Makers.Classes
 @{
     string path = HCS.Current.Request.Path;
@@ -37,7 +38,7 @@
 </transition>
 
 <header class="header-5F015D44-0984-4A50-B52B-5319AE57C19C">
-    <link rel="stylesheet" href="/css/components/header.css" />
+    <link rel="stylesheet" href="/css/components/header.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")" />
 
     <div class="flex">
         <div class="Header-Logo" onclick="location.href='/'"></div>

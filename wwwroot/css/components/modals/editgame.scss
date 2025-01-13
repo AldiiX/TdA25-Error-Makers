@@ -6,6 +6,28 @@
         border: 1px solid var(--button-outline-color);
         transition-duration: 0.3s;
 
+        >.closebutton {
+            display: none;
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            mask-image: url('/images/icons/X_bile.svg');
+            mask-size: 50%;
+            mask-repeat: no-repeat;
+            mask-position: top right;
+            top: 16px;
+            right: 16px;
+            cursor: pointer;
+            user-select: none;
+            background-color: var(--accent-color-secondary);
+            transition-duration: 0.3s;
+
+            &:hover {
+                background-color: var(--accent-color-secondary-darker);
+                transition-duration: 0.3s;
+            }
+        }
+
         >.left {
             display: flex;
             flex-direction: column;
@@ -322,6 +344,10 @@
         border: 1px solid var(--button-outline-color);
         transition-duration: 0.3s;
 
+        >.closebutton {
+            display: block;
+        }
+
         >.right{
             overflow: auto;
         }
@@ -342,10 +368,16 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        width: 90%;
-        height: 90%;
+        width: 95vw;
+        height: 95svh;
+        top: 50svh;
+        transform: translate(-50%, calc(-50svh +  20px));
         border: 1px solid var(--button-outline-color);
         transition-duration: 0.3s;
+
+        >.closebutton {
+            display: block;
+        }
         
         >.right{
             overflow: auto;

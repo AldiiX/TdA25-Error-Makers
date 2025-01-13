@@ -48,8 +48,8 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
         mask-repeat: no-repeat;
         mask-size: 75%;
         position: absolute;
-        right: calc(5vw + 7.5%);
-        top: 8vw;
+        top: calc(2.5vh + 16px);
+        right: calc(10% - 0.4vw);
         cursor: pointer;
         transition-duration: 0.3s;
 
@@ -68,8 +68,8 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
         background-repeat: no-repeat;
         background-position: center;
         position: absolute;
-        top: 8vw;
-        left: calc(4vw + 7.5%);
+        top: calc(2.5vh + 16px);
+        left: calc(10% - 0.4vw);
     }
     
     >.Header-Menu-Small {
@@ -115,14 +115,16 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
 
             >p {
                 margin: 0;
+                font-weight: 600;
             }
         }
-        
+
         >a {
             font-size: 32px;
             color: var(--text-color-primary);
             text-decoration: none;
             transition-duration: 0.3s;
+            font-weight: 600;
 
             &:hover {
                 transition-duration: 0.3s;
@@ -132,6 +134,7 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
 
         >button {
             font-size: 32px;
+            font-weight: 600;
         }
     }
 }
@@ -293,7 +296,7 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
         width: 50px;
         height: 50px;
         position: absolute;
-        right: 7.5%;
+        right: 5%;
         top: 50%;
         transform: translateY(-50%);
         mask-image: url(/images/svg/menu.svg);
@@ -322,7 +325,7 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
         top: 50%;
         transform: translateY(-50%);
         position: absolute;
-        left: 7.5%;
+        left: 5%;
         cursor: pointer;
     }
     
@@ -344,6 +347,7 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
     
 }
 
+// tablety
 @media screen and (min-width: 600px) and (max-width: 960px) { 
     .header-5F015D44-0984-4A50-B52B-5319AE57C19C {
         >.flex {
@@ -356,17 +360,13 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
             display: grid;
         }
     }
-    .ExpandedMenu{
-        >.Close-Icon{
-            top: 5vw;
-        }
-        >.Header-Logo-Small{
-            top: 5vw;
-        }
-    }
 }
+
+// mobily
 @media screen and (max-width: 600px) {
     .header-5F015D44-0984-4A50-B52B-5319AE57C19C {
+        //width: 95%;
+
         >.flex {
             display: none;
         }

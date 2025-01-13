@@ -30,9 +30,9 @@
 
 
     <link rel="stylesheet" href="/libs/purecss.css">
-    <link rel="stylesheet" href="/css/mainstyles.css">
-    <link rel="stylesheet" href="/css/games.css">
-    <link rel="stylesheet" href="/css/GDPR.css">
+    <link rel="stylesheet" href="/css/mainstyles.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
+    <link rel="stylesheet" href="/css/games.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
+    <link rel="stylesheet" href="/css/GDPR.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
     <link id="webtheme-link" rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()">
 
     @*  scripty pro komponenty *@

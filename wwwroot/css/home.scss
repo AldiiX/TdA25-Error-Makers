@@ -81,6 +81,7 @@ section:is(.top) {
     }
 }
 
+// tablety
 @media screen and (min-width: 600px) and (max-width: 960px){
     section:is(.top) > .center > .left > p {
         width: 45vw;
@@ -89,8 +90,13 @@ section:is(.top) {
         opacity: 0.7;
     }
 }
+
+// mobily
 @media screen and (max-width: 600px) {
     section:is(.top) {
+        height: calc(100svh + 80px);
+        transition-duration: 0.3s;
+
         >.center {
             position: absolute;
             width: auto;
@@ -104,34 +110,36 @@ section:is(.top) {
 
             >.left {
                 h1{
-                    width: clamp(0px, 71vw, 700px);
-                    font-size: clamp(0px, 11vw, 96px);
-                    line-height: clamp(0px, 10.5vw, 90px);
+                    width: 80vw;
+                    font-size: 48px;
+                    line-height: 48px;
                     position: relative;
                     color: white;
+
+                    &::before {
+                        content: "X O O X X O";
+                        position: absolute;
+                        bottom: 100%;
+                        left: 0;
+                        font-size: 16px;
+                        color: #ff7575;
+                    }
                 }
-                h1::before {
-                    content: "X O O X X O";
-                    position: absolute;
-                    bottom: 100%;
-                    left: 0;
-                    font-size: clamp(0px, 7.5vw, 32px);
-                    color: #ff7575;
-                }
+
                 p {
-                    width: 75vw;
-                    font-size: clamp(0px, 5.5vw, 24px);
-                    margin-top: 2vw;
+                    width: 80vw;
+                    font-size: 16px;
+                    margin-top: 16px;
                     opacity: 0.7;
                 }
                 
                 >button{
                     border-radius: 12px;
-                    padding: 10px 20px;
-                    font-size: clamp(0px, 3.5vw, 24px);
+                    padding: 10px 30px;
+                    font-size: 16px;
                     cursor: pointer;
                     margin: 0;
-                    margin-top: 2vw
+                    margin-top: 16px;
                 }
             }
             >.right {

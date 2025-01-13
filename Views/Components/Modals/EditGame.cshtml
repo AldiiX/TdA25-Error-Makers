@@ -4,6 +4,8 @@
 
     <div class="modal" v-if="editingGame !== null" v-bind:style="setEditGameModalStyle()">
 
+        <div class="closebutton" v-on:click="openModal(null); editingGame = null"></div>
+
         <!-- nastaveni -->
         <div class="left">
             <div class="modal-header">
@@ -18,7 +20,7 @@
             <div class="modal-content">
                 <div class="input">
                     <p>Název hry:</p>
-                    <input type="text" name="name" v-model="editingGame.name" maxlength="40" minlength="3" autocomplete="off" />
+                    <input type="text" name="name" v-model="editingGame.name" maxlength="40" minlength="3" autocomplete="off"/>
                 </div>
 
                 <div class="input">
@@ -36,7 +38,7 @@
 
                 <div class="buttons">
                     <input type="submit" class="button-secondary" value="Zrušit" v-on:click="openModal(null); editingGame = null"/>
-                    <input type="submit" class="button-primary" value="Uložit" v-on:click="saveEditedGame(editingGame)" v-bind:class="{ 'locked': temp.editingGameIsInvalid }" />
+                    <input type="submit" class="button-primary" value="Uložit" v-on:click="saveEditedGame(editingGame)" v-bind:class="{ 'locked': temp.editingGameIsInvalid }"/>
                 </div>
             </div>
 
