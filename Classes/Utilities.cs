@@ -107,6 +107,10 @@ public static class Utilities {
         var value = session.GetString(key);
         return value == null ? (T?)null : JsonSerializer.Deserialize<T>(value);
     }
+
+    public static string DeepClone(this string str) {
+        return new string(str);
+    }
 #endregion
 
 #region normální metody

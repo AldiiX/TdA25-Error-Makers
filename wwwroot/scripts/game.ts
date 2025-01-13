@@ -286,6 +286,7 @@ export const vue = new Vue({
             const _this = this as any;
             _this.editMode = false;
             _this.game.name = _this.game.original.name;
+            _this.game.difficulty = _this.game.original.difficulty;
         },
 
         setPlayerColor: function (): any {

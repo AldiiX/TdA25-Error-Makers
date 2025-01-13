@@ -67,16 +67,16 @@ public class GameBoard : IDeepCloneable<GameBoard> {
 
     public static GameBoard Parse(List<List<string>> board) => new(board);
 
-    public static GameBoard Parse(string board) => new(board);
+    public static GameBoard Parse(string boardJson) => new(boardJson);
 
-    public static bool TryParse(string? board, out GameBoard gameBoard) {
-        if (board == null) {
+    public static bool TryParse(string? boardJson, out GameBoard gameBoard) {
+        if (boardJson == null) {
             gameBoard = new GameBoard();
             return false;
         }
 
         try {
-            gameBoard = new GameBoard(board);
+            gameBoard = new GameBoard(boardJson);
             return true;
         } catch {
             gameBoard = new GameBoard();
@@ -269,6 +269,23 @@ public class GameBoard : IDeepCloneable<GameBoard> {
         }
 
         return null;
+    }
+
+    /***
+     * metoda, která vrací novou instanci GameBoard, která je výsledkem sčítání dvou GameBoardů
+     */
+    public static GameBoard operator + (GameBoard a, GameBoard b) {
+        var newBoard = new string[15, 15];
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
+                if (a.Board[row, col] == "" && b.Board[row, col] != "")
+                    newBoard[row, col] = b.Board[row, col];
+                else if (b.Board[row, col] != "" && a.Board[row, col] == "")
+                    newBoard[row, col] = a.Board[row, col];
+            }
+        }
+
+        return new GameBoard(newBoard);
     }
 
     public Player? CheckIfSomeoneCanWin() {

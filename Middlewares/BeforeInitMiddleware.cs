@@ -28,7 +28,6 @@ public class BeforeInitMiddleware(RequestDelegate next){
         var createdGame = path is "/game" or "/game/" ? Game.CreateAsync(null, Game.GameDifficulty.MEDIUM, GameBoard.CreateNew(), false, false, true) : null;
 
 
-
         // používání async věcí
         if (path.StartsWith("/game/") && path != "/game/") {
             Game? game = gameTask != null ? await gameTask : null;

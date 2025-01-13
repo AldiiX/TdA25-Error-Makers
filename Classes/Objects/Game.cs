@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Google.Protobuf;
 using MySql.Data.MySqlClient;
 
 namespace TdA25_Error_Makers.Classes.Objects;
@@ -8,7 +9,7 @@ namespace TdA25_Error_Makers.Classes.Objects;
 
 
 
-public class Game {
+public class Game : IDeepCloneable<Game> {
 
     // picovinky
     public enum GameDifficulty { BEGINNER, EASY, MEDIUM, HARD, EXTREME }
@@ -73,7 +74,22 @@ public class Game {
 
 
 
-    // static metody
+    // metody
+    public Game Clone() {
+        return new Game(
+            UUID,
+            Name,
+            Board.Clone(),
+            Difficulty,
+            CreatedAt,
+            UpdatedAt,
+            State,
+            Round,
+            IsSaved,
+            IsInstance
+        );
+    }
+
     public override string ToString() => JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
 
     public static async Task<List<Game>> GetAllAsync() {

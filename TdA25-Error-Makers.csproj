@@ -8,6 +8,7 @@
         <Platforms>AnyCPU</Platforms>
         <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
         <StartupObject>TdA25_Error_Makers.Program</StartupObject>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -37,6 +38,9 @@
       <Content Update=".env">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="wwwroot\fonts\dosis.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
     </ItemGroup>
 
