@@ -309,3 +309,53 @@
         }
     }
 }
+
+@media screen and (min-width: 600px) and (max-width: 1000px) {
+    .modal-editgame > .modal {
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        width: 90%;
+        max-width: 628px;
+        height: 90%;
+        border: 1px solid var(--button-outline-color);
+        transition-duration: 0.3s;
+
+        >.right{
+            overflow: auto;
+        }
+        >.left{
+            >.bottom{
+                >.help{
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width: 600px){
+    .modal-editgame > .modal {
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        width: 90%;
+        height: 90%;
+        border: 1px solid var(--button-outline-color);
+        transition-duration: 0.3s;
+        
+        >.right{
+            overflow: auto;
+        }
+        >.left{
+            >.bottom{
+                >.help{
+                    display: none;
+                }
+            }
+        }
+    }
+}

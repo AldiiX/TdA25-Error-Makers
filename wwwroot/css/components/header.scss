@@ -356,6 +356,14 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
             display: grid;
         }
     }
+    .ExpandedMenu{
+        >.Close-Icon{
+            top: 5vw;
+        }
+        >.Header-Logo-Small{
+            top: 5vw;
+        }
+    }
 }
 @media screen and (max-width: 600px) {
     .header-5F015D44-0984-4A50-B52B-5319AE57C19C {
