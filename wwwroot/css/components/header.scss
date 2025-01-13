@@ -49,7 +49,7 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
         mask-size: 75%;
         position: absolute;
         right: calc(5vw + 7.5%);
-        top: 5vw;
+        top: 8vw;
         cursor: pointer;
         transition-duration: 0.3s;
 
@@ -68,8 +68,8 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
         background-repeat: no-repeat;
         background-position: center;
         position: absolute;
-        top: 5vw;
-        left: calc(5vw + 7.5%);
+        top: 8vw;
+        left: calc(4vw + 7.5%);
     }
     
     >.Header-Menu-Small {
@@ -354,6 +354,14 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
         }
         >.Header-Logo-Small {
             display: grid;
+        }
+    }
+    .ExpandedMenu{
+        >.Close-Icon{
+            top: 5vw;
+        }
+        >.Header-Logo-Small{
+            top: 5vw;
         }
     }
 }
