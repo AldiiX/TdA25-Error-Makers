@@ -139,7 +139,6 @@
   display: flex;
   flex-direction: column;
   border-radius: 12px;
-  min-width: 600px;
   -webkit-animation: hhfjaergdfvgdsfade 1s ease-out;
 }
 @keyframes hhfjaergdfvgdsfade {
@@ -155,6 +154,7 @@
 }
 .sections > .mainsection > .content > .loadingdiv > .img {
   width: 250px;
+  max-width: 90vw;
   aspect-ratio: 1/1;
   mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
   mask-size: contain;
