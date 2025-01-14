@@ -70,6 +70,9 @@
   #AUTH-PAGE .sections .mainsection h1 {
     font-size: 7vw;
   }
+  #AUTH-PAGE p {
+    margin-bottom: 48px;
+  }
 }
 @media screen and (max-width: 600px) {
   #AUTH-PAGE .sections .mainsection h1 {
