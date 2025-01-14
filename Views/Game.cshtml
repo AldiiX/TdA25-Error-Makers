@@ -15,7 +15,7 @@
     var confetti = Html.PartialAsync("/Views/Components/Confetti.cshtml");
 }
 <!doctype html>
-<html lang="en">
+<html lang="en" ontouchmove>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
@@ -56,7 +56,7 @@
         <div class="mainsection">
 
             <!-- confetti při výhře -->
-            <div v-if="gameLoaded && game.winner">
+            <div v-if="gameLoaded && game.winner" v-cloak>
                 @await confetti
             </div>
 
@@ -72,7 +72,7 @@
             </div>
 
             <!-- herní pole + controls -->
-            <div class="flex" v-bind:class="{ locked: gameLocked, 'fade-out': gameFadeOut }" v-show="gameLoaded" v-bind:style="{ '--mcolor': setPlayerColor(), '--hcolor': setPlayerColorHover() }">
+            <div class="flex" v-cloak v-bind:class="{ locked: gameLocked, 'fade-out': gameFadeOut }" v-show="gameLoaded" v-bind:style="{ '--mcolor': setPlayerColor(), '--hcolor': setPlayerColorHover() }">
                 <div class="left">
                     <transition name="fade">
                         <div class="buttons" v-show="!pageIsScrolled">

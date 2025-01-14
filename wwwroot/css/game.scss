@@ -444,6 +444,22 @@
     }
 }
 
+// fullhd
+@media screen and (min-width: 1100px) and (max-width: 1600px) {
+    .mainsection .flex > .left .grid {
+        $cellsize: 38px;
+
+        grid-template-columns: repeat(15, $cellsize);
+        grid-template-rows: repeat(15, $cellsize);
+
+        >.cell {
+            width: $cellsize;
+            height: $cellsize;
+            border-radius: 6px;
+            border-width: 2.5px;
+        }
+    }
+}
 
 
 // tablety

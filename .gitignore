@@ -3,3 +3,5 @@
 .env
 .idea
 .idea/
+.vscode/launch.json
+.vscode/tasks.json
