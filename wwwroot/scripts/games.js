@@ -30,6 +30,7 @@ export const vue = new Vue({
         menuExpanded: false,
         games: null,
         gamesFiltered: [],
+        fillerGames: 0,
         modalOpened: null,
         editingGame: null,
     },
@@ -44,7 +45,7 @@ export const vue = new Vue({
                 .then(response => response.json())
                 .then(data => {
                 _this.games = data;
-                _this.gamesFiltered = data;
+                _this.filterGames();
             })
                 .catch(error => {
                 console.error("Error:", error);
@@ -78,10 +79,16 @@ export const vue = new Vue({
             _this.selectedDateRange = "";
             this.filterGames("", "", "", "");
         },
+        updateFillerGames: function () {
+            const _this = this;
+            _this.fillerGames = _this.gamesFiltered.length % 3 !== 0 ? 3 - (_this.gamesFiltered.length % 3) : 0;
+        },
         filterGames: function (name, difficulty, startDate, endDate) {
             const _this = this;
+            _this.gamesFiltered = _this.games;
             if (!name && !difficulty && !startDate && !endDate) {
                 _this.gamesFiltered = _this.games;
+                _this.updateFillerGames();
                 return;
             }
             _this.gamesFiltered = _this.games.filter((game) => {
@@ -94,6 +101,7 @@ export const vue = new Vue({
                 const matchesDate = _this.filterByDate(game.updatedAt, startDate, endDate);
                 return matchesName && matchesDifficulty && matchesDate;
             });
+            _this.updateFillerGames();
         },
         filterByDate: function (gameDate, startDate, endDate) {
             const gameUpdated = new Date(gameDate);

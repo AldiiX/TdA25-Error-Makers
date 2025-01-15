@@ -242,6 +242,20 @@ export const vue = new Vue({
                 return "var(--accent-color-secondary)";
             return _this.currentPlayer == 'x' ? 'var(--accent-color-primary)' : 'var(--accent-color-secondary)';
         },
+        difficultyTextTranslated: function () {
+            const _this = this;
+            if (_this.game.difficulty === "beginner")
+                return "Začátečník";
+            if (_this.game.difficulty === "easy")
+                return "Lehká";
+            if (_this.game.difficulty === "medium")
+                return "Střední";
+            if (_this.game.difficulty === "hard")
+                return "Těžká";
+            if (_this.game.difficulty === "extreme")
+                return "Extrémně těžká";
+            return "Neznámá";
+        },
     },
     computed: {},
 });

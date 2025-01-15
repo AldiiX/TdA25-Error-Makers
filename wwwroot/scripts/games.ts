@@ -43,6 +43,7 @@ export const vue = new Vue({
 
         games: null,
         gamesFiltered: [],
+        fillerGames: 0,
         modalOpened: null,
         editingGame: null,
     },
@@ -66,7 +67,7 @@ export const vue = new Vue({
                 .then(response => response.json())
                 .then(data => {
                     _this.games = data;
-                    _this.gamesFiltered = data;
+                    _this.filterGames();
                 })
                 .catch(error => {
                         console.error("Error:", error);
@@ -114,12 +115,19 @@ export const vue = new Vue({
             this.filterGames("", "", "", "");
         },
 
+        updateFillerGames: function (): void {
+            const _this = this as any;
+
+            _this.fillerGames = _this.gamesFiltered.length % 3 !== 0 ? 3 - (_this.gamesFiltered.length % 3) : 0;
+        },
+
         filterGames: function (name: string, difficulty: string, startDate: string, endDate: string): void {
             const _this = this as any;
-    
-            
+            _this.gamesFiltered = _this.games;
+
             if (!name && !difficulty && !startDate && !endDate) {
                 _this.gamesFiltered = _this.games;
+                _this.updateFillerGames();
                 return;
             }
 
@@ -136,6 +144,9 @@ export const vue = new Vue({
 
                 return matchesName && matchesDifficulty && matchesDate;
             });
+
+            // nastavení fillergames na počet, aby vždycky číslo her bylo dělitelné 3
+            _this.updateFillerGames();
         },
 
         filterByDate: function(gameDate: string, startDate: string, endDate: string): boolean {

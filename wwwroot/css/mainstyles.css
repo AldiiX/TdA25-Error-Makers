@@ -2,6 +2,10 @@
   display: none !important;
 }
 
+* {
+  font-synthesis: none !important;
+}
+
 input,
 textarea,
 button,

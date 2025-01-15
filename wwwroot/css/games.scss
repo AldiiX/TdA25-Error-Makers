@@ -476,6 +476,10 @@
                 >.child {
                     width: calc(100%/2 - 10px);
                 }
+
+                .filler {
+                    display: none;
+                }
             }
         }
     }
@@ -508,6 +512,10 @@
 
                 >.child {
                     width: 100%;
+                }
+
+                .filler {
+                    display: none;
                 }
             }
         }

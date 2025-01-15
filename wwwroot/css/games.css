@@ -354,6 +354,9 @@
   .sections > .mainsection > .content > .games-parent > .child {
     width: calc(50% - 10px);
   }
+  .sections > .mainsection > .content > .games-parent .filler {
+    display: none;
+  }
 }
 @media screen and (max-width: 750px) {
   .sections section:is(.top) > .texts p {
@@ -372,6 +375,9 @@
   }
   .sections > .mainsection > .content > .games-parent > .child {
     width: 100%;
+  }
+  .sections > .mainsection > .content > .games-parent .filler {
+    display: none;
   }
 }
 @media screen and (max-width: 1350px) {
