@@ -1,5 +1,5 @@
 ﻿// @ts-ignore
-import { scrollToElement, openModal, deepClone } from "/scripts/functions.js";
+import { scrollToElement, openModal, deepClone, enableScroll, disableScroll } from "/scripts/functions.js";
 
 // @ts-ignore
 export const vue = new Vue({

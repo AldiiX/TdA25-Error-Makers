@@ -105,9 +105,11 @@ export function openModal(vue: Vue|any, modalId: string|null): void {
             vue.modalOpened = null;
         }
 
+        enableScroll();
         return;
     }
 
+    disableScroll();
     vue.modalOpened = modalId;
 }
 
@@ -128,6 +130,74 @@ export function scrollToElement(elementId: string): void {
     const element: HTMLElement = document.getElementById(elementId) as HTMLElement;
     element.scrollIntoView({behavior: "smooth"});
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// region prevent scrolling
+const keys: any = {37: 1, 38: 1, 39: 1, 40: 1};
+
+function preventDefaultForScrollKeys(e: any) {
+    if (keys[e.keyCode]) {
+        preventDefault(e);
+        return false;
+    }
+}
+
+let supportsPassive = false;
+try {
+    // @ts-ignore
+    window.addEventListener("test", null, Object.defineProperty({}, 'passive', {
+        get: function () { supportsPassive = true; }
+    }));
+} catch(e) {}
+
+let wheelOpt = supportsPassive ? { passive: false } : false;
+let wheelEvent = 'onwheel' in document.createElement('div') ? 'wheel' : 'mousewheel';
+
+function preventDefault(e: any|Event) {
+    e.preventDefault();
+}
+export function disableScroll() {
+    window.addEventListener('DOMMouseScroll', preventDefault, false); // older FF
+    window.addEventListener(wheelEvent, preventDefault, wheelOpt); // modern desktop
+    window.addEventListener('touchmove', preventDefault, wheelOpt); // mobile
+    window.addEventListener('keydown', preventDefaultForScrollKeys, false);
+}
+
+export function enableScroll() {
+    window.removeEventListener('DOMMouseScroll', preventDefault, false);
+    // @ts-ignore
+    window.removeEventListener(wheelEvent, preventDefault, wheelOpt);
+    // @ts-ignore
+    window.removeEventListener('touchmove', preventDefault, wheelOpt);
+    window.removeEventListener('keydown', preventDefaultForScrollKeys, false);
+}
+// endregion
+
+
+
+
+
+
+
+
+
+
+
 
 
 
