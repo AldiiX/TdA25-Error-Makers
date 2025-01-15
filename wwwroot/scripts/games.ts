@@ -1,5 +1,5 @@
 ﻿// @ts-ignore
-import { scrollToElement, openModal, deepClone, enableScroll, disableScroll } from "/scripts/functions.js";
+import { scrollToElement, openModal, deepClone, enableScroll, disableScroll, addAnnouncement } from "/scripts/functions.js";
 
 // @ts-ignore
 export const vue = new Vue({
@@ -42,10 +42,16 @@ export const vue = new Vue({
         menuExpanded: false,
 
         games: null,
-        gamesFiltered: [],
         fillerGames: 0,
+        gamesFiltered: [],
+        gamesFilteredOnPage: [],
+        currentPage: 1,
+        maxGamesPerPage: 15,
+
+
         modalOpened: null,
         editingGame: null,
+        announcements: [],
     },
 
 
@@ -104,6 +110,10 @@ export const vue = new Vue({
             }, 300);
         },
 
+        addAnnouncement: function(text: string, type = 'info', timeout = 5000): void {
+            addAnnouncement(this, text, type, timeout);
+        },
+
         resetFilters: function(): void {
             const _this = this as any;
             _this.filterName = "";
@@ -118,7 +128,7 @@ export const vue = new Vue({
         updateFillerGames: function (): void {
             const _this = this as any;
 
-            _this.fillerGames = _this.gamesFiltered.length % 3 !== 0 ? 3 - (_this.gamesFiltered.length % 3) : 0;
+            _this.fillerGames = _this.gamesFilteredOnPage.length % 3 !== 0 ? 3 - (_this.gamesFilteredOnPage.length % 3) : 0;
         },
 
         filterGames: function (name: string, difficulty: string, startDate: string, endDate: string): void {
@@ -127,6 +137,7 @@ export const vue = new Vue({
 
             if (!name && !difficulty && !startDate && !endDate) {
                 _this.gamesFiltered = _this.games;
+                _this.setPage(1);
                 _this.updateFillerGames();
                 return;
             }
@@ -146,7 +157,21 @@ export const vue = new Vue({
             });
 
             // nastavení fillergames na počet, aby vždycky číslo her bylo dělitelné 3
+            _this.setPage(1);
+        },
+
+        setPage: function(page: number): void {
+            const _this = this as any;
+            _this.currentPage = page;
+            const start = (page - 1) * _this.maxGamesPerPage;
+            const end = start + _this.maxGamesPerPage;
+            _this.gamesFilteredOnPage = _this.gamesFiltered.slice(start, end);
             _this.updateFillerGames();
+        },
+
+        getMaxPage: function(): number {
+            const _this = this as any;
+            return Math.ceil(_this.gamesFiltered.length / _this.maxGamesPerPage);
         },
 
         filterByDate: function(gameDate: string, startDate: string, endDate: string): boolean {
@@ -344,7 +369,7 @@ export const vue = new Vue({
 
 
             // request
-            if(!_this.temp.creatingNewGame) {
+            if(!_this.temp.creatingNewGame) { // editace hry
                 fetch(`/api/v2/games/${game.uuid}`, {
                     method: 'PUT',
                     headers: {
@@ -363,6 +388,7 @@ export const vue = new Vue({
                     if (!response.ok) {
                         console.error("Error: ", data.message);
                         _this.temp.editingGameError = data.message;
+                        _this.addAnnouncement("Chyba při ukládání hry: " + data.message, 'error', 2000);
                         return;
                     }
 
@@ -373,10 +399,11 @@ export const vue = new Vue({
                     });
 
                     _this.resetFilters();
+                    _this.addAnnouncement(`Hra „${name}” byla úspěšně upravena.`, "info", 4000);
                     this.openModal(null);
                 });
             }
-            else {
+            else { // vytvoření hry
                 fetch(`/api/v2/games`, {
                     method: 'POST',
                     headers: {
@@ -398,15 +425,23 @@ export const vue = new Vue({
                     }
 
                     fetch("/api/v2/games")
-                        .then(response => response.json())
-                        .then(data => {
+                        .then(async response => {
+                            const data = await response.json();
+                            if (!response.ok) {
+                                console.error("Error: ", data.message);
+                                _this.addAnnouncement("Chyba při vytvoření hry: " + data.message, 'error', 2000);
+                                return;
+                            }
+
                             _this.games = data;
                             _this.gamesFiltered = data;
                             _this.resetFilters();
+                            _this.addAnnouncement(`Hra „${name}” byla úspěšně vytvořena.`, "info", 4000);
                             this.openModal(null);
                         })
                         .catch(error => {
                                 console.error("Error:", error);
+                                _this.addAnnouncement("Chyba při vytvoření hry: " + error, 'error', 2000);
                             }
                         );
                 });
@@ -535,7 +570,8 @@ export const vue = new Vue({
             }).then(async response => {
                 const data = await response.json();
                 if (!response.ok) {
-                    console.error("Error: ", data.message);
+                    console.error("Chyba spuštění hry: ", data.message);
+                    _this.addAnnouncement("Chyba spuštění hry: " + data.message, 'error', 2000);
                     _this.temp.loadingGame = false;
                     return;
                 }
@@ -547,6 +583,7 @@ export const vue = new Vue({
         deleteGame: function (game: any|null = null): void {
             const _this = this as any;
             game ??= _this.editingGame;
+            const name = game.name;
 
             fetch(`/api/v2/games/${game.uuid}`, {
                 method: 'DELETE',
@@ -561,6 +598,7 @@ export const vue = new Vue({
                 _this.gamesFiltered = _this.games;
                 _this.resetFilters();
                 this.openModal(null);
+                _this.addAnnouncement(`Hra „${name}” byla úspěšně smazána.`, "info", 4000);
             });
         }
     },

@@ -5,6 +5,7 @@ export const vue = new Vue({
     },
     data: {
         menuExpanded: false,
+        announcements: [],
     },
     methods: {
         main: function () {

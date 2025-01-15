@@ -77,6 +77,37 @@ export function removeCookie(prop: string): void {
     });
 }
 
+export function addAnnouncement(vue: any, text: string, type: string = 'info', timeout = 5000) {
+    /*
+    *
+    * Vyžaduje frontend ve vue, kde je nutné, aby vue.annoucements bylo []
+    *
+    * */
+
+    const announcement = { text: text, id: ("a" + generateUUID()) };
+    const annParent = document.getElementById('announcements');
+    if(annParent == null) return;
+
+    vue.announcements.push(announcement);
+
+    // vytvoření divu s anouncmentem
+    const announcementDiv = document.createElement('div');
+    announcementDiv.className = type;
+    announcementDiv.id = announcement.id;
+    announcementDiv.innerText = announcement.text;
+    annParent.appendChild(announcementDiv);
+
+    // odebrání anouncementu po 5s
+    setTimeout(() => {
+        (document.querySelector(`#announcements #${announcement.id}`) as HTMLElement).classList.add('fade-out');
+
+        setTimeout(() => {
+            annParent.removeChild(document.getElementById(announcement.id) as HTMLElement);
+            vue.announcements.filter((ann: any) => ann.id !== announcement.id);
+        }, 500);
+    }, timeout);
+}
+
 export function setWebTheme(theme: string): void {
     addCookie('webtheme', theme);
     const link = document.getElementById('webtheme-link') as HTMLLinkElement;

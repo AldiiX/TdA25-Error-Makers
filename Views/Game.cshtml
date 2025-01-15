@@ -13,6 +13,7 @@
     var backgroundComponent = Html.PartialAsync("/Views/Components/ColoredBackground.cshtml");
     var backgroundBlur = Html.PartialAsync("/Views/Components/BlurBackground.cshtml");
     var confetti = Html.PartialAsync("/Views/Components/Confetti.cshtml");
+    var announcements = Html.PartialAsync("/Views/Components/AnnouncementsMain.cshtml");
 }
 <!doctype html>
 <html lang="en" ontouchmove>
@@ -47,6 +48,7 @@
 <body id="GAME-PAGE" oncontextmenu="return false">
     <div id="app">
         @await backgroundBlur
+        @await announcements
 
         <div v-show="gameLoaded">
             @await backgroundComponent

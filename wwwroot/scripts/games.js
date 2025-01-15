@@ -1,4 +1,4 @@
-import { openModal, deepClone } from "/scripts/functions.js";
+import { openModal, deepClone, addAnnouncement } from "/scripts/functions.js";
 export const vue = new Vue({
     el: "#app",
     mounted: function () {
@@ -29,10 +29,14 @@ export const vue = new Vue({
         selectedDateRange: "",
         menuExpanded: false,
         games: null,
-        gamesFiltered: [],
         fillerGames: 0,
+        gamesFiltered: [],
+        gamesFilteredOnPage: [],
+        currentPage: 1,
+        maxGamesPerPage: 15,
         modalOpened: null,
         editingGame: null,
+        announcements: [],
     },
     methods: {
         main: function () {
@@ -70,6 +74,9 @@ export const vue = new Vue({
                 }
             }, 300);
         },
+        addAnnouncement: function (text, type = 'info', timeout = 5000) {
+            addAnnouncement(this, text, type, timeout);
+        },
         resetFilters: function () {
             const _this = this;
             _this.filterName = "";
@@ -81,13 +88,14 @@ export const vue = new Vue({
         },
         updateFillerGames: function () {
             const _this = this;
-            _this.fillerGames = _this.gamesFiltered.length % 3 !== 0 ? 3 - (_this.gamesFiltered.length % 3) : 0;
+            _this.fillerGames = _this.gamesFilteredOnPage.length % 3 !== 0 ? 3 - (_this.gamesFilteredOnPage.length % 3) : 0;
         },
         filterGames: function (name, difficulty, startDate, endDate) {
             const _this = this;
             _this.gamesFiltered = _this.games;
             if (!name && !difficulty && !startDate && !endDate) {
                 _this.gamesFiltered = _this.games;
+                _this.setPage(1);
                 _this.updateFillerGames();
                 return;
             }
@@ -101,7 +109,19 @@ export const vue = new Vue({
                 const matchesDate = _this.filterByDate(game.updatedAt, startDate, endDate);
                 return matchesName && matchesDifficulty && matchesDate;
             });
+            _this.setPage(1);
+        },
+        setPage: function (page) {
+            const _this = this;
+            _this.currentPage = page;
+            const start = (page - 1) * _this.maxGamesPerPage;
+            const end = start + _this.maxGamesPerPage;
+            _this.gamesFilteredOnPage = _this.gamesFiltered.slice(start, end);
             _this.updateFillerGames();
+        },
+        getMaxPage: function () {
+            const _this = this;
+            return Math.ceil(_this.gamesFiltered.length / _this.maxGamesPerPage);
         },
         filterByDate: function (gameDate, startDate, endDate) {
             const gameUpdated = new Date(gameDate);
@@ -290,6 +310,7 @@ export const vue = new Vue({
                     if (!response.ok) {
                         console.error("Error: ", data.message);
                         _this.temp.editingGameError = data.message;
+                        _this.addAnnouncement("Chyba při ukládání hry: " + data.message, 'error', 2000);
                         return;
                     }
                     _this.games.forEach((g, index) => {
@@ -298,6 +319,7 @@ export const vue = new Vue({
                         }
                     });
                     _this.resetFilters();
+                    _this.addAnnouncement(`Hra „${name}” byla úspěšně upravena.`, "info", 4000);
                     this.openModal(null);
                 });
             }
@@ -322,15 +344,22 @@ export const vue = new Vue({
                         return;
                     }
                     fetch("/api/v2/games")
-                        .then(response => response.json())
-                        .then(data => {
+                        .then(async (response) => {
+                        const data = await response.json();
+                        if (!response.ok) {
+                            console.error("Error: ", data.message);
+                            _this.addAnnouncement("Chyba při vytvoření hry: " + data.message, 'error', 2000);
+                            return;
+                        }
                         _this.games = data;
                         _this.gamesFiltered = data;
                         _this.resetFilters();
+                        _this.addAnnouncement(`Hra „${name}” byla úspěšně vytvořena.`, "info", 4000);
                         this.openModal(null);
                     })
                         .catch(error => {
                         console.error("Error:", error);
+                        _this.addAnnouncement("Chyba při vytvoření hry: " + error, 'error', 2000);
                     });
                 });
             }
@@ -431,7 +460,8 @@ export const vue = new Vue({
             }).then(async (response) => {
                 const data = await response.json();
                 if (!response.ok) {
-                    console.error("Error: ", data.message);
+                    console.error("Chyba spuštění hry: ", data.message);
+                    _this.addAnnouncement("Chyba spuštění hry: " + data.message, 'error', 2000);
                     _this.temp.loadingGame = false;
                     return;
                 }
@@ -441,6 +471,7 @@ export const vue = new Vue({
         deleteGame: function (game = null) {
             const _this = this;
             game ??= _this.editingGame;
+            const name = game.name;
             fetch(`/api/v2/games/${game.uuid}`, {
                 method: 'DELETE',
             }).then(async (response) => {
@@ -453,6 +484,7 @@ export const vue = new Vue({
                 _this.gamesFiltered = _this.games;
                 _this.resetFilters();
                 this.openModal(null);
+                _this.addAnnouncement(`Hra „${name}” byla úspěšně smazána.`, "info", 4000);
             });
         }
     },

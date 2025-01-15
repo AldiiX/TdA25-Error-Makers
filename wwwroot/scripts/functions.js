@@ -57,6 +57,25 @@ export function removeCookie(prop) {
         }
     });
 }
+export function addAnnouncement(vue, text, type = 'info', timeout = 5000) {
+    const announcement = { text: text, id: ("a" + generateUUID()) };
+    const annParent = document.getElementById('announcements');
+    if (annParent == null)
+        return;
+    vue.announcements.push(announcement);
+    const announcementDiv = document.createElement('div');
+    announcementDiv.className = type;
+    announcementDiv.id = announcement.id;
+    announcementDiv.innerText = announcement.text;
+    annParent.appendChild(announcementDiv);
+    setTimeout(() => {
+        document.querySelector(`#announcements #${announcement.id}`).classList.add('fade-out');
+        setTimeout(() => {
+            annParent.removeChild(document.getElementById(announcement.id));
+            vue.announcements.filter((ann) => ann.id !== announcement.id);
+        }, 500);
+    }, timeout);
+}
 export function setWebTheme(theme) {
     addCookie('webtheme', theme);
     const link = document.getElementById('webtheme-link');

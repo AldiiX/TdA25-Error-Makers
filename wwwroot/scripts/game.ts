@@ -1,5 +1,5 @@
 ﻿// @ts-ignore
-import { scrollToElement, getCookie } from "/scripts/functions.js";
+import { scrollToElement, getCookie, addAnnouncement } from "/scripts/functions.js";
 
 // @ts-ignore
 export const vue = new Vue({
@@ -27,6 +27,7 @@ export const vue = new Vue({
         editMode: false,
         pageIsScrolled: false,
         menuExpanded: false,
+        announcements: [],
     },
 
 
@@ -42,7 +43,9 @@ export const vue = new Vue({
             }, 1150);
         },
 
-        
+        addAnnouncement: function(message: string, type: string = "info", timeout: number = 3000): void {
+            addAnnouncement(this, message, type, timeout);
+        },
 
         updateCell: function(_cell: any, index: number): void {
             const cell = _cell as HTMLElement;
@@ -126,6 +129,24 @@ export const vue = new Vue({
             });
         },
 
+        generateRandomWinMessage: function(winner: string): string {
+            const messages = [
+                `Gratulujeme! Hráč ${winner} získal vítězství!`,
+                `Výhra pro hráče ${winner}!`,
+                `Hráč ${winner} zvítězil!`,
+                `Gratulujeme! Hráč ${winner} je vítěz!`,
+                `Hráč ${winner} triumfoval! Skvělá hra!`,
+                `Hráč ${winner} ukázal, kdo je tady nejlepší!`,
+                `Hráč ${winner} pokořil soupeře! Bravo!`,
+                `Neskutečný výkon! Hráč ${winner} je vítěz!`,
+                `Hráč ${winner} si zaslouženě připisuje vítězství!`,
+                `Hráč ${winner} dominuje! Výhra je jeho!`,
+                `${winner} bere korunu vítězství! Gratulace!`
+            ]
+
+            return messages[Math.floor(Math.random() * messages.length)];
+        },
+
         initializeGame: function(data: any): void {
             const _this = this as any;
             if(data === null) throw new Error("Data is null");
@@ -159,6 +180,10 @@ export const vue = new Vue({
                 data.winningCells.forEach((cell: any) => {
                     cells[cell[0] * 15 + cell[1]]?.classList.add("winning-cell");
                 });
+
+
+                //if(data.winner.toLowerCase() === "x") this.addAnnouncement(_this.generateRandomWinMessage("X"), "pskr_xwin", 5000);
+                //if(data.winner.toLowerCase() === "o") this.addAnnouncement(_this.generateRandomWinMessage("O"), "pskr_owin", 5000);
             }
 
 

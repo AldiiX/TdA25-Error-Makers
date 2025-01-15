@@ -1,4 +1,4 @@
-import { getCookie } from "/scripts/functions.js";
+import { getCookie, addAnnouncement } from "/scripts/functions.js";
 export const vue = new Vue({
     el: "#app",
     mounted: function () {
@@ -17,6 +17,7 @@ export const vue = new Vue({
         editMode: false,
         pageIsScrolled: false,
         menuExpanded: false,
+        announcements: [],
     },
     methods: {
         main: function () {
@@ -24,6 +25,9 @@ export const vue = new Vue({
             setTimeout(() => {
                 this.getGame();
             }, 1150);
+        },
+        addAnnouncement: function (message, type = "info", timeout = 3000) {
+            addAnnouncement(this, message, type, timeout);
         },
         updateCell: function (_cell, index) {
             const cell = _cell;
@@ -91,6 +95,22 @@ export const vue = new Vue({
             }).catch(error => {
                 location.href = `/error?code=404&message=Chyba při spouštění hry&buttonLink=/games`;
             });
+        },
+        generateRandomWinMessage: function (winner) {
+            const messages = [
+                `Gratulujeme! Hráč ${winner} získal vítězství!`,
+                `Výhra pro hráče ${winner}!`,
+                `Hráč ${winner} zvítězil!`,
+                `Gratulujeme! Hráč ${winner} je vítěz!`,
+                `Hráč ${winner} triumfoval! Skvělá hra!`,
+                `Hráč ${winner} ukázal, kdo je tady nejlepší!`,
+                `Hráč ${winner} pokořil soupeře! Bravo!`,
+                `Neskutečný výkon! Hráč ${winner} je vítěz!`,
+                `Hráč ${winner} si zaslouženě připisuje vítězství!`,
+                `Hráč ${winner} dominuje! Výhra je jeho!`,
+                `${winner} bere korunu vítězství! Gratulace!`
+            ];
+            return messages[Math.floor(Math.random() * messages.length)];
         },
         initializeGame: function (data) {
             const _this = this;
