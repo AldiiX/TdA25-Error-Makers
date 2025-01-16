@@ -73,6 +73,7 @@
   font-weight: 700;
   margin-bottom: 20px;
   border-bottom: 1px solid;
+  width: -moz-fit-content;
   width: fit-content;
   border-bottom-color: var(--text-color-primary);
   pointer-events: none;
@@ -263,6 +264,4 @@
     margin-right: 0;
     margin-top: 0;
   }
-}
-
-/*# sourceMappingURL=footer.css.map */
+}/*# sourceMappingURL=footer.css.map */

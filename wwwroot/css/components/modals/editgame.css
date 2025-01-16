@@ -10,14 +10,20 @@
   position: absolute;
   width: 48px;
   height: 48px;
-  mask-image: url("/images/icons/X_bile.svg");
-  mask-size: 50%;
-  mask-repeat: no-repeat;
-  mask-position: top right;
+  -webkit-mask-image: url("/images/icons/X_bile.svg");
+          mask-image: url("/images/icons/X_bile.svg");
+  -webkit-mask-size: 50%;
+          mask-size: 50%;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-position: top right;
+          mask-position: top right;
   top: 16px;
   right: 16px;
   cursor: pointer;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   background-color: var(--accent-color-secondary);
   transition-duration: 0.3s;
 }
@@ -41,10 +47,14 @@
   width: 90px;
   height: 90px;
   background-color: var(--text-color);
-  mask-image: var(--game-icon);
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
+  -webkit-mask-image: var(--game-icon);
+          mask-image: var(--game-icon);
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+          mask-position: center;
 }
 .modal-editgame > .modal > .left > .modal-header > .texts {
   display: flex;
@@ -53,6 +63,7 @@
 }
 .modal-editgame > .modal > .left > .modal-header > .texts > h1 {
   margin: 0;
+  width: -moz-max-content;
   width: max-content;
 }
 .modal-editgame > .modal > .left > .modal-header > .texts > p {
@@ -81,7 +92,9 @@
   position: relative;
 }
 .modal-editgame > .modal > .left > .modal-content > .input > .select-wrapper > select {
-  appearance: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
   padding-right: 52px;
 }
 .modal-editgame > .modal > .left > .modal-content > .input > .select-wrapper::after {
@@ -94,9 +107,12 @@
   transform: translateY(-50%);
   pointer-events: none;
   background-color: var(--text-color);
-  mask: url("/images/icons/arrow_down.svg") no-repeat center;
-  mask-size: contain;
-  mask-repeat: no-repeat;
+  -webkit-mask: url("/images/icons/arrow_down.svg") no-repeat center;
+          mask: url("/images/icons/arrow_down.svg") no-repeat center;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
 }
 .modal-editgame > .modal > .left > .modal-content > .buttons {
   display: flex;
@@ -129,9 +145,12 @@
   background-color: var(--text-color);
   width: 16px;
   height: 16px;
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+          mask-position: center;
 }
 .modal-editgame > .modal > .left > .bottom > .help > div > p {
   margin: 0;
@@ -157,7 +176,9 @@
   gap: 8px;
   margin-top: 24px;
   cursor: pointer;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   color: var(--accent-color-secondary);
   transition-duration: 0.3s;
   align-items: center;
@@ -166,10 +187,14 @@
   width: 16px;
   height: 16px;
   background-color: var(--accent-color-secondary);
-  mask-image: url("/images/icons/trash.svg");
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
+  -webkit-mask-image: url("/images/icons/trash.svg");
+          mask-image: url("/images/icons/trash.svg");
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+          mask-position: center;
   transition-duration: 0.3s;
 }
 .modal-editgame > .modal > .left > .bottom > .delete-button:hover {
@@ -188,6 +213,7 @@
   grid-template-columns: repeat(15, 38px);
   grid-template-rows: repeat(15, 38px);
   gap: 0;
+  width: -moz-fit-content;
   width: fit-content;
   border-radius: 12px;
 }
@@ -240,8 +266,10 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  mask: url("/images/icons/X_bile.svg") no-repeat center;
-  mask-size: 60%;
+  -webkit-mask: url("/images/icons/X_bile.svg") no-repeat center;
+          mask: url("/images/icons/X_bile.svg") no-repeat center;
+  -webkit-mask-size: 60%;
+          mask-size: 60%;
   background: var(--accent-color-secondary);
   animation: xoappear 0.2s ease-out;
   transition-duration: 0.5s;
@@ -255,14 +283,16 @@
   }
 }
 .modal-editgame > .modal > .right > .grid .cell:is(.x)::after {
-  mask-image: url("/images/icons/X_bile.svg");
+  -webkit-mask-image: url("/images/icons/X_bile.svg");
+          mask-image: url("/images/icons/X_bile.svg");
   background: var(--accent-color-secondary);
 }
 .modal-editgame > .modal > .right > .grid .cell:is(.x):is(.winning-cell) {
   background-color: var(--accent-color-secondary);
 }
 .modal-editgame > .modal > .right > .grid .cell:is(.o)::after {
-  mask-image: url("/images/icons/O_bile.svg");
+  -webkit-mask-image: url("/images/icons/O_bile.svg");
+          mask-image: url("/images/icons/O_bile.svg");
   background: var(--accent-color-primary);
 }
 .modal-editgame > .modal > .right > .grid .cell:is(.o):is(.winning-cell) {
@@ -313,6 +343,4 @@
   .modal-editgame > .modal > .left > .bottom > .help {
     display: none;
   }
-}
-
-/*# sourceMappingURL=editgame.css.map */
+}/*# sourceMappingURL=editgame.css.map */

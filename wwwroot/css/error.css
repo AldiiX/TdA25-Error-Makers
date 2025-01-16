@@ -32,6 +32,7 @@
 }
 .main > .centerdiv > .code {
   display: flex;
+  width: -moz-fit-content;
   width: fit-content;
   align-items: center;
   font-size: 200px;
@@ -41,10 +42,14 @@
 .main > .centerdiv > .code > .icon {
   width: 250px;
   height: 250px;
-  mask-image: url(/images/icons/zarivka_sad_bile.svg);
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
+  -webkit-mask-image: url(/images/icons/zarivka_sad_bile.svg);
+          mask-image: url(/images/icons/zarivka_sad_bile.svg);
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+          mask-position: center;
   background-color: var(--text-color);
   margin: 0 48px;
   animation: float 3s ease-in-out infinite alternate;
@@ -59,6 +64,4 @@
   100% {
     transform: translateY(0);
   }
-}
-
-/*# sourceMappingURL=error.css.map */
+}/*# sourceMappingURL=error.css.map */

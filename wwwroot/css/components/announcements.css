@@ -9,6 +9,7 @@
 }
 #announcements > div {
   position: relative;
+  width: -moz-fit-content;
   width: fit-content;
   display: flex;
   align-items: center;
@@ -21,7 +22,9 @@
   font-size: 20px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.22);
   transition-duration: 0.3s;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   animation: fadein 0.5s ease;
   animation-iteration-count: 1;
   max-width: 40vw;
@@ -46,6 +49,7 @@
   animation-duration: 0.8s;
   font-size: 32px;
   padding: 0 32px;
+  width: -moz-max-content;
   width: max-content;
   max-width: 60vw;
   left: unset;
@@ -58,18 +62,23 @@
   content: "";
   width: 120px;
   height: 120px;
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+          mask-position: center;
   background-color: white;
   margin-left: 32px;
   transform: scaleX(-1);
 }
 #announcements > div:is(.pskr_xwin)::after {
-  mask-image: url("/images/icons/zarivka_playing_x_bile.svg");
+  -webkit-mask-image: url("/images/icons/zarivka_playing_x_bile.svg");
+          mask-image: url("/images/icons/zarivka_playing_x_bile.svg");
 }
 #announcements > div:is(.pskr_owin)::after {
-  mask-image: url("/images/icons/zarivka_playing_o_bile.svg");
+  -webkit-mask-image: url("/images/icons/zarivka_playing_o_bile.svg");
+          mask-image: url("/images/icons/zarivka_playing_o_bile.svg");
 }
 #announcements > div:is(.error) {
   background-color: var(--accent-color-secondary);
@@ -94,6 +103,4 @@
   100% {
     opacity: 0;
   }
-}
-
-/*# sourceMappingURL=announcements.css.map */
+}/*# sourceMappingURL=announcements.css.map */

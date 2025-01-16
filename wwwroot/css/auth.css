@@ -6,6 +6,7 @@
   margin-top: 25vh;
 }
 #AUTH-PAGE .sections .mainsection .auth-box {
+  width: -moz-fit-content;
   width: fit-content;
   position: relative;
   margin: 0 auto;
@@ -37,6 +38,7 @@
   font-size: 16px;
   display: flex;
   flex-direction: column;
+  width: -moz-fit-content;
   width: fit-content;
 }
 #AUTH-PAGE .sections .mainsection .input > input {
@@ -78,6 +80,4 @@
   #AUTH-PAGE .sections .mainsection h1 {
     font-size: 12vw;
   }
-}
-
-/*# sourceMappingURL=auth.css.map */
+}/*# sourceMappingURL=auth.css.map */
