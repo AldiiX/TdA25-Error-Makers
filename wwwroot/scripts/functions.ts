@@ -205,7 +205,7 @@ function preventDefault(e: any|Event) {
 export function disableScroll() {
     window.addEventListener('DOMMouseScroll', preventDefault, false); // older FF
     window.addEventListener(wheelEvent, preventDefault, wheelOpt); // modern desktop
-    window.addEventListener('touchmove', preventDefault, wheelOpt); // mobile
+    //window.addEventListener('touchmove', preventDefault, wheelOpt); // mobile
     window.addEventListener('keydown', preventDefaultForScrollKeys, false);
 }
 
@@ -214,7 +214,7 @@ export function enableScroll() {
     // @ts-ignore
     window.removeEventListener(wheelEvent, preventDefault, wheelOpt);
     // @ts-ignore
-    window.removeEventListener('touchmove', preventDefault, wheelOpt);
+    //window.removeEventListener('touchmove', preventDefault, wheelOpt);
     window.removeEventListener('keydown', preventDefaultForScrollKeys, false);
 }
 // endregion

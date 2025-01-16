@@ -145,13 +145,11 @@ function preventDefault(e) {
 export function disableScroll() {
     window.addEventListener('DOMMouseScroll', preventDefault, false);
     window.addEventListener(wheelEvent, preventDefault, wheelOpt);
-    window.addEventListener('touchmove', preventDefault, wheelOpt);
     window.addEventListener('keydown', preventDefaultForScrollKeys, false);
 }
 export function enableScroll() {
     window.removeEventListener('DOMMouseScroll', preventDefault, false);
     window.removeEventListener(wheelEvent, preventDefault, wheelOpt);
-    window.removeEventListener('touchmove', preventDefault, wheelOpt);
     window.removeEventListener('keydown', preventDefaultForScrollKeys, false);
 }
 window.addCookie = addCookie;
