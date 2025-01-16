@@ -264,10 +264,12 @@ export const vue = new Vue({
             const difficulty = _this.editingGame.difficulty;
             if (!name) {
                 _this.temp.editingGameError = "Název hry nemůže být prázdný.";
+                _this.addAnnouncement("Chyba ukládání hry: Název hry nemůže být prázdný.", 'error', 2000);
                 return;
             }
             if (!difficulty) {
                 _this.temp.editingGameError = "Obtížnost hry nemůže být prázdná.";
+                _this.addAnnouncement("Chyba ukládání hry: Obtížnost hry nemůže být prázdná.", 'error', 2000);
                 return;
             }
             const board = document.querySelector(".modal-editgame > .modal > .right > .grid");
@@ -288,7 +290,8 @@ export const vue = new Vue({
                 });
             });
             if (empty) {
-                _this.temp.editingGameError = "Hra nemůže být prázdná.";
+                _this.temp.editingGameError = "Herní plocha nemůže být prázdná.";
+                _this.addAnnouncement("Chyba ukládání hry: Herní plocha nemůže být prázdná.", 'error', 2000);
                 return;
             }
             if (!_this.temp.creatingNewGame) {

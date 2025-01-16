@@ -4,7 +4,6 @@
     "module": "ES2022",
     "esModuleInterop": true,
     "strict": true,
-    "removeComments": true,
-    "outDir": "out"
+    "removeComments": true
   }
 }

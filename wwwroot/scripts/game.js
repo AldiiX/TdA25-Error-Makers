@@ -85,7 +85,6 @@ export const vue = new Vue({
         getGame: function () {
             const _this = this;
             const gameUUID = getCookie("gameuuid") ?? window.location.pathname.split("/")[2];
-            console.warn(gameUUID);
             fetch(`/api/v2/games/${gameUUID}`)
                 .then(async (response) => {
                 const data = await response.json();

@@ -115,7 +115,7 @@ export const vue = new Vue({
         getGame: function(): void {
             const _this = this as any;
             const gameUUID = getCookie("gameuuid") ?? window.location.pathname.split("/")[2];
-            console.warn(gameUUID);
+            //console.warn(gameUUID);
 
             fetch(`/api/v2/games/${gameUUID}`)
                 .then(async response => {
