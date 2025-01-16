@@ -457,6 +457,51 @@
                     }
                 }
             }
+
+            >.pages-select {
+                display: flex;
+                gap: calc(24px - 8px);
+                width: fit-content;
+                margin: 0 auto;
+                margin-top: 64px;
+                align-items: center;
+                user-select: none;
+                transition-duration: 0.3s;
+
+                >p, >div {
+                    padding: 8px;
+                }
+
+
+                >p:hover, >div:hover {
+                    cursor: pointer;
+                    border-radius: 4px;
+                    background-color: var(--background-color-primary);
+                }
+                
+                >p {
+                    margin: 0;
+
+                    &:is(.locked) {
+                        opacity: 0.5;
+                        pointer-events: none;
+                    }
+                }
+
+                >div {
+                    font-weight: 800;
+                    font-size: 20px;
+                    font-family: "Dosis", sans-serif;
+                    padding: 8px 16px;
+
+                    &:is(.selected) {
+                        border-radius: 4px;
+                        background-color: var(--accent-color-secondary);
+                        color: white;
+                        pointer-events: none;
+                    }
+                }
+            }
         }
     }
 }

@@ -187,10 +187,10 @@
                     <a class="button-primary" v-on:click="createNewGame()">Vytvořit úlohu</a>
                 </div>
 
-                <div class="pages-select" v-show="getMaxPage() > 1">
-                    <p class="previous" v-bind:class="{ 'locked': (currentPage - 1 <= 1) }" v-on:click="setPage(currentPage - 1 > 1 ? currentPage - 1 : 1)">← Předchozí</p>
-                    <div class="page" v-for="page in getMaxPage()" v-on:click="setPage(page)">{{ page }}</div>
-                    <p class="previous" v-bind:class="{ 'locked': (currentPage + 1 >= getMaxPage()) }" v-on:click="setPage(currentPage + 1 < getMaxPage() ? currentPage + 1 : getMaxPage())">Další →</p>
+                <div class="pages-select" v-show="getMaxPage() > 1" v-cloak>
+                    <p class="previous" v-bind:class="{ 'locked': (currentPage - 1 < 1) }" v-on:click="setPage(currentPage - 1 > 1 ? currentPage - 1 : 1)">← Předchozí</p>
+                    <div class="page" v-for="page in getMaxPage()" v-bind:class="{ 'selected': currentPage === page }" v-on:click="setPage(page)">{{ page }}</div>
+                    <p class="previous" v-bind:class="{ 'locked': (currentPage + 1 > getMaxPage()) }" v-on:click="setPage(currentPage + 1 < getMaxPage() ? currentPage + 1 : getMaxPage())">Další →</p>
                 </div>
             </div>
         </section>

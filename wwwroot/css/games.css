@@ -40,7 +40,9 @@
   margin: 0;
   margin-bottom: 6px;
   margin-left: 4px;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .sections > .mainsection > .texts > .inputs .SearchInput .Search-Bottom {
   overflow: hidden;
@@ -65,7 +67,9 @@
   margin: 0;
   margin-bottom: 6px;
   margin-right: 4px;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .sections > .mainsection > .texts > .inputs .filter-container .filter-bottom {
   overflow: hidden;
@@ -104,7 +108,9 @@
   position: relative;
 }
 .sections > .mainsection > .texts > .inputs .filter-container .filter-bottom > .select-wrapper > select {
-  appearance: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
   padding-right: 52px;
 }
 .sections > .mainsection > .texts > .inputs .filter-container .filter-bottom > .select-wrapper::after {
@@ -117,9 +123,12 @@
   transform: translateY(-50%);
   pointer-events: none;
   background-color: var(--text-color);
-  mask: url("/images/icons/arrow_down.svg") no-repeat center;
-  mask-size: contain;
-  mask-repeat: no-repeat;
+  -webkit-mask: url("/images/icons/arrow_down.svg") no-repeat center;
+          mask: url("/images/icons/arrow_down.svg") no-repeat center;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
 }
 .sections > .mainsection > .texts > .inputs .filter-container .filter-bottom .custom-date-input::-webkit-calendar-picker-indicator {
   color: transparent;
@@ -127,7 +136,8 @@
   display: block;
   background: none;
   background-color: var(--text-color);
-  mask: url("/images/icons/calendar.svg") no-repeat center;
+  -webkit-mask: url("/images/icons/calendar.svg") no-repeat center;
+          mask: url("/images/icons/calendar.svg") no-repeat center;
   width: 12px;
   height: 12px;
   border-width: thin;
@@ -156,8 +166,10 @@
   width: 250px;
   max-width: 90vw;
   aspect-ratio: 1/1;
-  mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
-  mask-size: contain;
+  -webkit-mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
+          mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
+  -webkit-mask-size: contain;
+          mask-size: contain;
   background-color: var(--text-color);
   animation: loading-img-anim 3s ease-in-out infinite;
   margin: 0 auto;
@@ -211,8 +223,10 @@
   width: 250px;
   max-width: 90vw;
   aspect-ratio: 1/1;
-  mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
-  mask-size: contain;
+  -webkit-mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
+          mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
+  -webkit-mask-size: contain;
+          mask-size: contain;
   background-color: var(--text-color);
   margin: 0 auto;
 }
@@ -228,6 +242,7 @@
   color: var(--color-gray);
 }
 .sections > .mainsection > .content > .nogamesdiv a {
+  width: -moz-fit-content;
   width: fit-content;
   margin: 0 auto;
 }
@@ -273,9 +288,12 @@
   position: absolute;
   width: 40px;
   height: 40px;
-  mask-position: center;
-  mask-size: contain;
-  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+          mask-position: center;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
   background-color: var(--text-color);
 }
 .sections > .mainsection > .content > .games-parent > .child > .icon > .x {
@@ -322,9 +340,12 @@
 .sections > .mainsection > .content > .games-parent > .child > .texts > .flex .pair .icon {
   width: 20px;
   height: 20px;
-  mask-position: center;
-  mask-size: contain;
-  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+          mask-position: center;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
   background-color: var(--color-gray);
 }
 .sections > .mainsection > .content > .games-parent > .child > .texts > .flex .pair p {
@@ -334,7 +355,8 @@
   color: var(--color-gray);
 }
 .sections > .mainsection > .content > .games-parent > .child > .texts > .flex .pair:not(.pair-difficulty) .icon {
-  mask-size: 80%;
+  -webkit-mask-size: 80%;
+          mask-size: 80%;
 }
 .sections > .mainsection > .content > .games-parent > .child > .texts > .flex .pair:is(.pair-difficulty) .icon {
   margin-right: 2px;
@@ -348,6 +370,46 @@
   display: block;
   font-size: 14px;
   padding: 8px 16px;
+}
+.sections > .mainsection > .content > .pages-select {
+  display: flex;
+  gap: 16px;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: 0 auto;
+  margin-top: 64px;
+  align-items: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  transition-duration: 0.3s;
+}
+.sections > .mainsection > .content > .pages-select > p, .sections > .mainsection > .content > .pages-select > div {
+  padding: 8px;
+}
+.sections > .mainsection > .content > .pages-select > p:hover, .sections > .mainsection > .content > .pages-select > div:hover {
+  cursor: pointer;
+  border-radius: 4px;
+  background-color: var(--background-color-primary);
+}
+.sections > .mainsection > .content > .pages-select > p {
+  margin: 0;
+}
+.sections > .mainsection > .content > .pages-select > p:is(.locked) {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.sections > .mainsection > .content > .pages-select > div {
+  font-weight: 800;
+  font-size: 20px;
+  font-family: "Dosis", sans-serif;
+  padding: 8px 16px;
+}
+.sections > .mainsection > .content > .pages-select > div:is(.selected) {
+  border-radius: 4px;
+  background-color: var(--accent-color-secondary);
+  color: white;
+  pointer-events: none;
 }
 
 @media screen and (min-width: 750px) and (max-width: 1400px) {
@@ -428,6 +490,4 @@
     opacity: 0.7;
     margin: 8px 0;*/
   }
-}
-
-/*# sourceMappingURL=games.css.map */
+}/*# sourceMappingURL=games.css.map */
