@@ -475,6 +475,17 @@
                     border-radius: 8px;
                 }
 
+                .previous, .next {
+                    &:is(.mobile) {
+                        font-weight: 1000;
+                        display: none;
+                    }
+                }
+
+                .next:not(.mobile) {
+                    margin-right: 32px;
+                }
+
 
                 >p:hover, >div:hover {
                     cursor: pointer;
@@ -516,6 +527,25 @@
 
 
 // random media queries
+@media screen and (max-width: 400px){
+    .sections > .mainsection > .content > .pages-select ,
+    .sections > .mainsection > .content > .pages-select {
+        gap: 12px;
+        flex-wrap: wrap;
+
+        .previous, .next {
+            &:is(.mobile)  {
+                display: grid;
+            }
+
+            &:not(.mobile) {
+                display: none;
+            }
+        }
+
+    }
+}
+
 @media screen and (min-width: 750px) and (max-width: 1400px){
     .sections {
         >.mainsection{
