@@ -386,6 +386,8 @@
 }
 .sections > .mainsection > .content > .pages-select > p, .sections > .mainsection > .content > .pages-select > div {
   padding: 8px;
+  transition-duration: 0.3s;
+  background-color: transparent;
 }
 .sections > .mainsection > .content > .pages-select > p:hover, .sections > .mainsection > .content > .pages-select > div:hover {
   cursor: pointer;
