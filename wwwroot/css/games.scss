@@ -104,8 +104,40 @@
                         gap: 8px;
                         align-items: center;
 
+                        >span {
+                            display: flex;
+                            gap: 8px;
+                            align-items: center;
+                        }
+
                         select, input {
                             height: 40px;
+                        }
+
+                        .reloadicon {
+                            width: 20px;
+                            height: 20px;
+                            mask: url("/images/icons/reload.svg") no-repeat center;
+                            mask-size: contain;
+                            background-color: var(--accent-color-secondary);
+                            cursor: pointer;
+                            transition-duration: 0.3s;
+
+                            &:hover, &:active {
+                                background-color: var(--accent-color-secondary-darker);
+                                transition-duration: 0.3s;
+                                //animation: opaskdopsa 2s ease infinite;
+
+                                @keyframes opaskdopsa{
+                                    from {
+                                        transform: rotate(0deg);
+                                    }
+
+                                    to {
+                                        transform: rotate(360deg);
+                                    }
+                                }
+                            }
                         }
 
                         // animace
@@ -143,7 +175,7 @@
 
 
 
-                        >.select-wrapper {
+                        .select-wrapper {
                             position: relative;
 
                             >select {
@@ -600,10 +632,15 @@
     }
 }
 
-@media screen and (max-width: 1350px) {
+@media screen and (max-width: 1360px) {
     .sections > .mainsection > .texts > .inputs .filter-container .filter-bottom {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+        //display: grid;
+        //grid-template-columns: 1fr 1fr;
+
+        >span {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
 
         select {
             width: 100%;
@@ -643,6 +680,16 @@
 
                 .filter-container .filter-bottom {
                     gap: 20px;
+                    flex-direction: row-reverse;
+                    justify-content: left;
+
+                    >span {
+                        flex-grow: 1;
+                    }
+
+                    .reloadicon {
+                        display: none;
+                    }
 
                     > .select-wrapper {
                         //width: calc(100% / 2 - 10px);

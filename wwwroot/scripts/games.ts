@@ -257,13 +257,18 @@ export const vue = new Vue({
             return obj;
         },
 
+        areFiltersEmpty: function(): boolean {
+            const _this = this as any;
+            return !_this.filterName && !_this.filterDifficulty && !_this.filterStartDate && !_this.filterEndDate;
+        },
+
         setGameDifficultyText: function(game: any): string {
             switch(game?.difficulty) {
                 case "beginner": return "Začátečník";
                 case "easy": return "Lehká";
                 case "medium": return "Střední";
                 case "hard": return "Těžká";
-                case "extreme": return "Extrémní";
+                case "extreme": return "Extrémně těžká";
             }
 
             return "Neznámá";

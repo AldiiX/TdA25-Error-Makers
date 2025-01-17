@@ -201,13 +201,17 @@ export const vue = new Vue({
             }
             return obj;
         },
+        areFiltersEmpty: function () {
+            const _this = this;
+            return !_this.filterName && !_this.filterDifficulty && !_this.filterStartDate && !_this.filterEndDate;
+        },
         setGameDifficultyText: function (game) {
             switch (game?.difficulty) {
                 case "beginner": return "Začátečník";
                 case "easy": return "Lehká";
                 case "medium": return "Střední";
                 case "hard": return "Těžká";
-                case "extreme": return "Extrémní";
+                case "extreme": return "Extrémně těžká";
             }
             return "Neznámá";
         },
