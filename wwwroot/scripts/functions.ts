@@ -159,7 +159,16 @@ export function generateUUID(): string {
 
 export function scrollToElement(elementId: string): void {
     const element: HTMLElement = document.getElementById(elementId) as HTMLElement;
-    element.scrollIntoView({behavior: "smooth"});
+    if(!element) return;
+
+    // scroll aby byl element uprostřed obrazovky
+    const elementPosition = element.getBoundingClientRect().top;
+    const offsetPosition = elementPosition - 300;
+
+    window.scrollBy({
+        top: offsetPosition,
+        behavior: 'smooth'
+    });
 }
 
 
@@ -179,7 +188,7 @@ export function scrollToElement(elementId: string): void {
 
 
 // region prevent scrolling
-const keys: any = {37: 1, 38: 1, 39: 1, 40: 1};
+const keys: any = {38: 1, 40: 1};
 
 function preventDefaultForScrollKeys(e: any) {
     if (keys[e.keyCode]) {

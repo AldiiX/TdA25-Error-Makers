@@ -60,7 +60,7 @@
                 <p>Užij si hraní piškvorek s přednastaveným začátkem!</p>
             </div>
         </section>
-        <section class="mainsection">
+        <section class="mainsection" id="mainsection">
             <div class="texts">
                 <div class="inputs">
                     <div class="SearchInput">
@@ -193,13 +193,13 @@
                 </div>
 
                 <div class="pages-select" v-show="getMaxPage() > 1" v-cloak>
-                    <p class="previous" v-bind:class="{ 'locked': (currentPage - 1 < 1) }" v-on:click="setPage(currentPage - 1 > 1 ? currentPage - 1 : 1)">← Předchozí</p>
-                    <p class="previous mobile" v-bind:class="{ 'locked': (currentPage - 1 < 1) }" v-on:click="setPage(currentPage - 1 > 1 ? currentPage - 1 : 1)">←</p>
+                    <p class="previous" v-bind:class="{ 'locked': (currentPage - 1 < 1) }" v-on:click="setPage(currentPage - 1 > 1 ? currentPage - 1 : 1); scrollToElement('mainsection')">← Předchozí</p>
+                    <p class="previous mobile" v-bind:class="{ 'locked': (currentPage - 1 < 1) }" v-on:click="setPage(currentPage - 1 > 1 ? currentPage - 1 : 1); scrollToElement('mainsection')">←</p>
 
-                    <div class="page" v-for="page in getMaxPage()" v-bind:class="{ 'selected': currentPage === page }" v-on:click="setPage(page)">{{ page }}</div>
+                    <div class="page" v-for="page in getMaxPage()" v-bind:class="{ 'selected': currentPage === page }" v-on:click="setPage(page); scrollToElement('mainsection')">{{ page }}</div>
 
-                    <p class="next" v-bind:class="{ 'locked': (currentPage + 1 > getMaxPage()) }" v-on:click="setPage(currentPage + 1 < getMaxPage() ? currentPage + 1 : getMaxPage())">Další →</p>
-                    <p class="next mobile" v-bind:class="{ 'locked': (currentPage + 1 > getMaxPage()) }" v-on:click="setPage(currentPage + 1 < getMaxPage() ? currentPage + 1 : getMaxPage())">→</p>
+                    <p class="next" v-bind:class="{ 'locked': (currentPage + 1 > getMaxPage()) }" v-on:click="setPage(currentPage + 1 < getMaxPage() ? currentPage + 1 : getMaxPage()); scrollToElement('mainsection')">Další →</p>
+                    <p class="next mobile" v-bind:class="{ 'locked': (currentPage + 1 > getMaxPage()) }" v-on:click="setPage(currentPage + 1 < getMaxPage() ? currentPage + 1 : getMaxPage()); scrollToElement('mainsection')">→</p>
                 </div>
             </div>
         </section>

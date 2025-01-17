@@ -22,7 +22,7 @@
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.22);
         transition-duration: 0.3s;
         user-select: none;
-        animation: fadein 0.5s ease;
+        animation: sdfsdfdsfdsfsdfsdffqderwehh 0.5s ease;
         animation-iteration-count: 1;
         max-width: 40vw;
         pointer-events: none;
@@ -87,11 +87,11 @@
 
         &:is(.fade-out) {
             opacity: 0;
-            animation: fadeout 0.5s ease;
+            animation: asdsadsadasdd 0.5s ease;
             animation-iteration-count: 1;
         }
 
-        @keyframes fadein {
+        @keyframes sdfsdfdsfdsfsdfsdffqderwehh {
             0% {
                 opacity: 0;
             }
@@ -101,7 +101,7 @@
             }
         }
 
-        @keyframes fadeout {
+        @keyframes asdsadsadasdd {
             0% {
                 opacity: 1;
             }

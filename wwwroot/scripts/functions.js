@@ -121,9 +121,16 @@ export function generateUUID() {
 }
 export function scrollToElement(elementId) {
     const element = document.getElementById(elementId);
-    element.scrollIntoView({ behavior: "smooth" });
+    if (!element)
+        return;
+    const elementPosition = element.getBoundingClientRect().top;
+    const offsetPosition = elementPosition - 300;
+    window.scrollBy({
+        top: offsetPosition,
+        behavior: 'smooth'
+    });
 }
-const keys = { 37: 1, 38: 1, 39: 1, 40: 1 };
+const keys = { 38: 1, 40: 1 };
 function preventDefaultForScrollKeys(e) {
     if (keys[e.keyCode]) {
         preventDefault(e);

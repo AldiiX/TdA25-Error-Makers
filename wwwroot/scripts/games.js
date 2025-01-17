@@ -1,4 +1,4 @@
-import { openModal, deepClone, addAnnouncement } from "/scripts/functions.js";
+import { scrollToElement, openModal, deepClone, addAnnouncement } from "/scripts/functions.js";
 export const vue = new Vue({
     el: "#app",
     mounted: function () {
@@ -204,6 +204,9 @@ export const vue = new Vue({
         areFiltersEmpty: function () {
             const _this = this;
             return !_this.filterName && !_this.filterDifficulty && !_this.filterStartDate && !_this.filterEndDate;
+        },
+        scrollToElement: function (element) {
+            scrollToElement(element);
         },
         setGameDifficultyText: function (game) {
             switch (game?.difficulty) {

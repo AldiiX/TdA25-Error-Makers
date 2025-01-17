@@ -262,6 +262,10 @@ export const vue = new Vue({
             return !_this.filterName && !_this.filterDifficulty && !_this.filterStartDate && !_this.filterEndDate;
         },
 
+        scrollToElement: function(element: string): void {
+            scrollToElement(element);
+        },
+
         setGameDifficultyText: function(game: any): string {
             switch(game?.difficulty) {
                 case "beginner": return "Začátečník";
