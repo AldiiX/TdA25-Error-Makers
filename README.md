@@ -7,7 +7,7 @@
 
 > Soutěžíme za [Střední Školu EDUCHEM, a.s.](https://educhem.cz)  &nbsp;&nbsp;&nbsp;:))
 
----
+--- 
 
 ### Použité technologie
 - **Frontend**: ![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)
