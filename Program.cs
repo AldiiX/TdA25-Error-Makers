@@ -68,6 +68,8 @@ public static class Program {
             builder.Configuration.AddJsonFile("appsettings.Release.json", optional: true, reloadOnChange: false);
         #elif TESTING
             builder.Configuration.AddJsonFile("appsettings.Testing.json", optional: true, reloadOnChange: false);
+        #elif RELEASE_UBUNTU
+            builder.Configuration.AddJsonFile("appsettings.ReleaseUbuntu.json", optional: true, reloadOnChange: false);
         #endif
 
         builder.Configuration.AddEnvironmentVariables();

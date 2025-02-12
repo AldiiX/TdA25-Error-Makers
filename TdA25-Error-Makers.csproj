@@ -4,7 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Configurations>Debug;Testing;Release</Configurations>
+        <Configurations>Debug;Testing;Release;Release Ubuntu</Configurations>
         <Platforms>AnyCPU</Platforms>
         <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
         <StartupObject>TdA25_Error_Makers.Program</StartupObject>
@@ -21,6 +21,10 @@
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <DefineConstants>RELEASE</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Ubuntu|AnyCPU'">
+        <DefineConstants>RELEASE_UBUNTU</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
@@ -40,6 +44,16 @@
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
       <Content Update="wwwroot\fonts\dosis.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="appsettings.ReleaseUbuntu.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove=".env" />
+      <Content Include=".env">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
     </ItemGroup>

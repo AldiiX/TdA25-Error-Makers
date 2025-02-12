@@ -7,6 +7,7 @@ Global
 		Debug|Any CPU = Debug|Any CPU
 								Testing|Any CPU = Testing|Any CPU
 								Release|Any CPU = Release|Any CPU
+		Release Ubuntu|Any CPU = Release Ubuntu|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A2561C53-C20B-4083-813D-16CA9747B394}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -15,5 +16,7 @@ Global
 		{A2561C53-C20B-4083-813D-16CA9747B394}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A2561C53-C20B-4083-813D-16CA9747B394}.Testing|Any CPU.ActiveCfg = Testing|Any CPU
 		{A2561C53-C20B-4083-813D-16CA9747B394}.Testing|Any CPU.Build.0 = Testing|Any CPU
+		{A2561C53-C20B-4083-813D-16CA9747B394}.Release Ubuntu|Any CPU.ActiveCfg = Release Ubuntu|Any CPU
+		{A2561C53-C20B-4083-813D-16CA9747B394}.Release Ubuntu|Any CPU.Build.0 = Release Ubuntu|Any CPU
 	EndGlobalSection
 EndGlobal
