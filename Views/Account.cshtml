@@ -17,7 +17,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login • Think Different Academy</title>
+    <title>Account • Think Different Academy</title>
     <link rel="icon" href="/favicon.ico">
 
     @{ // Vue.js definice
@@ -44,11 +44,17 @@
 
     <div class="sections">
         <section class="mainsection">
-                <div class="auth-box">
-                    <h1>Účet</h1>
-                    <p class="accentsecondary">Informace a nastavení tvého účtu!</p>
-                    <a href="/logout">Odhlásit se</a>
+            <div class="account-banner"></div>
+            <div class="account">
+                <div class="account-avatar"></div>
+                <div class="account-info">
+                    <div class="account-name"></div>
+                    <div class="account-createdat"></div>
+                    <div class="account-elo"></div>
                 </div>
+                <div class="game-history"></div>
+            </div>
+            <div class="logout-button"></div>
         </section>
     </div>
 

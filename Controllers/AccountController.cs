@@ -6,7 +6,7 @@ public class AccountController : Controller {
     
 
     [Route("/account")]
-    public IActionResult Hello() => View("/Views/Account.cshtml");
+    public IActionResult Account() => View("/Views/Account.cshtml");
     
     [HttpGet("/ucet"), HttpGet("/acc"), HttpGet("/uzivatel")]
     public IActionResult Redirection() => Redirect("/account");
