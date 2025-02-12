@@ -11,6 +11,7 @@
         <div class="Header-Menu-Small">
             <a href="/">Domů</a>
             <a href="/games">Hry</a>
+            <a href="/account">Účet</a>
             @*<a href="/multiplayer">Online</a>*@
             @if (!path.StartsWith("/game/")) {
                 <button class="newgame button-primary" onclick="location.href='/game'">Nová hra</button>
@@ -46,6 +47,7 @@
         <div class="Header-Menu">
             <a href="/" class="@Utilities.SetActiveClass("/")">Domů</a>
             <a href="/games" class="@Utilities.SetActiveClass("/games")">Úlohy</a>
+            <a href="/account" class="@Utilities.SetActiveClass("/account")">Účet</a>
             @*<a href="/multiplayer">Online</a>*@
         </div>
 
