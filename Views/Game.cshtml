@@ -76,9 +76,15 @@
             <!-- herní pole + controls -->
             <div class="flex" v-cloak v-bind:class="{ locked: gameLocked, 'fade-out': gameFadeOut }" v-show="gameLoaded" v-bind:style="{ '--mcolor': setPlayerColor(), '--hcolor': setPlayerColorHover() }">
                 <div class="left">
-                    <transition name="fade">
+                    @*<transition name="fade">
                         <div class="buttons" v-show="!pageIsScrolled">
                             <a href="/games">« Úlohy</a>
+                        </div>
+                    </transition>*@
+
+                    <transition name="fade">
+                        <div class="buttons" v-show="!pageIsScrolled">
+                            <a href="/play">« Zpět</a>
                         </div>
                     </transition>
 
@@ -104,7 +110,7 @@
                         </div>
                     </div>
 
-                    <div class="settings" v-if="editMode && game.gameState !== 'finished'">
+                    @*<div class="settings" v-if="editMode && game.gameState !== 'finished'">
                         <h2 v-if="!game.isInstance">Nastavení</h2>
                         <h2 v-if="game.isInstance">Uložit jako novou úlohu</h2>
 
@@ -144,13 +150,16 @@
                         <button class="button-secondary" v-on:click="deleteGame()">Smazat</button>
                     </div>
 
-                    <div class="presettings" v-else-if="game.gameState === 'finished'">
+                    <div class="presettings" v-if="game.gameState === 'finished'">
                         <button class="button-primary" v-on:click="createNewGame()">Nová hra</button>
                     </div>
 
                     <div class="presettings" v-else-if="!editMode && game.isInstance">
                         <button class="button-secondary" v-on:click="createNewGame()">Nová hra</button>
-                        <button class="button-primary" v-on:click="saveAsNewGameButtonClick()">Uložit jako</button>
+                    </div>*@
+
+                    <div class="presettings">
+                        <button class="button-primary" v-on:click="createNewGame()">Nová hra</button>
                     </div>
                 </div>
             </div>

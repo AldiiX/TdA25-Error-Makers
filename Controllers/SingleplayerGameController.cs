@@ -8,12 +8,12 @@ namespace TdA25_Error_Makers.Controllers;
 
 
 
-[Controller]
-public class GameController : Controller {
+[Controller, Route("play/singleplayer")]
+public class SingleplayerGameController : Controller {
 
-    [HttpGet("/game")]
+    [HttpGet("1v1/game"), HttpGet("1v1")]
     public IActionResult GameCreate() {
-        if (HCS.Current.Items["game"] is not Game game) {
+        if (HCS.Current.Items["game"] is not Game game) { // inicializuje se v BeforeInitMiddlewaru
             ViewBag.ErrorCode = 404;
             ViewBag.ErrorMessage = "Hra s tímto UUID nebyla nalezena";
             ViewBag.ErrorMessage2 = "Zkus jiné UUID ¯\\_(ツ)_/¯";
@@ -26,7 +26,13 @@ public class GameController : Controller {
         return View("/Views/Game.cshtml");
     }
 
-    [HttpGet("/game/{uuid}")]
+
+    [HttpGet("vsai/game"), HttpGet("vsai")]
+    public IActionResult CreateVsAIGame() {
+        return RedirectPermanent("/play");
+    }
+
+    /*[HttpGet("/game/{uuid}")]
     public IActionResult GameSpecific(string uuid) {
         if (HCS.Current.Items["game"] is not Game game || game.UUID != uuid) {
             ViewBag.ErrorCode = 404;
@@ -39,5 +45,5 @@ public class GameController : Controller {
         ViewBag.Game = game;
         Utilities.Cookie.Set("gameuuid", game.UUID);
         return View("/Views/Game.cshtml");
-    }
+    }*/
 }

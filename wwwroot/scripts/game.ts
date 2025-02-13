@@ -270,7 +270,7 @@ export const vue = new Vue({
 
             // preload /game stránku
             const preloadLink = document.createElement("link");
-            preloadLink.href = "/game";
+            preloadLink.href = "/play/singleplayer/1v1";
             preloadLink.rel = "prefetch";
             //preloadLink.as = "document";
             document.head.appendChild(preloadLink);
@@ -289,7 +289,7 @@ export const vue = new Vue({
                     method: "DELETE",
                 }).then();
 
-                window.location.href = "/game";
+                window.location.href = "/play/singleplayer/1v1";
             }, 1500);
         },
 

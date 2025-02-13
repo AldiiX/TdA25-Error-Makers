@@ -2,7 +2,7 @@
 @using TdA25_Error_Makers.Classes
 @{
     var webTheme = Utilities.WebTheme.Get();
-    var loggedAccountTask = Auth.ReAuthUserAsync();
+    var loggedAccountTask = Utilities.GetLoggedAccountFromContext();
 
     // části stránky
     var background = Html.PartialAsync("/Views/Components/BlurBackground.cshtml");

@@ -245,4 +245,10 @@ public class APIv2 : Controller {
 
         return new NoContentResult();
     }
+
+    [HttpGet("multiplayer/games")]
+    public IActionResult GetMultiplayerGames() {
+        var games = MultiplayerGame.GetAll();
+        return new JsonResult(games) { ContentType = "application/json" };
+    }
 }

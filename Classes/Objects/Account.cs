@@ -75,7 +75,7 @@ public sealed class Account {
 
         HCS.Current.Session.SetObject("loggeduser", acc);
         HCS.Current.Items["loggeduser"] = acc;
-        Console.WriteLine(acc);
+        //Console.WriteLine(acc);
         return acc;
     }
 
