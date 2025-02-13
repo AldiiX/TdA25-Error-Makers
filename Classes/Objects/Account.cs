@@ -61,5 +61,29 @@ public sealed class Account {
     }
 
     public static Account? Auth(in string username, in string hashedPassword) => AuthAsync(username, hashedPassword).Result;
+    
+    public static async Task<List<Account>> GetAllAsync()
+    {
+        var list = new List<Account>();
+        
+        await using var conn = await Database.GetConnectionAsync();
+        if (conn == null) return list;
+        
+        await using var cmd = new MySqlCommand("SELECT * FROM users", conn);
+        await using var reader = await cmd.ExecuteReaderAsync() as MySqlDataReader;
 
+        while (await reader.ReadAsync())
+        {
+            var user = new Account(
+                reader.GetString("username"),
+                reader.GetString("password"),
+                reader.GetString("email"),
+                reader.GetString("display_name"), 
+                reader.GetString("avatar"),
+                Enum.TryParse<Account.TypeOfAccount>(reader.GetString("type"), out var _e ) ? _e : TypeOfAccount.USER
+            );
+        }
+        
+        return list;
+    }
 }
