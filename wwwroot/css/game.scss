@@ -40,6 +40,23 @@
     height: calc(100vh + 80px);
 
     >.loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        margin-top: -40px;
+        //background-color: var(--background-color);
+        //border: 1px solid var(--background-color-primary);
+        display: flex;
+        flex-direction: column;
+        padding: 64px;
+        border-radius: 12px;
+        min-width: 600px;
+        -webkit-animation: appear 0.4s ease-out;
 
         @keyframes appear {
             from {
