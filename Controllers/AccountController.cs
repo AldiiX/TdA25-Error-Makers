@@ -17,7 +17,6 @@ public class AccountController : Controller {
 
     [HttpGet("/ucet"), HttpGet("/acc"), HttpGet("/uzivatel")]
     public IActionResult Redirection() => Redirect("/account");
-
-   
+    
 }
 

@@ -81,7 +81,7 @@ public sealed class Account {
 
     public static Account? Auth(in string username, in string hashedPassword) => AuthAsync(username, hashedPassword).Result;
     
-    public static async Task<List<Account>> GetAllAsync()
+    /* public static async Task<List<Account>> GetAllAsync()
     {
         var list = new List<Account>();
         
@@ -104,5 +104,5 @@ public sealed class Account {
         }
         
         return list;
-    }
+    } */
 }
