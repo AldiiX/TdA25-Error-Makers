@@ -10,11 +10,11 @@
         <div class="Header-Logo-Small"></div>
         <div class="Header-Menu-Small">
             <a href="/">Domů</a>
-            <a href="/games">Hry</a>
+            @*<a href="/games">Hry</a>*@
             <a href="/account">Účet</a>
             @*<a href="/multiplayer">Online</a>*@
             @if (!path.StartsWith("/game/")) {
-                <button class="newgame button-primary" onclick="location.href='/game'">Nová hra</button>
+                <button class="newgame button-primary" onclick="location.href='/play'">Hrát</button>
             } else {
                 <button class="newgame button-primary" v-cloak v-on:click="createNewGame()">Nová hra</button>
             }
@@ -46,7 +46,7 @@
 
         <div class="Header-Menu">
             <a href="/" class="@Utilities.SetActiveClass("/")">Domů</a>
-            <a href="/games" class="@Utilities.SetActiveClass("/games")">Úlohy</a>
+            @*<a href="/games" class="@Utilities.SetActiveClass("/games")">Úlohy</a>*@
             <a href="/account" class="@Utilities.SetActiveClass("/account")">Účet</a>
             @*<a href="/multiplayer">Online</a>*@
         </div>
@@ -59,7 +59,7 @@
             "></div>
 
             @if (!path.StartsWith("/game/")) {
-                <a class="newgame button-primary" href="/game">Nová hra</a>
+                <a class="newgame button-primary" href="/play">Hrát</a>
             } else {
                 <a class="newgame button-primary" v-cloak v-on:click="createNewGame()">Nová hra</a>
             }

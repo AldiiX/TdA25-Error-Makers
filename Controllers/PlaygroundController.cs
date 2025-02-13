@@ -18,5 +18,8 @@ public class PlaygroundController : Controller {
     [HttpGet("error/{code:int}")]
     public IActionResult SendError(int code) => StatusCode(code);
 
+    [HttpGet("apitest")]
+    public IActionResult APITest() => View("/Views/Playground/APITest.cshtml");
+
     #endif
 }

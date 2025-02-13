@@ -210,7 +210,7 @@ export const vue = new Vue({
             const _this = this;
             _this.gameLocked = true;
             const preloadLink = document.createElement("link");
-            preloadLink.href = "/game";
+            preloadLink.href = "/play/singleplayer/1v1";
             preloadLink.rel = "prefetch";
             document.head.appendChild(preloadLink);
             const bgDiv = document.querySelector(".background-f55288d9-4dcf-456d-87c4-26be60c16cdb");
@@ -224,7 +224,7 @@ export const vue = new Vue({
                 fetch(`/api/v2/games/${_this.game.uuid}/`, {
                     method: "DELETE",
                 }).then();
-                window.location.href = "/game";
+                window.location.href = "/play/singleplayer/1v1";
             }, 1500);
         },
         saveAsNewGameButtonClick: function () {

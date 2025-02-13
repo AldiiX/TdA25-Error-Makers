@@ -1,0 +1,128 @@
+﻿.header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Login > .newgame {
+    display: none;
+}
+
+.main {
+    width: 100%;
+    min-height: calc(100vh/* + 80px*/);
+    position: relative;
+
+    >.centerdiv {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+
+        >h1 {
+            font-size: 32px;
+            margin: 0;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        >button {
+            font-size: 20px;
+            margin: 0;
+            margin-top: 32px;
+            padding: 12px 48px;
+            text-transform: uppercase;
+        }
+
+        >p {
+            margin: 0;
+            color: var(--color-gray);
+        }
+
+
+        >.code {
+            display: flex;
+            width: fit-content;
+            align-items: center;
+            font-size: 200px;
+            margin: 0;
+            margin-bottom: 24px;
+
+            >.icon {
+                width: 250px;
+                height: 250px;
+                mask-image: url(/images/icons/zarivka_sad_bile.svg);
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                background-color: var(--text-color);
+                margin: 0 48px;
+                animation: float 3s ease-in-out infinite alternate;
+                @keyframes float {
+                    0% {
+                        transform: translateY(0);
+                    }
+
+                    50% {
+                        transform: translateY(20px);
+                    }
+
+                    100% {
+                        transform: translateY(0);
+                    }
+                }
+            }
+        }
+    }
+
+    .mmqueue {
+        @keyframes appear {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        >.img {
+            width: 250px;
+            max-width: 90vw;
+            aspect-ratio: 1/1;
+            mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
+            mask-size: contain;
+            background-color: var(--text-color);//var(--accent-color);
+            animation: loading-img-anim 2s ease-in-out infinite;
+            margin: 0 auto;
+
+            @keyframes loading-img-anim {
+                0% {
+                    transform: rotate(20deg);
+                }
+
+                50% {
+                    transform: rotate(-20deg);
+                }
+
+                100% {
+                    transform: rotate(20deg);
+                }
+            }
+        }
+
+        p, h1 {
+            text-align: center;
+            margin: 0 auto;
+            max-width: 90vw;
+        }
+
+        h1 {
+            margin-top: 32px;
+            margin-bottom: 8px;
+        }
+
+        p {
+            color: var(--color-gray);
+        }
+    }
+}
