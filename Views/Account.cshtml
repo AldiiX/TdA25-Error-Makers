@@ -3,6 +3,7 @@
 @{
     var webTheme = Utilities.WebTheme.Get();
     var authType = ViewBag.AuthType ?? "login";
+    var loggedAccount = Utilities.GetLoggedAccountFromContextOrNull();
 
 
     // části stránky
@@ -32,11 +33,12 @@
     <link rel="stylesheet" href="/css/mainstyles.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
     <link rel="stylesheet" href="/css/auth.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
     <link id="webtheme-link" rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()">
+    <link rel="stylesheet" href="css/account.css">
 
     @*  scripty pro komponenty *@
     <script src="/scripts/components/header.js"></script>
 </head>
-<body id="AUTH-PAGE">
+<body id="ACCOUNT-PAGE">
 <div id="app">
     @await background
     @await header
@@ -44,22 +46,39 @@
 
     <div class="sections">
         <section class="mainsection">
-            <form method="post">
-                <div class="submit">
-                    <input type="submit" class="button-primary" value="Smazat účet">
-                </div>
-            </form>
+            
             <div class="account-banner"></div>
+
             <div class="account">
-                <div class="account-avatar"></div>
-                <div class="account-info">
-                    <div class="account-name"></div>
-                    <div class="account-createdat"></div>
-                    <div class="account-elo"></div>
+
+                <div class="account-avatar">
+                    @loggedAccount.DisplayName[0].ToString().ToUpper()
                 </div>
-                <div class="game-history"></div>
+
+                <div class="account-info">
+                    <div class="account-name">
+                        @loggedAccount.DisplayName
+                    </div>
+
+                    <div class="account-createdat">
+                        Vytvořen: @loggedAccount.CreatedAt.ToString("dd.MM.yyyy")
+                    </div>
+                </div>
             </div>
-            <div class="logout-button"></div>
+
+            <div class="account-elo">
+                ELO: @loggedAccount.Elo
+            </div>
+
+            <div class="game-history"></div>
+
+            <div class="logout-button">
+                <form method="post">
+                    <div class="submit">
+                        <input type="submit" class="button-primary" value="Smazat účet">
+                    </div>
+                </form>
+            </div>
         </section>
     </div>
 
@@ -69,7 +88,7 @@
 </body>
 <script type="module">
     import * as f from "/scripts/functions.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
-    import { vue } from "/scripts/err.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
+    import { vue } from "/scripts/account.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
 
     window.addCookie = f.addCookie;
     //console.warn(vue);

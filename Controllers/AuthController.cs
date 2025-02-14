@@ -95,7 +95,7 @@ public class AuthController : Controller {
         try {
             using var cmd = conn.CreateCommand();
             cmd.CommandText =
-                "INSERT INTO `users` (`username`, `email`, `password`) VALUES (@username, @email, @password)";
+                "INSERT INTO `users` (`username`, `email`, `password`,`uuid`) VALUES (@username, @email, @password, UUID())";
             cmd.Parameters.AddWithValue("@username", username);
             cmd.Parameters.AddWithValue("@email", email);
             cmd.Parameters.AddWithValue("@password", Utilities.EncryptPassword(password));

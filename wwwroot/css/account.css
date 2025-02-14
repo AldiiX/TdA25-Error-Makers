@@ -1,84 +1,19 @@
-#AUTH-PAGE .sections {
+#ACCOUNT-PAGE .sections {
   min-height: 75vh;
 }
-#AUTH-PAGE .sections .mainsection {
+#ACCOUNT-PAGE .sections .mainsection {
   position: relative;
   margin-top: 25vh;
 }
-#AUTH-PAGE .sections .mainsection .auth-box {
-  width: -moz-fit-content;
-  width: fit-content;
-  position: relative;
-  margin: 0 auto;
+#ACCOUNT-PAGE .sections .mainsection > .account {
+  display: flex;
+  justify-content: center;
 }
-#AUTH-PAGE .sections .mainsection h1 {
-  text-align: center;
-  font-size: 5vw;
-  margin: 0;
-}
-#AUTH-PAGE .sections .mainsection p {
-  font-size: 20px;
-  text-align: center;
-  margin-top: 16px;
-  margin-bottom: 48px;
-}
-#AUTH-PAGE .sections .mainsection a {
-  color: var(--accent-color-secondary);
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 20px;
-}
-#AUTH-PAGE .sections .mainsection form {
-  width: auto;
-  position: relative;
-}
-#AUTH-PAGE .sections .mainsection .input {
-  text-align: center;
-  margin: 16px auto;
-  font-size: 16px;
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-info {
   display: flex;
   flex-direction: column;
-  width: -moz-fit-content;
-  width: fit-content;
-}
-#AUTH-PAGE .sections .mainsection .input > input {
-  width: 250px;
-}
-#AUTH-PAGE .sections .mainsection .input > label {
-  text-align: left;
-  margin-bottom: 4px;
-}
-#AUTH-PAGE .sections .mainsection .errortxt {
-  color: var(--accent-color-secondary);
-  font-size: 16px;
-  max-width: 250px;
-  margin: 10px auto;
-}
-#AUTH-PAGE .sections .mainsection .submit {
-  text-align: center;
-  margin: 0 auto;
-  font-size: 16px;
-  margin-top: 32px;
-}
-#AUTH-PAGE .sections .mainsection .submit > input {
-  width: 250px;
-}
-#AUTH-PAGE .sections .mainsection .submit > input:hover {
-  background-color: var(--accent-color-secondary);
-  color: white;
+  justify-content: center;
+  align-items: center;
 }
 
-@media screen and (min-width: 600px) and (max-width: 960px) {
-  #AUTH-PAGE .sections .mainsection h1 {
-    font-size: 7vw;
-  }
-  #AUTH-PAGE p {
-    margin-bottom: 48px;
-  }
-}
-@media screen and (max-width: 600px) {
-  #AUTH-PAGE .sections .mainsection h1 {
-    font-size: 12vw;
-  }
-}
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImF1dGguc2NzcyIsImF1dGguY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUVJO0VBQ0ksZ0JBQUE7QUNEUjtBREdRO0VBQ0ksa0JBQUE7RUFDQSxnQkFBQTtBQ0RaO0FER1k7RUFDSSx1QkFBQTtFQUFBLGtCQUFBO0VBQ0Esa0JBQUE7RUFDQSxjQUFBO0FDRGhCO0FESVk7RUFDSSxrQkFBQTtFQUNBLGNBQUE7RUFDQSxTQUFBO0FDRmhCO0FES1k7RUFDSSxlQUFBO0VBQ0Esa0JBQUE7RUFDQSxnQkFBQTtFQUNBLG1CQUFBO0FDSGhCO0FETVk7RUFDSSxvQ0FBQTtFQUNBLHFCQUFBO0VBQ0EsZ0JBQUE7RUFDQSxlQUFBO0FDSmhCO0FET1k7RUFDSSxXQUFBO0VBQ0Esa0JBQUE7QUNMaEI7QURRWTtFQUNJLGtCQUFBO0VBQ0EsaUJBQUE7RUFDQSxlQUFBO0VBQ0EsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsdUJBQUE7RUFBQSxrQkFBQTtBQ05oQjtBRFFnQjtFQUNJLFlBQUE7QUNOcEI7QURTZ0I7RUFDSSxnQkFBQTtFQUNBLGtCQUFBO0FDUHBCO0FEV1k7RUFDSSxvQ0FBQTtFQUNBLGVBQUE7RUFDQSxnQkFBQTtFQUNBLGlCQUFBO0FDVGhCO0FEWVk7RUFDSSxrQkFBQTtFQUNBLGNBQUE7RUFDQSxlQUFBO0VBQ0EsZ0JBQUE7QUNWaEI7QURZZ0I7RUFDSSxZQUFBO0FDVnBCO0FEWW9CO0VBQ0ksK0NBQUE7RUFDQSxZQUFBO0FDVnhCOztBRGtCQTtFQUNJO0lBQ0ksY0FBQTtFQ2ZOO0VEa0JFO0lBQ0ksbUJBQUE7RUNoQk47QUFDRjtBRG1CQTtFQUNJO0lBQ0ksZUFBQTtFQ2pCTjtBQUNGIiwiZmlsZSI6ImF1dGguY3NzIn0= */
+/*# sourceMappingURL=account.css.map */
