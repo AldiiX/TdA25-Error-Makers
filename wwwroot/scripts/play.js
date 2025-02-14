@@ -11,6 +11,7 @@ export const vue = new Vue({
             selectedMode: null,
             selectedMultiplayerMode: null,
             selectedSingleplayerMode: null,
+            multiplayerQueueWS: null,
         }
     },
     methods: {
@@ -30,6 +31,25 @@ export const vue = new Vue({
         locationHref(url) {
             window.location.href = url;
         },
+        connectToMultiplayerQueue: function () {
+            const _this = this;
+            const socket = new WebSocket(`ws://${window.location.host}/ws/multiplayer/queue`);
+            socket.onopen = function (event) {
+                console.log('Connected to WebSocket.');
+            };
+            socket.onmessage = function (event) {
+                console.log('Message from server:', event.data);
+            };
+            socket.onclose = function (event) {
+                console.log('WebSocket connection closed:', event);
+            };
+            socket.onerror = function (error) {
+                console.error('WebSocket error:', error);
+                console.error('WebSocket readyState:', socket.readyState);
+                console.error('WebSocket URL:', socket.url);
+            };
+            _this.temp.multiplayerQueueWS = socket;
+        }
     },
     computed: {},
 });

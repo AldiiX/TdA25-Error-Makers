@@ -95,8 +95,12 @@ public static class Program {
         
         
         App.UseHttpsRedirection();
-        App.UseStaticFiles();
         App.UseSession();
+        App.UseWebSockets(new WebSocketOptions() {
+            KeepAliveInterval = TimeSpan.FromSeconds(120),
+        });
+        App.UseMiddleware<WebSocketMiddleware>();
+        App.UseStaticFiles();
         App.UseRouting();
         App.UseAuthorization();
         App.UseMiddleware<ErrorHandlingMiddleware>();
