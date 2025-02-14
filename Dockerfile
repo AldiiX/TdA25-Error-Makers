@@ -1,6 +1,6 @@
 ﻿FROM ubuntu:22.04 AS base
 
-# instalace Redis, MySQL, wget a .NET SDK
+# Install Redis, MySQL, wget, and .NET SDK
 RUN apt-get update && apt-get install -y \
     redis \
     mysql-server \
@@ -12,30 +12,38 @@ RUN apt-get update && apt-get install -y \
     && apt-get update && apt-get install -y dotnet-sdk-8.0 \
     && apt-get clean
 
-# env
+# Environment variables
 ENV DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
 
-# exposování portů
+# Expose ports
 EXPOSE 80
 
-# buildnutí projektu
+# Build project
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["TdA25-Error-Makers.csproj", "./"]
 RUN dotnet restore "TdA25-Error-Makers.csproj"
 COPY . .
+
+# Create .env file if it does not exist
+RUN if [ ! -f /src/.env ]; then \
+    echo "DATABASE_PASSWORD=password" >> /src/.env && \
+    echo "CACHE_VERSION=1" >> /src/.env && \
+    echo "DATABASE_IP=localhost" >> /src/.env; \
+    fi
+
 RUN dotnet build "TdA25-Error-Makers.csproj" -c $BUILD_CONFIGURATION -o /app/build --runtime linux-x64
 COPY database.sql /app/
 COPY start.sh /app/
 RUN chmod +x /app/start.sh
 
-# pushnutí aplikace do /app/
+# Publish application
 RUN dotnet publish "TdA25-Error-Makers.csproj" -c $BUILD_CONFIGURATION -o /app/ --runtime linux-x64 /p:UseAppHost=false
 
-# přepnutí do /app/ diru
+# Switch to /app directory
 WORKDIR /app/
 
-# instalace balíčku tzdata a konfigurace časové zóny
+# Install tzdata package and configure timezone
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends tzdata \
     && ln -sf /usr/share/zoneinfo/Europe/Prague /etc/localtime \
@@ -49,16 +57,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends tzdata \
 #       a pak v github actions secrets -> https://github.com/AldiiX/TdA25-Error-Makers/settings/secrets/actions
 ARG DATABASE_IP=localhost
 ARG DATABASE_PASSWORD=password
-#ARG REDIS_PASSWORD=default
-#ARG REDIS_PORT=6379
 ARG CACHE_VERSION=1
 
-# vytvoření .env souboru ve složce /app
+# Create .env file in /app directory
 RUN echo "DATABASE_PASSWORD=${DATABASE_PASSWORD}" >> /app/.env && \
-    #echo "REDIS_PASSWORD=${REDIS_PASSWORD}" >> /app/.env && \
-    #echo "REDIS_PORT=${REDIS_PORT}" >> /app/.env && \
     echo "CACHE_VERSION=${CACHE_VERSION}" >> /app/.env && \
     echo "DATABASE_IP=${DATABASE_IP}" >> /app/.env
 
-# použití systémových limitů v runtime kontejneru
-CMD /app/start.sh
+# Use system limits in runtime container
+CMD ["/app/start.sh"]
