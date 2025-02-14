@@ -100,7 +100,7 @@ public sealed class Account {
                 reader.GetString("display_name"), 
                 reader.GetString("avatar"),
                 Enum.TryParse<Account.TypeOfAccount>(reader.GetString("type"), out var _e ) ? _e : TypeOfAccount.USER
-            );
+ w           );
         }
         
         return list;

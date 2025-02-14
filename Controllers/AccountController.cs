@@ -18,5 +18,11 @@ public class AccountController : Controller {
     [HttpGet("/ucet"), HttpGet("/acc"), HttpGet("/uzivatel")]
     public IActionResult Redirection() => Redirect("/account");
     
+    
+    [HttpPost("/account")]
+    public IActionResult Account_Post() {
+        
+            return View("/Views/Account.cshtml");
+        }
 }
 

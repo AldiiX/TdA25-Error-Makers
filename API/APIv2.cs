@@ -252,6 +252,8 @@ public class APIv2 : Controller {
         return new JsonResult(games) { ContentType = "application/json" };
     }
 
+    
+    // Leaderboard
     [HttpGet("leaderboard")]
     public IActionResult GetLeaderboard()
     {
