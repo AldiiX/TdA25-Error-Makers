@@ -64,8 +64,9 @@
             <!-- div který se ukaze pred nactenim -->
             <div class="loading" v-show="!gameLoaded">
                 <div class="img"></div>
-                <h1 v-if="gameNumberOfPlayers < 2">Čeká se na druhého hráče</h1>
-                <h1 v-else>Načítá se herní plocha</h1>
+                <h1 v-if="false">Načítá se hra</h1>
+                <h1 v-else-if="gameNumberOfPlayers < 2" v-cloak>Čeká se na druhého hráče</h1>
+                <h1 v-else v-cloak>Načítá se herní plocha</h1>
                 <p>... připravte se na pořádný piškvorkový zápas! :) ...</p>
             </div>
 

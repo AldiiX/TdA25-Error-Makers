@@ -1,7 +1,6 @@
 ﻿using System.Net.WebSockets;
 using System.Text.Json.Serialization;
 using MySql.Data.MySqlClient;
-using TdA25_Error_Makers.Services;
 
 namespace TdA25_Error_Makers.Classes.Objects;
 
@@ -48,13 +47,15 @@ public class MultiplayerGame {
     public ushort Round => Board.GetRound();
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
-    public GameBoard.Player? Winner { get; private set; }
     public string CurrentPlayer => Board.GetNextPlayer().ToString().ToUpper();
     public string NextPlayer => Board.GetCurrentPlayer().ToString().ToUpper();
     public PlayerAccount? PlayerX { get; private set; }
     public PlayerAccount? PlayerO { get; private set; }
     public GameType Type { get; private set; }
     public GameState State { get; private set; }
+
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public GameBoard.Player? Winner { get; private set; }
 
     [JsonIgnore]
     public GameBoard Board { get; private set; }
@@ -65,7 +66,7 @@ public class MultiplayerGame {
     [JsonInclude, JsonPropertyName("winningCells")]
     private HashSet<List<int>>? json_WinningCells {
         get {
-            if (Winner == null || Board == null) return null;
+            if (Winner == null) return null;
 
             return Board.GetWinningCells()?.Select(cell => new List<int> { cell.row, cell.col }).ToHashSet();
         }

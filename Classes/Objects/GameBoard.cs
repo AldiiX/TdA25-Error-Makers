@@ -32,6 +32,8 @@ public class GameBoard : IDeepCloneable<GameBoard> {
                 Board[row, col] = board[row][col];
             }
         }
+
+        CheckIfSomeoneWon();
     }
 
     private GameBoard(string boardJson) {
@@ -52,6 +54,7 @@ public class GameBoard : IDeepCloneable<GameBoard> {
         }
 
         Board = board;
+        CheckIfSomeoneWon();
     }
 
     private GameBoard() {
