@@ -64,7 +64,7 @@ export const vue = new Vue({
 
         connectToMultiplayerQueue: function () {
             const _this = this as any;
-            const socket = new WebSocket(`ws://${window.location.host}/ws/multiplayer/queue`);
+            const socket = new WebSocket(`wss://${window.location.host}/ws/multiplayer/queue`);
 
             socket.onopen = function (event) {
                 console.log('Connected to WebSocket.');

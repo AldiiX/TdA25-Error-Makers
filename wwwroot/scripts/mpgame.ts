@@ -47,7 +47,7 @@ export const vue = new Vue({
         connectToSocket: function(): void {
             const _this = this as any;
             const uuid = window.location.pathname.split("/")[2];
-            const socket = new WebSocket(`ws://${window.location.host}/ws/multiplayer/game/${uuid}`);
+            const socket = new WebSocket(`wss://${window.location.host}/ws/multiplayer/game/${uuid}`);
             _this.socket = socket;
 
             socket.onopen = () => {
