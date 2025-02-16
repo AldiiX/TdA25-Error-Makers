@@ -76,8 +76,8 @@
 }
 
 #ACCOUNT-PAGE{
-    .account{
-        .account-avatar{
+    .account-info{
+        .avatar{
             background: rgba(0, 0, 0 , 0.1);
         }
     }
