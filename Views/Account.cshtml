@@ -38,55 +38,91 @@
     @*  scripty pro komponenty *@
     <script src="/scripts/components/header.js"></script>
 </head>
-<body id="ACCOUNT-PAGE">
+<body id="ACCOUNT-PAGE"  class="header-top-light">
 <div id="app">
-    @await background
+    @* @await background *@
     @await header
 
 
     <div class="sections">
+        <section class="top">
+            <div class="wallpaper"></div>
+
+            <div class="texts">
+
+            </div>
+        </section>
+
         <section class="mainsection">
-            
-            <div class="account">
-                
-                <div class="account-banner"></div>
-
-                <div class="account-main">
-
-                    <div class="account-avatar">
-                        @loggedAccount.DisplayName[0].ToString().ToUpper()
+            <div class="parent">
+                <div class="first">
+                    <div class="left"></div>
+                    <div class="center">
+                        <div class="avatar"></div>
+                        <h1>@loggedAccount?.DisplayName</h1>
                     </div>
-
-                    <div class="account-info">
-                        <div class="account-name">
-                            @loggedAccount.DisplayName
-                        </div>
-                        
-                        <div class="account-elo">
-                            <p class="text">ELO Rating:</p>
-                            <p class="elo">@loggedAccount.Elo</p>
-                        </div>
-
-                        <div class="account-createdat">
-                            <p class="text"> Vytvořen: </p>
-                            <p class="time"> @loggedAccount.CreatedAt.ToString("dd.MM.yyyy") </p>
-                        </div>
-                    </div>
+                    <div class="right"></div>
                 </div>
-                
-                <div class="game-history"></div>
-
-                <div class="delete-account-button">
-                    <form method="post">
-                        <div class="submit">
-                            <input type="submit" class="button-primary" value="Smazat účet">
-                        </div>
-                    </form>
+                <div class="second">
+                    <p>asjmdoiasdj</p>
+                    <p>asjmdoiasdj</p>
+                    <p>asjmdoiasdj</p>
+                    <p>asjmdoiasdj</p>
                 </div>
             </div>
-            
-            
         </section>
+
+        @* <section class="mainsection"> *@
+        @* *@
+        @*     <div class="account"> *@
+        @* *@
+        @*         <div class="account-banner"></div> *@
+        @* *@
+        @*         <div class="account-main"> *@
+        @* *@
+        @*             <div class="account-avatar"> *@
+        @*                 @loggedAccount.DisplayName[0].ToString().ToUpper() *@
+        @*             </div> *@
+        @* *@
+        @*             <div class="account-info"> *@
+        @*                 <p class="account-name"> *@
+        @*                     @loggedAccount.DisplayName *@
+        @*                 </p> *@
+        @* *@
+        @*                 <div class="account-elo"> *@
+        @*                     <p class="text">ELO Rating:</p> *@
+        @*                     <p class="elo">@loggedAccount.Elo</p> *@
+        @*                 </div> *@
+        @* *@
+        @*                 <div class="account-createdat"> *@
+        @*                     <p class="text"> Vytvořen: </p> *@
+        @*                     <p class="time"> @loggedAccount.CreatedAt.ToString("dd.MM.yyyy") </p> *@
+        @*                 </div> *@
+        @*             </div> *@
+        @*         </div> *@
+        @*         <div class="account-bottom"> *@
+        @* *@
+        @*             <div class="game-history"> *@
+        @*                 <div class="title"> *@
+        @*                     <h2>Historie her</h2> *@
+        @*                 </div> *@
+        @*             </div> *@
+        @* *@
+        @*             <div class="admin-tools"></div> *@
+        @*         </div> *@
+        @* *@
+        @*         <div class="delete-account-button"> *@
+        @*             <form method="post"> *@
+        @*                 <div class="submit"> *@
+        @*                     <input type="submit" class="button-primary" value="Smazat účet"> *@
+        @*                 </div> *@
+        @*             </form> *@
+        @*         </div> *@
+        @* *@
+        @*     </div> *@
+        @* *@
+        @* *@
+        @* </section> *@
     </div>
 
 
