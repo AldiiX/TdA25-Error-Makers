@@ -99,12 +99,12 @@ public static class Program {
         App.UseWebSockets(new WebSocketOptions() {
             KeepAliveInterval = TimeSpan.FromSeconds(120),
         });
+        App.UseMiddleware<BeforeInitMiddleware>();
         App.UseMiddleware<WebSocketMiddleware>();
         App.UseStaticFiles();
         App.UseRouting();
         App.UseAuthorization();
         App.UseMiddleware<ErrorHandlingMiddleware>();
-        App.UseMiddleware<BeforeInitMiddleware>();
         App.MapControllerRoute(name: "default", pattern: "/");
 
 

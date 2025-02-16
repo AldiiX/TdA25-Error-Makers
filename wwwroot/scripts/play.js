@@ -39,6 +39,10 @@ export const vue = new Vue({
             };
             socket.onmessage = function (event) {
                 console.log('Message from server:', event.data);
+                const data = JSON.parse(event.data);
+                if (data.action === "sendToMatch") {
+                    _this.locationHref(`/multiplayer/${data.matchUUID}`);
+                }
             };
             socket.onclose = function (event) {
                 console.log('WebSocket connection closed:', event);

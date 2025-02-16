@@ -9,12 +9,22 @@ public class WebSocketMiddleware(RequestDelegate next) {
         if (context.Request.Path == "/ws/multiplayer/queue") {
             if (context.WebSockets.IsWebSocketRequest) {
                 WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                await WSMultiplayerGameQueue.HandleQueueAsync(webSocket);
+                await WSMultiplayerRankedGameQueue.HandleQueueAsync(webSocket);
             } else {
                 context.Response.StatusCode = 400;
             }
-        } else {
-            await next(context);
         }
+
+        else if(context.Request.Path.Value?.StartsWith("/ws/multiplayer/game/") == true) {
+            if (context.WebSockets.IsWebSocketRequest) {
+                WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                string gameUUID = context.Request.Path.Value.Split('/').Last();
+                await WSMultiplayerRankedGame.HandleAsync(webSocket, gameUUID);
+            } else {
+                context.Response.StatusCode = 400;
+            }
+        }
+
+        else await next(context);
     }
 }

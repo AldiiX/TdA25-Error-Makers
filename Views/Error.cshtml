@@ -10,6 +10,7 @@
     var footer = Html.PartialAsync("/Views/Components/Footer.cshtml");
 
     string buttonLink = ViewBag.ButtonLink ?? "/";
+    string buttonText = ViewBag.ButtonText ?? "Zpět";
     string errorCode = ViewBag.ErrorCode != null ? ViewBag.ErrorCode.ToString() : "500";
     string errorMessage = ViewBag.ErrorMessage ?? "Něco se pokazilo. Zkuste to prosím znovu.";
     string errorMessage2 = ViewBag.ErrorMessage2 ?? "XOXOOX";
@@ -57,7 +58,7 @@
             </h1>
             <h1>@errorMessage</h1>
             <p>@errorMessage2</p>
-            <button class="button-primary-col-sec" onclick="location.href='@buttonLink'">Zpět</button>
+            <button class="button-primary-col-sec" onclick="location.href='@buttonLink'">@buttonText</button>
         </div>
     </div>
 

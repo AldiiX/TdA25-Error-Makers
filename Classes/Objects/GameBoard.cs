@@ -230,6 +230,14 @@ public class GameBoard : IDeepCloneable<GameBoard> {
 
     public Player? GetWinner() => CheckIfSomeoneWon();
 
+    public bool SetCell(int row, int col, Player player) {
+        if (row < 0 || row >= 15 || col < 0 || col >= 15) return false;
+        if (Board[row, col] != "") return false;
+
+        Board[row, col] = player == Player.X ? "X" : "O";
+        return true;
+    }
+
     public HashSet<(int row, int col)>? GetWinningCells() => WinningCells != null ? [..WinningCells] : null;
 
     /**
@@ -249,6 +257,10 @@ public class GameBoard : IDeepCloneable<GameBoard> {
         }
 
         return xCount == oCount ? Player.X : Player.O;
+    }
+
+    public Player GetCurrentPlayer() {
+        return GetNextPlayer() == Player.X ? Player.O : Player.X;
     }
 
     public Player? CheckIfSomeoneWon() {

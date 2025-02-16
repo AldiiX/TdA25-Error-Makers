@@ -1,0 +1,137 @@
+﻿@using System.Text.Json
+@using TdA25_Error_Makers
+@using TdA25_Error_Makers.Classes
+@using TdA25_Error_Makers.Classes.Objects
+@{
+    if (ViewBag.Game is not MultiplayerGame game) {
+        throw new Exception("Game is null");
+        return;
+    }
+
+    var loggedAccount = Utilities.GetLoggedAccountFromContextOrNull();
+
+    // komponenty
+    var headerComponent = Html.PartialAsync("/Views/Components/Header.cshtml");
+    var footerComponent = Html.PartialAsync("/Views/Components/Footer.cshtml");
+    var backgroundComponent = Html.PartialAsync("/Views/Components/ColoredBackground.cshtml");
+    var backgroundBlur = Html.PartialAsync("/Views/Components/BlurBackground.cshtml");
+    var confetti = Html.PartialAsync("/Views/Components/Confetti.cshtml");
+    var announcements = Html.PartialAsync("/Views/Components/AnnouncementsMain.cshtml");
+}
+<!doctype html>
+<html lang="en" ontouchmove>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/libs/purecss.css">
+    <link rel="stylesheet" href="/css/game.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
+    <link rel="stylesheet" href="/css/mainstyles.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
+    <link rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()" id="webtheme-link">
+
+    @{ // Vue.js definice
+        if (Program.DEVELOPMENT_MODE) {
+            <script src="/libs/vue_dev.js"></script>
+        } else {
+            <script src="/libs/vue.js"></script>
+        }
+    }
+
+
+
+    <title>Ranked Hra • Think Different Academy</title>
+
+    @*  scripty pro komponenty *@
+    <script src="/scripts/components/header.js"></script>
+</head>
+<body id="GAME-PAGE" oncontextmenu="return false">
+    <div id="app">
+        @await backgroundBlur
+        @await announcements
+
+        <div v-show="gameLoaded">
+            @await backgroundComponent
+        </div>
+
+        @await headerComponent
+        <div class="mainsection">
+
+            <!-- confetti při výhře -->
+            <div v-if="game && gameLoaded && game?.winner" v-cloak>
+                @await confetti
+            </div>
+
+            <!-- div který se ukaze pred nactenim -->
+            <div class="loading" v-show="!gameLoaded">
+                <div class="img"></div>
+                <h1 v-if="gameNumberOfPlayers < 2">Čeká se na druhého hráče</h1>
+                <h1 v-else>Načítá se herní plocha</h1>
+                <p>... připravte se na pořádný piškvorkový zápas! :) ...</p>
+            </div>
+
+
+
+            <!-- herní pole + controls -->
+            <div class="flex" v-cloak v-bind:class="{ locked: gameLocked, 'fade-out': gameFadeOut }" v-show="gameLoaded" v-bind:style="{ '--mcolor': setPlayerColor(), '--hcolor': setPlayerColorHover() }">
+                <div class="left">
+
+
+                    <div class="grid" v-bind:class="{ locked: game?.winner != null }">
+                        <div class="cell" v-cloak v-for="(cell, i) in 15*15" v-on:click="updateCell($event.target, i)"></div>
+                    </div>
+                </div>
+
+                <div class="right">
+                    <div class="multiplayer-top">
+                        <div class="top">
+                            <div class="player-x" v-bind:class="{ active: String(game?.currentPlayer).toLowerCase() === 'x' }">
+                                <div class="icon"></div>
+                                <h1 class="name">{{ game?.playerX?.name }} {{ accountUUID === game?.playerX?.uuid ? '(ty)' : ''}}</h1>
+                            </div>
+
+                            <div class="player-o" v-bind:class="{ active: String(game?.currentPlayer).toLowerCase() === 'o' }">
+                                <div class="icon"></div>
+                                <h1 class="name">{{ game?.playerO?.name }} {{ accountUUID === game?.playerO?.uuid ? '(ty)' : ''}}</h1>
+                            </div>
+                        </div>
+
+                        <div class="texts">
+                            <p>Aktuální kolo: <span v-cloak>{{ game?.round + 1 }}.</span></p>
+                            <p>Hra vytvořena: <span v-cloak>{{ (new Date(game?.createdAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</span></p>
+                            <p>Poslední aktualizace: <span v-cloak>{{ (new Date(game?.updatedAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</span></p>
+                        </div>
+                    </div>
+
+
+                    <!-- varovani pokud se druhy hrac odpoji -->
+                    <div class="player-disconnected-warn" v-show="gameLoaded && gameNumberOfPlayers < 2">
+                        <p>Druhý hráč se odpojil, hra skončí za XX sekund.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @await footerComponent
+    </div>
+</body>
+<script>
+
+</script>
+<script type="module">
+    import * as f from "/scripts/functions.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
+    import { vue } from "/scripts/mpgame.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
+
+    vue.accountUUID = "@loggedAccount?.UUID";
+    setTimeout(() => { // fake loading jen tak for fun aby to vypadalo pěkně
+        vue.game = @Html.Raw(JsonSerializer.Serialize(game, new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+        console.log(vue.game);
+        vue.initializeGame(vue.game);
+    }, 1150);
+
+    window.addCookie = f.addCookie;
+    setTimeout(() => {
+        window.scroll({ top: 0, left: 0});
+    }, 150);
+    //console.warn(vue);
+    if (window.history.replaceState) window.history.replaceState( null, null, window.location.href );
+</script>
+</html>

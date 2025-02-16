@@ -336,7 +336,7 @@
                 overflow: hidden;
             }
 
-            div:nth-child(1) {
+            >div:nth-child(1) {
                 min-width: 320px;
 
                 >.top {
@@ -383,6 +383,52 @@
                         >span {
                             font-weight: 700;
                             font-size: 18px;
+                        }
+                    }
+                }
+            }
+
+            >.multiplayer-top {
+                >.top {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+
+                    >.player-o,
+                    >.player-x {
+                        display: flex;
+                        gap: 12px;
+                        align-items: center;
+
+                        &:not(.active) {
+                            opacity: 0.4;
+                        }
+
+                        div {
+                            width: 28px;
+                            height: 28px;
+                            mask-repeat: no-repeat;
+                            mask-position: center;
+                            mask-size: contain;
+                            background-color: white;
+                        }
+
+                        h1 {
+                            font-size: 24px;
+                            margin: 0;
+                            width: max-content;
+                        }
+                    }
+
+                    >.player-o {
+                        div {
+                            mask-image: url('/images/icons/O_bile.svg');
+                        }
+                    }
+
+                    >.player-x {
+                        div {
+                            mask-image: url('/images/icons/X_bile.svg');
                         }
                     }
                 }
@@ -439,6 +485,13 @@
                     //flex-grow: 2;
                     width: 120px;
                 }
+            }
+
+            >.player-disconnected-warn {
+                background-color: var(--accent-color-secondary);
+                color: white;
+                text-align: center;
+                font-size: 16px;
             }
         }
     }
