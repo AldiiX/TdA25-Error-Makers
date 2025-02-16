@@ -115,9 +115,11 @@ public class MultiplayerGame {
                         *, 
                         po.uuid AS player_o_uuid, 
                         po.display_name AS player_o_name, 
+                        po.username AS player_o_username, 
                         po.elo AS player_o_elo, 
                         px.uuid AS player_x_uuid, 
                         px.display_name AS player_x_name, 
+                        px.username AS player_x_username, 
                         px.elo AS player_x_elo
                     FROM multiplayer_games
                     JOIN users po ON multiplayer_games.player_o = po.uuid
@@ -134,13 +136,13 @@ public class MultiplayerGame {
 
         var playerX = new PlayerAccount(
             reader.GetValueOrNull<string>("player_x_uuid") ?? Guid.NewGuid().ToString(),
-            reader.GetValueOrNull<string>("player_x_name") ?? "Guest",
+            reader.GetValueOrNull<string>("player_x_name") ?? reader.GetValueOrNull<string>("player_x_username") ?? "Guest",
             reader.GetValueOrNull<UInt32?>("player_x_elo") ?? 400
         );
 
         var playerO = new PlayerAccount(
             reader.GetValueOrNull<string>("player_o_uuid") ?? Guid.NewGuid().ToString(),
-            reader.GetValueOrNull<string>("player_o_name") ?? "Guest",
+            reader.GetValueOrNull<string>("player_o_name") ?? reader.GetValueOrNull<string>("player_o_username") ?? "Guest",
             reader.GetValueOrNull<UInt32?>("player_o_elo") ?? 400
         );
 
@@ -184,9 +186,11 @@ public class MultiplayerGame {
                 *, 
                 po.uuid AS player_o_uuid, 
                 po.display_name AS player_o_name, 
+                po.username AS player_o_username, 
                 po.elo AS player_o_elo, 
                 px.uuid AS player_x_uuid, 
                 px.display_name AS player_x_name, 
+                px.username AS player_x_username, 
                 px.elo AS player_x_elo
             FROM multiplayer_games
             JOIN users po ON multiplayer_games.player_o = po.uuid
@@ -203,13 +207,13 @@ public class MultiplayerGame {
 
         var playerX = new PlayerAccount(
             reader.GetValueOrNull<string>("player_x_uuid") ?? Guid.NewGuid().ToString(),
-            reader.GetValueOrNull<string>("player_x_name") ?? "Guest",
+            reader.GetValueOrNull<string>("player_x_name") ?? reader.GetValueOrNull<string>("player_x_username") ?? "Guest",
             reader.GetValueOrNull<UInt32?>("player_x_elo") ?? 400
         );
 
         var playerO = new PlayerAccount(
             reader.GetValueOrNull<string>("player_o_uuid") ?? Guid.NewGuid().ToString(),
-            reader.GetValueOrNull<string>("player_o_name") ?? "Guest",
+            reader.GetValueOrNull<string>("player_o_name") ?? reader.GetValueOrNull<string>("player_o_username") ?? "Guest",
             reader.GetValueOrNull<UInt32?>("player_o_elo") ?? 400
         );
 
