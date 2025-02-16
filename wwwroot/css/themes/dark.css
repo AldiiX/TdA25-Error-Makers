@@ -63,6 +63,13 @@ html {
         }
     }
 }
+#ACCOUNT-PAGE{
+    .account{
+        .account-avatar{
+            background: rgba(255, 255, 255, 0.2);
+        }
+    }
+}
 
 .sections >section:is(.top) .wallpaper::after {
     background: linear-gradient(0deg, var(--background-color), transparent 100%);

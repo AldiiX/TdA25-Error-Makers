@@ -47,38 +47,45 @@
     <div class="sections">
         <section class="mainsection">
             
-            <div class="account-banner"></div>
-
             <div class="account">
+                
+                <div class="account-banner"></div>
 
-                <div class="account-avatar">
-                    @loggedAccount.DisplayName[0].ToString().ToUpper()
+                <div class="account-main">
+
+                    <div class="account-avatar">
+                        @loggedAccount.DisplayName[0].ToString().ToUpper()
+                    </div>
+
+                    <div class="account-info">
+                        <div class="account-name">
+                            @loggedAccount.DisplayName
+                        </div>
+                        
+                        <div class="account-elo">
+                            <p class="text">ELO Rating:</p>
+                            <p class="elo">@loggedAccount.Elo</p>
+                        </div>
+
+                        <div class="account-createdat">
+                            <p class="text"> Vytvořen: </p>
+                            <p class="time"> @loggedAccount.CreatedAt.ToString("dd.MM.yyyy") </p>
+                        </div>
+                    </div>
                 </div>
+                
+                <div class="game-history"></div>
 
-                <div class="account-info">
-                    <div class="account-name">
-                        @loggedAccount.DisplayName
-                    </div>
-
-                    <div class="account-createdat">
-                        Vytvořen: @loggedAccount.CreatedAt.ToString("dd.MM.yyyy")
-                    </div>
+                <div class="delete-account-button">
+                    <form method="post">
+                        <div class="submit">
+                            <input type="submit" class="button-primary" value="Smazat účet">
+                        </div>
+                    </form>
                 </div>
             </div>
-
-            <div class="account-elo">
-                ELO: @loggedAccount.Elo
-            </div>
-
-            <div class="game-history"></div>
-
-            <div class="logout-button">
-                <form method="post">
-                    <div class="submit">
-                        <input type="submit" class="button-primary" value="Smazat účet">
-                    </div>
-                </form>
-            </div>
+            
+            
         </section>
     </div>
 
