@@ -176,5 +176,28 @@
   height: 1px;
   background-color: var(--color-gray);
 }
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game {
+  display: flex;
+  flex-direction: column;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 16px;
+  margin-right: 16px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .game-between {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .game-between > .player {
+  margin: 0;
+}
 
 /*# sourceMappingURL=account.css.map */
