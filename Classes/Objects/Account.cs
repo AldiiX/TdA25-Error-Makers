@@ -9,7 +9,7 @@ namespace TdA25_Error_Makers.Classes.Objects;
 
 
 public sealed class Account {
-    public enum TypeOfAccount { USER, ADMIN }
+    public enum TypeOfAccount { USER, ADMIN, DEVELOPER }
 
     public string UUID { get; private set; }
     public string Username { get; private set; }

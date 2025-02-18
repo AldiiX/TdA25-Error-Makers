@@ -108,13 +108,13 @@
                         <p>Chat</p>
 
                         <div class="chat-messages" v-cloak>
-                            <div class="message" v-for="message in chatMessages" v-bind:style="{ '--color': message.letter === 'X' ? 'var(--accent-color-secondary)' : 'var(--accent-color-primary)' }">
+                            <div class="message" v-for="message in chatMessages" v-bind:class="{ mymsg: message.isMe }" v-bind:style="{ '--color': message.letter === 'X' ? 'var(--accent-color-secondary)' : 'var(--accent-color-primary)' }">
                                 <p class="name">{{ message.sender }}</p>
                                 <p class="text">{{ message.message }}</p>
                             </div>
                         </div>
                         <div class="chat-input">
-                            <input type="text" v-model="chatMessageInput" v-on:keyup.enter="sendMessageToMultiplayerChat(chatMessageInput, $event)" v-bind:placeholder="`Napiš zprávu jako ${accountName}...`"/>
+                            <input type="text" maxlength="64" v-model="chatMessageInput" v-on:keyup.enter="sendMessageToMultiplayerChat(chatMessageInput, $event)" v-bind:placeholder="`Napiš zprávu jako ${accountName}...`"/>
                         </div>
                     </div>
 

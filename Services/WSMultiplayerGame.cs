@@ -118,7 +118,7 @@ public static class WSMultiplayerRankedGame {
                             action = "chatMessage",
                             message = obj?["message"]?.ToString(),
                             sender = account?.Name,
-                            letter = game.PlayerX?.UUID == account?.UUID ? "X" : "O"
+                            letter = game.PlayerX?.UUID == account?.UUID ? "X" : "O",
                         });
 
                         foreach (var player in games[gameUUID]) player.WebSocket?.SendAsync(new ArraySegment<byte>(msg), WebSocketMessageType.Text, true, CancellationToken.None).Wait();

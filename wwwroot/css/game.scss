@@ -495,7 +495,7 @@
             }
 
             >.chat {
-                min-width: 350px;
+                width: 350px;
 
                 >p {
                     margin: 0;
@@ -505,16 +505,18 @@
                 }
 
                 .chat-messages {
-                    padding: 24px;
-                    gap: 12px;
+                    padding: 0 24px;
+                    gap: 6px;
                     display: flex;
                     flex-direction: column;
                     overflow-y: auto;
+                    overflow-x: hidden;
                     flex-grow: 1;
-                    max-height: 250px;
+                    max-height: 200px;
                     min-height: 100px;
 
                     >.message {
+                        width: fit-content;
                         padding: 12px;
                         border-radius: 12px;
                         background-color: var(--color);
@@ -524,6 +526,17 @@
                         animation: asdsaidasodjaoisdsf 0.3s;
                         animation-iteration-count: 1;
                         animation-timing-function: ease;
+
+
+                        &:is(.mymsg) {
+                            flex-direction: row-reverse;
+                            text-align: right;
+                            align-self: flex-end;
+
+                            >.name {
+                                display: none;
+                            }
+                        }
 
 
                         p {
@@ -558,9 +571,18 @@
 
                 .chat-input {
                     input {
-                        width: 100%;
-                        border-radius: 0;
-                        padding: 24px;
+                        width: calc(100% - 48px);
+                        left: 50%;
+                        transform: translateX(-50%);
+                        position: relative;
+                        padding: 12px;
+                        border-radius: 12px 12px;
+                        margin-bottom: 16px;
+                        margin-top: 16px;
+
+                        &::placeholder {
+                            user-select: none;
+                        }
                     }
                 }
             }

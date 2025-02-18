@@ -44,6 +44,8 @@ export const vue = new Vue({
         main: function(): void {
             const _this = this as any;
 
+
+            //_this.gameLoaded = true;
             this.connectToSocket();
         },
 
@@ -59,40 +61,46 @@ export const vue = new Vue({
             }
 
             socket.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                console.log(data);
+                _this.receiveSocketMessage(event);
+            }
+        },
 
-                if(data.c === "UNA1") location.href="/error?code=404&message=Hra skončila&buttonLink=/play";
+        receiveSocketMessage: function(event: MessageEvent<any>) {
+            const _this = this as any;
+            const data = JSON.parse(event.data);
+            console.log(data);
 
-                if(data.action === "status") {
-                    _this.gameNumberOfPlayers = data.playerCount;
-                }
+            if(data.c === "UNA1") location.href="/error?code=404&message=Hra skončila&buttonLink=/play";
 
-                if(data.action === "updateGame") {
-                    this.initializeGame(data.game);
-                }
+            if(data.action === "status") {
+                _this.gameNumberOfPlayers = data.playerCount;
+            }
 
-                if(data.action === "chatMessage") {
-                    (_this.chatMessages as any[]).push({
-                        sender: data.sender,
-                        message: data.message,
-                        letter: String(data.letter).toUpperCase(),
-                    });
+            if(data.action === "updateGame") {
+                this.initializeGame(data.game);
+            }
 
-                    // scrollnuti chatu dolu
-                    setTimeout(() => {
-                        const chatDiv = document.querySelector(".chat-messages") as HTMLElement;
-                        chatDiv.scroll({top: chatDiv.scrollHeight + 100000, behavior: 'smooth'});
-                    }, 10);
-                }
+            if(data.action === "chatMessage") {
+                (_this.chatMessages as any[]).push({
+                    sender: data.sender,
+                    message: data.message,
+                    letter: String(data.letter).toUpperCase(),
+                    isMe: data.sender === _this.accountName,
+                });
+
+                // scrollnuti chatu dolu
+                setTimeout(() => {
+                    const chatDiv = document.querySelector(".chat-messages") as HTMLElement;
+                    chatDiv.scroll({top: chatDiv.scrollHeight + 100000, behavior: 'smooth'});
+                }, 10);
+            }
 
 
 
 
-                if(!_this.gameLoaded && data.action === "status" && data.playerCount >= 2 && _this.game) {
-                    _this.gameLoaded = true;
-                    if(_this.game.playerX.uuid === _this.accountUUID) _this.gameLocked = false;
-                }
+            if(!_this.gameLoaded && data.action === "status" && data.playerCount >= 2 && _this.game) {
+                _this.gameLoaded = true;
+                if(_this.game.playerX.uuid === _this.accountUUID) _this.gameLocked = false;
             }
         },
 
@@ -122,23 +130,6 @@ export const vue = new Vue({
             }));
 
             _this.game?.currentPlayer === "X" ? _this.game.currentPlayer = "O" : _this.game.currentPlayer = "X";
-        },
-
-        getGame: function(): void {
-            const _this = this as any;
-            const gameUUID = getCookie("gameuuid") ?? window.location.pathname.split("/")[2];
-            //console.warn(gameUUID);
-
-            fetch(`/api/v2/games/${gameUUID}`)
-                .then(async response => {
-                    const data = await response.json();
-                    if(!response.ok) throw new Error();
-
-                    this.initializeGame(data);
-                }
-            ).catch(error => {
-                location.href = `/error?code=404&message=Chyba při spouštění hry&buttonLink=/games`;
-            });
         },
 
         generateRandomWinMessage: function(winner: string): string {
@@ -202,121 +193,6 @@ export const vue = new Vue({
             if(_this.accountUUID === _this.game.playerO.uuid && _this.game.currentPlayer === "O") _this.gameLocked = false;
         },
 
-        saveGame: function(): void {
-            const _this = this as any;
-
-            fetch(`/api/v2/games/${_this.game.uuid}/`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    board: _this.game.board,
-                    name: (document.getElementById("input-game-name") as HTMLInputElement)?.value ?? "Nová hra",
-                    difficulty: (document.getElementById("input-game-difficulty") as HTMLInputElement)?.value ?? "medium",
-                    saved: true,
-                    errorIfSavingCompleted: true,
-                })
-            }).then(async response => {
-                const data = await response.json();
-                if(!response.ok) throw new Error();
-
-                window.history.pushState({}, '', `/game/${data.uuid}`);
-                this.initializeGame(data);
-            }).catch(_ => {
-                this.getGame();
-            });
-        },
-
-        deleteGame: function(): void {
-            const _this = this as any;
-
-            fetch(`/api/v2/games/${_this.game.uuid}/`, {
-                method: "DELETE",
-            }).then(response => {
-                window.location.href = "/games";
-            });
-        },
-
-        resetGame: function (): void {
-            const _this = this as any;
-            if(_this.gameLocked) return;
-
-            _this.gameLocked = true;
-            fetch(`/api/v2/games/${_this.game.uuid}/`, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(async response => {
-                const data = await response.json();
-                if(!response.ok) throw new Error();
-
-                this.initializeGame(data);
-            }).catch(_ => {
-                this.getGame();
-            });
-        },
-
-        cancelEditMode: function() {
-            const _this = this as any;
-            _this.editMode = false;
-            _this.game.name = _this.game.original.name;
-            _this.game.difficulty = _this.game.original.difficulty;
-        },
-
-        createNewGame: function(): void {
-            const _this = this as any;
-            _this.gameLocked = true;
-
-            // preload /game stránku
-            const preloadLink = document.createElement("link");
-            preloadLink.href = "/play/singleplayer/1v1";
-            preloadLink.rel = "prefetch";
-            //preloadLink.as = "document";
-            document.head.appendChild(preloadLink);
-
-
-            const bgDiv = document.querySelector(".background-f55288d9-4dcf-456d-87c4-26be60c16cdb") as HTMLElement;
-            const newGameHeaderButton = document.querySelector(".header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Login .newgame") as HTMLElement;
-            const blurBgDiv = document.querySelector(".bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433") as HTMLElement;
-            bgDiv.classList.add("fade-out");
-            _this.gameFadeOut = true;
-            blurBgDiv.classList.add("disableanimations");
-            newGameHeaderButton.style.pointerEvents = "none";
-
-            setTimeout(() => {
-                fetch(`/api/v2/games/${_this.game.uuid}/`, {
-                    method: "DELETE",
-                }).then();
-
-                window.location.href = "/play/singleplayer/1v1";
-            }, 1500);
-        },
-
-        saveAsNewGameButtonClick: function(): void {
-            const _this = this as any;
-
-            _this.editMode = true;
-            fetch(`/api/v2/games/generate-name`, {
-                method: "GET",
-            }).then(async response => {
-                const data = await response.json();
-                if(!response.ok) throw new Error();
-
-                _this.game.name = data.name;
-            });
-        },
-
-        saveAsNewGameCancelButtonClick: function (): void {
-            const _this = this as any;
-            if(!_this.game) return;
-
-            _this.editMode = false;
-            _this.game.name = _this.game.original.name;
-            _this.game.difficulty = _this.game.original.difficulty;
-        },
-
         setPlayerColor: function (): any {
             const _this = this as any;
             if(!_this.game) return;
@@ -335,20 +211,11 @@ export const vue = new Vue({
             return _this.currentPlayer == 'x' ? 'var(--accent-color-primary)' : 'var(--accent-color-secondary)'
         },
 
-        difficultyTextTranslated: function(): string {
-            const _this = this as any;
-            if(_this.game.difficulty === "beginner") return "Začátečník";
-            if(_this.game.difficulty === "easy") return "Lehká";
-            if(_this.game.difficulty === "medium") return "Střední";
-            if(_this.game.difficulty === "hard") return "Těžká";
-            if(_this.game.difficulty === "extreme") return "Extrémně těžká";
-
-            return "Neznámá";
-        },
-
         sendMessageToMultiplayerChat: function (message: string, event: Event): void {
             const _this = this as any;
             const element = event.target as HTMLInputElement;
+
+            message = message.trim();
             if(message === "") return;
 
 
