@@ -51,7 +51,11 @@ public class MultiplayerGame {
     public string NextPlayer => Board.GetCurrentPlayer().ToString().ToUpper();
     public PlayerAccount? PlayerX { get; private set; }
     public PlayerAccount? PlayerO { get; private set; }
+
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public GameType Type { get; private set; }
+
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public GameState State { get; private set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]

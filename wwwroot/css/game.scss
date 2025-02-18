@@ -495,10 +495,12 @@
             }
 
             >.chat {
+                min-width: 350px;
+
                 >p {
                     margin: 0;
                     padding: 24px;
-                    font-size: 16px;
+                    font-size: 18px;
                     font-weight: 700;
                 }
 
@@ -508,18 +510,44 @@
                     display: flex;
                     flex-direction: column;
                     overflow-y: auto;
-                    max-height: 200px;
+                    flex-grow: 1;
+                    max-height: 250px;
+                    min-height: 100px;
 
                     >.message {
                         padding: 12px;
                         border-radius: 12px;
-                        background-color: var(--mcolor);
+                        background-color: var(--color);
                         color: white;
                         display: flex;
                         gap: 12px;
+                        animation: asdsaidasodjaoisdsf 0.3s;
+                        animation-iteration-count: 1;
+                        animation-timing-function: ease;
+
+
+                        p {
+                            margin: 0;
+
+                            &::selection {
+                                background-color: white;
+                                color: black;
+                            }
+                        }
+
+
+                        @keyframes asdsaidasodjaoisdsf {
+                            from {
+                                opacity: 0;
+                            }
+
+                            to {
+                                opacity: 1;
+                            }
+                        }
 
                         >.name {
-                            font-weight: 700;
+                            font-weight: 750;
                         }
 
                         >.message {
@@ -532,6 +560,7 @@
                     input {
                         width: 100%;
                         border-radius: 0;
+                        padding: 24px;
                     }
                 }
             }

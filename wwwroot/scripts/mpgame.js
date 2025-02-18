@@ -41,10 +41,12 @@ export const vue = new Vue({
             };
             socket.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                _this.gameNumberOfPlayers = data.count;
                 console.log(data);
                 if (data.c === "UNA1")
                     location.href = "/error?code=404&message=Hra skončila&buttonLink=/play";
+                if (data.action === "status") {
+                    _this.gameNumberOfPlayers = data.playerCount;
+                }
                 if (data.action === "updateGame") {
                     this.initializeGame(data.game);
                 }
@@ -52,9 +54,14 @@ export const vue = new Vue({
                     _this.chatMessages.push({
                         sender: data.sender,
                         message: data.message,
+                        letter: String(data.letter).toUpperCase(),
                     });
+                    setTimeout(() => {
+                        const chatDiv = document.querySelector(".chat-messages");
+                        chatDiv.scroll({ top: chatDiv.scrollHeight + 100000, behavior: 'smooth' });
+                    }, 10);
                 }
-                if (!_this.gameLoaded && data.action === "playersInGame" && data.count >= 2 && _this.game) {
+                if (!_this.gameLoaded && data.action === "status" && data.playerCount >= 2 && _this.game) {
                     _this.gameLoaded = true;
                     if (_this.game.playerX.uuid === _this.accountUUID)
                         _this.gameLocked = false;

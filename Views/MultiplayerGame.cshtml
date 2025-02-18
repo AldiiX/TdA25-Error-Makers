@@ -103,24 +103,24 @@
                         </div>
                     </div>
 
-
-                    <!-- varovani pokud se druhy hrac odpoji -->
-                    <div class="player-disconnected-warn" v-show="gameLoaded && gameNumberOfPlayers < 2">
-                        <p>Druhý hráč se odpojil, hra skončí za XX sekund.</p>
-                    </div>
-
+                    <!-- chat -->
                     <div class="chat">
                         <p>Chat</p>
 
                         <div class="chat-messages" v-cloak>
-                            <div class="message" v-for="message in chatMessages">
-                                <div class="name">{{ message.sender }}</div>
-                                <div class="text">{{ message.message }}</div>
+                            <div class="message" v-for="message in chatMessages" v-bind:style="{ '--color': message.letter === 'X' ? 'var(--accent-color-secondary)' : 'var(--accent-color-primary)' }">
+                                <p class="name">{{ message.sender }}</p>
+                                <p class="text">{{ message.message }}</p>
                             </div>
                         </div>
                         <div class="chat-input">
-                            <input type="text" v-model="chatMessageInput" v-on:keyup.enter="sendMessageToMultiplayerChat(chatMessageInput, $event)" placeholder="Napište zprávu..."/>
+                            <input type="text" v-model="chatMessageInput" v-on:keyup.enter="sendMessageToMultiplayerChat(chatMessageInput, $event)" v-bind:placeholder="`Napiš zprávu jako ${accountName}...`"/>
                         </div>
+                    </div>
+
+                    <!-- varovani pokud se druhy hrac odpoji -->
+                    <div class="player-disconnected-warn" v-show="gameLoaded && gameNumberOfPlayers < 2">
+                        <p>Druhý hráč se odpojil, hra skončí za XX sekund.</p>
                     </div>
                 </div>
             </div>

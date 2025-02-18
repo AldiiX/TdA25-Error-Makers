@@ -117,7 +117,8 @@ public static class WSMultiplayerRankedGame {
                         var msg = JsonSerializer.SerializeToUtf8Bytes(new {
                             action = "chatMessage",
                             message = obj?["message"]?.ToString(),
-                            sender = obj?["sender"]?.ToString()
+                            sender = account?.Name,
+                            letter = game.PlayerX?.UUID == account?.UUID ? "X" : "O"
                         });
 
                         foreach (var player in games[gameUUID]) player.WebSocket?.SendAsync(new ArraySegment<byte>(msg), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
@@ -168,8 +169,8 @@ public static class WSMultiplayerRankedGame {
                 foreach (var player in gamePlayers) {
                     var message = JsonSerializer.SerializeToUtf8Bytes(
                         new {
-                            action = "playersInGame",
-                            count = gamePlayers.Count
+                            action = "status",
+                            playerCount = gamePlayers.Count
                         }
                     );
 
