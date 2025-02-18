@@ -493,6 +493,48 @@
                 text-align: center;
                 font-size: 16px;
             }
+
+            >.chat {
+                >p {
+                    margin: 0;
+                    padding: 24px;
+                    font-size: 16px;
+                    font-weight: 700;
+                }
+
+                .chat-messages {
+                    padding: 24px;
+                    gap: 12px;
+                    display: flex;
+                    flex-direction: column;
+                    overflow-y: auto;
+                    max-height: 200px;
+
+                    >.message {
+                        padding: 12px;
+                        border-radius: 12px;
+                        background-color: var(--mcolor);
+                        color: white;
+                        display: flex;
+                        gap: 12px;
+
+                        >.name {
+                            font-weight: 700;
+                        }
+
+                        >.message {
+                            flex-grow: 1;
+                        }
+                    }
+                }
+
+                .chat-input {
+                    input {
+                        width: 100%;
+                        border-radius: 0;
+                    }
+                }
+            }
         }
     }
 }

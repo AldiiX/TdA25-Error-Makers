@@ -29,8 +29,11 @@ export const vue = new Vue({
         pageIsScrolled: false,
         menuExpanded: false,
         accountUUID: null,
+        accountName: null,
         announcements: [],
         socket: null,
+        chatMessages: [],
+        chatMessageInput: "",
     },
 
 
@@ -64,6 +67,13 @@ export const vue = new Vue({
 
                 if(data.action === "updateGame") {
                     this.initializeGame(data.game);
+                }
+
+                if(data.action === "chatMessage") {
+                    (_this.chatMessages as any[]).push({
+                        sender: data.sender,
+                        message: data.message,
+                    });
                 }
 
 
@@ -324,6 +334,22 @@ export const vue = new Vue({
             if(_this.game.difficulty === "extreme") return "Extrémně těžká";
 
             return "Neznámá";
+        },
+
+        sendMessageToMultiplayerChat: function (message: string, event: Event): void {
+            const _this = this as any;
+            const element = event.target as HTMLInputElement;
+            if(message === "") return;
+
+
+
+            _this.chatMessageInput = "";
+
+            _this.socket.send(JSON.stringify({
+                action: "SendChatMessage",
+                message: message,
+                sender: _this.accountName,
+            }));
         },
     },
 

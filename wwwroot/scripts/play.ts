@@ -32,8 +32,6 @@ export const vue = new Vue({
             selectedMode: null, // singleplayer nebo multiplayer
             selectedMultiplayerMode: null,
             selectedSingleplayerMode: null,
-
-            multiplayerQueueWS: null,
         }
     },
 
@@ -91,7 +89,7 @@ export const vue = new Vue({
             };
 
             _this.temp.multiplayerQueueWS = socket;
-        }
+        },
     },
 
     computed: {

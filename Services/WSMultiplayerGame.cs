@@ -102,12 +102,26 @@ public static class WSMultiplayerRankedGame {
 
             if (result.MessageType == WebSocketMessageType.Text) {
                 var obj = JsonNode.Parse(message);
+                var action = obj?["action"]?.ToString();
                 //Console.WriteLine(message);
-                if (obj?["action"]?.ToString() == "MakeMove") {
-                    var x = ushort.Parse(obj?["x"]?.ToString() ?? "0");
-                    var y = ushort.Parse(obj?["y"]?.ToString() ?? "0");
 
-                    await MakeMove(account, game, x, y);
+                switch (action) {
+                    case "MakeMove": {
+                        var x = ushort.Parse(obj?["x"]?.ToString() ?? "0");
+                        var y = ushort.Parse(obj?["y"]?.ToString() ?? "0");
+
+                        await MakeMove(account, game, x, y);
+                    } break;
+
+                    case "SendChatMessage": {
+                        var msg = JsonSerializer.SerializeToUtf8Bytes(new {
+                            action = "chatMessage",
+                            message = obj?["message"]?.ToString(),
+                            sender = obj?["sender"]?.ToString()
+                        });
+
+                        foreach (var player in games[gameUUID]) player.WebSocket?.SendAsync(new ArraySegment<byte>(msg), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
+                    } break;
                 }
             }
         }

@@ -73,11 +73,11 @@
 
 
             <!-- herní pole + controls -->
-            <div class="flex" v-cloak v-bind:class="{ locked: gameLocked, 'fade-out': gameFadeOut }" v-show="gameLoaded" v-bind:style="{ '--mcolor': setPlayerColor(), '--hcolor': setPlayerColorHover() }">
+            <div class="flex" v-cloak v-bind:class="{  'fade-out': gameFadeOut }" v-show="gameLoaded" v-bind:style="{ '--mcolor': setPlayerColor(), '--hcolor': setPlayerColorHover() }">
                 <div class="left">
 
 
-                    <div class="grid" v-bind:class="{ locked: game?.winner != null }">
+                    <div class="grid" v-bind:class="{ locked: game?.winner != null || gameLocked }">
                         <div class="cell" v-cloak v-for="(cell, i) in 15*15" v-on:click="updateCell($event.target, i)"></div>
                     </div>
                 </div>
@@ -108,6 +108,20 @@
                     <div class="player-disconnected-warn" v-show="gameLoaded && gameNumberOfPlayers < 2">
                         <p>Druhý hráč se odpojil, hra skončí za XX sekund.</p>
                     </div>
+
+                    <div class="chat">
+                        <p>Chat</p>
+
+                        <div class="chat-messages" v-cloak>
+                            <div class="message" v-for="message in chatMessages">
+                                <div class="name">{{ message.sender }}</div>
+                                <div class="text">{{ message.message }}</div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" v-model="chatMessageInput" v-on:keyup.enter="sendMessageToMultiplayerChat(chatMessageInput, $event)" placeholder="Napište zprávu..."/>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -122,6 +136,7 @@
     import { vue } from "/scripts/mpgame.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
 
     vue.accountUUID = "@loggedAccount?.UUID";
+    vue.accountName = "@loggedAccount?.DisplayName";
     setTimeout(() => { // fake loading jen tak for fun aby to vypadalo pěkně
         vue.game = @Html.Raw(JsonSerializer.Serialize(game, new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
         console.log(vue.game);

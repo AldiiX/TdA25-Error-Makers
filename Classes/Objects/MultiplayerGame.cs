@@ -169,7 +169,7 @@ public class MultiplayerGame {
         await using var cmd2 = new MySqlCommand("UPDATE multiplayer_games SET board = @board, winner = @winner WHERE uuid = @uuid", conn);
         cmd2.Parameters.AddWithValue("@uuid", gameUUID);
         cmd2.Parameters.AddWithValue("@board", game.Board.ToString());
-        cmd2.Parameters.AddWithValue("@winner", winner.ToString().ToUpper());
+        cmd2.Parameters.AddWithValue("@winner", game.Winner?.ToString().ToUpper());
 
         await cmd2.ExecuteNonQueryAsync();
 

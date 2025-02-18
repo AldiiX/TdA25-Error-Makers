@@ -11,7 +11,6 @@ export const vue = new Vue({
             selectedMode: null,
             selectedMultiplayerMode: null,
             selectedSingleplayerMode: null,
-            multiplayerQueueWS: null,
         }
     },
     methods: {
@@ -54,7 +53,7 @@ export const vue = new Vue({
                 console.error('WebSocket URL:', socket.url);
             };
             _this.temp.multiplayerQueueWS = socket;
-        }
+        },
     },
     computed: {},
 });

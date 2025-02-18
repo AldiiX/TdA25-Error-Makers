@@ -19,8 +19,11 @@ export const vue = new Vue({
         pageIsScrolled: false,
         menuExpanded: false,
         accountUUID: null,
+        accountName: null,
         announcements: [],
         socket: null,
+        chatMessages: [],
+        chatMessageInput: "",
     },
     methods: {
         main: function () {
@@ -44,6 +47,12 @@ export const vue = new Vue({
                     location.href = "/error?code=404&message=Hra skončila&buttonLink=/play";
                 if (data.action === "updateGame") {
                     this.initializeGame(data.game);
+                }
+                if (data.action === "chatMessage") {
+                    _this.chatMessages.push({
+                        sender: data.sender,
+                        message: data.message,
+                    });
                 }
                 if (!_this.gameLoaded && data.action === "playersInGame" && data.count >= 2 && _this.game) {
                     _this.gameLoaded = true;
@@ -258,6 +267,18 @@ export const vue = new Vue({
             if (_this.game.difficulty === "extreme")
                 return "Extrémně těžká";
             return "Neznámá";
+        },
+        sendMessageToMultiplayerChat: function (message, event) {
+            const _this = this;
+            const element = event.target;
+            if (message === "")
+                return;
+            _this.chatMessageInput = "";
+            _this.socket.send(JSON.stringify({
+                action: "SendChatMessage",
+                message: message,
+                sender: _this.accountName,
+            }));
         },
     },
     computed: {},
