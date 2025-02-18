@@ -8,7 +8,7 @@ html {
     --background-color-secondary: #111111;
     --background-color-3: #0b0b0b;
     --color-gray: #666;
-    --accent-color-primary: #0070BB;
+    --accent-color-primary: #0070bb;
     --accent-color-primary-darker: #005288;
     --accent-color: var(--accent-color-primary);
     --accent-color-secondary: #E31837;
@@ -60,6 +60,13 @@ html {
     .login{
         .UserIcon{
             background: rgb(255, 255, 255 , 0.2);
+        }
+    }
+}
+#ACCOUNT-PAGE{
+    .account-info{
+        .avatar{
+            background: rgba(255, 255, 255, 0.2);
         }
     }
 }

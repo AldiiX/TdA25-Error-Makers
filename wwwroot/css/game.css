@@ -59,10 +59,8 @@ header:not(.scrolled) {
   width: 250px;
   max-width: 90vw;
   aspect-ratio: 1/1;
-  -webkit-mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
-          mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
-  -webkit-mask-size: contain;
-          mask-size: contain;
+  mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
+  mask-size: contain;
   background-color: var(--text-color);
   animation: loading-img-anim 3s ease-in-out infinite;
   margin: 0 auto;
@@ -98,6 +96,10 @@ header:not(.scrolled) {
   display: flex;
   top: 50%;
   left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   gap: 12px;
   align-content: start;
@@ -112,9 +114,6 @@ header:not(.scrolled) {
   to {
     opacity: 1;
   }
-}
-.mainsection .flex p::-moz-selection, .mainsection .flex span::-moz-selection, .mainsection .flex a::-moz-selection, .mainsection .flex h1::-moz-selection, .mainsection .flex h2::-moz-selection, .mainsection .flex input::-moz-selection, .mainsection .flex select::-moz-selection {
-  background-color: var(--hcolor);
 }
 .mainsection .flex p::selection, .mainsection .flex span::selection, .mainsection .flex a::selection, .mainsection .flex h1::selection, .mainsection .flex h2::selection, .mainsection .flex input::selection, .mainsection .flex select::selection {
   background-color: var(--hcolor);
@@ -161,9 +160,7 @@ header:not(.scrolled) {
   text-decoration: none;
   border-radius: 12px 12px 0 0;
   transition-duration: 0.3s;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 .mainsection .flex > .left > .buttons > a:hover {
   background-color: var(--button-bg-hover);
@@ -174,7 +171,6 @@ header:not(.scrolled) {
   grid-template-columns: repeat(15, 45px);
   grid-template-rows: repeat(15, 45px);
   gap: 0;
-  width: -moz-fit-content;
   width: fit-content;
   border-radius: 12px;
 }
@@ -234,10 +230,8 @@ header:not(.scrolled) {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  -webkit-mask: url("/images/icons/X_bile.svg") no-repeat center;
-          mask: url("/images/icons/X_bile.svg") no-repeat center;
-  -webkit-mask-size: 60%;
-          mask-size: 60%;
+  mask: url("/images/icons/X_bile.svg") no-repeat center;
+  mask-size: 60%;
   background: var(--accent-color-secondary);
   animation: xoappear 0.2s ease-out;
   transition-duration: 0.5s;
@@ -251,16 +245,14 @@ header:not(.scrolled) {
   }
 }
 .mainsection .flex > .left .grid .cell:is(.x)::after {
-  -webkit-mask-image: url("/images/icons/X_bile.svg");
-          mask-image: url("/images/icons/X_bile.svg");
+  mask-image: url("/images/icons/X_bile.svg");
   background: var(--accent-color-secondary);
 }
 .mainsection .flex > .left .grid .cell:is(.x):is(.winning-cell) {
   background-color: var(--accent-color-secondary);
 }
 .mainsection .flex > .left .grid .cell:is(.o)::after {
-  -webkit-mask-image: url("/images/icons/O_bile.svg");
-          mask-image: url("/images/icons/O_bile.svg");
+  mask-image: url("/images/icons/O_bile.svg");
   background: var(--accent-color-primary);
 }
 .mainsection .flex > .left .grid .cell:is(.o):is(.winning-cell) {
@@ -300,7 +292,6 @@ header:not(.scrolled) {
 .mainsection .flex > .right > div:nth-child(1) > .top > .r {
   margin: 0 auto;
   font-size: 16px;
-  width: -moz-max-content;
   width: max-content;
 }
 .mainsection .flex > .right > div:nth-child(1) > .top > .r > span {

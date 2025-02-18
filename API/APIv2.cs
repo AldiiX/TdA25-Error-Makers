@@ -250,5 +250,28 @@ public class APIv2 : Controller {
     public IActionResult GetMultiplayerGames() {
         var games = MultiplayerGame.GetAll();
         return new JsonResult(games) { ContentType = "application/json" };
-    }*/
+    }
+
+    
+    // Leaderboard
+    [HttpGet("leaderboard")]
+    public IActionResult GetLeaderboard()
+    {
+        var array = new JsonArray();
+        
+        using var conn = Database.GetConnection();
+        if (conn == null) return new JsonResult(array);
+        using var cmd = new MySqlCommand("SELECT * FROM `users` ORDER BY `elo` desc", conn);
+        using var reader = cmd.ExecuteReader();
+        
+        while (reader.Read())
+        {
+            var obj = new JsonObject();
+            obj["uuid"] = reader.GetString("uuid");
+            obj["name"] = reader.GetString("username");
+            obj["elo"] = reader.GetInt32("elo");
+            array.Add(obj);
+        }
+        return new JsonResult(array);
+    }
 }

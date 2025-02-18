@@ -24,13 +24,14 @@ public sealed class Account {
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public TypeOfAccount AccountType { get; private set; }
+    public DateTime CreatedAt { get; private set; }
 
 
 
     [JsonConstructor]
     private Account(
         string username, string password, string displayName, string? email, string? avatar, TypeOfAccount accountType,
-        uint elo, uint wins, uint losses, uint draws, string uuid
+        uint elo, uint wins, uint losses, uint draws, string uuid, DateTime createdAt
         ) {
         Username = username;
         Password = password;
@@ -43,6 +44,7 @@ public sealed class Account {
         Losses = losses;
         Draws = draws;
         UUID = uuid;
+        CreatedAt = createdAt;
     }
 
     public override string ToString() => JsonSerializer.Serialize(this);
@@ -70,7 +72,8 @@ public sealed class Account {
             reader.GetUInt32("wins"),
             reader.GetUInt32("losses"),
             reader.GetUInt32("draws"),
-            reader.GetString("uuid")
+            reader.GetString("uuid"),
+            reader.GetDateTime("created_at")
         );
 
         HCS.Current.Session.SetObject("loggeduser", acc);
@@ -80,5 +83,29 @@ public sealed class Account {
     }
 
     public static Account? Auth(in string username, in string hashedPassword) => AuthAsync(username, hashedPassword).Result;
+    
+    /* public static async Task<List<Account>> GetAllAsync()
+    {
+        var list = new List<Account>();
+        
+        await using var conn = await Database.GetConnectionAsync();
+        if (conn == null) return list;
+        
+        await using var cmd = new MySqlCommand("SELECT * FROM users", conn);
+        await using var reader = await cmd.ExecuteReaderAsync() as MySqlDataReader;
 
+        while (await reader.ReadAsync())
+        {
+            var user = new Account(
+                reader.GetString("username"),
+                reader.GetString("password"),
+                reader.GetString("email"),
+                reader.GetString("display_name"), 
+                reader.GetString("avatar"),
+                Enum.TryParse<Account.TypeOfAccount>(reader.GetString("type"), out var _e ) ? _e : TypeOfAccount.USER
+            );
+        }
+        
+        return list;
+    } */
 }
