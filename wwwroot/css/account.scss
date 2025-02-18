@@ -36,88 +36,11 @@
         display: none;
       }
     }
-
-    /*.mainsection {
-      position: relative;
-      margin-top: 25vh;
-      
-      >.account{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 0 auto;
-        
-        >.account-main{ 
-          display: flex;
-          margin: 16px;
-          gap: 10vh;
-          
-          >.account-avatar{
-            font-size: 48px;
-            font-weight: 700;
-            color: var(--text-color-primary);
-            text-align: center;
-            align-content: center;
-            position: relative;
-            display: block;
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-          }
-          
-          >.account-info{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
-            
-            >.account-name{
-              font-size: 24px;
-              font-weight: 700;
-              color: var(--text-color-primary);
-            }
-            
-            >.account-elo{
-                
-              >.text{
-                font-size: 16px;
-                margin-bottom: 8px;
-              }
-              
-              >.elo{
-                font-size: 20px;
-                font-weight: 700;
-                margin: 0;
-              }
-            }
-            
-            >.account-createdat{
-              >.text{
-                font-size: 12px;
-                margin-bottom: 8px;
-              }
-              
-              >.time{
-                font-size: 16px;
-                font-weight: 500;
-                margin: 0;
-              }
-            }
-          }
-        }
-        
-        >.account-bottom{
-          display: flex;
-          gap: 10vh;
-        }
-      }
-      
-    }*/
-
+    
     .mainsection {
       z-index: 1;
       margin-top: -15vh;
+      margin-bottom: 64px;
 
       > .account {
         position: relative;
@@ -126,6 +49,7 @@
         display: flex;
         flex-direction: column;
         gap: 24px;
+        
 
         > div {
           position: relative;
@@ -169,6 +93,7 @@
               border-radius: 50%;
               width: 100px;
               height: 100px;
+              margin: 0 auto; 
             }
 
             > .account-createdat {
@@ -202,6 +127,7 @@
             width: 100%;
             height: 1px;
             background-color: var(--color-gray);
+            margin-bottom: 64px;
           }
 
           > .account-game-history {
@@ -232,6 +158,36 @@
                     }
                   }
                 }
+              }
+            }
+          }
+          
+          >.admin-panel{
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            
+            
+            >.admin-panel-top{
+              display: flex;
+              gap: 10vw;
+              justify-content: left;
+              align-items: center;
+              
+              >.search{
+                width: 400px;
+              }
+              
+            }
+            
+            >.admin-panel-users{
+              width: 100%;
+              table-layout: fixed;
+              text-align: left;
+              border-spacing: 8px;
+              
+              .thead{
+                border-bottom: 100% 1px solid var(--color-gray);
               }
             }
           }

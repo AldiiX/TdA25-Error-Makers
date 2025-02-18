@@ -1,5 +1,6 @@
 ﻿@using TdA25_Error_Makers
 @using TdA25_Error_Makers.Classes
+@using TdA25_Error_Makers.Classes.Objects
 @{
     var webTheme = Utilities.WebTheme.Get();
     var authType = ViewBag.AuthType ?? "login";
@@ -74,19 +75,19 @@
                         <p class="time">@loggedAccount?.CreatedAt.ToString("dd.MM.yyyy")</p>
                     </div>
                     
-                        <form>
-                            <input type="submit" class="button-primary" value="Smazat účet">
-                        </form>
                 </div>
 
                 <div class="account-bottom">
                     <div class="panel">
-                        <div class="history-tab"> Icon </div>
-                        <div class="admin-tab"> Icon2 </div>
+                        <div class="history-tab" v-on:click="currentTab = 'GameHistory'">Historie Her</div>
+                        @if (loggedAccount?.AccountType == Account.TypeOfAccount.ADMIN) {
+                            <div class="admin-tab" v-on:click="currentTab = 'AdminPanel'">Admin panel</div>
+                        }
+                        <div class="settings-tab" v-on:click="currentTab = 'Settings'">Nastavení</div>
                     </div>
                     <div class="divider"></div>
                     
-                    <div class="account-game-history">
+                    <div class="account-game-history" v-if="currentTab === 'GameHistory'">
                         <div class="game">
                             
                             <div class="game-info">
@@ -102,6 +103,45 @@
                             </div>
                         </div>
                     </div>
+                    
+                    @if (loggedAccount?.AccountType == Account.TypeOfAccount.ADMIN) {
+                        <div class="admin-panel" v-if="currentTab === 'AdminPanel'">
+                            <div class="admin-panel-top">
+                                <p class="users">Users</p>
+                                <input type="text" class="search" placeholder="Vyhledat uživatele">
+                            </div>
+                            
+                            <table class="admin-panel-users">
+                                <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Display Name</th>
+                                    <th>Created At</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Kuba</td>
+                                    <td>JJ</td>
+                                    <td>12.5.2024</td>
+                                    <td>Ban</td>
+                                </tr>
+                                </tbody>
+                                
+                            </table>
+                        </div>
+                    }
+                    
+                    
+                    <div class="account-settings" v-if="currentTab === 'Settings'">
+                        <p class="text">Nastavení účtu</p>
+                        
+                        <form>
+                            <input type="submit" class="button-primary" value="Smazat účet">
+                        </form>
+                    </div>
+                    
                 </div>
             </div>
         </section>
