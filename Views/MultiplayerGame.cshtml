@@ -73,12 +73,38 @@
 
             <div class="endgame" v-show="gameFazeIsEnding" v-cloak>
                 <div class="content">
-                    <h1 v-if="String(game?.winner).toUpperCase() === 'X' && game?.playerX?.uuid === accountUUID">Vyhrál jsi</h1>
-                    <h1 v-else-if="String(game?.winner).toUpperCase() === 'X' && game?.playerO?.uuid === accountUUID">Prohrál jsi</h1>
-                    <h1 v-else-if="String(game?.winner).toUpperCase() === 'O' && game?.playerO?.uuid === accountUUID">Vyhrál jsi</h1>
-                    <h1 v-else-if="String(game?.winner).toUpperCase() === 'O' && game?.playerX?.uuid === accountUUID">Prohrál jsi</h1>
+                    <p>Výsledek hry</p>
+                    <h1 class="win" v-if="String(game?.winner).toUpperCase() === 'X' && game?.playerX?.uuid === accountUUID">Vyhrál jsi</h1>
+                    <h1 class="lose" v-else-if="String(game?.winner).toUpperCase() === 'X' && game?.playerO?.uuid === accountUUID">Prohrál jsi</h1>
+                    <h1 class="win" v-else-if="String(game?.winner).toUpperCase() === 'O' && game?.playerO?.uuid === accountUUID">Vyhrál jsi</h1>
+                    <h1 class="lose" v-else-if="String(game?.winner).toUpperCase() === 'O' && game?.playerX?.uuid === accountUUID">Prohrál jsi</h1>
                     <h1 v-else>Remíza</h1>
+
+                    <div class="elo" v-if="finishGameObject">
+                        <p>ELO</p>
+
+                        <div class="elo-display">
+                            <p class="mark">{{ (finishGameObject?.elo - finishGameObject?.oldElo) >= 0 ? "+" : "-" }}</p>
+                            <h2>{{ Math.abs(finishGameObject?.elo - finishGameObject?.oldElo) }}</h2>
+                            <div v-bind:class="['arrow', { 'plus': (finishGameObject?.elo - finishGameObject?.oldElo) >= 0, 'minus': (finishGameObject?.elo - finishGameObject?.oldElo) < 0 } ]"></div>
+                        </div>
+                    </div>
+
                     <button v-on:click="endGame()">Zavřít</button>
+                </div>
+
+                <div class="chat">
+                    <p>Chat</p>
+
+                    <div class="chat-messages" v-cloak>
+                        <div class="message" v-for="message in chatMessages" v-bind:class="{ mymsg: message.isMe }" v-bind:style="{ '--color': message.letter === 'X' ? 'var(--accent-color-secondary)' : 'var(--accent-color-primary)' }">
+                            <p class="name">{{ message.sender }}</p>
+                            <p class="text">{{ message.message }}</p>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" maxlength="64" v-model="chatMessageInput" v-on:keyup.enter="sendMessageToMultiplayerChat(chatMessageInput, $event)" v-bind:placeholder="`Napiš zprávu jako ${accountName}...`"/>
+                    </div>
                 </div>
             </div>
 

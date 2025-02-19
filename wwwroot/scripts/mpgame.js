@@ -25,6 +25,7 @@ export const vue = new Vue({
         chatMessages: [],
         chatMessageInput: "",
         gameFazeIsEnding: false,
+        finishGameObject: null,
     },
     methods: {
         main: function () {
@@ -57,8 +58,7 @@ export const vue = new Vue({
                 this.initializeGame(data.game);
             }
             if (data.action === "finishGame") {
-                _this.socket.close();
-                _this.socket = null;
+                _this.finishGameObject = data;
             }
             if (data.action === "chatMessage") {
                 _this.chatMessages.push({
