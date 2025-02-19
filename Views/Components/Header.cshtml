@@ -2,6 +2,7 @@
 @using TdA25_Error_Makers.Classes
 @{
     string path = HCS.Current.Request.Path;
+    var loggedAccount = Utilities.GetLoggedAccountFromContextOrNull();
 }
 
 <transition name="fade">
@@ -12,12 +13,13 @@
             <a href="/">Domů</a>
             @*<a href="/games">Hry</a>*@
             <a href="/account">Účet</a>
+            <a href="/play">Hrát</a>
             @*<a href="/multiplayer">Online</a>*@
-            @if (!path.StartsWith("/game/")) {
+            @*@if (!path.StartsWith("/game/")) {
                 <button class="newgame button-primary" onclick="location.href='/play'">Hrát</button>
             } else {
                 <button class="newgame button-primary" v-cloak v-on:click="createNewGame()">Nová hra</button>
-            }
+            }*@
             <div class="line"></div>
             <div class="Theme-Flex">
                 <div class="changetheme" onclick="
@@ -48,21 +50,42 @@
             <a href="/" class="@Utilities.SetActiveClass("/")">Domů</a>
             @*<a href="/games" class="@Utilities.SetActiveClass("/games")">Úlohy</a>*@
             <a href="/account" class="@Utilities.SetActiveClass("/account")">Účet</a>
+            <a href="/play" class="@Utilities.SetActiveClass("/play")">Hrát</a>
             @*<a href="/multiplayer">Online</a>*@
         </div>
 
         <div class="Login">
+            
+            @if (loggedAccount != null) {
+                <div class="User">
+                    <span class="UserIcon" onclick="location.href='/account'">
+                        @loggedAccount.DisplayName[0].ToString().ToUpper()
+                    </span>
+                    <div class="Texts">
+                        <div class="top">
+                            <p> Přihlášen jako</p>
+                        </div>
+                        <div class="bot">
+                            <p> @loggedAccount.DisplayName</p>
+                        </div>
+                    </div>
+                </div>
+            } else {
+                <a href="/login" class="button-primary">Přihlásit se</a>
+            }
+            
+            
             <div class="changetheme" onclick="
                 import('/scripts/functions.js').then(module => {
                     module.toggleWebTheme();
                 });
             "></div>
 
-            @if (!path.StartsWith("/game/")) {
+            @*@if (!path.StartsWith("/game/")) {
                 <a class="newgame button-primary" href="/play">Hrát</a>
             } else {
                 <a class="newgame button-primary" v-cloak v-on:click="createNewGame()">Nová hra</a>
-            }
+            }*@
 
         </div>
     </div>

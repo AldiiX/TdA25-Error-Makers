@@ -181,6 +181,39 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
             display: flex;
             align-items: center;
             gap: 24px;
+            
+            >.User{
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                .UserIcon{
+                    font-size: 24px;
+                    font-weight: 700;
+                    color: white;
+                    text-align: center;
+                    align-content: center;
+                    position: relative;
+                    display: block;
+                    border-radius: 50%;
+                    width: 50px;
+                    height: 50px;
+                }
+                .Texts{
+                    >.top,
+                    >.bot{
+                        p{
+                            color : white;
+                            margin: 1px;
+                        }
+                    }
+                    .bot{
+                        p{
+                            font-weight: 700;
+                        }
+                    }
+                }
+            }
 
             >.changetheme {
                 width: 30px;
@@ -333,6 +366,24 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
 
     &:is(.scrolled) {
         background: var(--background-color-3);
+        
+        >.flex{
+            >.Login{
+                >.User{
+                    .UserIcon{
+                        color: var(--text-color-primary);
+                    }
+                    .Texts{
+                        >.top,
+                        >.bot{
+                            p{
+                                color : var(--text-color-primary);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         .newgame {
             background-color: var(--accent-color-primary) !important;
