@@ -40,7 +40,7 @@
     .mainsection {
       z-index: 1;
       margin-top: -15vh;
-      margin-bottom: 64px;
+      padding-bottom: 104px;
 
       > .account {
         position: relative;
@@ -65,22 +65,32 @@
           align-items: center;
           text-align: center;
           gap: 10vw;
+          
+          > div{
+            width: calc(100%/3 - 5vw/2*2);
+          }
+          >.left{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            
+            > .account-elo {
+              > .text {
+                font-weight: bold;
+                font-size: 16px;
+                margin-bottom: 8px;
+              }
 
-          > .account-elo {
-            > .text {
-              font-weight: bold;
-              font-size: 16px;
-              margin-bottom: 8px;
-            }
-
-            > .elo {
-              font-size: 20px;
-              margin: 0;
+              > .elo {
+                font-size: 20px;
+                margin: 0;
+              }
             }
           }
-
+          
           > .account-info {
-
+            
+            
             > .avatar {
               font-size: 48px;
               font-weight: 700;
@@ -96,19 +106,23 @@
             }
 
           }
-          > .account-createdat {
-              
-            > .text {
+          >.right{
+            display: flex;
+            > .account-createdat {
+
+              > .text {
                 font-weight: bold;
                 font-size: 16px;
                 margin-bottom: 8px;
               }
 
-            > .time {
+              > .time {
                 font-size: 20px;
                 margin: 0;
               }
+            }
           }
+          
         }
 
         > .account-bottom {

@@ -24,6 +24,7 @@ public sealed class Account {
     public uint Wins { get; private set; }
     public uint Losses { get; private set; }
     public uint Draws { get; private set; }
+    public DateTime? LastActive { get; private set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public TypeOfAccount AccountType { get; private set; }
@@ -34,7 +35,7 @@ public sealed class Account {
     [JsonConstructor]
     private Account(
         string username, string password, string displayName, string? email, string? avatar, TypeOfAccount accountType,
-        uint elo, uint wins, uint losses, uint draws, string uuid, DateTime createdAt
+        uint elo, uint wins, uint losses, uint draws, string uuid, DateTime createdAt, DateTime? lastActive
         ) {
         Username = username;
         Password = password;
@@ -48,6 +49,7 @@ public sealed class Account {
         Draws = draws;
         UUID = uuid;
         CreatedAt = createdAt;
+        LastActive = lastActive;
     }
 
     public static uint CalculateNewELO(Account target, Account b, MatchResult result) {
@@ -100,7 +102,13 @@ public sealed class Account {
         await using var conn = await Database.GetConnectionAsync();
         if (conn == null) return null;
 
-        await using var cmd = new MySqlCommand($"SELECT * FROM `users` WHERE (`username` = @username OR `email` = @username) AND `password` = @password", conn);
+        await using var cmd = new MySqlCommand(
+$"""
+            SELECT * FROM `users` WHERE (`username` = @username OR `email` = @username) AND `password` = @password;
+
+            UPDATE `users` SET `last_active` = NOW() WHERE (`username` = @username OR `email` = @username) AND `password` = @password;
+        """, conn);
+                                                
         cmd.Parameters.AddWithValue("@username", username);
         cmd.Parameters.AddWithValue("@password", hashedPassword);
 
@@ -120,7 +128,8 @@ public sealed class Account {
             reader.GetUInt32("losses"),
             reader.GetUInt32("draws"),
             reader.GetString("uuid"),
-            reader.GetDateTime("created_at")
+            reader.GetDateTime("created_at"),
+            reader.GetValueOrNull<DateTime>("last_active")
         );
 
         HCS.Current.Session.SetObject("loggeduser", acc);
@@ -153,7 +162,8 @@ public sealed class Account {
             reader.GetUInt32("losses"),
             reader.GetUInt32("draws"),
             reader.GetString("uuid"),
-            reader.GetDateTime("created_at")
+            reader.GetDateTime("created_at"),
+            reader.GetValueOrNull<DateTime>("last_active")
         );
     }
 

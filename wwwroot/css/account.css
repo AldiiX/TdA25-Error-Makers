@@ -2,31 +2,23 @@
   background-color: var(--background-color);
 }
 #ACCOUNT-PAGE .sections > .top {
-  -webkit-mask: url(/images/svg/mask.svg);
-          mask: url(/images/svg/mask.svg);
-  -webkit-mask-position: bottom;
-          mask-position: bottom;
-  -webkit-mask-size: 100vw;
-          mask-size: 100vw;
-  -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
+  mask: url(/images/svg/mask.svg);
+  mask-position: bottom;
+  mask-size: 100vw;
+  mask-repeat: no-repeat;
   height: 60vh;
   animation-name: asodjasd;
 }
 @keyframes asodjasd {
   from {
     height: calc(100vh + 100px);
-    -webkit-mask-position: center;
-            mask-position: center;
-    -webkit-mask-size: 500%;
-            mask-size: 500%;
+    mask-position: center;
+    mask-size: 500%;
   }
   to {
     height: 60vh;
-    -webkit-mask-size: 100vw;
-            mask-size: 100vw;
-    -webkit-mask-position: bottom;
-            mask-position: bottom;
+    mask-size: 100vw;
+    mask-position: bottom;
   }
 }
 #ACCOUNT-PAGE .sections > .top::after {
@@ -35,7 +27,7 @@
 #ACCOUNT-PAGE .sections .mainsection {
   z-index: 1;
   margin-top: -15vh;
-  margin-bottom: 64px;
+  padding-bottom: 104px;
 }
 #ACCOUNT-PAGE .sections .mainsection > .account {
   position: relative;
@@ -59,12 +51,20 @@
   text-align: center;
   gap: 10vw;
 }
-#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .account-elo > .text {
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > div {
+  width: calc(33.3333333333% - 5vw);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .left {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .left > .account-elo > .text {
   font-weight: bold;
   font-size: 16px;
   margin-bottom: 8px;
 }
-#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .account-elo > .elo {
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .left > .account-elo > .elo {
   font-size: 20px;
   margin: 0;
 }
@@ -81,12 +81,15 @@
   height: 100px;
   margin: 0 auto;
 }
-#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .account-createdat > .text {
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .right {
+  display: flex;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .right > .account-createdat > .text {
   font-weight: bold;
   font-size: 16px;
   margin-bottom: 8px;
 }
-#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .account-createdat > .time {
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .right > .account-createdat > .time {
   font-size: 20px;
   margin: 0;
 }
@@ -153,4 +156,5 @@
 #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .admin-panel > .admin-panel-users .thead {
   border-bottom: 100% 1px solid var(--color-gray);
 }
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFjY291bnQuc2NzcyIsImFjY291bnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFDO0VBRUMseUNBQUE7QUNBRjtBRE1JO0VBQ0UsdUNBQUE7VUFBQSwrQkFBQTtFQUNBLDZCQUFBO1VBQUEscUJBQUE7RUFDQSx3QkFBQTtVQUFBLGdCQUFBO0VBQ0EsOEJBQUE7VUFBQSxzQkFBQTtFQUVBLFlBRFM7RUFFVCx3QkFBQTtBQ0xOO0FET007RUFDRTtJQUNFLDJCQUFBO0lBQ0EsNkJBQUE7WUFBQSxxQkFBQTtJQUNBLHVCQUFBO1lBQUEsZUFBQTtFQ0xSO0VEUU07SUFDRSxZQUFBO0lBQ0Esd0JBQUE7WUFBQSxnQkFBQTtJQUNBLDZCQUFBO1lBQUEscUJBQUE7RUNOUjtBQUNGO0FEWU07RUFDRSxhQUFBO0FDVlI7QURjSTtFQUNFLFVBQUE7RUFDQSxpQkFBQTtFQUNBLG1CQUFBO0FDWk47QURjTTtFQUNFLGtCQUFBO0VBQ0EsV0FBQTtFQUNBLGNBQUE7RUFDQSxhQUFBO0VBQ0Esc0JBQUE7RUFDQSxTQUFBO0FDWlI7QURlUTtFQUNFLGtCQUFBO0VBQ0EsbURBQUE7RUFDQSxtQkFBQTtFQUNBLGFBQUE7RUFDQSx3Q0FBQTtBQ2JWO0FEZ0JRO0VBQ0UsYUFBQTtFQUNBLHVCQUFBO0VBQ0EsbUJBQUE7RUFDQSxrQkFBQTtFQUNBLFNBQUE7QUNkVjtBRGlCWTtFQUNFLGlCQUFBO0VBQ0EsZUFBQTtFQUNBLGtCQUFBO0FDZmQ7QURrQlk7RUFDRSxlQUFBO0VBQ0EsU0FBQTtBQ2hCZDtBRHNCWTtFQUNFLGVBQUE7RUFDQSxnQkFBQTtFQUNBLGdDQUFBO0VBQ0Esa0JBQUE7RUFDQSxxQkFBQTtFQUNBLGtCQUFBO0VBQ0EsY0FBQTtFQUNBLGtCQUFBO0VBQ0EsWUFBQTtFQUNBLGFBQUE7RUFDQSxjQUFBO0FDcEJkO0FEMEJZO0VBQ0ksaUJBQUE7RUFDQSxlQUFBO0VBQ0Esa0JBQUE7QUN4QmhCO0FEMkJZO0VBQ0ksZUFBQTtFQUNBLFNBQUE7QUN6QmhCO0FEOEJRO0VBQ0UsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsUUFBQTtBQzVCVjtBRDhCVTtFQUNFLGFBQUE7RUFDQSxTQUFBO0VBQ0EsdUJBQUE7RUFDQSxtQkFBQTtBQzVCWjtBRCtCVTtFQUNFLFdBQUE7RUFDQSxXQUFBO0VBQ0EsbUNBQUE7RUFDQSxtQkFBQTtBQzdCWjtBRGlDWTtFQUNFLGFBQUE7RUFDQSxzQkFBQTtBQy9CZDtBRGlDYztFQUNFLGFBQUE7RUFDQSxzQkFBQTtFQUNBLFNBQUE7QUMvQmhCO0FEa0NnQjtFQUNFLGFBQUE7RUFDQSw4QkFBQTtFQUNBLGlCQUFBO0VBQ0Esa0JBQUE7QUNoQ2xCO0FEbUNrQjtFQUNFLGFBQUE7RUFDQSxzQkFBQTtFQUNBLFFBQUE7QUNqQ3BCO0FEbUNvQjtFQUNFLFNBQUE7QUNqQ3RCO0FEeUNVO0VBQ0UsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsU0FBQTtBQ3ZDWjtBRDBDWTtFQUNFLGFBQUE7RUFDQSxTQUFBO0VBQ0EscUJBQUE7RUFDQSxtQkFBQTtBQ3hDZDtBRDBDYztFQUNFLFlBQUE7QUN4Q2hCO0FENkNZO0VBQ0UsV0FBQTtFQUNBLG1CQUFBO0VBQ0EsZ0JBQUE7RUFDQSxtQkFBQTtBQzNDZDtBRDZDYztFQUNFLCtDQUFBO0FDM0NoQiIsImZpbGUiOiJhY2NvdW50LmNzcyJ9 */
+
+/*# sourceMappingURL=account.css.map */

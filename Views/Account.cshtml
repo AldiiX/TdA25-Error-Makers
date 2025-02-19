@@ -57,10 +57,16 @@
         <section class="mainsection">
             <div class="account">
                 <div class="account-main">
-
-                    <div class="account-elo">
-                        <p class="text">ELO Rating:</p>
-                        <p class="elo">@loggedAccount?.Elo</p>
+                    
+                    <div class="left">
+                        <div class="account-elo">
+                            <p class="text">ELO Rating:</p>
+                            <p class="elo">@loggedAccount?.Elo</p>
+                        </div>
+                        
+                        <div class="win-loss-ratio">
+                            <p class="text">WL%</p>
+                        </div>
                     </div>
 
                     <div class="account-info">
@@ -70,11 +76,22 @@
                         <h1>@loggedAccount?.DisplayName</h1>
                     </div>
 
-                    <div class="account-createdat">
-                        <p class="text">Vytvořen:</p>
-                        <p class="time">@loggedAccount?.CreatedAt.ToString("dd.MM.yyyy")</p>
+                    <div class="right">
+                        <div class="account-createdat">
+                            <p class="text">Vytvořen:</p>
+                            <p class="time">@loggedAccount?.CreatedAt.ToString("dd.MM.yyyy")</p>
+                        </div>
+                        
+                        <div class="account-last-active">
+                            <p class="text">Poslední aktivita:</p>
+                            <p class="time">@(loggedAccount?.LastActive != null ? Utilities.HowLongSinceLastActivity(loggedAccount.LastActive??DateTime.Now) : "Neznámý")</p>
+                        </div>
+
                     </div>
-                    
+
+
+
+
                 </div>
 
                 <div class="account-bottom">
@@ -116,6 +133,7 @@
                                 <tr>
                                     <th>Username</th>
                                     <th>Display Name</th>
+                                    <th>Elo</th>
                                     <th>Created At</th>
                                     <th>Actions</th>
                                 </tr>
@@ -124,6 +142,7 @@
                                 <tr>
                                     <td>Kuba</td>
                                     <td>JJ</td>
+                                    <td>1200</td>
                                     <td>12.5.2024</td>
                                     <td>Ban</td>
                                 </tr>
