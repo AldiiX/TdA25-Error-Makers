@@ -34,6 +34,7 @@ export const vue = new Vue({
         socket: null,
         chatMessages: [],
         chatMessageInput: "",
+        gameFazeIsEnding: false,
     },
 
 
@@ -191,6 +192,13 @@ export const vue = new Vue({
             // zjištění, kdo je na tahu
             if(_this.accountUUID === _this.game.playerX.uuid && _this.game.currentPlayer === "X") _this.gameLocked = false;
             if(_this.accountUUID === _this.game.playerO.uuid && _this.game.currentPlayer === "O") _this.gameLocked = false;
+
+            // v pripade ze je hra ukoncena, zobrazi se endgame veci
+            if(data.winner !== null) {
+                setTimeout(() => {
+                    _this.showEndGameScreen();
+                }, 3000);
+            }
         },
 
         setPlayerColor: function (): any {
@@ -226,6 +234,21 @@ export const vue = new Vue({
                 message: message,
                 sender: _this.accountName,
             }));
+        },
+
+        showEndGameScreen: function (): void {
+            const _this = this as any;
+
+            const bgDiv = document.querySelector(".background-f55288d9-4dcf-456d-87c4-26be60c16cdb") as HTMLElement;
+            const newGameHeaderButton = document.querySelector(".header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Login .newgame") as HTMLElement;
+            const blurBgDiv = document.querySelector(".bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433") as HTMLElement;
+            bgDiv.classList.add("fade-out");
+            _this.gameFadeOut = true;
+            blurBgDiv.classList.add("disableanimations");
+            newGameHeaderButton.style.pointerEvents = "none";
+
+            // zobrazeni end game veci
+            _this.gameFazeIsEnding = true;
         },
     },
 

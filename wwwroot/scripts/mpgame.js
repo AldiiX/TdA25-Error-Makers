@@ -24,6 +24,7 @@ export const vue = new Vue({
         socket: null,
         chatMessages: [],
         chatMessageInput: "",
+        gameFazeIsEnding: false,
     },
     methods: {
         main: function () {
@@ -136,6 +137,11 @@ export const vue = new Vue({
                 _this.gameLocked = false;
             if (_this.accountUUID === _this.game.playerO.uuid && _this.game.currentPlayer === "O")
                 _this.gameLocked = false;
+            if (data.winner !== null) {
+                setTimeout(() => {
+                    _this.showEndGameScreen();
+                }, 3000);
+            }
         },
         setPlayerColor: function () {
             const _this = this;
@@ -167,6 +173,17 @@ export const vue = new Vue({
                 message: message,
                 sender: _this.accountName,
             }));
+        },
+        showEndGameScreen: function () {
+            const _this = this;
+            const bgDiv = document.querySelector(".background-f55288d9-4dcf-456d-87c4-26be60c16cdb");
+            const newGameHeaderButton = document.querySelector(".header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Login .newgame");
+            const blurBgDiv = document.querySelector(".bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433");
+            bgDiv.classList.add("fade-out");
+            _this.gameFadeOut = true;
+            blurBgDiv.classList.add("disableanimations");
+            newGameHeaderButton.style.pointerEvents = "none";
+            _this.gameFazeIsEnding = true;
         },
     },
     computed: {},

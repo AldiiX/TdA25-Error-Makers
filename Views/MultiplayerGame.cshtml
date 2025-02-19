@@ -71,6 +71,18 @@
             </div>
 
 
+            <div class="endgame" v-show="gameFazeIsEnding" v-cloak>
+                <div class="content">
+                    <h1 v-if="String(game?.winner).toUpperCase() === 'X' && game?.playerX?.uuid === accountUUID">Vyhrál jsi</h1>
+                    <h1 v-else-if="String(game?.winner).toUpperCase() === 'X' && game?.playerO?.uuid === accountUUID">Prohrál jsi</h1>
+                    <h1 v-else-if="String(game?.winner).toUpperCase() === 'O' && game?.playerO?.uuid === accountUUID">Vyhrál jsi</h1>
+                    <h1 v-else-if="String(game?.winner).toUpperCase() === 'O' && game?.playerX?.uuid === accountUUID">Prohrál jsi</h1>
+                    <h1 v-else>Remíza</h1>
+                    <button v-on:click="endGame()">Zavřít</button>
+                </div>
+            </div>
+
+
 
             <!-- herní pole + controls -->
             <div class="flex" v-cloak v-bind:class="{  'fade-out': gameFadeOut }" v-show="gameLoaded" v-bind:style="{ '--mcolor': setPlayerColor(), '--hcolor': setPlayerColorHover() }">

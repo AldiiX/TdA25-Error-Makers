@@ -47,6 +47,41 @@ public sealed class Account {
         CreatedAt = createdAt;
     }
 
+    public enum MatchResult { TARGET_WON, TARGET_LOST, DRAW}
+    public static uint CalculateNewELO(Account target, Account b, MatchResult result) {
+        // vzorec
+        // newElo = oldElo + 40 * ((result - expected) * (1 + 0.5 * (0.5 - (W+D) / (W+D+L) ) ) )
+
+        var res = result switch {
+            MatchResult.TARGET_WON => 1,
+            MatchResult.TARGET_LOST => 0,
+            MatchResult.DRAW or _ => 0.5
+        };
+
+        double expected = 1 / (1 + Math.Pow(10, (b.Elo - target.Elo) / 400));
+        uint targetNewElo = (uint)Math.Round(target.Elo + 40 * ((res - expected) * (1 + 0.5 * (0.5 - ((double)(target.Wins + target.Draws) / (target.Wins + target.Draws + target.Losses))))));
+
+        return targetNewElo;
+    }
+
+    public uint CalculateNewELO(Account b, MatchResult result) => CalculateNewELO(this, b, result);
+
+    public bool UpdateEloInDatabase(uint newElo) {
+        var currentElo = this.Elo;
+        this.Elo = newElo;
+
+        if (newElo == currentElo) return false;
+
+        using var conn = Database.GetConnection();
+        if (conn == null) return false;
+
+        using var cmd = new MySqlCommand("UPDATE `users` SET `elo` = @elo WHERE `uuid` = @uuid", conn);
+        cmd.Parameters.AddWithValue("@elo", newElo);
+        cmd.Parameters.AddWithValue("@uuid", this.UUID);
+
+        return cmd.ExecuteNonQuery() > 0;
+    }
+
     public override string ToString() => JsonSerializer.Serialize(this);
 
     public static async Task<Account?> AuthAsync(string username, string hashedPassword) {

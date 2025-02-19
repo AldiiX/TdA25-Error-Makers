@@ -18,13 +18,14 @@ public static class WSMultiplayerRankedGame {
 
     private static Dictionary<string, List<PlayerAccount>> games = new();
     private static Timer? timer1;
+    private static Account? sessionAccount;
 
     static WSMultiplayerRankedGame() {
         timer1 = new Timer(CheckGamePlayers!, null, 0, 1000);
     }
 
     public static async Task HandleAsync(WebSocket webSocket, string gameUUID) {
-        var sessionAccount = Utilities.GetLoggedAccountFromContextOrNull();
+        sessionAccount = Utilities.GetLoggedAccountFromContextOrNull();
         var game = HCS.Current.Items["game"] as MultiplayerGame;
 
         if (sessionAccount == null) {
@@ -149,7 +150,7 @@ public static class WSMultiplayerRankedGame {
         var message = JsonSerializer.SerializeToUtf8Bytes(
             new {
                 action = "updateGame",
-                game = g
+                game = g,
             }, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
         );
 
