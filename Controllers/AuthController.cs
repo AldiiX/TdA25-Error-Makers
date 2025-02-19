@@ -81,6 +81,12 @@ public class AuthController : Controller {
             return View("/Views/Auth.cshtml");
         }
 
+        if (!Regex.IsMatch(password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$"))
+        {
+            ViewBag.ErrorMessage = "Heslo musí obsahovat alespoň jedno velké písmeno, číslo a speciální znak";
+            return View("/Views/Auth.cshtml");
+        }
+
 
         username = username.ToLower();
         email = email.ToLower();

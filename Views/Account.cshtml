@@ -137,9 +137,10 @@
                     <div class="account-settings" v-if="currentTab === 'Settings'">
                         <p class="text">Nastavení účtu</p>
                         
-                        <form>
+                        <form method="post">
                             <input type="submit" class="button-primary" value="Smazat účet">
                         </form>
+                        <a href="/logout" class="button-primary">Odhlásit se</a>
                     </div>
                     
                 </div>
