@@ -16,6 +16,11 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        gap: 16px;
+        
+        >.game-type-1v1{
+            max-width: 295px;
+        }
 
 
         >h1 {

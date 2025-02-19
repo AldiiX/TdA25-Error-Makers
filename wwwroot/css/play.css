@@ -16,6 +16,10 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  gap: 16px;
+}
+.main > .centerdiv > .game-type-1v1 {
+  max-width: 295px;
 }
 .main > .centerdiv > h1 {
   font-size: 32px;
@@ -36,7 +40,6 @@
 }
 .main > .centerdiv > .code {
   display: flex;
-  width: -moz-fit-content;
   width: fit-content;
   align-items: center;
   font-size: 200px;
@@ -46,14 +49,10 @@
 .main > .centerdiv > .code > .icon {
   width: 250px;
   height: 250px;
-  -webkit-mask-image: url(/images/icons/zarivka_sad_bile.svg);
-          mask-image: url(/images/icons/zarivka_sad_bile.svg);
-  -webkit-mask-size: contain;
-          mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-          mask-position: center;
+  mask-image: url(/images/icons/zarivka_sad_bile.svg);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
   background-color: var(--text-color);
   margin: 0 48px;
   animation: float 3s ease-in-out infinite alternate;
@@ -81,10 +80,8 @@
   width: 250px;
   max-width: 90vw;
   aspect-ratio: 1/1;
-  -webkit-mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
-          mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
-  -webkit-mask-size: contain;
-          mask-size: contain;
+  mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
+  mask-size: contain;
   background-color: var(--text-color);
   animation: loading-img-anim 2s ease-in-out infinite;
   margin: 0 auto;
@@ -112,4 +109,5 @@
 .main .mmqueue p {
   color: var(--color-gray);
 }
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBsYXkuc2NzcyIsInBsYXkuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFDO0VBQ0csYUFBQTtBQ0NKOztBREVBO0VBQ0ksV0FBQTtFQUNBLGlCQUFBO0VBQ0Esa0JBQUE7QUNDSjtBRENJO0VBQ0ksa0JBQUE7RUFDQSxhQUFBO0VBQ0EsdUJBQUE7RUFDQSxzQkFBQTtFQUNBLG1CQUFBO0VBQ0EsUUFBQTtFQUNBLFNBQUE7RUFDQSxnQ0FBQTtBQ0NSO0FERVE7RUFDSSxlQUFBO0VBQ0EsU0FBQTtFQUNBLGtCQUFBO0VBQ0Esa0JBQUE7QUNBWjtBREdRO0VBQ0ksZUFBQTtFQUNBLFNBQUE7RUFDQSxnQkFBQTtFQUNBLGtCQUFBO0VBQ0EseUJBQUE7QUNEWjtBRElRO0VBQ0ksU0FBQTtFQUNBLHdCQUFBO0FDRlo7QURNUTtFQUNJLGFBQUE7RUFDQSx1QkFBQTtFQUFBLGtCQUFBO0VBQ0EsbUJBQUE7RUFDQSxnQkFBQTtFQUNBLFNBQUE7RUFDQSxtQkFBQTtBQ0paO0FETVk7RUFDSSxZQUFBO0VBQ0EsYUFBQTtFQUNBLDJEQUFBO1VBQUEsbURBQUE7RUFDQSwwQkFBQTtVQUFBLGtCQUFBO0VBQ0EsOEJBQUE7VUFBQSxzQkFBQTtFQUNBLDZCQUFBO1VBQUEscUJBQUE7RUFDQSxtQ0FBQTtFQUNBLGNBQUE7RUFDQSxrREFBQTtBQ0poQjtBREtnQjtFQUNJO0lBQ0ksd0JBQUE7RUNIdEI7RURNa0I7SUFDSSwyQkFBQTtFQ0p0QjtFRE9rQjtJQUNJLHdCQUFBO0VDTHRCO0FBQ0Y7QURZUTtFQUNJO0lBQ0ksVUFBQTtFQ1ZkO0VEYVU7SUFDSSxVQUFBO0VDWGQ7QUFDRjtBRGNRO0VBQ0ksWUFBQTtFQUNBLGVBQUE7RUFDQSxpQkFBQTtFQUNBLDZFQUFBO1VBQUEscUVBQUE7RUFDQSwwQkFBQTtVQUFBLGtCQUFBO0VBQ0EsbUNBQUE7RUFDQSxtREFBQTtFQUNBLGNBQUE7QUNaWjtBRGNZO0VBQ0k7SUFDSSx3QkFBQTtFQ1psQjtFRGVjO0lBQ0kseUJBQUE7RUNibEI7RURnQmM7SUFDSSx3QkFBQTtFQ2RsQjtBQUNGO0FEa0JRO0VBQ0ksa0JBQUE7RUFDQSxjQUFBO0VBQ0EsZUFBQTtBQ2hCWjtBRG1CUTtFQUNJLGdCQUFBO0VBQ0Esa0JBQUE7QUNqQlo7QURvQlE7RUFDSSx3QkFBQTtBQ2xCWiIsImZpbGUiOiJwbGF5LmNzcyJ9 */
+
+/*# sourceMappingURL=play.css.map */
