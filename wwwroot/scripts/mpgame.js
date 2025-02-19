@@ -56,6 +56,10 @@ export const vue = new Vue({
             if (data.action === "updateGame") {
                 this.initializeGame(data.game);
             }
+            if (data.action === "finishGame") {
+                _this.socket.close();
+                _this.socket = null;
+            }
             if (data.action === "chatMessage") {
                 _this.chatMessages.push({
                     sender: data.sender,

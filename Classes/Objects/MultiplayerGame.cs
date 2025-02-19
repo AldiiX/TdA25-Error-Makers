@@ -26,6 +26,12 @@ public class MultiplayerGame {
             Elo = elo;
             WebSocket = webSocket;
         }
+
+        public Account? ToFullAccount() => Account.GetByUUID(UUID);
+
+        public async Task<Account?> ToFullAccountAsync() {
+            return await Account.GetByUUIDAsync(UUID);
+        }
     }
 
 

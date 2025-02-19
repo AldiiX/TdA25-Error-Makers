@@ -9,6 +9,9 @@ namespace TdA25_Error_Makers.Classes.Objects;
 
 
 public sealed class Account {
+
+    public enum MatchResult { TARGET_WON, TARGET_LOST, DRAW}
+
     public enum TypeOfAccount { USER, ADMIN, DEVELOPER }
 
     public string UUID { get; private set; }
@@ -47,40 +50,49 @@ public sealed class Account {
         CreatedAt = createdAt;
     }
 
-    public enum MatchResult { TARGET_WON, TARGET_LOST, DRAW}
     public static uint CalculateNewELO(Account target, Account b, MatchResult result) {
-        // vzorec
-        // newElo = oldElo + 40 * ((result - expected) * (1 + 0.5 * (0.5 - (W+D) / (W+D+L) ) ) )
-
-        var res = result switch {
-            MatchResult.TARGET_WON => 1,
-            MatchResult.TARGET_LOST => 0,
-            MatchResult.DRAW or _ => 0.5
+        double res = result switch {
+            MatchResult.TARGET_WON  => 1.0,
+            MatchResult.TARGET_LOST => 0.0,
+            MatchResult.DRAW        => 0.5,
+            _                       => 0.5
         };
 
-        double expected = 1 / (1 + Math.Pow(10, (b.Elo - target.Elo) / 400));
-        uint targetNewElo = (uint)Math.Round(target.Elo + 40 * ((res - expected) * (1 + 0.5 * (0.5 - ((double)(target.Wins + target.Draws) / (target.Wins + target.Draws + target.Losses))))));
+        double eloDifference = ((int)b.Elo - (int)target.Elo) / 400.0;
+        double expected = 1 / (1 + Math.Pow(10, eloDifference));
 
+        double totalGames = target.Wins + target.Draws + target.Losses;
+        double performanceFactor = 1.0;
+        if (totalGames > 0) performanceFactor = 1 + 0.5 * (0.5 - ((double)(target.Wins + target.Draws) / totalGames));
+
+
+        double change = 40 * ((res - expected) * performanceFactor);
+        uint targetNewElo = (uint)Math.Round(target.Elo + change);
+
+        //Console.WriteLine($"Původní elo: {target.Elo}, nový elo: {targetNewElo}, očekávaný výsledek: {expected}");
         return targetNewElo;
     }
 
+
     public uint CalculateNewELO(Account b, MatchResult result) => CalculateNewELO(this, b, result);
 
-    public bool UpdateEloInDatabase(uint newElo) {
+    public async Task<bool> UpdateEloInDatabaseAsync(uint newElo) {
         var currentElo = this.Elo;
         this.Elo = newElo;
 
         if (newElo == currentElo) return false;
 
-        using var conn = Database.GetConnection();
+        await using var conn = await Database.GetConnectionAsync();
         if (conn == null) return false;
 
-        using var cmd = new MySqlCommand("UPDATE `users` SET `elo` = @elo WHERE `uuid` = @uuid", conn);
+        await using var cmd = new MySqlCommand("UPDATE `users` SET `elo` = @elo WHERE `uuid` = @uuid", conn);
         cmd.Parameters.AddWithValue("@elo", newElo);
         cmd.Parameters.AddWithValue("@uuid", this.UUID);
 
         return cmd.ExecuteNonQuery() > 0;
     }
+
+    public bool UpdateEloInDatabase(in uint newElo) => UpdateEloInDatabaseAsync(newElo).Result;
 
     public override string ToString() => JsonSerializer.Serialize(this);
 
@@ -118,7 +130,35 @@ public sealed class Account {
     }
 
     public static Account? Auth(in string username, in string hashedPassword) => AuthAsync(username, hashedPassword).Result;
-    
+
+    public static async Task<Account?> GetByUUIDAsync(string uuid) {
+        await using var conn = await Database.GetConnectionAsync();
+        if (conn == null) return null;
+
+        await using var cmd = new MySqlCommand("SELECT * FROM `users` WHERE `uuid` = @uuid", conn);
+        cmd.Parameters.AddWithValue("@uuid", uuid);
+
+        await using var reader = await cmd.ExecuteReaderAsync() as MySqlDataReader;
+        if (reader == null || !reader.Read()) return null;
+
+        return new Account(
+            reader.GetString("username"),
+            reader.GetString("password"),
+            reader.GetValueOrNull<string>("display_name") ?? reader.GetString("username"),
+            reader.GetValueOrNull<string>("email"),
+            reader.GetValueOrNull<string>("avatar"),
+            Enum.TryParse(reader.GetString("type"), out TypeOfAccount _e) ? _e : TypeOfAccount.USER,
+            reader.GetUInt32("elo"),
+            reader.GetUInt32("wins"),
+            reader.GetUInt32("losses"),
+            reader.GetUInt32("draws"),
+            reader.GetString("uuid"),
+            reader.GetDateTime("created_at")
+        );
+    }
+
+    public static Account? GetByUUID(in string uuid) => GetByUUIDAsync(uuid).Result;
+
     /* public static async Task<List<Account>> GetAllAsync()
     {
         var list = new List<Account>();
