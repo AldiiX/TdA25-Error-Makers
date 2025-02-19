@@ -68,14 +68,13 @@
 
           > .account-elo {
             > .text {
+              font-weight: bold;
               font-size: 16px;
-              font-weight: 600;
               margin-bottom: 8px;
             }
 
             > .elo {
               font-size: 20px;
-              font-weight: 700;
               margin: 0;
             }
           }
@@ -96,18 +95,19 @@
               margin: 0 auto; 
             }
 
-            > .account-createdat {
-              > .text {
-                font-size: 12px;
+          }
+          > .account-createdat {
+              
+            > .text {
+                font-weight: bold;
+                font-size: 16px;
                 margin-bottom: 8px;
               }
 
-              > .time {
-                font-size: 16px;
-                font-weight: 500;
+            > .time {
+                font-size: 20px;
                 margin: 0;
               }
-            }
           }
         }
 

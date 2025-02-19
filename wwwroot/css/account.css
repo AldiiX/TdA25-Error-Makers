@@ -52,13 +52,12 @@
   gap: 10vw;
 }
 #ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .account-elo > .text {
+  font-weight: bold;
   font-size: 16px;
-  font-weight: 600;
   margin-bottom: 8px;
 }
 #ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .account-elo > .elo {
   font-size: 20px;
-  font-weight: 700;
   margin: 0;
 }
 #ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .account-info > .avatar {
@@ -74,13 +73,13 @@
   height: 100px;
   margin: 0 auto;
 }
-#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .account-info > .account-createdat > .text {
-  font-size: 12px;
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .account-createdat > .text {
+  font-weight: bold;
+  font-size: 16px;
   margin-bottom: 8px;
 }
-#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .account-info > .account-createdat > .time {
-  font-size: 16px;
-  font-weight: 500;
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .account-createdat > .time {
+  font-size: 20px;
   margin: 0;
 }
 #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom {

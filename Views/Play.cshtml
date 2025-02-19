@@ -53,7 +53,7 @@
 
                 <!-- faze vybirani singleplayer modu -->
                 <template v-if="temp.faze === 'selectSingleplayerMode'">
-                    <div class="" v-on:click="temp.selectedSingleplayerMode = '1v1'; locationHref('/play/singleplayer/1v1');">
+                    <div class="game-type-1v1" v-on:click="temp.selectedSingleplayerMode = '1v1'; locationHref('/play/singleplayer/1v1');">
                         <h2>1v1</h2>
                         <p>Zahraj si piškvorky proti kamarádovi na jednom počítači!</p>
                     </div>
