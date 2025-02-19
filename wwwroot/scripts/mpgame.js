@@ -183,10 +183,11 @@ export const vue = new Vue({
             const bgDiv = document.querySelector(".background-f55288d9-4dcf-456d-87c4-26be60c16cdb");
             const newGameHeaderButton = document.querySelector(".header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Login .newgame");
             const blurBgDiv = document.querySelector(".bg-29aa2e9f-d314-4366-a4cd-95ba0bbd1433");
-            bgDiv.classList.add("fade-out");
+            bgDiv?.classList.add("fade-out");
             _this.gameFadeOut = true;
-            blurBgDiv.classList.add("disableanimations");
-            newGameHeaderButton.style.pointerEvents = "none";
+            blurBgDiv?.classList.add("disableanimations");
+            if (newGameHeaderButton)
+                newGameHeaderButton.style.pointerEvents = "none";
             _this.gameFazeIsEnding = true;
         },
     },

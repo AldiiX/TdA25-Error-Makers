@@ -40,10 +40,18 @@
     height: calc(100vh + 80px);
 
     >.endgame {
-        animation: eipllkhnbvctaqvq 1s ease-out;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: eipllkhnbvctaqvq 2s ease-in-out;
 
         @keyframes eipllkhnbvctaqvq {
-            from {
+            0% {
+                opacity: 0;
+            }
+
+            50% {
                 opacity: 0;
             }
 
