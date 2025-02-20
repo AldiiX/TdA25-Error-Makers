@@ -46,10 +46,14 @@
                 <h1 v-if="temp.selectedMode === 'multiplayer' && temp.faze !== 'multiplayerModeQueue'">Multiplayer</h1>
 
                 <!-- faze vybirani singleplayer / multiplayer -->
-                <template v-if="temp.faze === 'selectSingleplayerOrMultiplayer'">
-                    <div class="singleplayer" v-on:click="temp.selectedMode = 'singleplayer'; temp.faze = 'selectSingleplayerMode'">singleplayer</div>
-                    <div class="multiplayer" v-on:click="temp.selectedMode = 'multiplayer'; temp.faze = 'selectMultiplayerMode'">multiplayer</div>
-                </template>
+                <div class="first" v-if="temp.faze === 'selectSingleplayerOrMultiplayer'">
+                    <div class="singleplayer" v-on:click="temp.selectedMode = 'singleplayer'; temp.faze = 'selectSingleplayerMode'">
+                        <h2>Singleplayer</h2>
+                    </div>
+                    <div class="multiplayer" v-on:click="temp.selectedMode = 'multiplayer'; temp.faze = 'selectMultiplayerMode'">
+                        <h2>Multiplayer</h2>
+                    </div>
+                </div>
 
                 <!-- faze vybirani singleplayer modu -->
                 <template v-if="temp.faze === 'selectSingleplayerMode'">
