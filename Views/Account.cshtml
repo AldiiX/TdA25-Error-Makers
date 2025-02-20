@@ -65,8 +65,9 @@
                         </div>
                         
                         <div class="win-loss-ratio">
-                            <p class="text">
-                            W/L%
+                            <p class="text">Win/Loss Ratio:</p>
+                            <p class="winloss">
+                            @((loggedAccount.Wins + loggedAccount.Losses > 0) ? ((double)loggedAccount.Wins / (loggedAccount.Wins + loggedAccount.Losses) * 100).ToString("0.00") + "%" : "0%")
                             </p>
                         </div>
                     </div>
