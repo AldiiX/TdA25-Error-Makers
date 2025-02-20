@@ -80,17 +80,22 @@
                     <h1 class="lose" v-else-if="String(game?.winner).toUpperCase() === 'O' && game?.playerX?.uuid === accountUUID">Prohrál jsi</h1>
                     <h1 v-else>Remíza</h1>
 
-                    <div class="elo" v-if="finishGameObject">
-                        <p>ELO</p>
+                    <div class="randominfo">
+                        <div class="elo" v-if="finishGameObject">
+                            <p class="txt">ELO</p>
+                            <div class="elo-display">
+                                <p class="mark">{{ (finishGameObject?.elo - finishGameObject?.oldElo) >= 0 ? "+" : "-" }}</p>
+                                <h2 class="number">{{ Math.abs(finishGameObject?.elo - finishGameObject?.oldElo) }}</h2>
+                                <div v-bind:class="['arrow', { 'plus': (finishGameObject?.elo - finishGameObject?.oldElo) >= 0, 'minus': (finishGameObject?.elo - finishGameObject?.oldElo) < 0 } ]"></div>
+                            </div>
+                        </div>
 
-                        <div class="elo-display">
-                            <p class="mark">{{ (finishGameObject?.elo - finishGameObject?.oldElo) >= 0 ? "+" : "-" }}</p>
-                            <h2>{{ Math.abs(finishGameObject?.elo - finishGameObject?.oldElo) }}</h2>
-                            <div v-bind:class="['arrow', { 'plus': (finishGameObject?.elo - finishGameObject?.oldElo) >= 0, 'minus': (finishGameObject?.elo - finishGameObject?.oldElo) < 0 } ]"></div>
+                        <div class="timeplayed" v-if="finishGameObject">
+                            <p class="txt">Hra trvala</p>
+                            <h2 class="number">{{ finishGameObject?.timePlayed ?? "13 minut"}}</h2>
                         </div>
                     </div>
 
-                    <button v-on:click="endGame()">Zavřít</button>
                 </div>
 
                 <div class="chat">
@@ -116,7 +121,9 @@
 
 
                     <div class="grid" v-bind:class="{ locked: game?.winner != null || gameLocked }">
-                        <div class="cell" v-cloak v-for="(cell, i) in 15*15" v-on:click="updateCell($event.target, i)"></div>
+                        <div class="cell" v-cloak v-for="(cell, i) in 15*15" v-on:click="updateCell($event.target, i)">
+                            <div class="cellhover"></div>
+                        </div>
                     </div>
                 </div>
 

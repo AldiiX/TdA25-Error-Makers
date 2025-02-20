@@ -89,7 +89,9 @@
                     </transition>
 
                     <div class="grid" v-bind:class="{ locked: game.winner != null }">
-                        <div class="cell" v-cloak v-for="(cell, i) in 15*15" v-on:click="updateCell($event.target, i)"></div>
+                        <div class="cell" v-cloak v-for="(cell, i) in 15*15" v-on:click="updateCell($event.target, i)">
+                            <div class="cellhover"></div>
+                        </div>
                     </div>
                 </div>
 

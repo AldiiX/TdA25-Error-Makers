@@ -49,6 +49,7 @@ export const vue = new Vue({
 
 
             //_this.gameLoaded = true;
+            _this.finishGameObject = { oldElo: 450, elo: 500 }
             this.connectToSocket();
         },
 

@@ -16,7 +16,7 @@ namespace TdA25_Error_Makers.Services;
 
 public static class WSMultiplayerRankedGame {
 
-    private static Dictionary<string, List<PlayerAccount>> games = new();
+    private static Dictionary<MultiplayerGame, List<PlayerAccount>> games = new();
     private static Timer? timer1;
     private static Account? sessionAccount;
 
@@ -75,17 +75,17 @@ public static class WSMultiplayerRankedGame {
             sessionAccount.DisplayName,
             sessionAccount.Elo,
             webSocket
-        );
+        ) { PlayTimeLeft = 180};
 
 
 
         lock (games) {
-            if(!games.ContainsKey(gameUUID)) {
-                games.Add(gameUUID, [account]);
+            if(!games.ContainsKey(game)) {
+                games.Add(game, [account]);
             }
 
             else {
-                games[gameUUID].Add(account);
+                games[game].Add(account);
             }
         }
 
@@ -122,20 +122,20 @@ public static class WSMultiplayerRankedGame {
                             letter = game.PlayerX?.UUID == account?.UUID ? "X" : "O",
                         });
 
-                        foreach (var player in games[gameUUID]) player.WebSocket?.SendAsync(new ArraySegment<byte>(msg), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
+                        foreach (var player in games[game]) player.WebSocket?.SendAsync(new ArraySegment<byte>(msg), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
                     } break;
                 }
             }
         }
 
         lock (games) {
-            if(games.TryGetValue(gameUUID, out var value))
+            if(games.TryGetValue(game, out var value))
                 value.Remove(account);
 
-            if(games[gameUUID].Count == 0){
+            if(games[game].Count == 0){
                 //Console.WriteLine("Game removed");
                 _ = MultiplayerGame.EndAsync(gameUUID, null);
-                games.Remove(gameUUID);
+                games.Remove(game);
             }
         }
 
@@ -147,13 +147,17 @@ public static class WSMultiplayerRankedGame {
         var g = await MultiplayerGame.ReplaceCellAsync(game.UUID, x, y );
         if (g == null) return false;
 
+        // nastavení currentPlayer v games dict
+        //var gameInGamesDict = games.Keys.ToList().Find(k => k.UUID == game.UUID);
+        //if(gameInGamesDict != null) gameInGamesDict.CurrentPlayer = g.Board.GetCurrentPlayer().ToString().ToUpper();
+
 
         var updateMessage = JsonSerializer.SerializeToUtf8Bytes(new {
             action = "updateGame",
             game = g,
         }, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
-        foreach (var player in games[game.UUID]) {
+        foreach (var player in games[game]) {
             player.WebSocket?.SendAsync(new ArraySegment<byte>(updateMessage), WebSocketMessageType.Text, true,
                 CancellationToken.None
             ).Wait();
@@ -165,8 +169,8 @@ public static class WSMultiplayerRankedGame {
         if (g.Winner != null) {
 
             // získání vítěze a poraženého, původní gameobject
-            var w = g.PlayerX?.UUID == account.UUID ? games[game.UUID].Find(player => player.UUID == g.PlayerX?.UUID) : games[game.UUID].Find(player => player.UUID == g.PlayerO?.UUID);
-            var l = g.PlayerX?.UUID == account.UUID ? games[game.UUID].Find(player => player.UUID == g.PlayerO?.UUID) : games[game.UUID].Find(player => player.UUID == g.PlayerX?.UUID);
+            var w = g.PlayerX?.UUID == account.UUID ? games[game].Find(player => player.UUID == g.PlayerX?.UUID) : games[game].Find(player => player.UUID == g.PlayerO?.UUID);
+            var l = g.PlayerX?.UUID == account.UUID ? games[game].Find(player => player.UUID == g.PlayerO?.UUID) : games[game].Find(player => player.UUID == g.PlayerX?.UUID);
 
             // asynchronní získání úplných účtů
             var winnerTask = (g.PlayerX?.UUID == account.UUID ? g.PlayerX : g.PlayerO)?.ToFullAccountAsync();
@@ -206,27 +210,37 @@ public static class WSMultiplayerRankedGame {
             l?.WebSocket?.SendAsync(new ArraySegment<byte>(msgLoser), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
         }
 
-
-
         return true;
     }
 
 
     public static void CheckGamePlayers(object state) {
         lock (games) {
-            foreach (var game in games) {
-                var gamePlayers = game.Value;
+            foreach (var kvp in games) {
+                MultiplayerGame game = kvp.Key;
+                List<PlayerAccount> gamePlayers = kvp.Value;
 
                 foreach (var player in gamePlayers) {
+                    var playerTimeLeft = player!.PlayTimeLeft;
+
                     var message = JsonSerializer.SerializeToUtf8Bytes(
                         new {
                             action = "status",
-                            playerCount = gamePlayers.Count
+                            playerCount = gamePlayers.Count,
+                            timePlayed = game.GameTime,
+                            myTimeLeft = playerTimeLeft,
                         }
                     );
 
-                    player?.WebSocket?.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
+                    player.WebSocket?.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
+
+                    // pokud je na řadě tento hráč, odečte se mu čas
+                    var currentPlayer = game.Board.GetNextPlayer();
+                    if (game.PlayerX?.UUID == player.UUID && currentPlayer == GameBoard.Player.X) player.PlayTimeLeft--;
+                    if (game.PlayerO?.UUID == player.UUID && currentPlayer == GameBoard.Player.O) player.PlayTimeLeft--;
                 }
+
+                game.GameTime++;
             }
         }
     }

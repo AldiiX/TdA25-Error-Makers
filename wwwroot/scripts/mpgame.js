@@ -30,6 +30,7 @@ export const vue = new Vue({
     methods: {
         main: function () {
             const _this = this;
+            _this.finishGameObject = { oldElo: 450, elo: 500 };
             this.connectToSocket();
         },
         connectToSocket: function () {

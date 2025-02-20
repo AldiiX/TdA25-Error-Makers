@@ -1,4 +1,5 @@
 ﻿using System.Net.WebSockets;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using MySql.Data.MySqlClient;
 
@@ -18,6 +19,7 @@ public class MultiplayerGame {
         public string UUID { get; set; }
         public string Name { get; set; }
         public uint Elo { get; set; }
+        public ushort PlayTimeLeft { get; set; } = 180;
         public WebSocket? WebSocket { get; set; }
 
         public PlayerAccount(string uuid, string name, uint elo, WebSocket? webSocket = null) {
@@ -53,10 +55,10 @@ public class MultiplayerGame {
     public ushort Round => Board.GetRound();
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
-    public string CurrentPlayer => Board.GetNextPlayer().ToString().ToUpper();
-    public string NextPlayer => Board.GetCurrentPlayer().ToString().ToUpper();
+    public string CurrentPlayer { get; set; } = "X";
     public PlayerAccount? PlayerX { get; private set; }
     public PlayerAccount? PlayerO { get; private set; }
+    public ushort GameTime { get; set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public GameType Type { get; private set; }
@@ -112,6 +114,29 @@ public class MultiplayerGame {
     }
 
     public static List<MultiplayerGame> GetAll() => GetAllAsync().Result;*/
+
+    public override bool Equals(object? obj) {
+        return obj is MultiplayerGame game && game.UUID == UUID;
+    }
+
+    public override int GetHashCode() {
+        return HashCode.Combine(UUID);
+    }
+
+    public override string ToString() {
+        return JsonSerializer.Serialize(this);
+    }
+
+    public static bool operator ==(MultiplayerGame? left, MultiplayerGame? right) {
+        if (left is null && right is null) return true;
+        if (left is null || right is null) return false;
+
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(MultiplayerGame? left, MultiplayerGame? right) {
+        return !(left == right);
+    }
 
     public static async Task<MultiplayerGame?> ReplaceCellAsync(string gameUUID, ushort x, ushort y, string? letter = null) {
         await using var conn = await Database.GetConnectionAsync();
