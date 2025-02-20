@@ -2,23 +2,31 @@
   background-color: var(--background-color);
 }
 #ACCOUNT-PAGE .sections > .top {
-  mask: url(/images/svg/mask.svg);
-  mask-position: bottom;
-  mask-size: 100vw;
-  mask-repeat: no-repeat;
+  -webkit-mask: url(/images/svg/mask.svg);
+          mask: url(/images/svg/mask.svg);
+  -webkit-mask-position: bottom;
+          mask-position: bottom;
+  -webkit-mask-size: 100vw;
+          mask-size: 100vw;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
   height: 60vh;
   animation-name: asodjasd;
 }
 @keyframes asodjasd {
   from {
     height: calc(100vh + 100px);
-    mask-position: center;
-    mask-size: 500%;
+    -webkit-mask-position: center;
+            mask-position: center;
+    -webkit-mask-size: 500%;
+            mask-size: 500%;
   }
   to {
     height: 60vh;
-    mask-size: 100vw;
-    mask-position: bottom;
+    -webkit-mask-size: 100vw;
+            mask-size: 100vw;
+    -webkit-mask-position: bottom;
+            mask-position: bottom;
   }
 }
 #ACCOUNT-PAGE .sections > .top::after {
@@ -49,7 +57,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  gap: 10vw;
+  gap: 5vw;
 }
 #ACCOUNT-PAGE .sections .mainsection > .account > .account-main > div {
   width: calc(33.3333333333% - 5vw);
@@ -83,6 +91,7 @@
 }
 #ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .right {
   display: flex;
+  justify-content: space-between;
 }
 #ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .right > .account-createdat > .text {
   font-weight: bold;
@@ -156,5 +165,8 @@
 #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .admin-panel > .admin-panel-users .thead {
   border-bottom: 100% 1px solid var(--color-gray);
 }
-
-/*# sourceMappingURL=account.css.map */
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-settings > .account-buttons {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+}/*# sourceMappingURL=account.css.map */

@@ -65,7 +65,9 @@
                         </div>
                         
                         <div class="win-loss-ratio">
-                            <p class="text">WL%</p>
+                            <p class="text">
+                            W/L%
+                            </p>
                         </div>
                     </div>
 
@@ -155,11 +157,28 @@
                     
                     <div class="account-settings" v-if="currentTab === 'Settings'">
                         <p class="text">Nastavení účtu</p>
+
+                        <div class="account-buttons">
+                            <form method="post">
+                                <input type="submit" class="button-primary" value="Smazat účet">
+                            </form>
+
+                            
+                              <button class="button-primary" v-on:click="changePassword">Změnit heslo</button>
+                            
+
+                            <form method="post">
+                                <input type="submit" class="button-primary" value="Změnit email">
+                            </form>
+
+                            <form method="post">
+                                <input type="submit" class="button-primary" value="Změnit jméno">
+                            </form>
+
+                            <a href="/logout" class="button-primary">Odhlásit se</a>
+                        </div>
                         
-                        <form method="post">
-                            <input type="submit" class="button-primary" value="Smazat účet">
-                        </form>
-                        <a href="/logout" class="button-primary">Odhlásit se</a>
+                        
                     </div>
                     
                 </div>

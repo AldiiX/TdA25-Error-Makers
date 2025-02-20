@@ -19,7 +19,7 @@ public class AccountController : Controller {
     public IActionResult Redirection() => Redirect("/account");
     
     
-    [HttpPost("/account")]
+    /*[HttpPost("/account")]
     public IActionResult Account_Post() {
         var user = Utilities.GetLoggedAccountFromContextOrNull();
         using var conn = Database.GetConnection();
@@ -30,6 +30,6 @@ public class AccountController : Controller {
         var result = cmd.ExecuteNonQuery();
         
         return Redirect("/login");
-    }
+    }*/
 }
 

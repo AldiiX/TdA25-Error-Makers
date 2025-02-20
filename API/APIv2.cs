@@ -274,4 +274,40 @@ public class APIv2 : Controller {
         }
         return new JsonResult(array);
     }*/
+
+    [HttpPut("credentials")]
+public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?> body) {
+    using var conn = Database.GetConnection();
+    if (conn == null) return new StatusCodeResult(500);
+
+    var user = Utilities.GetLoggedAccountFromContextOrNull();
+    if(user == null) return new UnauthorizedObjectResult(new { code = Unauthorized().StatusCode, message = "Nepřihlášený uživatel." });
+
+    if (!body.TryGetValue("username", out object? _username) || !body.TryGetValue("password", out object? _password) || !body.TryGetValue("email", out object? _email))
+        return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Chybí povinná data." });
+
+    if(string.IsNullOrEmpty(_username?.ToString()) || string.IsNullOrEmpty(_password?.ToString()) || string.IsNullOrEmpty(_email?.ToString()))
+        return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Některá požadovaná data jsou prázdná." });
+
+    string username = _username?.ToString() ?? user.Username;
+    string password = _password?.ToString() ?? user.Password;
+    string email = _email?.ToString() ?? user.Email;
+
+    using var cmd = new MySqlCommand(@"
+        UPDATE `users`
+        SET `username` = @username, `password` = @password, `email` = @email
+        WHERE `uuid` = @uuid;
+    ", conn);
+
+    cmd.Parameters.AddWithValue("@username", username);
+    cmd.Parameters.AddWithValue("@password", Utilities.EncryptPassword(password));
+    cmd.Parameters.AddWithValue("@email", email);
+    cmd.Parameters.AddWithValue("@uuid", user.UUID);
+
+    int affectedRows = cmd.ExecuteNonQuery();
+    if (affectedRows == 0) return new NotFoundObjectResult(new { code = NotFound().StatusCode, message = "Uživatel nebyl nalezen." });
+
+    return new NoContentResult();
+}
+
 }
