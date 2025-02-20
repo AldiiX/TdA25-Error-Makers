@@ -37,7 +37,7 @@ public class MultiplayerGame {
 
 
 
-    protected MultiplayerGame(string uuid, DateTime createdAt, DateTime updatedAt, GameBoard.Player? winner, GameBoard board, PlayerAccount playerX, PlayerAccount playerO, GameType type, GameState state) {
+    protected MultiplayerGame(string uuid, DateTime createdAt, DateTime updatedAt, GameBoard.Player? winner, GameBoard board, PlayerAccount playerX, PlayerAccount playerO, GameType type, GameState state, ushort timePlayed) {
         UUID = uuid;
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
@@ -47,6 +47,7 @@ public class MultiplayerGame {
         PlayerO = playerO;
         Type = type;
         State = state;
+        GameTime = timePlayed;
     }
 
 
@@ -191,7 +192,8 @@ public class MultiplayerGame {
             playerX,
             playerO,
             Enum.Parse<GameType>(reader.GetString("type")),
-            Enum.Parse<GameState>(reader.GetString("state"))
+            Enum.Parse<GameState>(reader.GetString("state")),
+            reader.GetUInt16("time_played")
         );
 
         await reader.CloseAsync();
@@ -210,6 +212,19 @@ public class MultiplayerGame {
         await cmd2.ExecuteNonQueryAsync();
 
         return game;
+    }
+
+    public async Task<bool> UpdateGameTime(ushort? gameTime = null) {
+        gameTime ??= GameTime;
+
+        await using var conn = await Database.GetConnectionAsync();
+        if(conn == null) return false;
+
+        await using var cmd = new MySqlCommand("UPDATE multiplayer_games SET time_played = @time_played WHERE uuid = @uuid", conn);
+        cmd.Parameters.AddWithValue("@uuid", UUID);
+        cmd.Parameters.AddWithValue("@time_played", gameTime);
+
+        return await cmd.ExecuteNonQueryAsync() > 0;
     }
 
     public static async Task<MultiplayerGame?> GetAsync(string uuid) {
@@ -263,7 +278,8 @@ public class MultiplayerGame {
             playerX,
             playerO,
             Enum.Parse<GameType>(reader.GetString("type")),
-            Enum.Parse<GameState>(reader.GetString("state"))
+            Enum.Parse<GameState>(reader.GetString("state")),
+            reader.GetUInt16("time_played")
         );
     }
 
@@ -280,7 +296,8 @@ public class MultiplayerGame {
             player1,
             player2,
             type,
-            GameState.RUNNING
+            GameState.RUNNING,
+            0
         );
 
         await using var cmd = new MySqlCommand("INSERT INTO multiplayer_games (uuid, round, created_at, updated_at, winner, board, player_x, player_o, type) VALUES (@uuid, @round, @created_at, @updated_at, @winner, @board, @player_x, @player_o, @type)", conn);

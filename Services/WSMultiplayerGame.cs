@@ -191,6 +191,7 @@ public static class WSMultiplayerRankedGame {
 
             _ = winner.UpdateEloInDatabaseAsync(newEloWinner);
             _ = loser.UpdateEloInDatabaseAsync(newEloLoser);
+            _ = g.UpdateGameTime();
 
             var msgWinner = JsonSerializer.SerializeToUtf8Bytes(new {
                 action = "finishGame",
@@ -241,11 +242,11 @@ public static class WSMultiplayerRankedGame {
 
                     // pokud je na řadě tento hráč, odečte se mu čas
                     var currentPlayer = game.Board.GetNextPlayer();
-                    if (game.PlayerX?.UUID == player.UUID && currentPlayer == GameBoard.Player.X) game.PlayerXTimeLeft--;
-                    if (game.PlayerO?.UUID == player.UUID && currentPlayer == GameBoard.Player.O) game.PlayerOTimeLeft--;
+                    bool gameIsFinished = game.Board.GetWinner() != null;
+                    if (!gameIsFinished && game.PlayerX?.UUID == player.UUID && currentPlayer == GameBoard.Player.X) game.PlayerXTimeLeft--;
+                    if (!gameIsFinished && game.PlayerO?.UUID == player.UUID && currentPlayer == GameBoard.Player.O) game.PlayerOTimeLeft--;
                 }
 
-                Console.WriteLine("gamewinner: " + game.Board.GetWinner());
                 if(game.Board.GetWinner() == null) game.GameTime++;
             }
         }

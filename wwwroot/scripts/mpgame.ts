@@ -78,7 +78,10 @@ export const vue = new Vue({
 
             if(data.action === "status") {
                 _this.gameNumberOfPlayers = data.playerCount;
-                _this.game.gameTime = data.gameTime;
+
+                if(_this.game && data?.gameTime) {
+                    _this.game.gameTime = data.gameTime;
+                }
             }
 
             if(data.action === "updateGame") {
@@ -266,7 +269,8 @@ export const vue = new Vue({
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = seconds % 60;
 
-            return `${minutes} minut ${remainingSeconds} s`;
+            //console.warn(minutes, remainingSeconds);
+            return `${minutes} min ${remainingSeconds} s`;
         }
     },
 

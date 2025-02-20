@@ -81,7 +81,7 @@
                     <h1 v-else>Remíza</h1>
 
                     <div class="randominfo">
-                        <div class="elo" v-if="finishGameObject">
+                        <div class="elo" v-if="finishGameObject && finishGameObject?.elo && finishGameObject?.oldElo">
                             <p class="txt">ELO</p>
                             <div class="elo-display">
                                 <p class="mark">{{ (finishGameObject?.elo - finishGameObject?.oldElo) >= 0 ? "+" : "-" }}</p>
@@ -92,7 +92,7 @@
 
                         <div class="timeplayed" v-if="finishGameObject">
                             <p class="txt">Hra trvala</p>
-                            <h2 class="number">{{ parseTime(finishGameObject?.game.gameTime ?? 695) }}</h2>
+                            <h2 class="number">{{ parseTime(game?.gameTime ?? 0) }}</h2>
                         </div>
                     </div>
 
