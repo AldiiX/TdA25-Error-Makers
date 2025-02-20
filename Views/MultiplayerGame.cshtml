@@ -92,7 +92,7 @@
 
                         <div class="timeplayed" v-if="finishGameObject">
                             <p class="txt">Hra trvala</p>
-                            <h2 class="number">{{ finishGameObject?.timePlayed ?? "13 minut"}}</h2>
+                            <h2 class="number">{{ parseTime(finishGameObject?.game.gameTime ?? 695) }}</h2>
                         </div>
                     </div>
 

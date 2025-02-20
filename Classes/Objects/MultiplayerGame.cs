@@ -19,7 +19,6 @@ public class MultiplayerGame {
         public string UUID { get; set; }
         public string Name { get; set; }
         public uint Elo { get; set; }
-        public ushort PlayTimeLeft { get; set; } = 180;
         public WebSocket? WebSocket { get; set; }
 
         public PlayerAccount(string uuid, string name, uint elo, WebSocket? webSocket = null) {
@@ -55,9 +54,11 @@ public class MultiplayerGame {
     public ushort Round => Board.GetRound();
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
-    public string CurrentPlayer { get; set; } = "X";
+    public string CurrentPlayer => Board.GetNextPlayer().ToString();
     public PlayerAccount? PlayerX { get; private set; }
+    public ushort PlayerXTimeLeft { get; set; } = 180;
     public PlayerAccount? PlayerO { get; private set; }
+    public ushort PlayerOTimeLeft { get; set; } = 180;
     public ushort GameTime { get; set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
@@ -70,7 +71,7 @@ public class MultiplayerGame {
     public GameBoard.Player? Winner { get; private set; }
 
     [JsonIgnore]
-    public GameBoard Board { get; private set; }
+    public GameBoard Board { get; set; }
 
     [JsonInclude, JsonPropertyName("board")]
     private List<List<string>> json_Board => Board?.ToList() ?? new List<List<string>>();

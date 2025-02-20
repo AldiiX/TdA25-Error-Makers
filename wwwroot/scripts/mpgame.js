@@ -54,6 +54,7 @@ export const vue = new Vue({
                 location.href = "/error?code=404&message=Hra skončila&buttonLink=/play";
             if (data.action === "status") {
                 _this.gameNumberOfPlayers = data.playerCount;
+                _this.game.gameTime = data.gameTime;
             }
             if (data.action === "updateGame") {
                 this.initializeGame(data.game);
@@ -191,6 +192,11 @@ export const vue = new Vue({
                 newGameHeaderButton.style.pointerEvents = "none";
             _this.gameFazeIsEnding = true;
         },
+        parseTime: function (seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes} minut ${remainingSeconds} s`;
+        }
     },
     computed: {},
 });

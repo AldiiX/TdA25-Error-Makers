@@ -21,7 +21,7 @@ public static class WSMultiplayerRankedGame {
     private static Account? sessionAccount;
 
     static WSMultiplayerRankedGame() {
-        timer1 = new Timer(CheckGamePlayers!, null, 0, 1000);
+        timer1 = new Timer(SendStatus!, null, 0, 1000);
     }
 
     public static async Task HandleAsync(WebSocket webSocket, string gameUUID) {
@@ -69,13 +69,15 @@ public static class WSMultiplayerRankedGame {
             return;
         }
 
+        game.PlayerXTimeLeft = 300;
+        game.PlayerOTimeLeft = 300;
 
         PlayerAccount account = new PlayerAccount(
             sessionAccount.UUID,
             sessionAccount.DisplayName,
             sessionAccount.Elo,
             webSocket
-        ) { PlayTimeLeft = 180};
+        );
 
 
 
@@ -147,9 +149,9 @@ public static class WSMultiplayerRankedGame {
         var g = await MultiplayerGame.ReplaceCellAsync(game.UUID, x, y );
         if (g == null) return false;
 
-        // nastavení currentPlayer v games dict
-        //var gameInGamesDict = games.Keys.ToList().Find(k => k.UUID == game.UUID);
-        //if(gameInGamesDict != null) gameInGamesDict.CurrentPlayer = g.Board.GetCurrentPlayer().ToString().ToUpper();
+        // nastavení boardy
+        var gameInGamesDict = games.Keys.ToList().Find(k => k.UUID == game.UUID);
+        if (gameInGamesDict != null) gameInGamesDict.Board = g.Board;
 
 
         var updateMessage = JsonSerializer.SerializeToUtf8Bytes(new {
@@ -196,6 +198,7 @@ public static class WSMultiplayerRankedGame {
                 elo = newEloWinner,
                 result = "win",
                 game = g,
+                gameTime = game.GameTime,
             }, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
             var msgLoser = JsonSerializer.SerializeToUtf8Bytes(new {
@@ -204,6 +207,7 @@ public static class WSMultiplayerRankedGame {
                 elo = newEloLoser,
                 result = "lose",
                 game = g,
+                gameTime = game.GameTime,
             }, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
             w?.WebSocket?.SendAsync(new ArraySegment<byte>(msgWinner), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
@@ -214,14 +218,14 @@ public static class WSMultiplayerRankedGame {
     }
 
 
-    public static void CheckGamePlayers(object state) {
+    public static void SendStatus(object state) {
         lock (games) {
             foreach (var kvp in games) {
                 MultiplayerGame game = kvp.Key;
                 List<PlayerAccount> gamePlayers = kvp.Value;
 
                 foreach (var player in gamePlayers) {
-                    var playerTimeLeft = player!.PlayTimeLeft;
+                    var playerTimeLeft = game.PlayerO?.UUID == player.UUID ? game.PlayerOTimeLeft : game.PlayerXTimeLeft;
 
                     var message = JsonSerializer.SerializeToUtf8Bytes(
                         new {
@@ -229,6 +233,7 @@ public static class WSMultiplayerRankedGame {
                             playerCount = gamePlayers.Count,
                             timePlayed = game.GameTime,
                             myTimeLeft = playerTimeLeft,
+                            gameTime = game.GameTime,
                         }
                     );
 
@@ -236,11 +241,12 @@ public static class WSMultiplayerRankedGame {
 
                     // pokud je na řadě tento hráč, odečte se mu čas
                     var currentPlayer = game.Board.GetNextPlayer();
-                    if (game.PlayerX?.UUID == player.UUID && currentPlayer == GameBoard.Player.X) player.PlayTimeLeft--;
-                    if (game.PlayerO?.UUID == player.UUID && currentPlayer == GameBoard.Player.O) player.PlayTimeLeft--;
+                    if (game.PlayerX?.UUID == player.UUID && currentPlayer == GameBoard.Player.X) game.PlayerXTimeLeft--;
+                    if (game.PlayerO?.UUID == player.UUID && currentPlayer == GameBoard.Player.O) game.PlayerOTimeLeft--;
                 }
 
-                game.GameTime++;
+                Console.WriteLine("gamewinner: " + game.Board.GetWinner());
+                if(game.Board.GetWinner() == null) game.GameTime++;
             }
         }
     }

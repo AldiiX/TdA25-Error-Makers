@@ -78,6 +78,7 @@ export const vue = new Vue({
 
             if(data.action === "status") {
                 _this.gameNumberOfPlayers = data.playerCount;
+                _this.game.gameTime = data.gameTime;
             }
 
             if(data.action === "updateGame") {
@@ -260,6 +261,13 @@ export const vue = new Vue({
             // zobrazeni end game veci
             _this.gameFazeIsEnding = true;
         },
+
+        parseTime: function (seconds: number): string {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+
+            return `${minutes} minut ${remainingSeconds} s`;
+        }
     },
 
     computed: {
