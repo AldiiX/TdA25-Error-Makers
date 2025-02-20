@@ -61,6 +61,7 @@ public class MultiplayerGame {
     public PlayerAccount? PlayerO { get; private set; }
     public ushort PlayerOTimeLeft { get; set; } = 180;
     public ushort GameTime { get; set; }
+    public bool EloUpdated { get; set; } = false;
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public GameType Type { get; private set; }
@@ -69,7 +70,7 @@ public class MultiplayerGame {
     public GameState State { get; private set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public GameBoard.Player? Winner { get; private set; }
+    public GameBoard.Player? Winner { get; set; }
 
     [JsonIgnore]
     public GameBoard Board { get; set; }

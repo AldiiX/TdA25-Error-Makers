@@ -37,6 +37,7 @@ export const vue = new Vue({
         gameFazeIsEnding: false,
 
         finishGameObject: null,
+        myTimeLeft: null,
     },
 
 
@@ -78,9 +79,12 @@ export const vue = new Vue({
 
             if(data.action === "status") {
                 _this.gameNumberOfPlayers = data.playerCount;
+                _this.myTimeLeft = data.myTimeLeft;
 
-                if(_this.game && data?.gameTime) {
-                    _this.game.gameTime = data.gameTime;
+                if(_this.game) {
+                    if(data?.gameTime) _this.game.gameTime = data.gameTime;
+                    if(data?.playerXTimeLeft) _this.game.playerXTimeLeft = data.playerXTimeLeft;
+                    if(data?.playerOTimeLeft) _this.game.playerOTimeLeft = data.playerOTimeLeft;
                 }
             }
 
@@ -93,6 +97,14 @@ export const vue = new Vue({
                 _this.socket = null;*/
 
                 _this.finishGameObject = data;
+                _this.gameLocked = true;
+
+                // zobrazi se endgame veci
+                if(data.winner !== null) {
+                    setTimeout(() => {
+                        _this.showEndGameScreen();
+                    }, 3000);
+                }
             }
 
             if(data.action === "chatMessage") {
@@ -115,7 +127,7 @@ export const vue = new Vue({
 
             if(!_this.gameLoaded && data.action === "status" && data.playerCount >= 2 && _this.game) {
                 _this.gameLoaded = true;
-                if(_this.game.playerX.uuid === _this.accountUUID) _this.gameLocked = false;
+                if(data.currentPlayer === data.yourChar) _this.gameLocked = false;
             }
         },
 
@@ -206,13 +218,6 @@ export const vue = new Vue({
             // zjištění, kdo je na tahu
             if(_this.accountUUID === _this.game.playerX.uuid && _this.game.currentPlayer === "X") _this.gameLocked = false;
             if(_this.accountUUID === _this.game.playerO.uuid && _this.game.currentPlayer === "O") _this.gameLocked = false;
-
-            // v pripade ze je hra ukoncena, zobrazi se endgame veci
-            if(data.winner !== null) {
-                setTimeout(() => {
-                    _this.showEndGameScreen();
-                }, 3000);
-            }
         },
 
         setPlayerColor: function (): any {
@@ -263,15 +268,23 @@ export const vue = new Vue({
 
             // zobrazeni end game veci
             _this.gameFazeIsEnding = true;
+            _this.gameLoaded = true;
         },
 
-        parseTime: function (seconds: number): string {
+        parseTimeToWord: function (seconds: number): string {
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = seconds % 60;
 
-            //console.warn(minutes, remainingSeconds);
-            return `${minutes} min ${remainingSeconds} s`;
-        }
+            // formát xx min xx s, v případě že je sekunda 0 tak se nezobrazuje
+            return `${minutes} min${remainingSeconds <= 0 ? "" : ' ' + remainingSeconds + ' s'}`;
+        },
+
+        parseTimeToDigital: function(seconds: number): string {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+
+            return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+        },
     },
 
     computed: {

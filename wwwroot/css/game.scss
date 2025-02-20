@@ -76,6 +76,7 @@
                 font-size: 72px;
                 text-transform: uppercase;
                 margin: 0;
+                width: max-content;
 
                 &:is(.win) {
                     color: var(--accent-color-primary);
@@ -393,6 +394,28 @@
                 position: absolute;
                 top: -26px;
 
+                >.timeleft {
+                    pointer-events: none;
+                    font-family: 'Dosis', sans-serif;
+                    font-size: 24px;
+                    font-weight: 700;
+                }
+
+                >div {
+                    padding: 8px 24px;
+                    background-color: var(--background-color);
+                    color: var(--text-color);
+                    text-decoration: none;
+                    border-radius: 12px 12px 0 0;
+                    transition-duration: 0.3s;
+                    user-select: none;
+
+                    &:hover {
+                        background-color: var(--button-bg-hover);
+                        transition-duration: 0.3s;
+                    }
+                }
+
                 >a {
                     padding: 8px 24px;
                     background-color: var(--background-color);
@@ -642,6 +665,12 @@
                             font-size: 24px;
                             margin: 0;
                             width: max-content;
+                        }
+
+                        >.time {
+                            flex-grow: 1;
+                            text-align: right;
+                            margin: 0;
                         }
                     }
 

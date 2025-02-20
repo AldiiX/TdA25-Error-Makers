@@ -57,7 +57,7 @@
         <div class="mainsection">
 
             <!-- confetti při výhře -->
-            <div v-if="game && gameLoaded && game?.winner" v-cloak>
+            <div v-if="game && gameLoaded && game?.winner && finishGameObject?.result === 'win'" v-cloak>
                 @await confetti
             </div>
 
@@ -74,10 +74,8 @@
             <div class="endgame" v-show="gameFazeIsEnding" v-cloak>
                 <div class="content">
                     <p>Výsledek hry</p>
-                    <h1 class="win" v-if="String(game?.winner).toUpperCase() === 'X' && game?.playerX?.uuid === accountUUID">Vyhrál jsi</h1>
-                    <h1 class="lose" v-else-if="String(game?.winner).toUpperCase() === 'X' && game?.playerO?.uuid === accountUUID">Prohrál jsi</h1>
-                    <h1 class="win" v-else-if="String(game?.winner).toUpperCase() === 'O' && game?.playerO?.uuid === accountUUID">Vyhrál jsi</h1>
-                    <h1 class="lose" v-else-if="String(game?.winner).toUpperCase() === 'O' && game?.playerX?.uuid === accountUUID">Prohrál jsi</h1>
+                    <h1 class="win" v-if="finishGameObject?.result === 'win'">Vyhrál jsi</h1>
+                    <h1 class="lose" v-else-if="finishGameObject?.result === 'lose'">Prohrál jsi</h1>
                     <h1 v-else>Remíza</h1>
 
                     <div class="randominfo">
@@ -92,7 +90,7 @@
 
                         <div class="timeplayed" v-if="finishGameObject">
                             <p class="txt">Hra trvala</p>
-                            <h2 class="number">{{ parseTime(game?.gameTime ?? 0) }}</h2>
+                            <h2 class="number">{{ parseTimeToWord(game?.gameTime ?? 0) }}</h2>
                         </div>
                     </div>
 
@@ -120,6 +118,12 @@
                 <div class="left">
 
 
+                    <transition name="fade">
+                        <div class="buttons" v-show="myTimeLeft !== null">
+                            <div class="timeleft">{{ parseTimeToDigital(myTimeLeft) }}</div>
+                        </div>
+                    </transition>
+
                     <div class="grid" v-bind:class="{ locked: game?.winner != null || gameLocked }">
                         <div class="cell" v-cloak v-for="(cell, i) in 15*15" v-on:click="updateCell($event.target, i)">
                             <div class="cellhover"></div>
@@ -133,11 +137,13 @@
                             <div class="player-x" v-bind:class="{ active: String(game?.currentPlayer).toLowerCase() === 'x' }">
                                 <div class="icon"></div>
                                 <h1 class="name">{{ game?.playerX?.name }} {{ accountUUID === game?.playerX?.uuid ? '(ty)' : ''}}</h1>
+                                <p class="time">{{ parseTimeToDigital(game?.playerXTimeLeft) }}</p>
                             </div>
 
                             <div class="player-o" v-bind:class="{ active: String(game?.currentPlayer).toLowerCase() === 'o' }">
                                 <div class="icon"></div>
                                 <h1 class="name">{{ game?.playerO?.name }} {{ accountUUID === game?.playerO?.uuid ? '(ty)' : ''}}</h1>
+                                <p class="time">{{ parseTimeToDigital(game?.playerOTimeLeft) }}</p>
                             </div>
                         </div>
 

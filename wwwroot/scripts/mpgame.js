@@ -26,6 +26,7 @@ export const vue = new Vue({
         chatMessageInput: "",
         gameFazeIsEnding: false,
         finishGameObject: null,
+        myTimeLeft: null,
     },
     methods: {
         main: function () {
@@ -54,8 +55,14 @@ export const vue = new Vue({
                 location.href = "/error?code=404&message=Hra skončila&buttonLink=/play";
             if (data.action === "status") {
                 _this.gameNumberOfPlayers = data.playerCount;
-                if (_this.game && data?.gameTime) {
-                    _this.game.gameTime = data.gameTime;
+                _this.myTimeLeft = data.myTimeLeft;
+                if (_this.game) {
+                    if (data?.gameTime)
+                        _this.game.gameTime = data.gameTime;
+                    if (data?.playerXTimeLeft)
+                        _this.game.playerXTimeLeft = data.playerXTimeLeft;
+                    if (data?.playerOTimeLeft)
+                        _this.game.playerOTimeLeft = data.playerOTimeLeft;
                 }
             }
             if (data.action === "updateGame") {
@@ -63,6 +70,12 @@ export const vue = new Vue({
             }
             if (data.action === "finishGame") {
                 _this.finishGameObject = data;
+                _this.gameLocked = true;
+                if (data.winner !== null) {
+                    setTimeout(() => {
+                        _this.showEndGameScreen();
+                    }, 3000);
+                }
             }
             if (data.action === "chatMessage") {
                 _this.chatMessages.push({
@@ -78,7 +91,7 @@ export const vue = new Vue({
             }
             if (!_this.gameLoaded && data.action === "status" && data.playerCount >= 2 && _this.game) {
                 _this.gameLoaded = true;
-                if (_this.game.playerX.uuid === _this.accountUUID)
+                if (data.currentPlayer === data.yourChar)
                     _this.gameLocked = false;
             }
         },
@@ -145,11 +158,6 @@ export const vue = new Vue({
                 _this.gameLocked = false;
             if (_this.accountUUID === _this.game.playerO.uuid && _this.game.currentPlayer === "O")
                 _this.gameLocked = false;
-            if (data.winner !== null) {
-                setTimeout(() => {
-                    _this.showEndGameScreen();
-                }, 3000);
-            }
         },
         setPlayerColor: function () {
             const _this = this;
@@ -193,12 +201,18 @@ export const vue = new Vue({
             if (newGameHeaderButton)
                 newGameHeaderButton.style.pointerEvents = "none";
             _this.gameFazeIsEnding = true;
+            _this.gameLoaded = true;
         },
-        parseTime: function (seconds) {
+        parseTimeToWord: function (seconds) {
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = seconds % 60;
-            return `${minutes} min ${remainingSeconds} s`;
-        }
+            return `${minutes} min${remainingSeconds <= 0 ? "" : ' ' + remainingSeconds + ' s'}`;
+        },
+        parseTimeToDigital: function (seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+        },
     },
     computed: {},
 });
