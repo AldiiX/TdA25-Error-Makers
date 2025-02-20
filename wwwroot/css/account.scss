@@ -86,6 +86,19 @@
                 margin: 0;
               }
             }
+            
+            >.win-loss-ratio{
+                > .text {
+                    font-weight: bold;
+                    font-size: 16px;
+                    margin-bottom: 8px;
+                }
+    
+                > .ratio {
+                    font-size: 20px;
+                    margin: 0;
+                }
+            }
           }
           
           > .account-info {

@@ -2,31 +2,23 @@
   background-color: var(--background-color);
 }
 #ACCOUNT-PAGE .sections > .top {
-  -webkit-mask: url(/images/svg/mask.svg);
-          mask: url(/images/svg/mask.svg);
-  -webkit-mask-position: bottom;
-          mask-position: bottom;
-  -webkit-mask-size: 100vw;
-          mask-size: 100vw;
-  -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
+  mask: url(/images/svg/mask.svg);
+  mask-position: bottom;
+  mask-size: 100vw;
+  mask-repeat: no-repeat;
   height: 60vh;
   animation-name: asodjasd;
 }
 @keyframes asodjasd {
   from {
     height: calc(100vh + 100px);
-    -webkit-mask-position: center;
-            mask-position: center;
-    -webkit-mask-size: 500%;
-            mask-size: 500%;
+    mask-position: center;
+    mask-size: 500%;
   }
   to {
     height: 60vh;
-    -webkit-mask-size: 100vw;
-            mask-size: 100vw;
-    -webkit-mask-position: bottom;
-            mask-position: bottom;
+    mask-size: 100vw;
+    mask-position: bottom;
   }
 }
 #ACCOUNT-PAGE .sections > .top::after {
@@ -73,6 +65,15 @@
   margin-bottom: 8px;
 }
 #ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .left > .account-elo > .elo {
+  font-size: 20px;
+  margin: 0;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .left > .win-loss-ratio > .text {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .left > .win-loss-ratio > .ratio {
   font-size: 20px;
   margin: 0;
 }
@@ -178,4 +179,6 @@
   display: flex;
   gap: 24px;
   justify-content: center;
-}/*# sourceMappingURL=account.css.map */
+}
+
+/*# sourceMappingURL=account.css.map */

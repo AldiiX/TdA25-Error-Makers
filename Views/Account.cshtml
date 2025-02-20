@@ -66,8 +66,8 @@
                         
                         <div class="win-loss-ratio">
                             <p class="text">Win/Loss Ratio:</p>
-                            <p class="winloss">
-                            @((loggedAccount.Wins + loggedAccount.Losses > 0) ? ((double)loggedAccount.Wins / (loggedAccount.Wins + loggedAccount.Losses) * 100).ToString("0.00") + "%" : "0%")
+                            <p class="ratio">
+                                @((loggedAccount.Losses > 0) ? ((double)loggedAccount.Wins / loggedAccount.Losses).ToString("0.00") : loggedAccount.Wins.ToString("0.00"))
                             </p>
                         </div>
                     </div>
@@ -161,17 +161,17 @@
 
                         <div class="account-buttons">
                         
-                            <form method="post">
-                                <input type="submit" class="button-primary" value="Smazat účet">
+                            <form v-on:submit.prevent="changeCredentialsFormSubmit($event)">
+                                <input type="text" name="displayName" value="@loggedAccount.DisplayName" placeholder="Display Name" />
+                                <input type="text" name="username" value="@loggedAccount.Username" placeholder="Username" />
+                                <input type="text" name="email" value="@loggedAccount.Email" placeholder="Email" />
+                                <input type="text" name="oldPassword" placeholder="Staré Heslo" />
+                                <input type="text" name="newPassword" placeholder="Nové Heslo" />
+
+                                <input type="submit"/>
                             </form>
-
                             
-                            <button class="button-primary" v-on:click="changePassword">Změnit heslo</button>
-                            
-                            <button class="button-primary" v-on:click="changeDisplayName">Změnit jméno</button>
-
-                            <button class="button-primary" v-on:click="changeEmail">Změnit avatar</button>
-
+                            <button class="button-primary-col-sec" v-on:click="deleteaccount()">Smazat účet</button>
                             <a href="/logout" class="button-primary">Odhlásit se</a>
                         </div>
                         

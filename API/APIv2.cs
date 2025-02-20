@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Runtime.InteropServices.Marshalling;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
@@ -276,38 +277,69 @@ public class APIv2 : Controller {
     }*/
 
     [HttpPut("credentials")]
-public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?> body) {
-    using var conn = Database.GetConnection();
-    if (conn == null) return new StatusCodeResult(500);
+    public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?> body) {
+        using var conn = Database.GetConnection();
+        if (conn == null)
+            return new BadRequestObjectResult(new { success = false, message = "Databáze nebyla připojena" });
+        
+        
+        // kontrola prihlaseni
+        var loggedAccount = Auth.ReAuthUser();
+        if (loggedAccount == null)
+            return new UnauthorizedObjectResult(new { success = false, message = "Musíš být přihlášený." });
+        
+        
+        // parsovani veci z body
+        var username = body.TryGetValue("username", out var _username) ? _username?.ToString() : null;
+        var email = body.TryGetValue("email", out var _email) ? _email?.ToString() : null;
+        var password = body.TryGetValue("password", out var _password) ? _password?.ToString() : null;
+        var newPassword = body.TryGetValue("newPassword", out var _newPassword) ? _newPassword?.ToString() : null;
+        var displayName = body.TryGetValue("displayName", out var _displayName) ? _displayName?.ToString() : null;
+        
+        // pajo sem dopis validaci dat
+        
+        using var cmd = new MySqlCommand(
+            """
+                    UPDATE `users` 
+                    SET 
+                        `username` = @username, 
+                        `email` = @email,
+                        `display_name` = @displayName,
+                        `password` = IF(@password IS NULL, `password`, @password)
+                    WHERE `uuid` = @uuid;
+                    """, conn
+        );
+        
+        cmd.Parameters.AddWithValue("@uuid", loggedAccount.UUID);
+        cmd.Parameters.AddWithValue("@username", username);
+        cmd.Parameters.AddWithValue("@email", email);
+        cmd.Parameters.AddWithValue("@password", password);
+        cmd.Parameters.AddWithValue("@displayName", displayName);
 
-    var user = Utilities.GetLoggedAccountFromContextOrNull();
-    if(user == null) return new UnauthorizedObjectResult(new { code = Unauthorized().StatusCode, message = "Nepřihlášený uživatel." });
+        var affectedRows = cmd.ExecuteNonQuery();
+        
+        return 
+            affectedRows > 0 
+            ? new JsonResult(new { success = true, message = "Údaje byly úspěšně změněny." }) 
+            : new JsonResult(new { success = false, message = "Uživatel nebyl nalezen"});
+    }
 
-    if (!body.TryGetValue("username", out object? _username) || !body.TryGetValue("password", out object? _password) || !body.TryGetValue("email", out object? _email))
-        return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Chybí povinná data." });
-
-    if(string.IsNullOrEmpty(_username?.ToString()) || string.IsNullOrEmpty(_password?.ToString()) || string.IsNullOrEmpty(_email?.ToString()))
-        return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Některá požadovaná data jsou prázdná." });
-
-    string username = _username?.ToString() ?? user.Username;
-    string password = _password?.ToString() ?? user.Password;
-    string email = _email?.ToString() ?? user.Email;
-
-    using var cmd = new MySqlCommand(@"
-        UPDATE `users`
-        SET `username` = @username, `password` = @password, `email` = @email
-        WHERE `uuid` = @uuid;
-    ", conn);
-
-    cmd.Parameters.AddWithValue("@username", username);
-    cmd.Parameters.AddWithValue("@password", Utilities.EncryptPassword(password));
-    cmd.Parameters.AddWithValue("@email", email);
-    cmd.Parameters.AddWithValue("@uuid", user.UUID);
-
-    int affectedRows = cmd.ExecuteNonQuery();
-    if (affectedRows == 0) return new NotFoundObjectResult(new { code = NotFound().StatusCode, message = "Uživatel nebyl nalezen." });
-
-    return new NoContentResult();
-}
-
+    [HttpDelete("myaccount")]
+    public IActionResult DeleteAccount() {
+        using var conn = Database.GetConnection();
+        if (conn == null)
+            return new BadRequestObjectResult(new { success = false, message = "Databáze nebyla připojena" });
+        
+        var loggedAccount = Auth.ReAuthUser();
+        if (loggedAccount == null)
+            return new UnauthorizedObjectResult(new { success = false, message = "Musíš být přihlášený." });
+        
+        using var cmd = new MySqlCommand("DELETE FROM `users` WHERE `uuid` = @uuid", conn);
+        cmd.Parameters.AddWithValue("@uuid", loggedAccount.UUID);
+        
+        return cmd.ExecuteNonQuery() > 0 
+            ? new JsonResult(new { success = true, message = "Účet byl úspěšně smazán." }) 
+            : new JsonResult(new { success = false, message = "Uživatel nebyl nalezen" });
+        
+    }
 }
