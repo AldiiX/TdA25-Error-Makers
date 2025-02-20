@@ -169,7 +169,7 @@ public static class WSMultiplayerRankedGame {
 
 
         // pokud je výhra, spočítá se ELO pro oba uživatele
-        if (game.Winner != null) await EndGameNormal(game, account);
+        if (g.Winner != null) await EndGameNormal(g, account);
 
 
         return true;
@@ -196,6 +196,16 @@ public static class WSMultiplayerRankedGame {
                 foreach (var player in gamePlayers) {
                     var playerTimeLeft = game.PlayerO?.UUID == player.UUID ? game.PlayerOTimeLeft : game.PlayerXTimeLeft;
                     var currentPlayer = game.Board.GetNextPlayer();
+                    var winner = game.Board.GetWinner();
+
+                    // zjisteni resultu
+                    string? result = null;
+                    if     (winner == GameBoard.Player.X && game.PlayerX?.UUID == player.UUID) result = "win";
+                    else if(winner == GameBoard.Player.O && game.PlayerO?.UUID == player.UUID) result = "win";
+                    else if(winner == GameBoard.Player.X && game.PlayerO?.UUID == player.UUID) result = "lose";
+                    else if(winner == GameBoard.Player.O && game.PlayerX?.UUID == player.UUID) result = "lose";
+
+
 
                     var message = JsonSerializer.SerializeToUtf8Bytes(
                         new {
@@ -204,6 +214,12 @@ public static class WSMultiplayerRankedGame {
                             timePlayed = game.GameTime,
                             myTimeLeft = playerTimeLeft,
                             gameTime = game.GameTime,
+                            winner = winner switch {
+                                GameBoard.Player.X => "X",
+                                GameBoard.Player.O => "O",
+                                _ => null,
+                            },
+                            result = result,
                             playerXTimeLeft = game.PlayerXTimeLeft,
                             playerOTimeLeft = game.PlayerOTimeLeft,
                             yourChar = game.PlayerX?.UUID == player.UUID ? "X" : "O",

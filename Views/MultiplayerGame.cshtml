@@ -74,8 +74,8 @@
             <div class="endgame" v-show="gameFazeIsEnding" v-cloak>
                 <div class="content">
                     <p>Výsledek hry</p>
-                    <h1 class="win" v-if="finishGameObject?.result === 'win'">Vyhrál jsi</h1>
-                    <h1 class="lose" v-else-if="finishGameObject?.result === 'lose'">Prohrál jsi</h1>
+                    <h1 class="win" v-if="finishGameObject?.result === 'win' || game?.result === 'win'">Vyhrál jsi</h1>
+                    <h1 class="lose" v-else-if="finishGameObject?.result === 'lose'  || game?.result === 'lose'">Prohrál jsi</h1>
                     <h1 v-else>Remíza</h1>
 
                     <div class="randominfo">

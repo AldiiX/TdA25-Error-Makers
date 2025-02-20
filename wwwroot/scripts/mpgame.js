@@ -63,6 +63,13 @@ export const vue = new Vue({
                         _this.game.playerXTimeLeft = data.playerXTimeLeft;
                     if (data?.playerOTimeLeft)
                         _this.game.playerOTimeLeft = data.playerOTimeLeft;
+                    _this.game.winner = data.winner;
+                    _this.game.result = data.result;
+                }
+                if (data.winner !== null) {
+                    setTimeout(() => {
+                        _this.showEndGameScreen();
+                    }, 3000);
                 }
             }
             if (data.action === "updateGame") {

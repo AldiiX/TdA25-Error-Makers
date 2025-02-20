@@ -85,6 +85,15 @@ export const vue = new Vue({
                     if(data?.gameTime) _this.game.gameTime = data.gameTime;
                     if(data?.playerXTimeLeft) _this.game.playerXTimeLeft = data.playerXTimeLeft;
                     if(data?.playerOTimeLeft) _this.game.playerOTimeLeft = data.playerOTimeLeft;
+                    _this.game.winner = data.winner;
+                    _this.game.result = data.result;
+                }
+
+                // zobrazi se endgame veci
+                if(data.winner !== null) {
+                    setTimeout(() => {
+                        _this.showEndGameScreen();
+                    }, 3000);
                 }
             }
 
