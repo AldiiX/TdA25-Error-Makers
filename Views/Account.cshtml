@@ -159,21 +159,17 @@
                         <p class="text">Nastavení účtu</p>
 
                         <div class="account-buttons">
+                        
                             <form method="post">
                                 <input type="submit" class="button-primary" value="Smazat účet">
                             </form>
 
                             
-                              <button class="button-primary" v-on:click="changePassword">Změnit heslo</button>
+                            <button class="button-primary" v-on:click="changePassword">Změnit heslo</button>
                             
+                            <button class="button-primary" v-on:click="changeDisplayName">Změnit jméno</button>
 
-                            <form method="post">
-                                <input type="submit" class="button-primary" value="Změnit email">
-                            </form>
-
-                            <form method="post">
-                                <input type="submit" class="button-primary" value="Změnit jméno">
-                            </form>
+                            <button class="button-primary" v-on:click="changeEmail">Změnit avatar</button>
 
                             <a href="/logout" class="button-primary">Odhlásit se</a>
                         </div>
