@@ -137,13 +137,13 @@
                             <div class="player-x" v-bind:class="{ active: String(game?.currentPlayer).toLowerCase() === 'x' }">
                                 <div class="icon"></div>
                                 <h1 class="name">{{ game?.playerX?.name }} {{ accountUUID === game?.playerX?.uuid ? '(ty)' : ''}}</h1>
-                                <p class="time">{{ parseTimeToDigital(game?.playerXTimeLeft) }}</p>
+                                <p class="time">{{ parseTimeToDigital(playerXTimeLeft) }}</p>
                             </div>
 
                             <div class="player-o" v-bind:class="{ active: String(game?.currentPlayer).toLowerCase() === 'o' }">
                                 <div class="icon"></div>
                                 <h1 class="name">{{ game?.playerO?.name }} {{ accountUUID === game?.playerO?.uuid ? '(ty)' : ''}}</h1>
-                                <p class="time">{{ parseTimeToDigital(game?.playerOTimeLeft) }}</p>
+                                <p class="time">{{ parseTimeToDigital(playerOTimeLeft) }}</p>
                             </div>
                         </div>
 

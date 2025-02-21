@@ -5,8 +5,6 @@ using System.Text.Json.Nodes;
 using TdA25_Error_Makers.Classes;
 using TdA25_Error_Makers.Classes.Objects;
 using PlayerAccount = TdA25_Error_Makers.Classes.Objects.MultiplayerGame.PlayerAccount;
-// ReSharper disable InconsistentlySynchronizedField
-#pragma warning disable CS0169 // Field is never used
 
 namespace TdA25_Error_Makers.Services;
 
@@ -15,284 +13,305 @@ namespace TdA25_Error_Makers.Services;
 
 
 public static class WSMultiplayerRankedGame {
+    #region Statické proměnné
 
-    private static Dictionary<MultiplayerGame, List<PlayerAccount>> games = new();
-    private static Timer? timer1;
-    private static Account? sessionAccount;
+    private static readonly Dictionary<MultiplayerGame, List<PlayerAccount>> Games = new();
+    private static Timer? _statusTimer;
+    private static Account? _sessionAccount;
+    private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
+    #endregion
 
     static WSMultiplayerRankedGame() {
-        timer1 = new Timer(SendStatus!, null, 0, 1000);
+        _statusTimer = new Timer(SendStatus, null, 0, 1000);
     }
 
     public static async Task HandleAsync(WebSocket webSocket, string gameUUID) {
-        sessionAccount = Utilities.GetLoggedAccountFromContextOrNull();
+        _sessionAccount = Utilities.GetLoggedAccountFromContextOrNull();
         var game = HCS.Current.Items["game"] as MultiplayerGame;
 
-        if (sessionAccount == null) {
-            await webSocket.SendAsync(
-                JsonSerializer.SerializeToUtf8Bytes(new { error = true, message = "Neautorizovaný přístup: uživatel není přihlášen." }),
-                WebSocketMessageType.Text, true, CancellationToken.None);
-            await webSocket.CloseAsync(WebSocketCloseStatus.PolicyViolation, "Unauthorized", CancellationToken.None);
+        // Ošetření chyb při autorizaci a validaci hry
+        if (_sessionAccount == null) {
+            await SendErrorAndCloseAsync(webSocket, "Neautorizovaný přístup: uživatel není přihlášen.", WebSocketCloseStatus.PolicyViolation, "Unauthorized");
             return;
         }
 
         if (game == null) {
             Console.WriteLine(JsonSerializer.Serialize(game));
-            await webSocket.SendAsync(
-                JsonSerializer.SerializeToUtf8Bytes(new { error = true, message = "Nenalezeno: hra nebyla nalezena." }),
-                WebSocketMessageType.Text, true, CancellationToken.None);
-            await webSocket.CloseAsync(WebSocketCloseStatus.PolicyViolation, "Not Found", CancellationToken.None);
+            await SendErrorAndCloseAsync(webSocket, "Nenalezeno: hra nebyla nalezena.", WebSocketCloseStatus.PolicyViolation, "Not Found");
             return;
         }
 
         if (game.UUID != gameUUID) {
-            await webSocket.SendAsync(
-                JsonSerializer.SerializeToUtf8Bytes(new { error = true, message = "Neautorizovaný přístup: nesouhlasí ID hry." }),
-                WebSocketMessageType.Text, true, CancellationToken.None);
-            await webSocket.CloseAsync(WebSocketCloseStatus.PolicyViolation, "Unauthorized", CancellationToken.None);
+            await SendErrorAndCloseAsync(webSocket, "Neautorizovaný přístup: nesouhlasí ID hry.", WebSocketCloseStatus.PolicyViolation, "Unauthorized");
             return;
         }
 
         if (game.State != MultiplayerGame.GameState.RUNNING) {
-            await webSocket.SendAsync(
-                JsonSerializer.SerializeToUtf8Bytes(new { error = true, message = "Neautorizovaný přístup: hra není spuštěná.", c = "UNA1" }),
-                WebSocketMessageType.Text, true, CancellationToken.None);
-            await webSocket.CloseAsync(WebSocketCloseStatus.PolicyViolation, "Unauthorized", CancellationToken.None);
+            await SendErrorAndCloseAsync(webSocket, "Neautorizovaný přístup: hra není spuštěná.", WebSocketCloseStatus.PolicyViolation, "Unauthorized");
             return;
         }
 
-        if (game.PlayerX?.UUID != sessionAccount.UUID && game.PlayerO?.UUID != sessionAccount.UUID) {
-            await webSocket.SendAsync(
-                JsonSerializer.SerializeToUtf8Bytes(new { error = true, message = "Neautorizovaný přístup: uživatel není účastníkem hry." }),
-                WebSocketMessageType.Text, true, CancellationToken.None);
-            await webSocket.CloseAsync(WebSocketCloseStatus.PolicyViolation, "Unauthorized", CancellationToken.None);
+        if (game.PlayerX?.UUID != _sessionAccount.UUID && game.PlayerO?.UUID != _sessionAccount.UUID) {
+            await SendErrorAndCloseAsync(webSocket, "Neautorizovaný přístup: uživatel není účastníkem hry.", WebSocketCloseStatus.PolicyViolation, "Unauthorized");
             return;
         }
 
-        game.PlayerXTimeLeft = 3 * 60; // sekundy
-        game.PlayerOTimeLeft = 3 * 60;
+        // Nastavení času pro hráče
+        game.PlayerXTimeLeft = 5 * 60;
+        game.PlayerOTimeLeft = 5 * 60;
 
-        PlayerAccount account = new PlayerAccount(
-            sessionAccount.UUID,
-            sessionAccount.DisplayName,
-            sessionAccount.Elo,
-            webSocket
-        );
-
-
-
-        lock (games) {
-            if(!games.ContainsKey(game)) {
-                games.Add(game, [account]);
-            }
-
-            else {
-                games[game].Add(account);
-            }
+        // Vytvoření instance hráče a přidání do hry
+        var playerAccount = new PlayerAccount(_sessionAccount.UUID, _sessionAccount.DisplayName, _sessionAccount.Elo, webSocket);
+        lock (Games) {
+            if (!Games.ContainsKey(game))
+                Games.Add(game, [playerAccount]);
+            else
+                Games[game].Add(playerAccount);
         }
 
         var buffer = new byte[1024 * 4];
+
+        // Smyčka pro příjem zpráv
         while (webSocket.State == WebSocketState.Open) {
-            using var ms = new MemoryStream();
-            WebSocketReceiveResult result;
-            do {
-                result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                ms.Write(buffer, 0, result.Count);
-            } while (!result.EndOfMessage);
+            string? message = await ReceiveMessageAsync(webSocket, buffer);
+            if (message == null)
+                break;
 
-            ms.Seek(0, SeekOrigin.Begin);
-            var message = Encoding.UTF8.GetString(ms.ToArray());
+            var jsonNode = JsonNode.Parse(message);
+            var action = jsonNode?["action"]?.ToString();
+            if (string.IsNullOrEmpty(action))
+                continue;
 
-            if (result.MessageType == WebSocketMessageType.Text) {
-                var obj = JsonNode.Parse(message);
-                var action = obj?["action"]?.ToString();
-                //Console.WriteLine(message);
-
-                switch (action) {
-                    case "MakeMove": {
-                        var x = ushort.Parse(obj?["x"]?.ToString() ?? "0");
-                        var y = ushort.Parse(obj?["y"]?.ToString() ?? "0");
-
-                        await MakeMove(account, game, x, y);
-                    } break;
-
-                    case "SendChatMessage": {
-                        var msg = JsonSerializer.SerializeToUtf8Bytes(new {
-                            action = "chatMessage",
-                            message = obj?["message"]?.ToString(),
-                            sender = account?.Name,
-                            letter = game.PlayerX?.UUID == account?.UUID ? "X" : "O",
-                        });
-
-                        foreach (var player in games[game]) player.WebSocket?.SendAsync(new ArraySegment<byte>(msg), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
-                    } break;
-                }
+            // Rozdělení zpracování zpráv do pomocných metod
+            switch (action) {
+                case "MakeMove":
+                    await ProcessMakeMove(playerAccount, game, jsonNode);
+                    break;
+                case "SendChatMessage":
+                    await ProcessChatMessage(playerAccount, game, jsonNode);
+                    break;
             }
         }
 
-        lock (games) {
-            if(games.TryGetValue(game, out var value))
-                value.Remove(account);
-
-            if(games[game].Count == 0){
-                //Console.WriteLine("Game removed");
-                _ = MultiplayerGame.EndAsync(gameUUID, null);
-                games.Remove(game);
+        // Odstranění hráče ze hry a ukončení spojení
+        lock (Games) {
+            if (Games.TryGetValue(game, out var players)) {
+                players.Remove(playerAccount);
+                if (players.Count == 0) {
+                    _ = MultiplayerGame.EndAsync(gameUUID, null);
+                    Games.Remove(game);
+                }
             }
         }
 
         await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by server", CancellationToken.None);
     }
 
+    #region Zpracování zpráv
 
-    public static async Task<bool> MakeMove(PlayerAccount account, MultiplayerGame game, ushort x, ushort y) {
-        if (game.Winner != null) return false;
+    private static async Task ProcessMakeMove(PlayerAccount playerAccount, MultiplayerGame game, JsonNode jsonNode) {
+        if (ushort.TryParse(jsonNode?["x"]?.ToString(), out var x) &&
+            ushort.TryParse(jsonNode?["y"]?.ToString(), out var y))
+        {
+            await MakeMove(playerAccount, game, x, y);
+        }
+    }
 
-        var g = await MultiplayerGame.ReplaceCellAsync(game.UUID, x, y );
-        if (g == null) return false;
+    private static async Task ProcessChatMessage(PlayerAccount playerAccount, MultiplayerGame game, JsonNode jsonNode) {
+        var chatMsg = jsonNode?["message"]?.ToString();
+        var letter = game.PlayerX?.UUID == playerAccount.UUID ? "X" : "O";
+        var chatPayload = new {
+            action = "chatMessage",
+            message = chatMsg,
+            sender = playerAccount.Name,
+            letter = letter
+        };
 
-        // nastavení boardy
-        var gameInGamesDict = games.Keys.ToList().Find(k => k.UUID == game.UUID);
-        if (gameInGamesDict != null) gameInGamesDict.Board = g.Board;
+        var chatBytes = JsonSerializer.SerializeToUtf8Bytes(chatPayload, JsonOptions);
+        await BroadcastToGame(game, chatBytes);
+    }
 
+    #endregion
 
-        var updateMessage = JsonSerializer.SerializeToUtf8Bytes(new {
-            action = "updateGame",
-            game = g,
-        }, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+    #region Metody pro odesílání zpráv
 
-        foreach (var player in games[game]) {
-            player.WebSocket?.SendAsync(new ArraySegment<byte>(updateMessage), WebSocketMessageType.Text, true,
-                CancellationToken.None
-            ).Wait();
+    private static async Task BroadcastToGame(MultiplayerGame game, byte[] message) {
+        List<Task> tasks = [];
+        lock (Games) {
+            if (Games.TryGetValue(game, out var players)) {
+                foreach (var player in players) {
+                    if (player.WebSocket != null && player.WebSocket.State == WebSocketState.Open) {
+                        tasks.Add(player.WebSocket.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None));
+                    }
+                }
+            }
         }
 
+        await Task.WhenAll(tasks);
+    }
 
-        // pokud je výhra, spočítá se ELO pro oba uživatele
-        if (g.Winner != null) await EndGameNormal(g, account);
+    private static async Task SendStatusToPlayer(MultiplayerGame game, PlayerAccount player, int playerCount) {
+        var playerTimeLeft = game.PlayerO?.UUID == player.UUID ? game.PlayerOTimeLeft : game.PlayerXTimeLeft;
+        var currentPlayer = game.Board.GetNextPlayer();
+        var winner = game.Board.GetWinner();
 
+        string? result = null;
+        if (winner == GameBoard.Player.X)
+            result = game.PlayerX?.UUID == player.UUID ? "win" : "lose";
+        else if (winner == GameBoard.Player.O)
+            result = game.PlayerO?.UUID == player.UUID ? "win" : "lose";
+
+        var statusPayload = new {
+            action = "status",
+            playerCount,
+            timePlayed = game.GameTime,
+            myTimeLeft = playerTimeLeft,
+            gameTime = game.GameTime,
+            winner = winner switch {
+                GameBoard.Player.X => "X",
+                GameBoard.Player.O => "O",
+                _ => null
+            },
+            result,
+            playerXTimeLeft = game.PlayerXTimeLeft,
+            playerOTimeLeft = game.PlayerOTimeLeft,
+            yourChar = game.PlayerX?.UUID == player.UUID ? "X" : "O",
+            currentPlayer = currentPlayer == GameBoard.Player.X ? "X" : "O"
+        };
+
+        var statusBytes = JsonSerializer.SerializeToUtf8Bytes(statusPayload, JsonOptions);
+        if (player.WebSocket != null && player.WebSocket.State == WebSocketState.Open) {
+            await player.WebSocket.SendAsync(new ArraySegment<byte>(statusBytes), WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+
+        // Odečítání času, pokud je hráč na řadě
+        if (game.Board.GetWinner() == null) {
+            if (game.PlayerX?.UUID == player.UUID && currentPlayer == GameBoard.Player.X)
+                game.PlayerXTimeLeft--;
+            if (game.PlayerO?.UUID == player.UUID && currentPlayer == GameBoard.Player.O)
+                game.PlayerOTimeLeft--;
+        }
+    }
+
+    private static async Task BroadcastFinishGame(PlayerAccount winnerPlayer, byte[] winnerMessage, PlayerAccount loserPlayer, byte[] loserMessage) {
+        List<Task> finishTasks = [];
+        if (winnerPlayer.WebSocket is { State: WebSocketState.Open }) {
+            finishTasks.Add(winnerPlayer.WebSocket.SendAsync(new ArraySegment<byte>(winnerMessage), WebSocketMessageType.Text, true, CancellationToken.None));
+        }
+
+        if (loserPlayer.WebSocket is { State: WebSocketState.Open }) {
+            finishTasks.Add(loserPlayer.WebSocket.SendAsync(new ArraySegment<byte>(loserMessage), WebSocketMessageType.Text, true, CancellationToken.None));
+        }
+
+        await Task.WhenAll(finishTasks);
+    }
+
+    #endregion
+
+    #region Herní logika
+
+    private static async Task<bool> MakeMove(PlayerAccount playerAccount, MultiplayerGame game, ushort x, ushort y) {
+        if (game.Winner != null)
+            return false;
+
+        var updatedGame = await MultiplayerGame.ReplaceCellAsync(game.UUID, x, y);
+        if (updatedGame == null)
+            return false;
+
+        // Aktualizace hracího pole v instanci hry
+        lock (Games) {
+            var gameKey = Games.Keys.FirstOrDefault(g => g.UUID == game.UUID);
+            if (gameKey != null)
+                gameKey.Board = updatedGame.Board;
+        }
+
+        // Odeslání aktualizované hry všem hráčům
+        var updatePayload = new { action = "updateGame", game = updatedGame };
+        var updateBytes = JsonSerializer.SerializeToUtf8Bytes(updatePayload, JsonOptions);
+        await BroadcastToGame(game, updateBytes);
+
+        // Pokud je výhra, ukonči hru a aktualizuj ELO
+        if (updatedGame.Winner != null) {
+            await EndGameNormal(updatedGame, playerAccount);
+        }
 
         return true;
     }
 
+    private static void SendStatus(object? state) {
 
-    public static void SendStatus(object state) {
-        lock (games) {
-            foreach (var kvp in games) {
-                MultiplayerGame game = kvp.Key;
-                List<PlayerAccount> gamePlayers = kvp.Value;
+        // Získáme kopii seznamu her, abychom nemuseli iterovat přímo přes dictionary
+        List<KeyValuePair<MultiplayerGame, List<PlayerAccount>>> gamesCopy;
+        lock (Games) {
+            gamesCopy = Games.ToList();
+        }
 
+        foreach (var kvp in gamesCopy) {
+            var game = kvp.Key;
+            var players = kvp.Value;
 
-                // zjisteni jestli někomu vyprsel cas
-                if(game.PlayerXTimeLeft <= 0) {
-                    _ = ForceEndGame(game, "o");
-                    continue;
-                } else if (game.PlayerOTimeLeft <= 0) {
-                    _ = ForceEndGame(game, "x");
-                    continue;
-                }
+            // Kontrola, zda některému hráči vypršel čas
+            if (game.PlayerXTimeLeft <= 0) {
+                _ = ForceEndGame(game, "O");
+                continue;
+            }
 
+            else if (game.PlayerOTimeLeft <= 0) {
+                _ = ForceEndGame(game, "X");
+                continue;
+            }
 
-                foreach (var player in gamePlayers) {
-                    var playerTimeLeft = game.PlayerO?.UUID == player.UUID ? game.PlayerOTimeLeft : game.PlayerXTimeLeft;
-                    var currentPlayer = game.Board.GetNextPlayer();
-                    var winner = game.Board.GetWinner();
+            // Odeslání status zprávy každému hráči
+            foreach (var player in players) {
+                _ = SendStatusToPlayer(game, player, players.Count);
+            }
 
-                    // zjisteni resultu
-                    string? result = null;
-                    if     (winner == GameBoard.Player.X && game.PlayerX?.UUID == player.UUID) result = "win";
-                    else if(winner == GameBoard.Player.O && game.PlayerO?.UUID == player.UUID) result = "win";
-                    else if(winner == GameBoard.Player.X && game.PlayerO?.UUID == player.UUID) result = "lose";
-                    else if(winner == GameBoard.Player.O && game.PlayerX?.UUID == player.UUID) result = "lose";
-
-
-
-                    var message = JsonSerializer.SerializeToUtf8Bytes(
-                        new {
-                            action = "status",
-                            playerCount = gamePlayers.Count,
-                            timePlayed = game.GameTime,
-                            myTimeLeft = playerTimeLeft,
-                            gameTime = game.GameTime,
-                            winner = winner switch {
-                                GameBoard.Player.X => "X",
-                                GameBoard.Player.O => "O",
-                                _ => null,
-                            },
-                            result = result,
-                            playerXTimeLeft = game.PlayerXTimeLeft,
-                            playerOTimeLeft = game.PlayerOTimeLeft,
-                            yourChar = game.PlayerX?.UUID == player.UUID ? "X" : "O",
-                            currentPlayer = currentPlayer == GameBoard.Player.X ? "X" : "O",
-                        }
-                    );
-
-                    player.WebSocket?.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
-
-                    // pokud je na řadě tento hráč, odečte se mu čas
-                    bool gameIsFinished = game.Board.GetWinner() != null;
-                    if (!gameIsFinished && game.PlayerX?.UUID == player.UUID && currentPlayer == GameBoard.Player.X) game.PlayerXTimeLeft--;
-                    if (!gameIsFinished && game.PlayerO?.UUID == player.UUID && currentPlayer == GameBoard.Player.O) game.PlayerOTimeLeft--;
-                }
-
-                if(game.Board.GetWinner() == null) game.GameTime++;
+            if (game.Board.GetWinner() == null) {
+                game.GameTime++;
             }
         }
     }
 
-    public static async Task<bool> ForceEndGame(MultiplayerGame game, string? winnerChar) {
-        if(game.EloUpdated) return false;
-        winnerChar = winnerChar?.ToUpper();
+    private static async Task<bool> ForceEndGame(MultiplayerGame game, string? winnerChar) {
+        if (game.EloUpdated)
+            return false;
 
-        var w = winnerChar == "X" ? games[game].Find(player => player.UUID == game.PlayerX?.UUID) : games[game].Find(player => player.UUID == game.PlayerO?.UUID);
-        var l = winnerChar == "X" ? games[game].Find(player => player.UUID == game.PlayerO?.UUID) : games[game].Find(player => player.UUID == game.PlayerX?.UUID);
+        winnerChar = winnerChar?.ToUpper();
+        PlayerAccount? winnerPlayer;
+        PlayerAccount? loserPlayer;
+
+        lock (Games) {
+            if (!Games.TryGetValue(game, out var players))
+                return false;
+
+            if (winnerChar == "X") {
+                winnerPlayer = players.Find(p => p.UUID == game.PlayerX?.UUID);
+                loserPlayer = players.Find(p => p.UUID == game.PlayerO?.UUID);
+            }
+
+            else {
+                winnerPlayer = players.Find(p => p.UUID == game.PlayerO?.UUID);
+                loserPlayer = players.Find(p => p.UUID == game.PlayerX?.UUID);
+            }
+        }
 
         game.Winner = winnerChar == "X" ? GameBoard.Player.X : winnerChar == "O" ? GameBoard.Player.O : null;
+        if (winnerPlayer == null || loserPlayer == null)
+            return false;
 
+        var winnerAccount = await winnerPlayer.ToFullAccountAsync();
+        var loserAccount = await loserPlayer.ToFullAccountAsync();
+        if (winnerAccount == null || loserAccount == null)
+            return false;
 
-        // asynchronní získání úplných účtů
-        var winnerTask = w?.ToFullAccountAsync();
-        var loserTask = l?.ToFullAccountAsync();
-        if(winnerTask == null || loserTask == null) return false;
+        var (winnerMessage, loserMessage, _, _, _, _) = await CalculateEloAndCreateFinishMessages(game, winnerAccount, loserAccount);
+        await BroadcastFinishGame(winnerPlayer, winnerMessage, loserPlayer, loserMessage);
 
-        // získání vítěze a poraženého, úplné účty
-        var winner = await winnerTask;
-        var loser = await loserTask;
-        if(winner == null || loser == null) return false;
-
-        var oldEloWinner = winner.Elo;
-        var oldEloLoser = loser.Elo;
-        var newEloWinner = winner.CalculateNewELO(loser, Account.MatchResult.TARGET_WON);
-        var newEloLoser = loser.CalculateNewELO(winner, Account.MatchResult.TARGET_LOST);
-
-        _ = winner.UpdateEloInDatabaseAsync(newEloWinner);
-        _ = loser.UpdateEloInDatabaseAsync(newEloLoser);
-        _ = game.UpdateGameTime();
-
-        var msgWinner = JsonSerializer.SerializeToUtf8Bytes(new {
-            action = "finishGame",
-            result = "win",
-            game = game,
-            elo = newEloWinner,
-            oldElo = oldEloWinner,
-            gameTime = game.GameTime,
-        }, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
-
-        var msgLoser = JsonSerializer.SerializeToUtf8Bytes(new {
-            action = "finishGame",
-            result = "lose",
-            game = game,
-            elo = newEloLoser,
-            oldElo = oldEloLoser,
-            gameTime = game.GameTime,
-        }, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
-
-        w?.WebSocket?.SendAsync(new ArraySegment<byte>(msgWinner), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
-        l?.WebSocket?.SendAsync(new ArraySegment<byte>(msgLoser), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
-
-        // zapsani do db
+        // Aktualizace databáze
         await using var conn = await Database.GetConnectionAsync();
-        if(conn == null) return false;
+        if (conn == null)
+            return false;
 
         await using var cmd = conn.CreateCommand();
         cmd.CommandText = "UPDATE multiplayer_games SET winner = @winner WHERE uuid = @uuid";
@@ -303,52 +322,100 @@ public static class WSMultiplayerRankedGame {
         return await cmd.ExecuteNonQueryAsync() > 0;
     }
 
-    public static async Task<bool> EndGameNormal(MultiplayerGame game, PlayerAccount account) {
+    private static async Task<bool> EndGameNormal(MultiplayerGame game, PlayerAccount playerAccount) {
+        PlayerAccount? winnerPlayer;
+        PlayerAccount? loserPlayer;
+        lock (Games) {
+            if (game.PlayerX?.UUID == playerAccount.UUID) {
+                winnerPlayer = Games[game].Find(p => p.UUID == game.PlayerX?.UUID);
+                loserPlayer = Games[game].Find(p => p.UUID == game.PlayerO?.UUID);
+            }
 
-        // získání vítěze a poraženého, původní gameobject
-        var w = game.PlayerX?.UUID == account.UUID ? games[game].Find(player => player.UUID == game.PlayerX?.UUID) : games[game].Find(player => player.UUID == game.PlayerO?.UUID);
-        var l = game.PlayerX?.UUID == account.UUID ? games[game].Find(player => player.UUID == game.PlayerO?.UUID) : games[game].Find(player => player.UUID == game.PlayerX?.UUID);
+            else {
+                winnerPlayer = Games[game].Find(p => p.UUID == game.PlayerO?.UUID);
+                loserPlayer = Games[game].Find(p => p.UUID == game.PlayerX?.UUID);
+            }
+        }
 
-        // asynchronní získání úplných účtů
-        var winnerTask = (game.PlayerX?.UUID == account.UUID ? game.PlayerX : game.PlayerO)?.ToFullAccountAsync();
-        var loserTask = (game.PlayerX?.UUID == account.UUID ? game.PlayerO : game.PlayerX)?.ToFullAccountAsync();
-        if(winnerTask == null || loserTask == null) return false;
+        if (winnerPlayer == null || loserPlayer == null)
+            return false;
 
-        // získání vítěze a poraženého, úplné účty
-        var winner = await winnerTask;
-        var loser = await loserTask;
-        if(winner == null || loser == null) return false;
+        Account? winnerAccount = await (game.PlayerX?.UUID == playerAccount.UUID ? game.PlayerX : game.PlayerO)?.ToFullAccountAsync();
+        Account? loserAccount = await (game.PlayerX?.UUID == playerAccount.UUID ? game.PlayerO : game.PlayerX)?.ToFullAccountAsync();
+        if (winnerAccount == null || loserAccount == null)
+            return false;
 
-        var oldEloWinner = winner.Elo;
-        var oldEloLoser = loser.Elo;
-        var newEloWinner = winner.CalculateNewELO(loser, Account.MatchResult.TARGET_WON);
-        var newEloLoser = loser.CalculateNewELO(winner, Account.MatchResult.TARGET_LOST);
-
-        _ = winner.UpdateEloInDatabaseAsync(newEloWinner);
-        _ = loser.UpdateEloInDatabaseAsync(newEloLoser);
-        _ = game.UpdateGameTime();
-
-        var msgWinner = JsonSerializer.SerializeToUtf8Bytes(new {
-            action = "finishGame",
-            oldElo = oldEloWinner,
-            elo = newEloWinner,
-            result = "win",
-            game = game,
-            gameTime = game.GameTime,
-        }, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
-
-        var msgLoser = JsonSerializer.SerializeToUtf8Bytes(new {
-            action = "finishGame",
-            oldElo = oldEloLoser,
-            elo = newEloLoser,
-            result = "lose",
-            game = game,
-            gameTime = game.GameTime,
-        }, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
-
-        w?.WebSocket?.SendAsync(new ArraySegment<byte>(msgWinner), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
-        l?.WebSocket?.SendAsync(new ArraySegment<byte>(msgLoser), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
-
+        var (winnerMessage, loserMessage, _, _, _, _) = await CalculateEloAndCreateFinishMessages(game, winnerAccount, loserAccount);
+        await BroadcastFinishGame(winnerPlayer, winnerMessage, loserPlayer, loserMessage);
         return true;
     }
+
+    #endregion
+
+    #region Pomocné metody
+
+    // Zde provádíme výpočet ELO a sestavení finish zpráv.
+    private static async Task<(byte[] winnerMessage, byte[] loserMessage, int oldEloWinner, int oldEloLoser, int newEloWinner, int newEloLoser)> CalculateEloAndCreateFinishMessages(MultiplayerGame game, Account winnerAccount, Account loserAccount) {
+        int oldEloWinner = (int)winnerAccount.Elo;
+        int oldEloLoser = (int)loserAccount.Elo;
+        int newEloWinner = (int)winnerAccount.CalculateNewELO(loserAccount, Account.MatchResult.TARGET_WON);
+        int newEloLoser = (int)loserAccount.CalculateNewELO(winnerAccount, Account.MatchResult.TARGET_LOST);
+
+        _ = winnerAccount.UpdateEloInDatabaseAsync((uint)newEloWinner);
+        _ = loserAccount.UpdateEloInDatabaseAsync((uint)newEloLoser);
+        _ = game.UpdateGameTime();
+
+        var finishWinnerPayload = new {
+            action = "finishGame",
+            result = "win",
+            game,
+            elo = newEloWinner,
+            oldElo = oldEloWinner,
+            gameTime = game.GameTime,
+        };
+
+        var finishLoserPayload = new {
+            action = "finishGame",
+            result = "lose",
+            game,
+            elo = newEloLoser,
+            oldElo = oldEloLoser,
+            gameTime = game.GameTime,
+        };
+
+        var winnerMessage = JsonSerializer.SerializeToUtf8Bytes(finishWinnerPayload, JsonOptions);
+        var loserMessage = JsonSerializer.SerializeToUtf8Bytes(finishLoserPayload, JsonOptions);
+        return (winnerMessage, loserMessage, oldEloWinner, oldEloLoser, newEloWinner, newEloLoser);
+    }
+
+    private static async Task SendErrorAndCloseAsync(WebSocket socket, string errorMessage, WebSocketCloseStatus status, string closeDescription, CancellationToken cancellationToken = default)
+    {
+        var errorPayload = new { error = true, message = errorMessage };
+        var errorBytes = JsonSerializer.SerializeToUtf8Bytes(errorPayload, JsonOptions);
+        if (socket.State == WebSocketState.Open)
+        {
+            await socket.SendAsync(new ArraySegment<byte>(errorBytes), WebSocketMessageType.Text, true, cancellationToken);
+            await socket.CloseAsync(status, closeDescription, cancellationToken);
+        }
+    }
+
+    private static async Task<string?> ReceiveMessageAsync(WebSocket socket, byte[] buffer, CancellationToken cancellationToken = default) {
+        using var ms = new MemoryStream();
+        WebSocketReceiveResult result;
+        try {
+            do {
+                result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationToken);
+                if (result.MessageType == WebSocketMessageType.Close)
+                    return null;
+                ms.Write(buffer, 0, result.Count);
+            } while (!result.EndOfMessage);
+        } catch {
+            return null;
+        }
+
+        ms.Seek(0, SeekOrigin.Begin);
+        return Encoding.UTF8.GetString(ms.ToArray());
+    }
+
+    #endregion
 }

@@ -27,6 +27,8 @@ export const vue = new Vue({
         gameFazeIsEnding: false,
         finishGameObject: null,
         myTimeLeft: null,
+        playerOTimeLeft: null,
+        playerXTimeLeft: null,
     },
     methods: {
         main: function () {
@@ -56,13 +58,11 @@ export const vue = new Vue({
             if (data.action === "status") {
                 _this.gameNumberOfPlayers = data.playerCount;
                 _this.myTimeLeft = data.myTimeLeft;
+                _this.playerXTimeLeft = data.playerXTimeLeft;
+                _this.playerOTimeLeft = data.playerOTimeLeft;
                 if (_this.game) {
                     if (data?.gameTime)
                         _this.game.gameTime = data.gameTime;
-                    if (data?.playerXTimeLeft)
-                        _this.game.playerXTimeLeft = data.playerXTimeLeft;
-                    if (data?.playerOTimeLeft)
-                        _this.game.playerOTimeLeft = data.playerOTimeLeft;
                     _this.game.winner = data.winner;
                     _this.game.result = data.result;
                 }
