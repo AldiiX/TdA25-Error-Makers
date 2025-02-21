@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using MySql.Data.MySqlClient;
 using TdA25_Error_Makers.Classes;
-using TdA25_Error_Makers.Classes.Objects;
 
 namespace TdA25_Error_Makers.Controllers;
 

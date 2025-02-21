@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices.Marshalling;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
@@ -342,7 +341,7 @@ public class APIv2 : Controller {
             : new JsonResult(new { success = false, message = "Uživatel nebyl nalezen" });
     }
     
-    [HttpGet("gamehistory")]
+        [HttpGet("gamehistory")]
     public IActionResult GetGameHistory() {
         using var conn = Database.GetConnection();
         if (conn == null)
@@ -351,18 +350,44 @@ public class APIv2 : Controller {
         var loggedAccount = Auth.ReAuthUser();
         if (loggedAccount == null)
             return new UnauthorizedObjectResult(new { success = false, message = "Musíš být přihlášený." });
+
+        var query = @"
+        SELECT mg.*, u1.username AS player_o_username, u2.username AS player_x_username, u1.display_name AS player_o_display_name, u2.display_name AS player_x_display_name
+        FROM `multiplayer_games` mg
+        LEFT JOIN `users` u1 ON mg.player_o = u1.uuid
+        LEFT JOIN `users` u2 ON mg.player_x = u2.uuid
+        WHERE (mg.player_o = @uuid OR mg.player_x = @uuid)
+        AND FIND_IN_SET('RANKED', mg.type)";
         
-        using var cmd = new MySqlCommand("SELECT `uuid`, `type`, `player_o`, `player_x` FROM `multiplayer_games` WHERE (`player_o` = @uuid OR `player_x` = @uuid) AND FIND_IN_SET('RANKED', `type`)", conn);
+        using var cmd = new MySqlCommand(query, conn);
         cmd.Parameters.AddWithValue("@uuid", loggedAccount.UUID);
         
         using var reader = cmd.ExecuteReader();
-        var games = new List<Dictionary<string, string>>();
+        var games = new JsonArray();
         while (reader.Read()) {
-            var game = new Dictionary<string, string> {
+            
+            //Console.WriteLine($"player_o: {reader.GetString("player_o")}, player_x: {reader.GetString("player_x")}");
+
+            
+            var player = reader.GetString("player_o") == loggedAccount.UUID ? "player_o" : "player_x";
+            var opponent = player == "player_o" ? "player_x" : "player_o";
+            var loggeduserwon = reader.GetValueOrNull<string>("winner") == "X" && player == "player_x" ||
+                                reader.GetValueOrNull<string>("winner") == "O" && player == "player_o";
+            var game = new JsonObject() {
                 {"uuid", reader.GetString("uuid")},
-                {"type", reader.GetString("type")},
+                {"board", JsonNode.Parse(reader.GetString("board")) },
+                {"winner", reader.GetValueOrNull<string>("winner") !},
+                {"player", player},
+                {"opponent", reader.GetString(opponent)},
+                {"loggeduserwon", loggeduserwon.ToString()},
+                {"created_at", reader.GetDateTime("created_at").ToString()},
+                {"updated_at", reader.GetDateTime("updated_at").ToString()},
                 {"player_o", reader.GetString("player_o")},
-                {"player_x", reader.GetString("player_x")}
+                {"player_x", reader.GetString("player_x")},
+                {"player_o_name", reader.GetValueOrNull<string>("player_o_display_name") ?? reader.GetString("player_o_username")},
+                {"player_x_name", reader.GetValueOrNull<string>("player_x_display_name") ?? reader.GetString("player_x_username")},
+                
+                
             };
             games.Add(game);
         }
