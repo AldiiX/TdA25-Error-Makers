@@ -340,6 +340,32 @@ public class APIv2 : Controller {
         return cmd.ExecuteNonQuery() > 0 
             ? new JsonResult(new { success = true, message = "Účet byl úspěšně smazán." }) 
             : new JsonResult(new { success = false, message = "Uživatel nebyl nalezen" });
+    }
+    
+    [HttpGet("gamehistory")]
+    public IActionResult GetGameHistory() {
+        using var conn = Database.GetConnection();
+        if (conn == null)
+            return new BadRequestObjectResult(new { success = false, message = "Databáze nebyla připojena" });
         
+        var loggedAccount = Auth.ReAuthUser();
+        if (loggedAccount == null)
+            return new UnauthorizedObjectResult(new { success = false, message = "Musíš být přihlášený." });
+        
+        using var cmd = new MySqlCommand("SELECT `uuid`, `type`, `player_o`, `player_x` FROM `multiplayer_games` WHERE (`player_o` = @uuid OR `player_x` = @uuid) AND FIND_IN_SET('RANKED', `type`)", conn);
+        cmd.Parameters.AddWithValue("@uuid", loggedAccount.UUID);
+        
+        using var reader = cmd.ExecuteReader();
+        var games = new List<Dictionary<string, string>>();
+        while (reader.Read()) {
+            var game = new Dictionary<string, string> {
+                {"uuid", reader.GetString("uuid")},
+                {"type", reader.GetString("type")},
+                {"player_o", reader.GetString("player_o")},
+                {"player_x", reader.GetString("player_x")}
+            };
+            games.Add(game);
+        }
+        return new JsonResult(games);
     }
 }

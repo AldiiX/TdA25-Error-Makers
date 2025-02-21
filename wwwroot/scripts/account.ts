@@ -65,7 +65,8 @@ export const vue = new Vue({
                     
                     window.location.href="/";
                 })
-            }
+            },
+            
         },
     computed: {
     },
