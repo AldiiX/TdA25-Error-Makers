@@ -85,7 +85,7 @@
 
             @if (loggedAccount is { AccountType: Account.TypeOfAccount.DEVELOPER }) {
                 <div class="admintools">
-                    <p class="upper">Admin Info</p>
+                    <p class="upper">Dev Info</p>
                     <p>Uptime aplikace: @($"{Program.AppUptime.Days:D2}:{Program.AppUptime.Hours:D2}:{Program.AppUptime.Minutes:D2}:{Program.AppUptime.Seconds:D2}")</p>
                     <p>MySQL Server: @(Database.IsUsingFallbackServer ? "Fallback" : "Externí")</p>
                     <button onclick="
