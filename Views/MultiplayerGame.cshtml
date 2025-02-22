@@ -79,7 +79,7 @@
                     <h1 v-else>Remíza</h1>
 
                     <div class="randominfo">
-                        <div class="elo" v-if="finishGameObject && finishGameObject?.elo && finishGameObject?.oldElo">
+                        <div class="elo" v-if="game?.type === 'RANKED' && finishGameObject && finishGameObject?.elo && finishGameObject?.oldElo">
                             <p class="txt">ELO</p>
                             <div class="elo-display">
                                 <p class="mark">{{ (finishGameObject?.elo - finishGameObject?.oldElo) >= 0 ? "+" : "-" }}</p>
@@ -119,7 +119,7 @@
 
 
                     <transition name="fade">
-                        <div class="buttons" v-show="myTimeLeft !== null">
+                        <div class="buttons" v-show="myTimeLeft !== null && game?.type === 'RANKED'">
                             <div class="timeleft">{{ parseTimeToDigital(myTimeLeft) }}</div>
                         </div>
                     </transition>
@@ -137,20 +137,22 @@
                             <div class="player-x" v-bind:class="{ active: String(game?.currentPlayer).toLowerCase() === 'x' }">
                                 <div class="icon"></div>
                                 <h1 class="name">{{ game?.playerX?.name }} {{ accountUUID === game?.playerX?.uuid ? '(ty)' : ''}}</h1>
-                                <p class="time">{{ parseTimeToDigital(playerXTimeLeft) }}</p>
+                                <p class="time" v-if="game?.type === 'RANKED'">{{ parseTimeToDigital(playerXTimeLeft) }}</p>
                             </div>
 
                             <div class="player-o" v-bind:class="{ active: String(game?.currentPlayer).toLowerCase() === 'o' }">
                                 <div class="icon"></div>
                                 <h1 class="name">{{ game?.playerO?.name }} {{ accountUUID === game?.playerO?.uuid ? '(ty)' : ''}}</h1>
-                                <p class="time">{{ parseTimeToDigital(playerOTimeLeft) }}</p>
+                                <p class="time" v-if="game?.type === 'RANKED'">{{ parseTimeToDigital(playerOTimeLeft) }}</p>
                             </div>
                         </div>
 
                         <div class="texts">
+                            <p>Herní mód: <span v-cloak>{{ game?.type }}</span></p>
                             <p>Aktuální kolo: <span v-cloak>{{ game?.round + 1 }}.</span></p>
                             <p>Hra vytvořena: <span v-cloak>{{ (new Date(game?.createdAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</span></p>
                             <p>Poslední aktualizace: <span v-cloak>{{ (new Date(game?.updatedAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</span></p>
+                            <p>Herní čas: <span v-cloak>{{ parseTimeToWord(game?.gameTime ?? 0) }}</span></p>
                         </div>
                     </div>
 

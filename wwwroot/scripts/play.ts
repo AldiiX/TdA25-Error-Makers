@@ -1,5 +1,5 @@
 // @ts-ignore
-import { scrollToElement } from "/scripts/functions.js";
+import { scrollToElement, addAnnouncement } from "/scripts/functions.js";
 
 // @ts-ignore
 export const vue = new Vue({
@@ -32,6 +32,17 @@ export const vue = new Vue({
             selectedMode: null, // singleplayer nebo multiplayer
             selectedMultiplayerMode: null,
             selectedSingleplayerMode: null,
+            freeplayLobbyPlayers: [],
+            freeplayRoomNumber: null,
+            inputLobbyCode: null,
+            socket: null,
+
+        },
+
+        freeplayQueue: {
+            players: [],
+            roomNumber: null,
+            account: null
         }
     },
 
@@ -56,14 +67,18 @@ export const vue = new Vue({
             return tips[Math.floor(Math.random() * tips.length)];
         },
 
+        addAnnouncement: function(text: string, type = 'info', timeout = 5000): void {
+            addAnnouncement(this, text, type, timeout);
+        },
+
         locationHref(url: string): void {
             window.location.href = url;
         },
 
-        connectToMultiplayerQueue: function () {
+        connectToMultiplayerRankedQueue: function (): void {
             const _this = this as any;
             const locationIsLocalhost = window.location.host.includes("localhost");
-            const socket = new WebSocket(`${locationIsLocalhost ? "ws" : "wss"}://${window.location.host}/ws/multiplayer/queue`);
+            const socket = new WebSocket(`${locationIsLocalhost ? "ws" : "wss"}://${window.location.host}/ws/multiplayer/ranked/queue`);
 
             socket.onopen = function (event) {
                 console.log('Connected to WebSocket.');
@@ -88,7 +103,82 @@ export const vue = new Vue({
                 console.error('WebSocket URL:', socket.url);
             };
 
-            _this.temp.multiplayerQueueWS = socket;
+            _this.socket = socket;
+        },
+
+        connectToMultiplayerFreeplayQueue: function(code: number | null = null): void {
+            const _this = this as any;
+
+            if(_this.socket) {
+                _this.socket.close();
+            }
+
+            const locationIsLocalhost = window.location.host.includes("localhost");
+            const socket = new WebSocket(`${locationIsLocalhost ? "ws" : "wss"}://${window.location.host}/ws/multiplayer/freeplay/queue${code ? `?roomNumber=${code}` : ""}`);
+
+            socket.onopen = function (event) {
+                console.log('Connected to WebSocket.');
+            };
+
+            socket.onmessage = function (event) {
+                console.log('Message from server:', event.data);
+
+                const data = JSON.parse(event.data);
+                switch (data.action) {
+                    case "joined": {
+                        _this.freeplayQueue.roomNumber = data.roomNumber;
+                        _this.freeplayQueue.players = data.players;
+                        _this.freeplayQueue.account = data.yourAccount;
+                        //_this.freeplayQueue.account.ownerOfRoom = data.ownerOfRoom;
+
+                        console.warn(_this.freeplayQueue);
+                    } break;
+
+                    case "lobbyDoesntExistError": {
+                        _this.addAnnouncement(`Místnost s kódem ${_this.temp.inputLobbyCode} neexistuje.`, "error");
+                    } break;
+
+                    case "kicked": {
+                        _this.socket = null;
+                        _this.addAnnouncement("Byl jsi vyhozen z místnosti: " + data.message, "error");
+                        _this.connectToMultiplayerFreeplayQueue();
+                    } break;
+
+                    case "sendToMatch": {
+                        _this.locationHref(`/multiplayer/${data.matchUUID}`);
+                    } break;
+
+                    case "status": {
+                        //_this.temp.freeplayRoomNumber = data.roomNumber;
+                        _this.freeplayQueue.players = data.players;
+                    } break;
+
+                    case "error": {
+                        _this.addAnnouncement(data.message, "error");
+                    } break;
+                }
+            };
+
+            socket.onclose = function (event) {
+                console.log('WebSocket connection closed:', event);
+            };
+
+            socket.onerror = function (error) {
+                console.error('WebSocket error:', error);
+                console.error('WebSocket readyState:', socket.readyState);
+                console.error('WebSocket URL:', socket.url);
+            };
+
+            _this.socket = socket;
+        },
+
+        startFreeplayLobby: function (): void {
+            const _this = this as any;
+            if(!_this.freeplayQueue?.account?.isOwnerOfRoom) return;
+
+            _this.socket.send(JSON.stringify({
+                action: "startFreeplayLobby"
+            }));
         },
     },
 

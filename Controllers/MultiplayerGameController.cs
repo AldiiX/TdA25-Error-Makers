@@ -22,7 +22,7 @@ public class MultiplayerGameController : Controller {
             return View("~/Views/Error.cshtml");
         }
 
-        var account = Utilities.GetLoggedAccountFromContextOrNull();
+        var account = Utilities.GetLoggedAccountFromContextOrNull() ?? Account.GetByUUID(HCS.Current.Session.GetString("tempAccountUUID") ?? "0");
         if(account?.UUID != game.PlayerX.UUID && account?.UUID != game.PlayerO.UUID) {
             ViewBag.ErrorCode = 401;
             ViewBag.ErrorMessage = "Nemáš přístup k této hře";

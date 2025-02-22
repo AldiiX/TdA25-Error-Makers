@@ -33,7 +33,30 @@ public class MultiplayerGame {
         public async Task<Account?> ToFullAccountAsync() {
             return await Account.GetByUUIDAsync(UUID);
         }
+
+        public async Task<bool> PushToDatabaseAsync() {
+            await using var conn = await Database.GetConnectionAsync();
+            if(conn == null) return false;
+
+            // pushnuti do db pokud uživatel s tímto UUID neexistuje
+            try {
+                await using var cmd = new MySqlCommand("INSERT INTO users (uuid, username, display_name, password, temporary) VALUES (@uuid, @username, @displayName, @password, @temp)", conn);
+                cmd.Parameters.AddWithValue("@username", Name.ToLower().Replace(" ", "_"));
+                cmd.Parameters.AddWithValue("@displayName", Name);
+                cmd.Parameters.AddWithValue("@uuid", UUID);
+                cmd.Parameters.AddWithValue("@password", "_");
+                cmd.Parameters.AddWithValue("@temp", true);
+
+                return await cmd.ExecuteNonQueryAsync() > 0;
+            } catch (MySqlException e) {
+                if(e.Number == 1062) return true;
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
     }
+
+    public record FreeplayRoom(ushort Number, List<PlayerAccount> Players, PlayerAccount Owner) { }
 
 
 
@@ -123,7 +146,7 @@ public class MultiplayerGame {
     }
 
     public override int GetHashCode() {
-        return HashCode.Combine(UUID);
+        return HashCode.Combine(UUID, PlayerO, PlayerX);
     }
 
     public override string ToString() {
@@ -300,6 +323,11 @@ public class MultiplayerGame {
             GameState.RUNNING,
             0
         );
+
+        // pushnutí neexistujicich useru do db
+        var p1dbpush = player1.PushToDatabaseAsync();
+        var p2dbpush = player2.PushToDatabaseAsync();
+        await Task.WhenAll(p1dbpush, p2dbpush);
 
         await using var cmd = new MySqlCommand("INSERT INTO multiplayer_games (uuid, round, created_at, updated_at, winner, board, player_x, player_o, type) VALUES (@uuid, @round, @created_at, @updated_at, @winner, @board, @player_x, @player_o, @type)", conn);
         cmd.Parameters.AddWithValue("@uuid", game.UUID);

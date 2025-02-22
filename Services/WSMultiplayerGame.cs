@@ -27,7 +27,7 @@ public static class WSMultiplayerRankedGame {
     }
 
     public static async Task HandleAsync(WebSocket webSocket, string gameUUID) {
-        _sessionAccount = Utilities.GetLoggedAccountFromContextOrNull();
+        _sessionAccount = Utilities.GetLoggedAccountFromContextOrNull() ?? Account.GetByUUID(HCS.Current.Session.GetString("tempAccountUUID") ?? "0");
         var game = HCS.Current.Items["game"] as MultiplayerGame;
 
         // Ošetření chyb při autorizaci a validaci hry
@@ -186,7 +186,7 @@ public static class WSMultiplayerRankedGame {
         }
 
         // Odečítání času, pokud je hráč na řadě
-        if (game.Board.GetWinner() == null) {
+        if (game.Type == MultiplayerGame.GameType.RANKED && game.Board.GetWinner() == null) {
             if (game.PlayerX?.UUID == player.UUID && currentPlayer == GameBoard.Player.X)
                 game.PlayerXTimeLeft--;
             if (game.PlayerO?.UUID == player.UUID && currentPlayer == GameBoard.Player.O)
@@ -252,14 +252,16 @@ public static class WSMultiplayerRankedGame {
             var players = kvp.Value;
 
             // Kontrola, zda některému hráči vypršel čas
-            if (game.PlayerXTimeLeft <= 0) {
-                _ = ForceEndGame(game, "O");
-                continue;
-            }
+            if (game.Type == MultiplayerGame.GameType.RANKED) {
+                if (game.PlayerXTimeLeft <= 0) {
+                    _ = ForceEndGame(game, "O");
+                    continue;
+                }
 
-            else if (game.PlayerOTimeLeft <= 0) {
-                _ = ForceEndGame(game, "X");
-                continue;
+                else if (game.PlayerOTimeLeft <= 0) {
+                    _ = ForceEndGame(game, "X");
+                    continue;
+                }
             }
 
             // Odeslání status zprávy každému hráči
@@ -361,8 +363,11 @@ public static class WSMultiplayerRankedGame {
         int newEloWinner = (int)winnerAccount.CalculateNewELO(loserAccount, Account.MatchResult.TARGET_WON);
         int newEloLoser = (int)loserAccount.CalculateNewELO(winnerAccount, Account.MatchResult.TARGET_LOST);
 
-        _ = winnerAccount.UpdateEloInDatabaseAsync((uint)newEloWinner);
-        _ = loserAccount.UpdateEloInDatabaseAsync((uint)newEloLoser);
+        if (game.Type == MultiplayerGame.GameType.RANKED) {
+            _ = winnerAccount.UpdateEloInDatabaseAsync((uint)newEloWinner);
+            _ = loserAccount.UpdateEloInDatabaseAsync((uint)newEloLoser);
+        }
+
         _ = game.UpdateGameTime();
 
         var finishWinnerPayload = new {
@@ -388,12 +393,10 @@ public static class WSMultiplayerRankedGame {
         return (winnerMessage, loserMessage, oldEloWinner, oldEloLoser, newEloWinner, newEloLoser);
     }
 
-    private static async Task SendErrorAndCloseAsync(WebSocket socket, string errorMessage, WebSocketCloseStatus status, string closeDescription, CancellationToken cancellationToken = default)
-    {
+    private static async Task SendErrorAndCloseAsync(WebSocket socket, string errorMessage, WebSocketCloseStatus status, string closeDescription, CancellationToken cancellationToken = default) {
         var errorPayload = new { error = true, message = errorMessage };
         var errorBytes = JsonSerializer.SerializeToUtf8Bytes(errorPayload, JsonOptions);
-        if (socket.State == WebSocketState.Open)
-        {
+        if (socket.State == WebSocketState.Open) {
             await socket.SendAsync(new ArraySegment<byte>(errorBytes), WebSocketMessageType.Text, true, cancellationToken);
             await socket.CloseAsync(status, closeDescription, cancellationToken);
         }
