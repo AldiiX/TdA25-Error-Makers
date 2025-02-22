@@ -108,21 +108,22 @@
                     <div class="divider"></div>
                     
                     <div class="account-game-history" v-if="currentTab === 'GameHistory'">
-                        <div class="game">
-                            
+                        <div class="game" v-for="game in gameHistory">
                             <div class="game-info">
                                 <div class="game-info-top">
                                     <div class="game-between">
-                                        <p class="player">Stanislav</p>
-                                        <p class="player">Kuba</p>
+                                        <p class="player">{{ game.player_o_name }}</p>
+                                        <p class="player">{{ game.player_x_name }}</p>
                                     </div>
-                                    <p class="game-result">Výsledek (vyhra prohra)</p>
-                                    <p class="game-elo">+-Elo</p>
-                                    <p class="game-played-on">Hra byla hrana (datum)</p>
+                                    <p class="game-result">
+                                        {{getGameResult(game)}}
+                                    </p>
+                                    <p class="game-played-on">{{ new Date(game.created_at).toLocaleDateString() }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     
                     @if (loggedAccount?.AccountType == Account.TypeOfAccount.ADMIN) {
                         <div class="admin-panel" v-if="currentTab === 'AdminPanel'">
@@ -142,11 +143,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>Kuba</td>
-                                    <td>JJ</td>
-                                    <td>1200</td>
-                                    <td>12.5.2024</td>
+                                <tr v-for="user in users">
+                                    <td>{{user.username}}</td>
+                                    <td>{{user.display_name}}</td>
+                                    <td>{{user.elo}}</td>
+                                    <td>{{new Date(user.created_at).toLocaleDateString()}}</td>
                                     <td>Ban</td>
                                 </tr>
                                 </tbody>

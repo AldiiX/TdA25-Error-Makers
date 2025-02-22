@@ -8,10 +8,14 @@ export const vue = new Vue({
         announcements: [],
         currentTab: "GameHistory",
         username: "",
+        gameHistory: [],
+        users: [],
     },
     methods: {
         main: function () {
             const _this = this;
+            _this.getGameHistory();
+            _this.getUsers();
         },
         changeCredentialsFormSubmit: function (event) {
             const _this = this;
@@ -53,6 +57,43 @@ export const vue = new Vue({
                 window.location.href = "/";
             });
         },
+        getGameHistory: function () {
+            const _this = this;
+            fetch("/api/v2/gamehistory", {
+                method: "GET",
+            }).then(async (response) => {
+                const data = await response.json();
+                if (!response.ok) {
+                    console.error("požadavek nebyl uspesny");
+                    return;
+                }
+                _this.gameHistory = data;
+            });
+        },
+        getGameResult: function (game) {
+            if (game.loggeduserwon) {
+                return "win";
+            }
+            else if (!game.loggeduserwon) {
+                return "lose";
+            }
+            else {
+                return "draw";
+            }
+        },
+        getUsers: function () {
+            const _this = this;
+            fetch("/api/v2/users", {
+                method: "GET",
+            }).then(async (response) => {
+                const data = await response.json();
+                if (!response.ok) {
+                    console.error("požadavek nebyl uspesny");
+                    return;
+                }
+                _this.users = data;
+            });
+        }
     },
     computed: {},
 });

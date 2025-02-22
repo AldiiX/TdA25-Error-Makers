@@ -343,6 +343,61 @@ public class APIv2 : Controller {
     
         [HttpGet("gamehistory")]
     public IActionResult GetGameHistory() {
+    using var conn = Database.GetConnection();
+    if (conn == null)
+        return new BadRequestObjectResult(new { success = false, message = "Databáze nebyla připojena" });
+
+    var loggedAccount = Auth.ReAuthUser();
+    if (loggedAccount == null)
+        return new UnauthorizedObjectResult(new { success = false, message = "Musíš být přihlášený." });
+
+    var query = @"
+    SELECT mg.*, 
+           u1.username AS player_o_username, u2.username AS player_x_username, 
+           u1.display_name AS player_o_display_name, u2.display_name AS player_x_display_name
+    FROM `multiplayer_games` mg
+    LEFT JOIN `users` u1 ON mg.player_o = u1.uuid
+    LEFT JOIN `users` u2 ON mg.player_x = u2.uuid
+    WHERE (mg.player_o = @uuid OR mg.player_x = @uuid)
+    AND FIND_IN_SET('RANKED', mg.type)";
+
+    using var cmd = new MySqlCommand(query, conn);
+    cmd.Parameters.AddWithValue("@uuid", loggedAccount.UUID);
+
+    using var reader = cmd.ExecuteReader();
+    var games = new JsonArray();
+    while (reader.Read()) {
+        var player = reader.GetString("player_o") == loggedAccount.UUID ? "player_o" : "player_x";
+        var opponent = player == "player_o" ? "player_x" : "player_o";
+        var loggeduserwon = reader.GetValueOrNull<string>("winner") == "X" && player == "player_x" ||
+                            reader.GetValueOrNull<string>("winner") == "O" && player == "player_o";
+
+        var playerOName = reader.GetValueOrNull<string>("player_o_display_name") ?? reader.GetValueOrNull<string>("player_o_username") ?? "Neznámý hráč";
+        var playerXName = reader.GetValueOrNull<string>("player_x_display_name") ?? reader.GetValueOrNull<string>("player_x_username") ?? "Neznámý hráč";
+
+        var game = new JsonObject() {
+            { "uuid", reader.GetString("uuid") },
+            { "board", JsonNode.Parse(reader.GetString("board")) },
+            { "winner", reader.GetValueOrNull<string>("winner") ?? "" },
+            { "player", player },
+            { "opponent", reader.GetValueOrNull<string>(opponent) ?? "neznámý" },
+            { "loggeduserwon", loggeduserwon },
+            { "created_at", reader.GetDateTime("created_at") },
+            { "updated_at", reader.GetDateTime("updated_at") },
+            { "player_o", reader.GetValueOrNull<string>("player_o") ?? "neznámý" },
+            { "player_x", reader.GetValueOrNull<string>("player_x") ?? "neznámý" },
+            { "player_o_name", playerOName },
+            { "player_x_name", playerXName },
+        };
+
+        games.Add(game);
+    }
+    return new JsonResult(games);
+}
+
+    
+    [HttpGet("users")]
+    public IActionResult GetUsers() {
         using var conn = Database.GetConnection();
         if (conn == null)
             return new BadRequestObjectResult(new { success = false, message = "Databáze nebyla připojena" });
@@ -352,45 +407,22 @@ public class APIv2 : Controller {
             return new UnauthorizedObjectResult(new { success = false, message = "Musíš být přihlášený." });
 
         var query = @"
-        SELECT mg.*, u1.username AS player_o_username, u2.username AS player_x_username, u1.display_name AS player_o_display_name, u2.display_name AS player_x_display_name
-        FROM `multiplayer_games` mg
-        LEFT JOIN `users` u1 ON mg.player_o = u1.uuid
-        LEFT JOIN `users` u2 ON mg.player_x = u2.uuid
-        WHERE (mg.player_o = @uuid OR mg.player_x = @uuid)
-        AND FIND_IN_SET('RANKED', mg.type)";
+        SELECT * FROM `users` WHERE `temporary` = 0";
         
         using var cmd = new MySqlCommand(query, conn);
-        cmd.Parameters.AddWithValue("@uuid", loggedAccount.UUID);
         
         using var reader = cmd.ExecuteReader();
-        var games = new JsonArray();
+        var users = new JsonArray();
         while (reader.Read()) {
-            
-            //Console.WriteLine($"player_o: {reader.GetString("player_o")}, player_x: {reader.GetString("player_x")}");
-
-            
-            var player = reader.GetString("player_o") == loggedAccount.UUID ? "player_o" : "player_x";
-            var opponent = player == "player_o" ? "player_x" : "player_o";
-            var loggeduserwon = reader.GetValueOrNull<string>("winner") == "X" && player == "player_x" ||
-                                reader.GetValueOrNull<string>("winner") == "O" && player == "player_o";
-            var game = new JsonObject() {
+            var user = new JsonObject() {
                 {"uuid", reader.GetString("uuid")},
-                {"board", JsonNode.Parse(reader.GetString("board")) },
-                {"winner", reader.GetValueOrNull<string>("winner") !},
-                {"player", player},
-                {"opponent", reader.GetString(opponent)},
-                {"loggeduserwon", loggeduserwon.ToString()},
-                {"created_at", reader.GetDateTime("created_at").ToString()},
-                {"updated_at", reader.GetDateTime("updated_at").ToString()},
-                {"player_o", reader.GetString("player_o")},
-                {"player_x", reader.GetString("player_x")},
-                {"player_o_name", reader.GetValueOrNull<string>("player_o_display_name") ?? reader.GetString("player_o_username")},
-                {"player_x_name", reader.GetValueOrNull<string>("player_x_display_name") ?? reader.GetString("player_x_username")},
-                
-                
+                {"username", reader.GetString("username")},
+                {"display_name", reader.GetValueOrNull<string>("display_name")},
+                {"elo", reader.GetInt32("elo")},
+                {"created_at", reader.GetDateTime("created_at")},
             };
-            games.Add(game);
+            users.Add(user);
         }
-        return new JsonResult(games);
+        return new JsonResult(users);
     }
 }
