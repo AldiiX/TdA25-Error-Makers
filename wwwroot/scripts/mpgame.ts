@@ -30,6 +30,7 @@ export const vue = new Vue({
         menuExpanded: false,
         accountUUID: null,
         accountName: null,
+        accountChar: null,
         announcements: [],
         socket: null,
         chatMessages: [],
@@ -52,7 +53,6 @@ export const vue = new Vue({
 
 
             //_this.gameLoaded = true;
-            _this.finishGameObject = { oldElo: 450, elo: 500 }
             this.connectToSocket();
         },
 
@@ -84,6 +84,8 @@ export const vue = new Vue({
                 _this.myTimeLeft = data.myTimeLeft;
                 _this.playerXTimeLeft = data.playerXTimeLeft;
                 _this.playerOTimeLeft = data.playerOTimeLeft;
+                _this.accountChar = data.yourChar;
+                _this.currentPlayer = data.currentPlayer;
 
                 if(_this.game) {
                     if(data?.gameTime) _this.game.gameTime = data.gameTime;

@@ -34,6 +34,7 @@ public class MultiplayerGameController : Controller {
 
 
         ViewBag.Game = game;
+        ViewBag.Account = account;
         return View("~/Views/MultiplayerGame.cshtml");
     }
 }

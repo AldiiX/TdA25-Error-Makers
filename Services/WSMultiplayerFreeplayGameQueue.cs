@@ -2,7 +2,6 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using TdA25_Error_Makers.Classes;
 using TdA25_Error_Makers.Classes.Objects;
 using PlayerAccount = TdA25_Error_Makers.Classes.Objects.MultiplayerGame.PlayerAccount;
 using Room = TdA25_Error_Makers.Classes.Objects.MultiplayerGame.FreeplayRoom;
@@ -25,18 +24,7 @@ public static class WSMultiplayerFreeplayGameQueue {
 
     #region Obsluha fronty
 
-    public static async Task HandleQueueAsync(WebSocket webSocket, ushort? forceRoomNumber = null) {
-        var sessionAccount = HCS.Current.Session.GetObject<Account>("loggeduser");
-
-        // Používáme hodnoty přímo, protože sessionAccount není null.
-        var account = new PlayerAccount(
-            sessionAccount?.UUID ?? Guid.NewGuid().ToString(),
-            sessionAccount?.DisplayName ?? "Guest " + Guid.NewGuid().ToString()[..5].ToUpper(),
-            sessionAccount?.Elo ?? 0,
-            webSocket
-        );
-
-        HCS.Current.Session.SetString("tempAccountUUID", account.UUID);
+    public static async Task HandleQueueAsync(WebSocket webSocket, PlayerAccount account, ushort? forceRoomNumber = null) {
 
         // vytvoření room čísla (4 čísla)
         ushort roomNumber = forceRoomNumber ?? 0;
@@ -201,44 +189,49 @@ public static class WSMultiplayerFreeplayGameQueue {
 
     #region Pomocné metody
 
-    private static void SendStatus(object? state) {
+    private static async void SendStatus(object? state) {
+        List<Room> roomsCopy;
         lock (Rooms) {
-            foreach (var room in Rooms) {
-                var roomNumber = room.Number;
-                var players = room.Players;
+            roomsCopy = [..Rooms];
+        }
 
+        foreach (var room in roomsCopy) {
+            var roomNumber = room.Number;
+            var players = room.Players;
 
-                // pokud se owner odpojil, tak se room smaže
-                if (!room.Players.Contains(room.Owner)) {
-                    foreach (var player in players) {
-                        var msg = JsonSerializer.SerializeToUtf8Bytes(new { action = "kicked", message = "Lobby bylo zrušeno." });
-                        SendMessageAndCloseAsync(player, msg, "Vyhozeno z lobby - owner se odpojil").Wait();
-                    }
-
-                    Rooms.Remove(room);
-                    return;
-                }
-
-                var payload = new {
-                    action = "status",
-                    roomNumber,
-                    //loggedAccountIsOwner = players[0].UUID ==
-                    players = players.Select(player => new {
-                        player.UUID,
-                        player.Name,
-                    }),
-                    roomOwner = players.Select(player => new {
-                        player.UUID,
-                        player.Name,
-                    }).FirstOrDefault()
-                };
-
-                var message = JsonSerializer.SerializeToUtf8Bytes(payload, new JsonSerializerOptions(){ PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+            // If the room owner is not connected, remove the room.
+            if (!players.Contains(room.Owner)) {
                 foreach (var player in players) {
+                    var payload = new { action = "kicked", message = "Lobby has been cancelled." };
+                    var msg = JsonSerializer.SerializeToUtf8Bytes(payload, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
                     if (player.WebSocket?.State == WebSocketState.Open) {
-                        player.WebSocket.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
+                        await player.WebSocket.SendAsync(new ArraySegment<byte>(msg), WebSocketMessageType.Text, true, CancellationToken.None);
+                        await player.WebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Lobby closed", CancellationToken.None);
                     }
                 }
+
+                lock (Rooms) Rooms.Remove(room);
+                continue;
+            }
+
+            var payloadStatus = new {
+                action = "status",
+                roomNumber,
+                players = players.Select(player => new {
+                    player.UUID,
+                    player.Name
+                }),
+                roomOwner = players.Select(player => new {
+                    player.UUID,
+                    player.Name
+                }).FirstOrDefault()
+            };
+
+            var message = JsonSerializer.SerializeToUtf8Bytes(payloadStatus, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+
+            foreach (var player in players) {
+                if (player.WebSocket?.State == WebSocketState.Open)
+                    await player.WebSocket.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None);
             }
         }
     }

@@ -106,7 +106,7 @@
 
                         <div class="texts">
                             <p>Aktuální kolo: <span v-cloak>{{ game.round + 1 }}.</span></p>
-                            <p>Obtížnost: <span v-cloak>{{ difficultyTextTranslated().toUpperCase() }}</span></p>
+                            @* <p>Obtížnost: <span v-cloak>{{ difficultyTextTranslated().toUpperCase() }}</span></p> *@
                             <p>Hra vytvořena: <span v-cloak>{{ (new Date(game.createdAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</span></p>
                             <p>Poslední aktualizace: <span v-cloak>{{ (new Date(game.updatedAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</span></p>
                         </div>

@@ -10,7 +10,7 @@ public static class WSMultiplayerRankedGameQueue {
     #region Statické proměnné
 
     // Seznam připojených hráčů
-    private static readonly List<MultiplayerGame.PlayerAccount> connectedPlayers = new();
+    private static readonly List<MultiplayerGame.PlayerAccount> connectedPlayers = [];
     private static Timer? sortAndPairTimer;
     //private static Timer? sendQueueCountTimer;
 
@@ -24,7 +24,7 @@ public static class WSMultiplayerRankedGameQueue {
     #region Obsluha fronty
 
     public static async Task HandleQueueAsync(WebSocket webSocket) {
-        var sessionAccount = HCS.Current.Session.GetObject<Account>("loggeduser");
+        var sessionAccount = Utilities.GetLoggedAccountFromContextOrNull();
         if (sessionAccount == null) {
             await SendErrorAndCloseAsync(webSocket, "Unauthorized", "Unauthorized", WebSocketCloseStatus.PolicyViolation);
             return;

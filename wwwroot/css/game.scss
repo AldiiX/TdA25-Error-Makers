@@ -348,6 +348,13 @@
             background-color: var(--hcolor);
         }
 
+        &:not(.myturn) {
+            .grid .cell:not(.winning-cell) {
+                background-color: var(--gameboard-cell-notmyturn-bg) !important;
+                transition-duration: 0.3s;
+            }
+        }
+
         &:is(.fade-out) {
             animation: fade-out 0.5s ease;
             animation-iteration-count: 1;
