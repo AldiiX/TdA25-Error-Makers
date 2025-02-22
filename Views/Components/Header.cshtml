@@ -14,7 +14,8 @@
             @*<a href="/games">Hry</a>*@
             <a href="/leaderboard">Žebříčky</a>
             <a href="/account">Účet</a>
-            <a href="/play">Hrát</a>
+            @* <a href="/play">Hrát</a> *@
+            <button class="newgame button-primary" onclick="location.href='/play'">Hrát</button>
             @*<a href="/multiplayer">Online</a>*@
             @*@if (!path.StartsWith("/game/")) {
                 <button class="newgame button-primary" onclick="location.href='/play'">Hrát</button>
