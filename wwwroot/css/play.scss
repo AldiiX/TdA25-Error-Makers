@@ -20,8 +20,20 @@
             height: 300px;
             width: 300px;
             border-radius: 12px;
-            background-color: var(--background-color-primary);
+            background-color: var(--background-color-secondary);
             text-align: center;
+            overflow: hidden;
+            
+            .img {
+                width: 100%;
+                position: relative;
+                aspect-ratio: 1/1;
+                background-image: url("/images/icons/zarivka_playing_bile.svg");
+                background-size: contain;
+                background-position: left;
+                background-repeat: no-repeat;
+                margin: 0 auto;
+            }
         }
     }
     

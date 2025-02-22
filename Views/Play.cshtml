@@ -41,7 +41,7 @@
 
         <div class="main">
             <div class="centerdiv" v-cloak>
-                <h1 v-if="temp.selectedMode === null">Hrát</h1>
+                <h1 class="title" v-if="temp.selectedMode === null">Hrát</h1>
                 <h1 v-if="temp.selectedMode === 'singleplayer'">Singleplayer</h1>
                 <h1 v-if="temp.selectedMode === 'multiplayer' && temp.faze !== 'multiplayerModeQueue'">Multiplayer</h1>
 
@@ -49,9 +49,11 @@
                 <div class="first" v-if="temp.faze === 'selectSingleplayerOrMultiplayer'">
                     <div class="singleplayer" v-on:click="temp.selectedMode = 'singleplayer'; temp.faze = 'selectSingleplayerMode'">
                         <h2>Singleplayer</h2>
+                        <div class="img"></div>
                     </div>
                     <div class="multiplayer" v-on:click="temp.selectedMode = 'multiplayer'; temp.faze = 'selectMultiplayerMode'">
                         <h2>Multiplayer</h2>
+                        <div class="img"></div>
                     </div>
                 </div>
 
