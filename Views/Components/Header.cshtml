@@ -59,11 +59,14 @@
 
         <div class="Login">
             
+            <div class="changetheme" onclick="
+                import('/scripts/functions.js').then(module => {
+                    module.toggleWebTheme();
+                });
+            "></div>
+            
             @if (loggedAccount != null) {
                 <div class="User">
-                    <span class="UserIcon" onclick="location.href='/account'">
-                        @loggedAccount.DisplayName[0].ToString().ToUpper()
-                    </span>
                     <div class="Texts">
                         <div class="top">
                             <p> Přihlášen jako</p>
@@ -72,17 +75,15 @@
                             <p> @loggedAccount.DisplayName</p>
                         </div>
                     </div>
+                    <span class="UserIcon" onclick="location.href='/account'">
+                        @loggedAccount.DisplayName[0].ToString().ToUpper()
+                    </span>
                 </div>
             } else {
                 <a href="/login" class="button-primary">Přihlásit se</a>
             }
             
             
-            <div class="changetheme" onclick="
-                import('/scripts/functions.js').then(module => {
-                    module.toggleWebTheme();
-                });
-            "></div>
 
             @*@if (!path.StartsWith("/game/")) {
                 <a class="newgame button-primary" href="/play">Hrát</a>

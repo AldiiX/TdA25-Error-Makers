@@ -156,6 +156,44 @@ public static class Utilities {
     }
 
     public static string EncryptPassword(in string password) => EncryptWithSHA512(password) + EncryptWithMD5(password[0] + "" + password[1] + "" + password[^1]);
+    
+    public static string HowLongSinceLastActivity(DateTime lastActivity)
+    {
+        DateTime now = DateTime.Now;
+        TimeSpan diff = now - lastActivity;
+
+        int diffDays = (int)diff.TotalDays;
+        int diffHours = (int)diff.TotalHours % 24;
+        int diffMinutes = (int)diff.TotalMinutes % 60;
+        int diffSeconds = (int)diff.TotalSeconds % 60;
+
+        if (diffDays > 0)
+        {
+            return $"{diffDays} {GetCzechDeclension(diffDays, "den", "dny", "dní")} nazpět";
+        }
+        else if (diffHours > 0)
+        {
+            return $"{diffHours} {GetCzechDeclension(diffHours, "hodina", "hodiny", "hodin")} nazpět";
+        }
+        else if (diffMinutes > 0)
+        {
+            return $"{diffMinutes} {GetCzechDeclension(diffMinutes, "minuta", "minuty", "minut")} nazpět";
+        }
+        else
+        {
+            return "před pár sekundama";
+        }
+    }
+
+    private static string GetCzechDeclension(int count, string singular, string few, string plural)
+    {
+        if (count == 1)
+            return singular;
+        else if (count >= 2 && count <= 4)
+            return few;
+        else
+            return plural;
+    }
 
 
 #endregion

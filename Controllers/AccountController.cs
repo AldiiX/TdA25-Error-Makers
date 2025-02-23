@@ -18,16 +18,8 @@ public class AccountController : Controller {
     
     
     [HttpPost("/account")]
-    public IActionResult Account_Post() {
-        var user = Utilities.GetLoggedAccountFromContextOrNull();
-        using var conn = Database.GetConnection();
-        using var cmd = conn?.CreateCommand();
-        cmd.CommandText =
-            "DELETE FROM `users` WHERE `uuid` = @uuid";
-        cmd.Parameters.AddWithValue("@uuid", user.UUID);
-        var result = cmd.ExecuteNonQuery();
-        
-        return Redirect("/login");
+    public IActionResult Account_Post([FromBody] Dictionary<string, object?> body) {
+        return new JsonResult(body);
     }
 }
 

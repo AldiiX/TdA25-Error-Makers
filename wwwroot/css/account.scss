@@ -22,19 +22,135 @@
                     mask-size: 500%;
                 }
 
-                to {
-                    height: calc($height);
-                    mask-size: 100vw;
-                    mask-position: bottom;
+        to {
+          height: calc($height);
+          mask-size: 100vw;
+          mask-position: bottom;
+        }
+      }
+
+      > .wallpaper {
+      }
+
+      &::after {
+        display: none;
+      }
+    }
+    
+    .mainsection {
+      z-index: 1;
+      margin-top: -15vh;
+      padding-bottom: 104px;
+
+      > .account {
+        position: relative;
+        width: 75vw;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        
+
+        > div {
+          position: relative;
+          background-color: var(--background-color-secondary);
+          border-radius: 12px;
+          padding: 24px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        > .account-main {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          gap: 5vw;
+          
+          > div{
+            width: calc(100%/3 - 5vw/2*2);
+          }
+          >.left{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            
+            > .account-elo {
+              > .text {
+                font-weight: bold;
+                font-size: 16px;
+                margin-bottom: 8px;
+              }
+
+              > .elo {
+                font-size: 20px;
+                margin: 0;
+              }
+            }
+            
+            >.win-loss-ratio{
+                > .text {
+                    font-weight: bold;
+                    font-size: 16px;
+                    margin-bottom: 8px;
+                }
+    
+                > .ratio {
+                    font-size: 20px;
+                    margin: 0;
                 }
             }
-
-            > .wallpaper {
+          }
+          
+          > .account-info {
+            
+            
+            > .avatar {
+              font-size: 48px;
+              font-weight: 700;
+              color: var(--text-color-primary);
+              text-align: center;
+              align-content: center;
+              position: relative;
+              display: block;
+              border-radius: 50%;
+              width: 100px;
+              height: 100px;
+              margin: 0 auto; 
             }
 
-            &::after {
-                display: none;
+          }
+          >.right{
+            display: flex;
+            justify-content: space-between;
+
+            > .account-createdat {
+
+              > .text {
+                font-weight: bold;
+                font-size: 16px;
+                margin-bottom: 8px;
+              }
+
+              > .time {
+                font-size: 20px;
+                margin: 0;
+              }
             }
+
+            >.account-last-active{
+              > .text {
+                font-weight: bold;
+                font-size: 16px;
+                margin-bottom: 8px;
+              }
+
+              > .time {
+                font-size: 20px;
+                margin: 0;
+              }
+            }
+          }
+          
         }
 
         .mainsection {
@@ -193,6 +309,45 @@
                     }
                 }
             }
+          }
+          
+          >.admin-panel{
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            
+            
+            >.admin-panel-top{
+              display: flex;
+              gap: 10vw;
+              justify-content: left;
+              align-items: center;
+              
+              >.search{
+                width: 400px;
+              }
+              
+            }
+            
+            >.admin-panel-users{
+              width: 100%;
+              table-layout: fixed;
+              text-align: left;
+              border-spacing: 8px;
+              
+              .thead{
+                border-bottom: 100% 1px solid var(--color-gray);
+              }
+            }
+          }
+
+          >.account-settings{
+            >.account-buttons{
+              display: flex;
+              gap: 24px;
+              justify-content: center;
+            }
+          }
         }
     }
 }

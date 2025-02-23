@@ -186,6 +186,7 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
                 display: flex;
                 align-items: center;
                 gap: 8px;
+                margin-left: 32px;
 
                 .UserIcon{
                     font-size: 24px;
@@ -203,6 +204,7 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
                     >.top,
                     >.bot{
                         p{
+                            text-align: right;
                             color : white;
                             margin: 1px;
                         }

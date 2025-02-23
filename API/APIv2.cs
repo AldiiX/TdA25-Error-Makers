@@ -274,4 +274,229 @@ public class APIv2 : Controller {
         }
         return new JsonResult(array);
     }*/
+
+    [HttpPut("credentials")]
+public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?> body) {
+    using var conn = Database.GetConnection();
+    if (conn == null)
+        return new BadRequestObjectResult(new { success = false, message = "Databáze nebyla připojena" });
+    
+    // Kontrola přihlášení
+    var loggedAccount = Auth.ReAuthUser();
+    if (loggedAccount == null)
+        return new UnauthorizedObjectResult(new { success = false, message = "Musíš být přihlášený." });
+    
+    // Parsování údajů z body
+    var username = body.TryGetValue("username", out var _username) ? _username?.ToString() : null;
+    var email = body.TryGetValue("email", out var _email) ? _email?.ToString() : null;
+    var oldPassword = body.TryGetValue("password", out var _password) ? _password?.ToString() : null;
+    var newPassword = body.TryGetValue("newPassword", out var _newPassword) ? _newPassword?.ToString() : null;
+    var displayName = body.TryGetValue("displayName", out var _displayName) ? _displayName?.ToString() : null;
+    
+    // Validace hesla: pokud jsou obě zadány, odstraníme přebytečné mezery a prázdný řetězec (nastavíme na null)
+    if (oldPassword != null && newPassword != null) {
+        oldPassword = oldPassword.Trim();
+        newPassword = newPassword.Trim();
+        if (oldPassword == "") oldPassword = null;
+        if (newPassword == "") newPassword = null;
+    }
+    
+    // Pokud se snaží změnit heslo, musí být obě pole vyplněná
+    if ((oldPassword != null && newPassword == null) || (oldPassword == null && newPassword != null)) {
+        return new BadRequestObjectResult(new { success = false, message = "Pro změnu hesla je třeba zadat obě hesla (staré i nové)." });
+    }
+    
+    // Sestavení SQL příkazu – pokud se mění heslo, ověříme staré heslo a aktualizujeme na nové
+    string sql;
+    if (newPassword == null) {
+        // Heslo se nemění
+        sql = @"
+            UPDATE `users` 
+            SET 
+                `username` = @username, 
+                `email` = @email,
+                `display_name` = @displayName
+            WHERE `uuid` = @uuid;
+        ";
+    }
+    else {
+        // Změna hesla – kontrola, zda staré heslo odpovídá
+        sql = @"
+            UPDATE `users` 
+            SET 
+                `username` = @username, 
+                `email` = @email,
+                `display_name` = @displayName,
+                `password` = @newPassword
+            WHERE `uuid` = @uuid AND `password` = @oldPassword;
+        ";
+    }
+    
+    using var cmd = new MySqlCommand(sql, conn);
+    cmd.Parameters.AddWithValue("@uuid", loggedAccount.UUID);
+    cmd.Parameters.AddWithValue("@username", username);
+    cmd.Parameters.AddWithValue("@email", email);
+    cmd.Parameters.AddWithValue("@displayName", displayName);
+    
+    if (newPassword != null) {
+        cmd.Parameters.AddWithValue("@oldPassword", oldPassword);
+        cmd.Parameters.AddWithValue("@newPassword", newPassword);
+    }
+    
+    var affectedRows = cmd.ExecuteNonQuery();
+    
+    // Pokud se mění heslo a update neproběhl, znamená to, že staré heslo nesedělo
+    if (newPassword != null && affectedRows == 0)
+        return new JsonResult(new { success = false, message = "Špatné staré heslo." });
+    
+    return affectedRows > 0 
+        ? new JsonResult(new { success = true, message = "Údaje byly úspěšně změněny." }) 
+        : new JsonResult(new { success = false, message = "Uživatel nebyl nalezen" });
+}
+
+
+    [HttpDelete("myaccount")]
+    public IActionResult DeleteAccount() {
+        using var conn = Database.GetConnection();
+        if (conn == null)
+            return new BadRequestObjectResult(new { success = false, message = "Databáze nebyla připojena" });
+        
+        var loggedAccount = Auth.ReAuthUser();
+        if (loggedAccount == null)
+            return new UnauthorizedObjectResult(new { success = false, message = "Musíš být přihlášený." });
+        
+        using var cmd = new MySqlCommand("DELETE FROM `users` WHERE `uuid` = @uuid", conn);
+        cmd.Parameters.AddWithValue("@uuid", loggedAccount.UUID);
+        
+        return cmd.ExecuteNonQuery() > 0 
+            ? new JsonResult(new { success = true, message = "Účet byl úspěšně smazán." }) 
+            : new JsonResult(new { success = false, message = "Uživatel nebyl nalezen" });
+    }
+    
+        [HttpGet("gamehistory")]
+public IActionResult GetGameHistory() {
+    using var conn = Database.GetConnection();
+    if (conn == null)
+        return new BadRequestObjectResult(new { success = false, message = "Databáze nebyla připojena" });
+
+    var loggedAccount = Auth.ReAuthUser();
+    if (loggedAccount == null)
+        return new UnauthorizedObjectResult(new { success = false, message = "Musíš být přihlášený." });
+
+    var query = @"
+    SELECT mg.*, 
+           u1.username AS player_o_username, u2.username AS player_x_username, 
+           u1.display_name AS player_o_display_name, u2.display_name AS player_x_display_name
+    FROM `multiplayer_games` mg
+    LEFT JOIN `users` u1 ON mg.player_o = u1.uuid
+    LEFT JOIN `users` u2 ON mg.player_x = u2.uuid
+    WHERE (mg.player_o = @uuid OR mg.player_x = @uuid)
+    AND FIND_IN_SET('RANKED', mg.type)
+    ORDER BY mg.created_at DESC";
+
+    using var cmd = new MySqlCommand(query, conn);
+    cmd.Parameters.AddWithValue("@uuid", loggedAccount.UUID);
+
+    using var reader = cmd.ExecuteReader();
+    var games = new JsonArray();
+    while (reader.Read()) {
+        var player = reader.GetString("player_o") == loggedAccount.UUID ? "player_o" : "player_x";
+        var opponent = player == "player_o" ? "player_x" : "player_o";
+        var loggeduserwon = reader.GetValueOrNull<string>("winner") == "X" && player == "player_x" ||
+                            reader.GetValueOrNull<string>("winner") == "O" && player == "player_o";
+
+        var playerOName = reader.GetValueOrNull<string>("player_o_display_name") ?? reader.GetValueOrNull<string>("player_o_username") ?? "Neznámý hráč";
+        var playerXName = reader.GetValueOrNull<string>("player_x_display_name") ?? reader.GetValueOrNull<string>("player_x_username") ?? "Neznámý hráč";
+
+        var game = new JsonObject() {
+            { "uuid", reader.GetString("uuid") },
+            { "board", JsonNode.Parse(reader.GetString("board")) },
+            { "winner", reader.GetValueOrNull<string>("winner") ?? "" },
+            { "player", player },
+            { "opponent", reader.GetValueOrNull<string>(opponent) ?? "neznámý" },
+            { "loggeduserwon", loggeduserwon },
+            { "created_at", reader.GetDateTime("created_at") },
+            { "updated_at", reader.GetDateTime("updated_at") },
+            { "player_o", reader.GetValueOrNull<string>("player_o") ?? "neznámý" },
+            { "player_x", reader.GetValueOrNull<string>("player_x") ?? "neznámý" },
+            { "player_o_name", playerOName },
+            { "player_x_name", playerXName },
+        };
+
+        games.Add(game);
+    }
+    return new JsonResult(games);
+}
+
+
+    
+    [HttpGet("users")]
+    public IActionResult GetUsers() {
+        using var conn = Database.GetConnection();
+        if (conn == null)
+            return new BadRequestObjectResult(new { success = false, message = "Databáze nebyla připojena" });
+        
+        var loggedAccount = Auth.ReAuthUser();
+        if (loggedAccount == null)
+            return new UnauthorizedObjectResult(new { success = false, message = "Musíš být přihlášený." });
+
+        var query = @"
+        SELECT * FROM `users` WHERE `temporary` = 0 ORDER BY `username` ASC ";
+        
+        using var cmd = new MySqlCommand(query, conn);
+        
+        using var reader = cmd.ExecuteReader();
+        var users = new JsonArray();
+        while (reader.Read()) {
+            var user = new JsonObject() {
+                {"uuid", reader.GetString("uuid")},
+                {"username", reader.GetString("username")},
+                {"display_name", reader.GetValueOrNull<string>("display_name")},
+                {"elo", reader.GetInt32("elo")},
+                {"created_at", reader.GetDateTime("created_at")},
+                {"is_banned", reader.GetValueOrNull<DateTime?>("is_banned") != null && reader.GetDateTime("is_banned") > DateTime.Now}
+            };
+            users.Add(user);
+        }
+        return new JsonResult(users);
+    }
+
+    private bool BanOrUnban(bool ban, string uuid) {
+        using var conn = Database.GetConnection();
+        if (conn == null)
+            return false;
+        
+        var loggedAccount = Auth.ReAuthUser();
+        if (loggedAccount == null)
+            return false;
+
+        if (loggedAccount.AccountType is not Account.TypeOfAccount.ADMIN and Account.TypeOfAccount.DEVELOPER ) 
+            return false;
+        
+        if (loggedAccount.UUID == uuid)
+            return false;
+        
+        var query = @"
+        UPDATE `users` SET `is_banned` = @date WHERE `uuid` = @uuid AND `type` = 'USER'";
+        
+        using var cmd = new MySqlCommand(query, conn);
+        cmd.Parameters.AddWithValue("@uuid", uuid);
+        cmd.Parameters.AddWithValue("@date", ban ? DateTime.Now.AddYears(100) : DBNull.Value);
+        
+        return cmd.ExecuteNonQuery() > 0;
+        
+    }
+    
+    [HttpPut("users/{uuid}/ban")]
+    public IActionResult BanUser(string uuid) {
+        return BanOrUnban(true, uuid) 
+            ? new JsonResult(new { success = true, message = "Uživatel byl zabanován." }) 
+            : new JsonResult(new { success = false, message = "Uživatel nebyl zabanován." });
+    }
+    [HttpPut("users/{uuid}/unban")]
+    public IActionResult UnbanUser(string uuid) {
+        return BanOrUnban(false, uuid) 
+            ? new JsonResult(new { success = true, message = "Uživatel byl odbanován." }) 
+            : new JsonResult(new { success = false, message = "Uživatel nebyl odbanován." });
+    }
 }

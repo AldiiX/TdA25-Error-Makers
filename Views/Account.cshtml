@@ -57,10 +57,19 @@
         <section class="mainsection">
             <div class="account">
                 <div class="account-main">
-
-                    <div class="account-elo">
-                        <p class="text">ELO Rating:</p>
-                        <p class="elo">@loggedAccount?.Elo</p>
+                    
+                    <div class="left">
+                        <div class="account-elo">
+                            <p class="text">ELO Rating:</p>
+                            <p class="elo">@loggedAccount?.Elo</p>
+                        </div>
+                        
+                        <div class="win-loss-ratio">
+                            <p class="text">Win/Loss Ratio:</p>
+                            <p class="ratio">
+                                @((loggedAccount.Losses > 0) ? ((double)loggedAccount.Wins / loggedAccount.Losses).ToString("0.00") : loggedAccount.Wins.ToString("0.00"))
+                            </p>
+                        </div>
                     </div>
 
                     <div class="account-info">
@@ -70,11 +79,22 @@
                         <h1>@loggedAccount?.DisplayName</h1>
                     </div>
 
-                    <div class="account-createdat">
-                        <p class="text">Vytvořen:</p>
-                        <p class="time">@loggedAccount?.CreatedAt.ToString("dd.MM.yyyy")</p>
+                    <div class="right">
+                        <div class="account-createdat">
+                            <p class="text">Vytvořen:</p>
+                            <p class="time">@loggedAccount?.CreatedAt.ToString("dd.MM.yyyy")</p>
+                        </div>
+                        
+                        <div class="account-last-active">
+                            <p class="text">Poslední aktivita:</p>
+                            <p class="time">@(loggedAccount?.LastActive != null ? Utilities.HowLongSinceLastActivity(loggedAccount.LastActive??DateTime.Now) : "Neznámý")</p>
+                        </div>
+
                     </div>
-                    
+
+
+
+
                 </div>
 
                 <div class="account-bottom">
@@ -88,27 +108,28 @@
                     <div class="divider"></div>
                     
                     <div class="account-game-history" v-if="currentTab === 'GameHistory'">
-                        <div class="game">
-                            
+                        <div class="game" v-for="game in gameHistory">
                             <div class="game-info">
                                 <div class="game-info-top">
                                     <div class="game-between">
-                                        <p class="player">Stanislav</p>
-                                        <p class="player">Kuba</p>
+                                        <p class="player">{{ game.player_o_name }}</p>
+                                        <p class="player">{{ game.player_x_name }}</p>
                                     </div>
-                                    <p class="game-result">Výsledek (vyhra prohra)</p>
-                                    <p class="game-elo">+-Elo</p>
-                                    <p class="game-played-on">Hra byla hrana (datum)</p>
+                                    <p class="game-result">
+                                        {{getGameResult(game)}}
+                                    </p>
+                                    <p class="game-played-on">{{ new Date(game.created_at).toLocaleDateString() }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     
                     @if (loggedAccount?.AccountType == Account.TypeOfAccount.ADMIN) {
                         <div class="admin-panel" v-if="currentTab === 'AdminPanel'">
                             <div class="admin-panel-top">
                                 <p class="users">Users</p>
-                                <input type="text" class="search" placeholder="Vyhledat uživatele">
+                                <input v-model="searchUserInput" v-on:keyup="filterUsers()" type="text" class="search" placeholder="Vyhledat uživatele">
                             </div>
                             
                             <table class="admin-panel-users">
@@ -116,16 +137,21 @@
                                 <tr>
                                     <th>Username</th>
                                     <th>Display Name</th>
+                                    <th>Elo</th>
                                     <th>Created At</th>
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>Kuba</td>
-                                    <td>JJ</td>
-                                    <td>12.5.2024</td>
-                                    <td>Ban</td>
+                                <tr v-for="user in usersFiltered">
+                                    <td>{{user.username}}</td>
+                                    <td>{{user.display_name}}</td>
+                                    <td>{{user.elo}}</td>
+                                    <td>{{new Date(user.created_at).toLocaleDateString()}}</td>
+                                    <td>
+                                        <button class="button-primary-col-sec" v-if="user.is_banned === false" v-on:click="banUser(user)">BAN</button>
+                                        <button class="button-primary" v-if="user.is_banned === true" v-on:click="unbanUser(user)">UNBAN</button>
+                                    </td>
                                 </tr>
                                 </tbody>
                                 
@@ -136,11 +162,24 @@
                     
                     <div class="account-settings" v-if="currentTab === 'Settings'">
                         <p class="text">Nastavení účtu</p>
+
+                        <div class="account-buttons">
                         
-                        <form method="post">
-                            <input type="submit" class="button-primary" value="Smazat účet">
-                        </form>
-                        <a href="/logout" class="button-primary">Odhlásit se</a>
+                            <form v-on:submit.prevent="changeCredentialsFormSubmit($event)">
+                                <input type="text" name="displayName" value="@loggedAccount.DisplayName" placeholder="Display Name" />
+                                <input type="text" name="username" value="@loggedAccount.Username" placeholder="Username" />
+                                <input type="text" name="email" value="@loggedAccount.Email" placeholder="Email" />
+                                <input type="password" name="oldPassword" placeholder="Staré Heslo" />
+                                <input type="password" name="newPassword" placeholder="Nové Heslo" />
+
+                                <input type="submit"/>
+                            </form>
+                            
+                            <button class="button-primary-col-sec" v-on:click="deleteaccount()">Smazat účet</button>
+                            <a href="/logout" class="button-primary">Odhlásit se</a>
+                        </div>
+                        
+                        
                     </div>
                     
                 </div>
