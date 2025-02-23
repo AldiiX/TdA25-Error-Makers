@@ -183,4 +183,43 @@ public sealed class Account {
         
         return list;
     } */
+
+    public static async Task<Account?> CreateAsync(string username, string email, string password, uint elo) {
+        await using var conn = await Database.GetConnectionAsync();
+        if (conn == null) return null;
+
+        await using var cmd = new MySqlCommand(@"
+            INSERT INTO `users` (`uuid`, `username`, `email`, `password`, `elo`)
+            VALUES (@uuid, @username, @email, @password, @elo);
+            SELECT * FROM `users` WHERE `uuid` = @uuid LIMIT 1;
+        ", conn);
+
+        cmd.Parameters.AddWithValue("@uuid", Guid.NewGuid().ToString());
+        cmd.Parameters.AddWithValue("@username", username);
+        cmd.Parameters.AddWithValue("@email", email);
+        cmd.Parameters.AddWithValue("@password", password);
+        cmd.Parameters.AddWithValue("@elo", elo);
+
+        await using var reader = cmd.ExecuteReader();
+        if (!reader.Read()) return null;
+
+        var user = new Account(
+            reader.GetString("username"),
+            reader.GetString("password"),
+            reader.GetValueOrNull<string>("display_name") ?? reader.GetString("username"),
+            reader.GetValueOrNull<string>("email"),
+            reader.GetValueOrNull<string>("avatar"),
+            Enum.TryParse(reader.GetString("type"), out TypeOfAccount _e) ? _e : TypeOfAccount.USER,
+            reader.GetUInt32("elo"),
+            reader.GetUInt32("wins"),
+            reader.GetUInt32("losses"),
+            reader.GetUInt32("draws"),
+            reader.GetString("uuid"),
+            reader.GetDateTime("created_at")
+        );
+
+        return user;
+    }
+
+    public static Account? Create(in string username, in string email, in string password, in uint elo) => CreateAsync(username, email, password, elo).Result;
 }

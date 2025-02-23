@@ -231,4 +231,144 @@ public class APIv1 : Controller {
 
         return new NoContentResult();
     }
+
+    [HttpGet("users")]
+    public IActionResult GetAllUsers() {
+        using var conn = Database.GetConnection();
+        if (conn == null) return new StatusCodeResult(500);
+
+        using var cmd = new MySqlCommand("SELECT * FROM `users` WHERE temporary = 0", conn);
+        using var reader = cmd.ExecuteReader();
+
+        var array = new JsonArray();
+        while (reader.Read()) {
+            var obj = new JsonObject {
+                ["uuid"] = reader.GetString("uuid"),
+                ["createdAt"] = reader.GetDateTime("created_at"),
+                ["username"] = reader.GetString("username"),
+                ["email"] = reader.GetValueOrNull<string>("email"),
+                ["elo"] = reader.GetUInt32("elo"),
+                ["wins"] = reader.GetUInt32("wins"),
+                ["draws"] = reader.GetUInt32("draws"),
+                ["losses"] = reader.GetUInt32("losses"),
+                ["password"] = reader.GetString("password"),
+            };
+
+            array.Add(obj);
+        }
+
+        return new JsonResult(array);
+    }
+
+    [HttpPost("users")]
+    public IActionResult PostNewUser([FromBody] Dictionary<string, object?> body) {
+        if (!body.TryGetValue("username", out object? _username) || !body.TryGetValue("email", out object? _email) || !body.TryGetValue("password", out object? _password) || !body.TryGetValue("elo", out object? _elo))
+            return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Chybí povinná data." });
+
+        if (string.IsNullOrEmpty(_username?.ToString()) || string.IsNullOrEmpty(_email?.ToString()) || string.IsNullOrEmpty(_password?.ToString()) || string.IsNullOrEmpty(_elo?.ToString()))
+            return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Některá požadovaná data jsou prázdná." });
+
+
+        // validace dat
+        if (!uint.TryParse(_elo?.ToString(), out var _)) return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Elo musí být číslo." });
+        uint elo = uint.TryParse(_elo?.ToString(), out var _e) ? _e : 400;
+        string username = _username?.ToString() ?? "unknown";
+        string email = _email?.ToString() ?? "unknown";
+        string password = Utilities.EncryptPassword(_password?.ToString() ?? "unknown");
+
+
+        var user = Account.Create(username, email, password, elo);
+        if(user == null) return new BadRequestObjectResult(new { code = UnprocessableEntity().StatusCode, message = "Chyba při vytváření uživatele." });
+
+        return new JsonResult(user) { StatusCode = 201 };
+    }
+
+    [HttpGet("users/{uuid}")]
+    public IActionResult GetSpecificUser(string uuid) {
+        using var conn = Database.GetConnection();
+        if (conn == null) return new StatusCodeResult(500);
+
+        using var cmd = new MySqlCommand("SELECT * FROM `users` WHERE temporary = 0 AND uuid = @uuid", conn);
+        cmd.Parameters.AddWithValue("@uuid", uuid);
+        using var reader = cmd.ExecuteReader();
+
+        if (!reader.Read()) return new NotFoundObjectResult(new { code = NotFound().StatusCode, message = "Uživatel nebyl nalezen." });
+
+        var obj = new JsonObject {
+            ["uuid"] = reader.GetString("uuid"),
+            ["createdAt"] = reader.GetDateTime("created_at"),
+            ["username"] = reader.GetString("username"),
+            ["email"] = reader.GetValueOrNull<string>("email"),
+            ["elo"] = reader.GetUInt32("elo"),
+            ["wins"] = reader.GetUInt32("wins"),
+            ["draws"] = reader.GetUInt32("draws"),
+            ["losses"] = reader.GetUInt32("losses"),
+            ["password"] = reader.GetString("password"),
+        };
+
+        return new JsonResult(obj);
+    }
+
+    [HttpPut("users/{uuid}")]
+    public IActionResult EditUser(string uuid, [FromBody] Dictionary<string, object?> data) {
+        using var conn = Database.GetConnection();
+        if (conn == null) return new StatusCodeResult(500);
+
+        if (!data.TryGetValue("username", out object? _username) || !data.TryGetValue("email", out object? _email) || !data.TryGetValue("password", out object? _password) || !data.TryGetValue("elo", out object? _elo))
+            return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Chybí povinná data." });
+
+        if (string.IsNullOrEmpty(_username?.ToString()) || string.IsNullOrEmpty(_email?.ToString()) || string.IsNullOrEmpty(_password?.ToString()) || string.IsNullOrEmpty(_elo?.ToString()))
+            return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Některá požadovaná data jsou prázdná." });
+
+        if (!uint.TryParse(_elo?.ToString(), out var _)) return new BadRequestObjectResult(new { code = BadRequest().StatusCode, message = "Elo musí být číslo." });
+        uint elo = uint.TryParse(_elo?.ToString(), out var _e) ? _e : 400;
+        string username = _username?.ToString() ?? "unknown";
+        string email = _email?.ToString() ?? "unknown";
+        string password = Utilities.EncryptPassword(_password?.ToString() ?? "unknown");
+
+        using var cmd = new MySqlCommand(@"
+            UPDATE `users`
+            SET `username` = @username, `email` = @email, `password` = @password, `elo` = @elo
+            WHERE `uuid` = @uuid;
+            SELECT * FROM `users` WHERE `uuid` = @uuid LIMIT 1;
+        ", conn);
+
+        cmd.Parameters.AddWithValue("@username", username);
+        cmd.Parameters.AddWithValue("@email", email);
+        cmd.Parameters.AddWithValue("@password", password);
+        cmd.Parameters.AddWithValue("@elo", elo);
+        cmd.Parameters.AddWithValue("@uuid", uuid);
+
+        using var reader = cmd.ExecuteReader();
+        if (!reader.Read()) return new NotFoundObjectResult(new { code = NotFound().StatusCode, message = "Uživatel nebyl nalezen." });
+
+        var obj = new JsonObject {
+            ["uuid"] = reader.GetString("uuid"),
+            ["createdAt"] = reader.GetDateTime("created_at"),
+            ["username"] = reader.GetString("username"),
+            ["email"] = reader.GetValueOrNull<string>("email"),
+            ["elo"] = reader.GetUInt32("elo"),
+            ["wins"] = reader.GetUInt32("wins"),
+            ["draws"] = reader.GetUInt32("draws"),
+            ["losses"] = reader.GetUInt32("losses"),
+            ["password"] = reader.GetString("password"),
+        };
+
+
+        return new JsonResult(obj);
+    }
+
+    [HttpDelete("users/{uuid}")]
+    public IActionResult DeleteUser(string uuid) {
+        using var conn = Database.GetConnection();
+        if (conn == null) return new StatusCodeResult(500);
+
+        using var cmd = new MySqlCommand("DELETE FROM `users` WHERE `uuid` = @uuid", conn);
+        cmd.Parameters.AddWithValue("@uuid", uuid);
+
+        int affectedRows = cmd.ExecuteNonQuery();
+        if (affectedRows == 0) return new NotFoundObjectResult(new { code = NotFound().StatusCode, message = "Uživatel nebyl nalezen." });
+
+        return new NoContentResult();
+    }
 }
