@@ -116,7 +116,45 @@ export const vue = new Vue({
 
                 //console.log(data);
             })
-        }
+        },
+        
+        banUser: function (user: any) {
+            const _this = this as any;
+            fetch(`/api/v2/users/${user.uuid}/ban`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }).then(async response => {
+                const data = await response.json();
+
+                if (!response.ok) {
+                    console.error("požadavek nebyl uspesny");
+                    return;
+                }
+
+                _this.getUsers();
+            })
+        },
+        
+        unbanUser: function (user: any) {
+            const _this = this as any;
+            fetch(`/api/v2/users/${user.uuid}/unban`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }).then(async response => {
+                const data = await response.json();
+
+                if (!response.ok) {
+                    console.error("požadavek nebyl uspesny");
+                    return;
+                }
+
+                _this.getUsers();
+            })
+        },
     },
 
     computed: {

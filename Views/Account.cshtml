@@ -148,7 +148,10 @@
                                     <td>{{user.display_name}}</td>
                                     <td>{{user.elo}}</td>
                                     <td>{{new Date(user.created_at).toLocaleDateString()}}</td>
-                                    <td>Ban</td>
+                                    <td>
+                                        <button class="button-primary-col-sec" v-if="user.is_banned === false" v-on:click="banUser(user)">BAN</button>
+                                        <button class="button-primary" v-if="user.is_banned === true" v-on:click="unbanUser(user)">UNBAN</button>
+                                    </td>
                                 </tr>
                                 </tbody>
                                 
@@ -166,8 +169,8 @@
                                 <input type="text" name="displayName" value="@loggedAccount.DisplayName" placeholder="Display Name" />
                                 <input type="text" name="username" value="@loggedAccount.Username" placeholder="Username" />
                                 <input type="text" name="email" value="@loggedAccount.Email" placeholder="Email" />
-                                <input type="text" name="oldPassword" placeholder="Staré Heslo" />
-                                <input type="text" name="newPassword" placeholder="Nové Heslo" />
+                                <input type="password" name="oldPassword" placeholder="Staré Heslo" />
+                                <input type="password" name="newPassword" placeholder="Nové Heslo" />
 
                                 <input type="submit"/>
                             </form>

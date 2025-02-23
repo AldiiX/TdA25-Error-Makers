@@ -93,7 +93,39 @@ export const vue = new Vue({
                 }
                 _this.users = data;
             });
-        }
+        },
+        banUser: function (user) {
+            const _this = this;
+            fetch(`/api/v2/users/${user.uuid}/ban`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }).then(async (response) => {
+                const data = await response.json();
+                if (!response.ok) {
+                    console.error("požadavek nebyl uspesny");
+                    return;
+                }
+                _this.getUsers();
+            });
+        },
+        unbanUser: function (user) {
+            const _this = this;
+            fetch(`/api/v2/users/${user.uuid}/unban`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }).then(async (response) => {
+                const data = await response.json();
+                if (!response.ok) {
+                    console.error("požadavek nebyl uspesny");
+                    return;
+                }
+                _this.getUsers();
+            });
+        },
     },
     computed: {},
 });

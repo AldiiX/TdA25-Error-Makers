@@ -29,13 +29,14 @@ public sealed class Account {
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public TypeOfAccount AccountType { get; private set; }
     public DateTime CreatedAt { get; private set; }
+    public bool IsBanned { get; private set; }
 
 
 
     [JsonConstructor]
     private Account(
         string username, string password, string displayName, string? email, string? avatar, TypeOfAccount accountType,
-        uint elo, uint wins, uint losses, uint draws, string uuid, DateTime createdAt, DateTime? lastActive
+        uint elo, uint wins, uint losses, uint draws, string uuid, DateTime createdAt, DateTime? lastActive, bool isBanned
         ) {
         Username = username;
         Password = password;
@@ -50,6 +51,7 @@ public sealed class Account {
         UUID = uuid;
         CreatedAt = createdAt;
         LastActive = lastActive;
+        IsBanned = isBanned;
     }
 
     public static uint CalculateNewELO(Account target, Account b, MatchResult result) {
@@ -103,11 +105,19 @@ public sealed class Account {
         if (conn == null) return null;
 
         await using var cmd = new MySqlCommand(
-$"""
-            SELECT * FROM `users` WHERE (`username` = @username OR `email` = @username) AND `password` = @password;
+            $"""
+                 SELECT * FROM `users`
+                 WHERE (`username` = @username OR `email` = @username)
+                   AND `password` = @password
+                   AND `temporary` = 0
+                   AND (`is_banned` IS NULL OR `is_banned` < NOW());
+             
+                 UPDATE `users`
+                 SET `last_active` = NOW()
+                 WHERE (`username` = @username OR `email` = @username)
+                   AND `password` = @password;
+             """, conn);
 
-            UPDATE `users` SET `last_active` = NOW() WHERE (`username` = @username OR `email` = @username) AND `password` = @password;
-        """, conn);
                                                 
         cmd.Parameters.AddWithValue("@username", username);
         cmd.Parameters.AddWithValue("@password", hashedPassword);
@@ -129,7 +139,8 @@ $"""
             reader.GetUInt32("draws"),
             reader.GetString("uuid"),
             reader.GetDateTime("created_at"),
-            reader.GetValueOrNull<DateTime>("last_active")
+            reader.GetValueOrNull<DateTime>("last_active"),
+            reader.GetValueOrNull<DateTime?>("is_banned") != null && reader.GetDateTime("is_banned") > DateTime.Now
         );
 
         HCS.Current.Session.SetObject("loggeduser", acc);
@@ -163,7 +174,8 @@ $"""
             reader.GetUInt32("draws"),
             reader.GetString("uuid"),
             reader.GetDateTime("created_at"),
-            reader.GetValueOrNull<DateTime>("last_active")
+            reader.GetValueOrNull<DateTime>("last_active"),
+            reader.GetValueOrNull<DateTime?>("is_banned") != null && reader.GetDateTime("is_banned") > DateTime.Now
         );
     }
 
