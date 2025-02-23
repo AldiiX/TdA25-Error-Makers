@@ -237,7 +237,9 @@ public sealed class Account {
             reader.GetUInt32("losses"),
             reader.GetUInt32("draws"),
             reader.GetString("uuid"),
-            reader.GetDateTime("created_at")
+            reader.GetDateTime("created_at"),
+            reader.GetValueOrNull<DateTime>("last_active"),
+            reader.GetValueOrNull<DateTime?>("is_banned") != null && reader.GetDateTime("is_banned") > DateTime.Now
         );
 
         return user;

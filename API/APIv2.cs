@@ -470,7 +470,7 @@ public IActionResult GetGameHistory() {
         if (loggedAccount == null)
             return false;
 
-        if (loggedAccount.AccountType is not Account.TypeOfAccount.ADMIN and Account.TypeOfAccount.DEVELOPER ) 
+        if (loggedAccount.AccountType is not (Account.TypeOfAccount.ADMIN or Account.TypeOfAccount.DEVELOPER) )
             return false;
         
         if (loggedAccount.UUID == uuid)
@@ -491,12 +491,13 @@ public IActionResult GetGameHistory() {
     public IActionResult BanUser(string uuid) {
         return BanOrUnban(true, uuid) 
             ? new JsonResult(new { success = true, message = "Uživatel byl zabanován." }) 
-            : new JsonResult(new { success = false, message = "Uživatel nebyl zabanován." });
+            : new JsonResult(new { success = false, message = "Uživatel nebyl zabanován." }) { StatusCode = 400 };
     }
+
     [HttpPut("users/{uuid}/unban")]
     public IActionResult UnbanUser(string uuid) {
         return BanOrUnban(false, uuid) 
             ? new JsonResult(new { success = true, message = "Uživatel byl odbanován." }) 
-            : new JsonResult(new { success = false, message = "Uživatel nebyl odbanován." });
+            : new JsonResult(new { success = false, message = "Uživatel nebyl odbanován." }) { StatusCode = 400 };
     }
 }

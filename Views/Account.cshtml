@@ -77,6 +77,7 @@
                             @loggedAccount?.DisplayName[0].ToString().ToUpper()
                         </div>
                         <h1>@loggedAccount?.DisplayName</h1>
+                        <p>@loggedAccount?.Username</p>
                     </div>
 
                     <div class="right">
@@ -100,7 +101,7 @@
                 <div class="account-bottom">
                     <div class="panel">
                         <div class="history-tab" v-on:click="currentTab = 'GameHistory'">Historie Her</div>
-                        @if (loggedAccount?.AccountType == Account.TypeOfAccount.ADMIN) {
+                        @if (loggedAccount?.AccountType is Account.TypeOfAccount.ADMIN or Account.TypeOfAccount.DEVELOPER) {
                             <div class="admin-tab" v-on:click="currentTab = 'AdminPanel'">Admin panel</div>
                         }
                         <div class="settings-tab" v-on:click="currentTab = 'Settings'">Nastavení</div>
@@ -125,7 +126,7 @@
                     </div>
 
                     
-                    @if (loggedAccount?.AccountType == Account.TypeOfAccount.ADMIN) {
+                    @if (loggedAccount?.AccountType is Account.TypeOfAccount.ADMIN or Account.TypeOfAccount.DEVELOPER) {
                         <div class="admin-panel" v-if="currentTab === 'AdminPanel'">
                             <div class="admin-panel-top">
                                 <p class="users">Users</p>
