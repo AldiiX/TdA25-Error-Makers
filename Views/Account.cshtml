@@ -129,7 +129,7 @@
                         <div class="admin-panel" v-if="currentTab === 'AdminPanel'">
                             <div class="admin-panel-top">
                                 <p class="users">Users</p>
-                                <input type="text" class="search" placeholder="Vyhledat uživatele">
+                                <input v-model="searchUserInput" v-on:keyup="filterUsers()" type="text" class="search" placeholder="Vyhledat uživatele">
                             </div>
                             
                             <table class="admin-panel-users">
@@ -143,7 +143,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="user in users">
+                                <tr v-for="user in usersFiltered">
                                     <td>{{user.username}}</td>
                                     <td>{{user.display_name}}</td>
                                     <td>{{user.elo}}</td>

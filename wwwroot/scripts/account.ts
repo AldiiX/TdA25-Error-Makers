@@ -15,6 +15,8 @@ export const vue = new Vue({
         username: "",
         gameHistory: [],
         users: [],
+        usersFiltered: [],
+        searchUserInput: "",
     },
 
     methods: {
@@ -113,6 +115,7 @@ export const vue = new Vue({
                 }
                 
                 _this.users = data;
+                _this.usersFiltered = data;
 
                 //console.log(data);
             })
@@ -154,6 +157,13 @@ export const vue = new Vue({
 
                 _this.getUsers();
             })
+        },
+        
+        filterUsers: function () {
+            const _this = this as any;
+            _this.usersFiltered = _this.users.filter((user: any) => {
+                return user.username.toLowerCase().includes(_this.searchUserInput.toLowerCase()) || user.display_name?.toLowerCase().includes(_this.searchUserInput.toLowerCase());
+            });
         },
     },
 

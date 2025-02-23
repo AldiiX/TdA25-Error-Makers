@@ -10,6 +10,8 @@ export const vue = new Vue({
         username: "",
         gameHistory: [],
         users: [],
+        usersFiltered: [],
+        searchUserInput: "",
     },
     methods: {
         main: function () {
@@ -92,6 +94,7 @@ export const vue = new Vue({
                     return;
                 }
                 _this.users = data;
+                _this.usersFiltered = data;
             });
         },
         banUser: function (user) {
@@ -124,6 +127,12 @@ export const vue = new Vue({
                     return;
                 }
                 _this.getUsers();
+            });
+        },
+        filterUsers: function () {
+            const _this = this;
+            _this.usersFiltered = _this.users.filter((user) => {
+                return user.username.toLowerCase().includes(_this.searchUserInput.toLowerCase()) || user.display_name?.toLowerCase().includes(_this.searchUserInput.toLowerCase());
             });
         },
     },

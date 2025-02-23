@@ -441,7 +441,7 @@ public IActionResult GetGameHistory() {
             return new UnauthorizedObjectResult(new { success = false, message = "Musíš být přihlášený." });
 
         var query = @"
-        SELECT * FROM `users` WHERE `temporary` = 0";
+        SELECT * FROM `users` WHERE `temporary` = 0 ORDER BY `username` ASC ";
         
         using var cmd = new MySqlCommand(query, conn);
         
