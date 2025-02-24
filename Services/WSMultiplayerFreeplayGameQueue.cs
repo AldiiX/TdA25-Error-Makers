@@ -204,7 +204,7 @@ public static class WSMultiplayerFreeplayGameQueue {
                 foreach (var player in players) {
                     // pokud je websocket zavreny, tak to hrace odpoji
                     if (player.WebSocket?.State != WebSocketState.Open) {
-                        room.Players.Remove(player);
+                        lock(Rooms) Rooms.Find(r => r.Number == room.Number)?.Players.Remove(player);
                         continue;
                     }
 
