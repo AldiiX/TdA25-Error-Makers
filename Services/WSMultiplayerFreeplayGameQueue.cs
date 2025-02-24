@@ -24,25 +24,25 @@ public static class WSMultiplayerFreeplayGameQueue {
 
     #region Obsluha fronty
 
-    public static async Task HandleQueueAsync(WebSocket webSocket, PlayerAccount account, ushort? forceRoomNumber = null) {
+    public static async Task HandleQueueAsync(WebSocket webSocket, PlayerAccount account, uint? forceRoomNumber = null) {
 
-        // vytvoření room čísla (4 čísla)
-        ushort roomNumber = forceRoomNumber ?? 0;
+        // vytvoření room čísla (6 čísel)
+        uint roomNumber = forceRoomNumber ?? 0;
         lock (Rooms) {
             if (forceRoomNumber == null) {
-                ushort attempts = 0;
+                uint attempts = 0;
                 do {
-                    if (attempts++ > 10_000) {
+                    if (attempts++ > 999_999) {
                         SendErrorAndCloseAsync(webSocket, "Failed to create room", "Failed to create room", WebSocketCloseStatus.InternalServerError).Wait();
                         return;
                     }
 
-                    roomNumber = (ushort)new Random().Next(1000, 10000);
+                    roomNumber = (uint) new Random().Next(100_000, 999_999);
                 } while (Rooms.Find(x => x.Number == roomNumber) != null);
             }
 
             // pokud se hráč chce někam připojit, ale místnost neexistuje
-            else if (Rooms.Find(x => x.Number == roomNumber) == null) {
+            else if (!Rooms.Exists(x => x.Number == roomNumber)) {
                 SendMessageAndCloseAsync(account, JsonSerializer.SerializeToUtf8Bytes(new { action = "lobbyDoesntExistError", message = $"Lobby s kódem {roomNumber} neexistuje" }), "Room does not exist").Wait();
             }
         }
@@ -82,7 +82,7 @@ public static class WSMultiplayerFreeplayGameQueue {
             };
 
             var message = JsonSerializer.SerializeToUtf8Bytes(payload, new JsonSerializerOptions(){ PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
-            webSocket.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
+            if(webSocket.State == WebSocketState.Open) webSocket.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
         }
 
 
@@ -141,7 +141,7 @@ public static class WSMultiplayerFreeplayGameQueue {
 
     #region Párování hráčů
 
-    private static async Task StartFreeplayLobbyAsync(PlayerAccount account, ushort roomNumber) {
+    private static async Task StartFreeplayLobbyAsync(PlayerAccount account, uint roomNumber) {
         PlayerAccount? player1;
         PlayerAccount? player2;
 
@@ -202,6 +202,12 @@ public static class WSMultiplayerFreeplayGameQueue {
             // If the room owner is not connected, remove the room.
             if (!players.Contains(room.Owner)) {
                 foreach (var player in players) {
+                    // pokud je websocket zavreny, tak to hrace odpoji
+                    if (player.WebSocket?.State != WebSocketState.Open) {
+                        room.Players.Remove(player);
+                        continue;
+                    }
+
                     var payload = new { action = "kicked", message = "Lobby has been cancelled." };
                     var msg = JsonSerializer.SerializeToUtf8Bytes(payload, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
                     if (player.WebSocket?.State == WebSocketState.Open) {

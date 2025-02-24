@@ -56,7 +56,7 @@ public class MultiplayerGame {
         }
     }
 
-    public record FreeplayRoom(ushort Number, List<PlayerAccount> Players, PlayerAccount Owner) { }
+    public record FreeplayRoom(uint Number, List<PlayerAccount> Players, PlayerAccount Owner) { }
 
 
 

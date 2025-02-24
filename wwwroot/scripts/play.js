@@ -26,6 +26,44 @@ export const vue = new Vue({
     methods: {
         main: function () {
             const _this = this;
+            const url = new URL(window.location.href);
+            const faze = url.searchParams.get("faze");
+            const roomNumber = url.searchParams.get("roomNumber");
+            if (faze)
+                _this.changeFaze(faze);
+            if (roomNumber)
+                _this.connectToMultiplayerFreeplayQueue(parseInt(roomNumber));
+        },
+        changeFaze: function (faze, func) {
+            const _this = this;
+            const el = document.querySelector(".main");
+            if (el)
+                el.classList.add("fadeout");
+            if (faze === "multiplayerModeQueue") {
+                _this.connectToMultiplayerRankedQueue();
+                _this.temp.selectedMultiplayerMode = 'ranked';
+            }
+            if (faze === "createFreeplayLobby") {
+                _this.connectToMultiplayerFreeplayQueue();
+                _this.temp.selectedMultiplayerMode = 'freeplay';
+            }
+            setTimeout(() => {
+                _this.temp.faze = faze;
+                if (func != null)
+                    func();
+                if (el)
+                    el.classList.remove("fadeout");
+                if (el)
+                    el.classList.add("fadein");
+                const url = new URL(window.location.href);
+                url.searchParams.set("faze", faze);
+                window.history.pushState({}, "", url);
+                console.log(_this.temp);
+            }, 150);
+            setTimeout(() => {
+                if (el)
+                    el.classList.remove("fadein");
+            }, 300);
         },
         generateRandomTip: function () {
             const tips = [
@@ -69,6 +107,7 @@ export const vue = new Vue({
         },
         connectToMultiplayerFreeplayQueue: function (code = null) {
             const _this = this;
+            console.log("connectToMultiplayerFreeplayQueue", code);
             if (_this.socket) {
                 _this.socket.close();
             }

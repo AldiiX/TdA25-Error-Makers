@@ -53,6 +53,51 @@ export const vue = new Vue({
     methods: {
         main: function(): void {
             const _this = this as any;
+
+            // zjisteni query parametru
+            const url = new URL(window.location.href);
+            const faze = url.searchParams.get("faze");
+            const roomNumber = url.searchParams.get("roomNumber");
+            if(faze) _this.changeFaze(faze);
+            if(roomNumber) _this.connectToMultiplayerFreeplayQueue(parseInt(roomNumber));
+        },
+
+        changeFaze: function(faze: string, func: Function | null): void {
+            const _this = this as any;
+
+            const el = document.querySelector(".main");
+            if(el) el.classList.add("fadeout");
+
+
+            if(faze === "multiplayerModeQueue") {
+                _this.connectToMultiplayerRankedQueue();
+                _this.temp.selectedMultiplayerMode = 'ranked';
+            }
+
+            if(faze === "createFreeplayLobby") {
+                _this.connectToMultiplayerFreeplayQueue();
+                _this.temp.selectedMultiplayerMode = 'freeplay';
+            }
+
+            setTimeout(() => {
+                _this.temp.faze = faze;
+                if(func != null) func();
+                if (el) el.classList.remove("fadeout");
+                if (el) el.classList.add("fadein");
+
+                // pridani query parametru podle faze
+                const url = new URL(window.location.href);
+                url.searchParams.set("faze", faze);
+                window.history.pushState({}, "", url);
+
+                console.log(_this.temp)
+            }, 150);
+
+
+
+            setTimeout(() => {
+                if(el) el.classList.remove("fadein");
+            }, 300);
         },
 
         generateRandomTip: function(): string {
@@ -108,6 +153,8 @@ export const vue = new Vue({
 
         connectToMultiplayerFreeplayQueue: function(code: number | null = null): void {
             const _this = this as any;
+
+            console.log("connectToMultiplayerFreeplayQueue", code);
 
             if(_this.socket) {
                 _this.socket.close();
