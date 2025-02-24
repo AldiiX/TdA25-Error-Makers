@@ -261,16 +261,25 @@ public class APIv2 : Controller {
         
         using var conn = Database.GetConnection();
         if (conn == null) return new JsonResult(array);
-        using var cmd = new MySqlCommand("SELECT * FROM `users` ORDER BY `elo` desc", conn);
+        using var cmd = new MySqlCommand("SELECT * FROM `users` WHERE temporary = 0 ORDER BY `elo` desc", conn);
         using var reader = cmd.ExecuteReader();
         
         while (reader.Read())
         {
             var obj = new JsonObject();
             obj["uuid"] = reader.GetString("uuid");
-            obj["name"] = reader.GetString("username");
+            if (!reader.IsDBNull(reader.GetOrdinal("display_name")))
+            {
+                obj["name"] = reader.GetString("display_name");
+            }
+            else
+            {
+                obj["name"] = reader.GetString("username");
+            }
             obj["elo"] = reader.GetInt32("elo");
             array.Add(obj);
+                
+
         }
         return new JsonResult(array);
     }
