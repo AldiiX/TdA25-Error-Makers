@@ -73,6 +73,7 @@ html {
     .login{
         .UserIcon{
             background: rgba(0, 0, 0 , 0.1);
+            font-family: "Dosis", sans-serif;
         }
     }
 }
@@ -80,6 +81,7 @@ html {
 .header-5F015D44-0984-4A50-B52B-5319AE57C19C {
     .UserIcon{
         background: rgb(0, 0, 0, 0.1);
+        font-family: "Dosis", sans-serif;
     }
 }
 

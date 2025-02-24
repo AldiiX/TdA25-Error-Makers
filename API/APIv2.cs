@@ -289,70 +289,60 @@ public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?
     // Parsování údajů z body
     var username = body.TryGetValue("username", out var _username) ? _username?.ToString() : null;
     var email = body.TryGetValue("email", out var _email) ? _email?.ToString() : null;
-    var oldPassword = body.TryGetValue("password", out var _password) ? _password?.ToString() : null;
-    var newPassword = body.TryGetValue("newPassword", out var _newPassword) ? _newPassword?.ToString() : null;
     var displayName = body.TryGetValue("displayName", out var _displayName) ? _displayName?.ToString() : null;
+    var oldPassword = body.TryGetValue("password", out var _password) ? _password?.ToString()?.Trim() : null;
+    var newPassword = body.TryGetValue("newPassword", out var _newPassword) ? _newPassword?.ToString()?.Trim() : null;
     
-    // Validace hesla: pokud jsou obě zadány, odstraníme přebytečné mezery a prázdný řetězec (nastavíme na null)
-    if (oldPassword != null && newPassword != null) {
-        oldPassword = oldPassword.Trim();
-        newPassword = newPassword.Trim();
-        if (oldPassword == "") oldPassword = null;
-        if (newPassword == "") newPassword = null;
+    // Pokud chce uživatel změnit heslo, musí zadat obě hesla
+    if (!string.IsNullOrEmpty(newPassword) && string.IsNullOrEmpty(oldPassword)) {
+        return new BadRequestObjectResult(new { success = false, message = "Pro změnu hesla je třeba zadat staré heslo." });
+    }
+    if (!string.IsNullOrEmpty(oldPassword) && string.IsNullOrEmpty(newPassword)) {
+        return new BadRequestObjectResult(new { success = false, message = "Pro změnu hesla je třeba zadat nové heslo." });
     }
     
-    // Pokud se snaží změnit heslo, musí být obě pole vyplněná
-    if ((oldPassword != null && newPassword == null) || (oldPassword == null && newPassword != null)) {
-        return new BadRequestObjectResult(new { success = false, message = "Pro změnu hesla je třeba zadat obě hesla (staré i nové)." });
-    }
-    
-    // Sestavení SQL příkazu – pokud se mění heslo, ověříme staré heslo a aktualizujeme na nové
-    string sql;
-    if (newPassword == null) {
-        // Heslo se nemění
-        sql = @"
+    // Aktualizace uživatelských údajů (kromě hesla)
+    if (!string.IsNullOrEmpty(username) || !string.IsNullOrEmpty(email) || !string.IsNullOrEmpty(displayName)) {
+        string sql = @"
             UPDATE `users` 
             SET 
-                `username` = @username, 
-                `email` = @email,
-                `display_name` = @displayName
+                `username` = COALESCE(NULLIF(@username, ''), `username`), 
+                `email` = COALESCE(NULLIF(@email, ''), `email`),
+                `display_name` = COALESCE(NULLIF(@displayName, ''), `display_name`)
             WHERE `uuid` = @uuid;
         ";
+        
+        using var cmd = new MySqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@uuid", loggedAccount.UUID);
+        cmd.Parameters.AddWithValue("@username", username);
+        cmd.Parameters.AddWithValue("@email", email);
+        cmd.Parameters.AddWithValue("@displayName", displayName);
+        cmd.ExecuteNonQuery();
     }
-    else {
-        // Změna hesla – kontrola, zda staré heslo odpovídá
-        sql = @"
+    
+    // Pokud se mění heslo, zpracujeme ho v samostatném dotazu
+    if (!string.IsNullOrEmpty(newPassword) && !string.IsNullOrEmpty(oldPassword)) {
+        string sql = @"
             UPDATE `users` 
-            SET 
-                `username` = @username, 
-                `email` = @email,
-                `display_name` = @displayName,
-                `password` = @newPassword
+            SET `password` = @newPassword
             WHERE `uuid` = @uuid AND `password` = @oldPassword;
         ";
+        
+        using var passwordCmd = new MySqlCommand(sql, conn);
+        passwordCmd.Parameters.AddWithValue("@uuid", loggedAccount.UUID);
+        passwordCmd.Parameters.AddWithValue("@oldPassword", oldPassword);
+        passwordCmd.Parameters.AddWithValue("@newPassword", newPassword);
+        
+        var passwordAffectedRows = passwordCmd.ExecuteNonQuery();
+        
+        if (passwordAffectedRows == 0)
+            return new JsonResult(new { success = false, message = "Špatné staré heslo." });
     }
     
-    using var cmd = new MySqlCommand(sql, conn);
-    cmd.Parameters.AddWithValue("@uuid", loggedAccount.UUID);
-    cmd.Parameters.AddWithValue("@username", username);
-    cmd.Parameters.AddWithValue("@email", email);
-    cmd.Parameters.AddWithValue("@displayName", displayName);
-    
-    if (newPassword != null) {
-        cmd.Parameters.AddWithValue("@oldPassword", oldPassword);
-        cmd.Parameters.AddWithValue("@newPassword", newPassword);
-    }
-    
-    var affectedRows = cmd.ExecuteNonQuery();
-    
-    // Pokud se mění heslo a update neproběhl, znamená to, že staré heslo nesedělo
-    if (newPassword != null && affectedRows == 0)
-        return new JsonResult(new { success = false, message = "Špatné staré heslo." });
-    
-    return affectedRows > 0 
-        ? new JsonResult(new { success = true, message = "Údaje byly úspěšně změněny." }) 
-        : new JsonResult(new { success = false, message = "Uživatel nebyl nalezen" });
+    return new JsonResult(new { success = true, message = "Údaje byly úspěšně změněny." });
 }
+
+
 
 
     [HttpDelete("myaccount")]
@@ -454,6 +444,7 @@ public IActionResult GetGameHistory() {
                 {"display_name", reader.GetValueOrNull<string>("display_name")},
                 {"elo", reader.GetInt32("elo")},
                 {"created_at", reader.GetDateTime("created_at")},
+                {"account_type", reader.GetString("type")},
                 {"is_banned", reader.GetValueOrNull<DateTime?>("is_banned") != null && reader.GetDateTime("is_banned") > DateTime.Now}
             };
             users.Add(user);
