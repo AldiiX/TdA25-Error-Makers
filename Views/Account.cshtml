@@ -19,7 +19,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Account • Think Different Academy</title>
+    <title>Účet • Think Different Academy</title>
     <link rel="icon" href="/favicon.ico">
 
     @{ // Vue.js definice
@@ -65,7 +65,7 @@
                         </div>
                         
                         <div class="win-loss-ratio">
-                            <p class="text">Win/Loss Ratio:</p>
+                            <p class="text">Poměr výher/proher:</p>
                             <p class="ratio">
                                 @((loggedAccount.Losses > 0) ? ((double)loggedAccount.Wins / loggedAccount.Losses).ToString("0.00") : loggedAccount.Wins.ToString("0.00"))
                             </p>
