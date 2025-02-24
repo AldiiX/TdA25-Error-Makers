@@ -39,28 +39,42 @@
     <script type="module" src="/scripts/components/header.js"></script>
 </head>
 <body id="LEADERBOARD-PAGE" class="header-top-light">
-    <div id="app">
-        @await header
+<div id="app">
+    @await header
 
 
-        <div class="sections">
-            <section class="top">
-                <div class="wallpaper"></div>
+    <div class="sections">
+        <section class="top">
+            <div class="wallpaper"></div>
 
-                <div class="texts">
-                    <h1>Žebříčky</h1>
-                </div>
-            </section>
-            <section class="mainsection">
-                <div class="texts">
-                </div>
-            </section>
-        </div>
-
-
-        @await footer
+            <div class="texts">
+                <h1>Žebříčky</h1>
+            </div>
+        </section>
+        <section class="mainsection">
+            <div class="texts">
+                <table id="leaderboard">
+                    <thead>
+                    <tr>
+                        <th>Pozice</th>
+                        <th>Jméno</th>
+                        <th>Elo</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </div>
+
+
+    @await footer
+</div>
 </body>
+
+<script src="scripts/leaderboard.js"></script>
+
 <script type="module">
     import * as f from "/scripts/functions.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
     import { vue } from "/scripts/err.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";

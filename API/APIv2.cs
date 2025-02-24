@@ -250,7 +250,7 @@ public class APIv2 : Controller {
     public IActionResult GetMultiplayerGames() {
         var games = MultiplayerGame.GetAll();
         return new JsonResult(games) { ContentType = "application/json" };
-    }
+    }*/
 
     
     // Leaderboard
@@ -273,7 +273,7 @@ public class APIv2 : Controller {
             array.Add(obj);
         }
         return new JsonResult(array);
-    }*/
+    }
 
     [HttpPut("credentials")]
 public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?> body) {
