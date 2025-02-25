@@ -201,6 +201,7 @@
                                     justify-content: space-between;
                                     margin-left: 16px;
                                     margin-right: 16px;
+                                    align-items: center;
 
 
                                     >.game-between{
@@ -210,6 +211,103 @@
 
                                         >.player{
                                             margin: 0;
+                                        }
+                                    }
+
+                                    >.gameboard {
+                                        max-width: 250px;
+                                        max-height: 250px;
+                                        display: grid;
+                                        grid-template-columns: repeat(15, 25px);
+                                        grid-template-rows: repeat(15, 25px);
+                                        gap: 0;
+                                        width: fit-content;
+                                        border-radius: 12px;
+                                        overflow: scroll;
+
+                                        &:is(.locked) {
+                                            pointer-events: none !important;
+
+                                            /*.cell {
+                                                pointer-events: none !important;
+                                            }*/
+                                        }
+
+                                        .cell {
+                                            width: 25px;
+                                            height: 25px;
+                                            background-color: var(--button-bg);
+                                            //background-color: rgba(0, 0, 0, 0.3);
+                                            border-radius: 8px;
+                                            border: 3px solid var(--background-color-primary);
+                                            //box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+                                            cursor: pointer;
+                                            position: relative;
+                                            transition-duration: 0.3s;
+                                            overflow: hidden;
+
+                                            &:is(.x),
+                                            &:is(.o) {
+                                                pointer-events: none;
+                                                transition-duration: 0.3s;
+
+                                                >.cellhover {
+                                                    display: none;
+                                                }
+
+                                                &:is(.winning-cell) {
+                                                    &::after {
+                                                        background-color: white;
+                                                    }
+                                                }
+
+                                                &::after {
+                                                    content: "";
+                                                    width: 100%;
+                                                    height: 100%;
+                                                    position: absolute;
+                                                    top: 50%;
+                                                    left: 50%;
+                                                    transform: translate(-50%, -50%);
+                                                    mask: url('/images/icons/X_bile.svg') no-repeat center;
+                                                    mask-size: 60%;
+                                                    background: var(--accent-color-secondary);
+                                                    animation: xoappear 0.2s ease-out;
+                                                    transition-duration: 0.5s;
+
+                                                    @keyframes xoappear {
+                                                        0% {
+                                                            transform: translate(-50%, -50%) scale(0);
+                                                        }
+
+                                                        100% {
+                                                            transform: translate(-50%, -50%) scale(1);
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            &:is(.x) {
+                                                &::after {
+                                                    mask-image: url('/images/icons/X_bile.svg');
+                                                    background: var(--accent-color-secondary);
+                                                }
+
+                                                &:is(.winning-cell) {
+                                                    background-color: var(--accent-color-secondary);
+                                                }
+                                            }
+
+                                            &:is(.o) {
+                                                &::after {
+                                                    mask-image: url('/images/icons/O_bile.svg');
+                                                    background: var(--accent-color-primary);
+                                                }
+
+                                                &:is(.winning-cell) {
+                                                    background-color: var(--accent-color-primary);
+                                                }
+                                            }
                                         }
                                     }
                                 }

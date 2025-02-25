@@ -116,6 +116,31 @@
                                         <p class="player">{{ game.player_o_name }}</p>
                                         <p class="player">{{ game.player_x_name }}</p>
                                     </div>
+                                    
+                                    <!-- Tlačítko pro zobrazení boardu -->
+                                    <div v-if="!showBoard">
+                                        <button v-on:click="showBoard = true">Zobrazit desku</button>
+                                    </div>
+
+                                    <!-- Board se zobrazí, když je showBoard true, a po kliknutí na něj se opět skryje -->
+                                    <div v-else class="gameboard" v-on:click="showBoard = false">
+                                        <div 
+                                            v-for="(cell, index) in game.board.flat()" 
+                                            :key="index"
+                                            :class="[
+                                             'cell', 
+                                              { 
+                                                'x': cell === 'X', 
+                                                'o': cell === 'O',
+                                                'winning-cell': isWinningCell(index, game)
+                                              }
+                                            ]"
+                                        >
+                                        </div>
+                                    </div>
+
+
+                                    
                                     <p class="game-result">
                                         {{getGameResult(game)}}
                                     </p>

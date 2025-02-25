@@ -17,6 +17,7 @@ export const vue = new Vue({
         users: [],
         usersFiltered: [],
         searchUserInput: "",
+        showBoard: false,
     },
 
     methods: {
@@ -165,6 +166,15 @@ export const vue = new Vue({
                 return user.username.toLowerCase().includes(_this.searchUserInput.toLowerCase()) || user.display_name?.toLowerCase().includes(_this.searchUserInput.toLowerCase());
             });
         },
+
+        isWinningCell: function (index: number, game :any): any {
+            //console.log(game);
+            const boardSize = 15; // velikost hrací desky 15x15
+            const row = Math.floor(index / boardSize);
+            const col = index % boardSize;
+            return game.winningCells?.some((cell: any) => cell[0] === row && cell[1] === col);
+        },
+
     },
 
     computed: {

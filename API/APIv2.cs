@@ -397,6 +397,10 @@ public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?
 
             var playerOName = reader.GetValueOrNull<string>("player_o_display_name") ?? reader.GetValueOrNull<string>("player_o_username") ?? "Neznámý hráč";
             var playerXName = reader.GetValueOrNull<string>("player_x_display_name") ?? reader.GetValueOrNull<string>("player_x_username") ?? "Neznámý hráč";
+            var winningCells = GameBoard.Parse(reader.GetString("board")).GetWinningCells();
+            var winningCellsList = winningCells?
+                .Select(cell => new List<int> { cell.row, cell.col })
+                .ToList() ?? new List<List<int>>();
 
             var game = new JsonObject() {
                 { "uuid", reader.GetString("uuid") },
@@ -411,7 +415,9 @@ public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?
                 { "player_x", reader.GetValueOrNull<string>("player_x") ?? "neznámý" },
                 { "player_o_name", playerOName },
                 { "player_x_name", playerXName },
+                { "winningCells", JsonSerializer.SerializeToNode(winningCellsList) }
             };
+
 
             games.Add(game);
         }

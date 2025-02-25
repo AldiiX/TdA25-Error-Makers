@@ -9,17 +9,13 @@
 @keyframes asodjasd {
   from {
     height: calc(100vh + 100px);
-    -webkit-mask-position: center;
-            mask-position: center;
-    -webkit-mask-size: 500%;
-            mask-size: 500%;
+    mask-position: center;
+    mask-size: 500%;
   }
   to {
     height: 60vh;
-    -webkit-mask-size: 100vw;
-            mask-size: 100vw;
-    -webkit-mask-position: bottom;
-            mask-position: bottom;
+    mask-size: 100vw;
+    mask-position: bottom;
   }
 }
 #ACCOUNT-PAGE .sections > .top::after {
@@ -162,6 +158,7 @@
   justify-content: space-between;
   margin-left: 16px;
   margin-right: 16px;
+  align-items: center;
 }
 #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .game-between {
   display: flex;
@@ -170,6 +167,80 @@
 }
 #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .game-between > .player {
   margin: 0;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard {
+  max-width: 250px;
+  max-height: 250px;
+  display: grid;
+  grid-template-columns: repeat(15, 25px);
+  grid-template-rows: repeat(15, 25px);
+  gap: 0;
+  width: fit-content;
+  border-radius: 12px;
+  overflow: scroll;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard:is(.locked) {
+  pointer-events: none !important;
+  /*.cell {
+      pointer-events: none !important;
+  }*/
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell {
+  width: 25px;
+  height: 25px;
+  background-color: var(--button-bg);
+  border-radius: 8px;
+  border: 3px solid var(--background-color-primary);
+  cursor: pointer;
+  position: relative;
+  transition-duration: 0.3s;
+  overflow: hidden;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.x), #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.o) {
+  pointer-events: none;
+  transition-duration: 0.3s;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.x) > .cellhover, #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.o) > .cellhover {
+  display: none;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.x):is(.winning-cell)::after, #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.o):is(.winning-cell)::after {
+  background-color: white;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.x)::after, #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.o)::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  mask: url("/images/icons/X_bile.svg") no-repeat center;
+  mask-size: 60%;
+  background: var(--accent-color-secondary);
+  animation: xoappear 0.2s ease-out;
+  transition-duration: 0.5s;
+}
+@keyframes xoappear {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.x)::after {
+  mask-image: url("/images/icons/X_bile.svg");
+  background: var(--accent-color-secondary);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.x):is(.winning-cell) {
+  background-color: var(--accent-color-secondary);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.o)::after {
+  mask-image: url("/images/icons/O_bile.svg");
+  background: var(--accent-color-primary);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.o):is(.winning-cell) {
+  background-color: var(--accent-color-primary);
 }
 #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .admin-panel {
   display: flex;
@@ -211,4 +282,5 @@
   gap: 8px;
   width: 250px;
 }
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFjY291bnQuc2NzcyIsImFjY291bnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFDO0VBRUcseUNBQUE7RUFDQSxnQ0FBQTtBQ0FKO0FETVE7RUFFSSxZQURTO0VBRVQsd0JBQUE7QUNMWjtBRE9ZO0VBQ0k7SUFDSSwyQkFBQTtJQUNBLDZCQUFBO1lBQUEscUJBQUE7SUFDQSx1QkFBQTtZQUFBLGVBQUE7RUNMbEI7RURRYztJQUNJLFlBQUE7SUFDQSx3QkFBQTtZQUFBLGdCQUFBO0lBQ0EsNkJBQUE7WUFBQSxxQkFBQTtFQ05sQjtBQUNGO0FEU1k7RUFDSSxpQ0FBQTtBQ1BoQjtBRFdRO0VBQ0ksVUFBQTtFQUNBLGlCQUFBO0VBQ0EscUJBQUE7RUFDQSxrQkFBQTtBQ1RaO0FEV1k7RUFDSSxrQkFBQTtFQUNBLFdBQUE7RUFDQSxjQUFBO0VBQ0EsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsU0FBQTtBQ1RoQjtBRFlnQjtFQUNJLGtCQUFBO0VBQ0EsbURBQUE7RUFDQSxtQkFBQTtFQUNBLGFBQUE7RUFDQSx3Q0FBQTtBQ1ZwQjtBRGFnQjtFQUNJLGFBQUE7RUFDQSx1QkFBQTtFQUNBLG1CQUFBO0VBQ0Esa0JBQUE7RUFDQSxRQUFBO0FDWHBCO0FEYW9CO0VBQ0ksaUNBQUE7QUNYeEI7QURjb0I7RUFDSSxhQUFBO0VBQ0EsNkJBQUE7RUFDQSxtQkFBQTtBQ1p4QjtBRGU0QjtFQUNJLGlCQUFBO0VBQ0EsZUFBQTtFQUNBLGtCQUFBO0FDYmhDO0FEZ0I0QjtFQUNJLGVBQUE7RUFDQSxTQUFBO0FDZGhDO0FEbUI0QjtFQUNJLGlCQUFBO0VBQ0EsZUFBQTtFQUNBLGtCQUFBO0FDakJoQztBRG9CNEI7RUFDSSxlQUFBO0VBQ0EsU0FBQTtBQ2xCaEM7QUR5QndCO0VBQ0ksU0FBQTtBQ3ZCNUI7QUQwQndCO0VBQ0ksZUFBQTtFQUNBLGdCQUFBO0VBQ0EsZ0NBQUE7RUFDQSx3Q0FBQTtFQUNBLGtCQUFBO0VBQ0EscUJBQUE7RUFDQSxrQkFBQTtFQUNBLGNBQUE7RUFDQSxrQkFBQTtFQUNBLFlBQUE7RUFDQSxpQkFBQTtFQUNBLGNBQUE7RUFDQSw2QkFBQTtFQUNBLHFCQUFBO0VBQ0EsMkNBQUE7RUFDQSxnQ0FBQTtBQ3hCNUI7QUQ2Qm9CO0VBQ0ksYUFBQTtFQUNBLDhCQUFBO0FDM0J4QjtBRCtCNEI7RUFDSSxpQkFBQTtFQUNBLGVBQUE7RUFDQSxrQkFBQTtBQzdCaEM7QURnQzRCO0VBQ0ksZUFBQTtFQUNBLFNBQUE7QUM5QmhDO0FEbUM0QjtFQUNJLGlCQUFBO0VBQ0EsZUFBQTtFQUNBLGtCQUFBO0FDakNoQztBRG9DNEI7RUFDSSxlQUFBO0VBQ0EsU0FBQTtBQ2xDaEM7QUR5Q2dCO0VBQ0ksYUFBQTtFQUNBLHNCQUFBO0VBQ0EsUUFBQTtBQ3ZDcEI7QUR5Q29CO0VBQ0ksYUFBQTtFQUNBLFNBQUE7RUFDQSx1QkFBQTtFQUNBLG1CQUFBO0VBQ0EsZUFBQTtBQ3ZDeEI7QUQwQ29CO0VBQ0ksV0FBQTtFQUNBLFdBQUE7RUFDQSxtQ0FBQTtFQUNBLG1CQUFBO0FDeEN4QjtBRDJDb0I7RUFDSSxhQUFBO0VBQ0Esc0JBQUE7RUFDQSxTQUFBO0FDekN4QjtBRDJDd0I7RUFDSSxhQUFBO0VBQ0Esc0JBQUE7QUN6QzVCO0FEMkM0QjtFQUNJLGFBQUE7RUFDQSxzQkFBQTtFQUNBLFNBQUE7QUN6Q2hDO0FENENnQztFQUNJLGFBQUE7RUFDQSw4QkFBQTtFQUNBLGlCQUFBO0VBQ0Esa0JBQUE7QUMxQ3BDO0FENkNvQztFQUNJLGFBQUE7RUFDQSxzQkFBQTtFQUNBLFFBQUE7QUMzQ3hDO0FENkN3QztFQUNJLFNBQUE7QUMzQzVDO0FEbURvQjtFQUNJLGFBQUE7RUFDQSxzQkFBQTtFQUNBLFNBQUE7QUNqRHhCO0FEb0R3QjtFQUNJLGFBQUE7RUFDQSxTQUFBO0VBQ0EscUJBQUE7RUFDQSxtQkFBQTtBQ2xENUI7QURvRDRCO0VBQ0ksWUFBQTtBQ2xEaEM7QUR1RHdCO0VBQ0ksV0FBQTtFQUNBLG1CQUFBO0VBQ0EsZ0JBQUE7RUFDQSxtQkFBQTtBQ3JENUI7QUR1RDRCO0VBQ0ksK0NBQUE7QUNyRGhDO0FEMkR3QjtFQUNJLGFBQUE7RUFDQSxTQUFBO0VBQ0EsdUJBQUE7QUN6RDVCIiwiZmlsZSI6ImFjY291bnQuY3NzIn0= */
+
+/*# sourceMappingURL=account.css.map */

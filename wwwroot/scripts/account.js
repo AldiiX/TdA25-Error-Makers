@@ -12,6 +12,7 @@ export const vue = new Vue({
         users: [],
         usersFiltered: [],
         searchUserInput: "",
+        showBoard: false,
     },
     methods: {
         main: function () {
@@ -134,6 +135,12 @@ export const vue = new Vue({
             _this.usersFiltered = _this.users.filter((user) => {
                 return user.username.toLowerCase().includes(_this.searchUserInput.toLowerCase()) || user.display_name?.toLowerCase().includes(_this.searchUserInput.toLowerCase());
             });
+        },
+        isWinningCell: function (index, game) {
+            const boardSize = 15;
+            const row = Math.floor(index / boardSize);
+            const col = index % boardSize;
+            return game.winningCells?.some((cell) => cell[0] === row && cell[1] === col);
         },
     },
     computed: {},
