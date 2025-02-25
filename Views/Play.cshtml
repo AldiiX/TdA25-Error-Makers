@@ -55,24 +55,39 @@
                 </div>
 
                 <div class="leavelobby" v-if="freeplayQueue?.account?.isOwnerOfRoom === false">
-                    <p>Jsi připojen do hry s id {{ freeplayQueue?.roomNumber }}</p>
-                    <button v-on:click="connectToMultiplayerFreeplayQueue()">Odpojit</button>
+                    
+                    <div class="left">
+                        <p class="text">Jsi připojen do hry s id:</p>
+                        <p class="roomnumber">{{ freeplayQueue?.roomNumber }}</p>
+                    </div>
+                    <div class="right">
+                        <button class="leavebutton" v-on:click="connectToMultiplayerFreeplayQueue()">Odpojit</button>
+                    </div>
+                    
+                    
                 </div>
 
                 <div class="createlobby">
                     <p>Vytvoření lobby</p>
 
-                    <div>
-                        <p>Kód tvojí roomky: {{ freeplayQueue?.roomNumber }}</p>
-                        <div class="players">
-                            <p>Připojení hráči</p>
-                            <div class="player" v-for="player in freeplayQueue.players">
-                                <div class="img"></div>
-                                <p>{{ player.name }}</p>
+                    <div class="infolobby">
+                        <div class="top">
+                            <div class="roomnumber">
+                                <p>Kód tvojí roomky:</p>
+                                <p>{{ freeplayQueue?.roomNumber }}</p>
+                            </div>
+                            <div class="players">
+                                <p>Připojení hráči:</p>
+                                <div class="player" v-for="player in freeplayQueue.players">
+                                    <div class="img"></div>
+                                    <p>{{ player.name }}</p>
+                                </div>
                             </div>
                         </div>
-                        <button v-if="freeplayQueue?.account?.isOwnerOfRoom === true" v-on:click="startFreeplayLobby()">Začít hru</button>
-                        <button v-else v-on:click="startFreeplayLobby()" disabled>Začít hru</button>
+                        <div class="bottom">
+                            <button class="ownerbutton" v-if="freeplayQueue?.account?.isOwnerOfRoom === true" v-on:click="startFreeplayLobby()">Začít hru</button>
+                            <button class="userbutton" v-else v-on:click="startFreeplayLobby()" disabled>Začít hru</button>
+                        </div>
                     </div>
                 </div>
             </div>

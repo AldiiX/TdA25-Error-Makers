@@ -63,12 +63,9 @@
   position: relative;
   cursor: pointer;
   transition-duration: 0.3s;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 .main .first > .singleplayer h2, .main .first > .multiplayer h2 {
-  width: -moz-fit-content;
   width: fit-content;
   margin: 0;
   position: absolute;
@@ -81,15 +78,11 @@
   width: 100%;
   position: absolute;
   aspect-ratio: 1/1;
-  -webkit-mask-image: url("/images/icons/zarivka_playing_bile.svg");
-          mask-image: url("/images/icons/zarivka_playing_bile.svg");
+  mask-image: url("/images/icons/zarivka_playing_bile.svg");
   background-color: var(--text-color);
-  -webkit-mask-size: contain;
-          mask-size: contain;
-  -webkit-mask-position: center;
-          mask-position: center;
-  -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
+  mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
   margin: 0 auto;
   top: 0;
   right: 0;
@@ -137,7 +130,6 @@
   margin: 0 auto;
   text-align: center;
   position: relative;
-  width: -moz-fit-content;
   width: fit-content;
 }
 .main > .mpfreeplaylobby > h1::after {
@@ -149,14 +141,10 @@
   width: 150%;
   height: 20px;
   top: 100%;
-  -webkit-mask-image: url("/images/icons/effect.svg");
-          mask-image: url("/images/icons/effect.svg");
-  -webkit-mask-size: cover;
-          mask-size: cover;
-  -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-          mask-position: center;
+  mask-image: url("/images/icons/effect.svg");
+  mask-size: cover;
+  mask-repeat: no-repeat;
+  mask-position: center;
   background: url("/images/bg1.png"), linear-gradient(90deg, rgb(0, 112, 187) 0%, rgb(57, 90, 154) 25%, rgb(114, 68, 121) 50%, rgb(227, 24, 55) 100%);
   background-size: cover;
   border-radius: 100%;
@@ -170,7 +158,6 @@
 .main > .mpfreeplaylobby > .joinlobby p {
   margin: 0;
   margin-left: 2px;
-  width: -moz-fit-content;
   width: fit-content;
 }
 .main > .mpfreeplaylobby > .joinlobby > div {
@@ -186,6 +173,38 @@
 .main > .mpfreeplaylobby > .joinlobby > div > input::-webkit-outer-spin-button, .main > .mpfreeplaylobby > .joinlobby > div > input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
+.main > .mpfreeplaylobby > .leavelobby {
+  display: flex;
+  justify-content: space-around;
+  background-color: var(--background-color);
+  padding: 16px;
+  border-radius: 12px;
+}
+.main > .mpfreeplaylobby > .leavelobby > .left {
+  display: flex;
+  flex-direction: column;
+}
+.main > .mpfreeplaylobby > .leavelobby > .left > .text {
+  margin: 0;
+  margin-bottom: 8px;
+}
+.main > .mpfreeplaylobby > .leavelobby > .left > .roomnumber {
+  font-size: 24px;
+  margin: 0;
+}
+.main > .mpfreeplaylobby > .leavelobby > .right {
+  display: block;
+  align-content: center;
+}
+.main > .mpfreeplaylobby > .leavelobby > .right > .leavebutton {
+  background: var(--accent-color-primary);
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
 .main > .mpfreeplaylobby > .createlobby {
   display: flex;
   flex-direction: column;
@@ -194,13 +213,49 @@
 .main > .mpfreeplaylobby > .createlobby p {
   margin: 0;
   margin-left: 2px;
-  width: -moz-fit-content;
   width: fit-content;
 }
 .main > .mpfreeplaylobby > .createlobby > div {
   background-color: var(--background-color);
   padding: 24px;
   border-radius: 12px;
+}
+.main > .mpfreeplaylobby > .createlobby > .infolobby > .top {
+  display: flex;
+  justify-content: space-between;
+}
+.main > .mpfreeplaylobby > .createlobby > .infolobby > .top > .roomnumber {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.main > .mpfreeplaylobby > .createlobby > .infolobby > .top > .players {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.main > .mpfreeplaylobby > .createlobby > .infolobby > .bottom {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+.main > .mpfreeplaylobby > .createlobby > .infolobby > .bottom > .ownerbutton {
+  background: var(--accent-color-primary);
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.main > .mpfreeplaylobby > .createlobby > .infolobby > .bottom > .userbutton {
+  background: var(--accent-color-secondary);
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  cursor: pointer;
 }
 .main > .centerdiv {
   position: absolute;
@@ -231,14 +286,10 @@
   width: 150%;
   height: 20px;
   top: 100%;
-  -webkit-mask-image: url("/images/icons/effect.svg");
-          mask-image: url("/images/icons/effect.svg");
-  -webkit-mask-size: cover;
-          mask-size: cover;
-  -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-          mask-position: center;
+  mask-image: url("/images/icons/effect.svg");
+  mask-size: cover;
+  mask-repeat: no-repeat;
+  mask-position: center;
   background: url("/images/bg1.png"), linear-gradient(90deg, rgb(0, 112, 187) 0%, rgb(57, 90, 154) 25%, rgb(114, 68, 121) 50%, rgb(227, 24, 55) 100%);
   background-size: cover;
   border-radius: 100%;
@@ -256,7 +307,6 @@
 }
 .main > .centerdiv > .code {
   display: flex;
-  width: -moz-fit-content;
   width: fit-content;
   align-items: center;
   font-size: 200px;
@@ -266,14 +316,10 @@
 .main > .centerdiv > .code > .icon {
   width: 250px;
   height: 250px;
-  -webkit-mask-image: url(/images/icons/zarivka_sad_bile.svg);
-          mask-image: url(/images/icons/zarivka_sad_bile.svg);
-  -webkit-mask-size: contain;
-          mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-          mask-position: center;
+  mask-image: url(/images/icons/zarivka_sad_bile.svg);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
   background-color: var(--text-color);
   margin: 0 48px;
   animation: float 3s ease-in-out infinite alternate;
@@ -301,10 +347,8 @@
   width: 250px;
   max-width: 90vw;
   aspect-ratio: 1/1;
-  -webkit-mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
-          mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
-  -webkit-mask-size: contain;
-          mask-size: contain;
+  mask: url("/images/icons/zarivka_thinking_bile.svg") no-repeat center;
+  mask-size: contain;
   background-color: var(--text-color);
   animation: loading-img-anim 2s ease-in-out infinite;
   margin: 0 auto;
@@ -337,4 +381,4 @@
   color: var(--color-gray);
 }
 
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBsYXkuc2NzcyIsInBsYXkuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFDO0VBQ0csYUFBQTtBQ0NKOztBREVBO0VBQ0ksV0FBQTtFQUNBLGlCQUFBO0VBQ0Esa0JBQUE7RUFDQSx5QkFBQTtFQUNBLG9EQUFBO0FDQ0o7QURDSTtFQUNJO0lBQ0ksVUFBQTtFQ0NWO0VERU07SUFDSSxVQUFBO0VDQVY7QUFDRjtBREdJO0VBQ0kscUNBQUE7RUFDQSw0QkFBQTtFQUNBLFVBQUE7QUNEUjtBREdRO0VBQ0k7SUFDSSxVQUFBO0VDRGQ7RURJVTtJQUNJLFVBQUE7RUNGZDtBQUNGO0FET0k7RUFDSSx3Q0FBQTtFQUNBLDRCQUFBO0VBQ0EsVUFBQTtBQ0xSO0FET1E7RUFDSTtJQUNJLFVBQUE7RUNMZDtFRFFVO0lBQ0ksVUFBQTtFQ05kO0FBQ0Y7QURXSTtFQUNJLGFBQUE7RUFDQSx1QkFBQTtFQUNBLG1CQUFBO0VBQ0EsbUJBQUE7RUFDQSxXQUFBO0VBQ0EsWUFBQTtFQUNBLFNBQUE7QUNUUjtBRGVRO0VBQ0ksYUFBQTtFQUNBLFlBQUE7RUFDQSxtQkFBQTtFQUNBLHlDQUFBO0VBQ0EsNkNBQUE7RUFDQSxrQkFBQTtFQUNBLGdCQUFBO0VBQ0Esa0JBQUE7RUFDQSxlQUFBO0VBQ0EseUJBQUE7RUFDQSx5QkFBQTtLQUFBLHNCQUFBO1VBQUEsaUJBQUE7QUNiWjtBRGVZO0VBQ0ksdUJBQUE7RUFBQSxrQkFBQTtFQUNBLFNBQUE7RUFDQSxrQkFBQTtFQUNBLFFBQUE7RUFDQSxTQUFBO0VBQ0EsZ0NBQUE7RUFDQSxVQUFBO0FDYmhCO0FEZ0JZO0VBQ0ksV0FBQTtFQUNBLGtCQUFBO0VBQ0EsaUJBQUE7RUFDQSxpRUFBQTtVQUFBLHlEQUFBO0VBQ0EsbUNBQUE7RUFDQSwwQkFBQTtVQUFBLGtCQUFBO0VBQ0EsNkJBQUE7VUFBQSxxQkFBQTtFQUNBLDhCQUFBO1VBQUEsc0JBQUE7RUFDQSxjQUFBO0VBQ0EsTUFBQTtFQUNBLFFBQUE7RUFDQSxhQUFBO0VBQ0EsVUFBQTtBQ2RoQjtBRGlCWTtFQUNJLDZDQUFBO0VBQ0EseUJBQUE7QUNmaEI7QURpQmdCO0VBQ0ksWUFBQTtBQ2ZwQjtBRGtCZ0I7RUFDSSx1QkFBQTtBQ2hCcEI7QURtQmdCO0VBQ0ksVUFBQTtBQ2pCcEI7QURxQlk7RUFDSSxXQUFBO0VBQ0Esa0JBQUE7RUFDQSxNQUFBO0VBQ0EsT0FBQTtFQUNBLFdBQUE7RUFDQSxZQUFBO0VBQ0EsbUpBQUE7RUFDQSxzQkFBQTtFQUNBLFVBQUE7RUFDQSx5QkFBQTtFQUNBLFVBQUE7QUNuQmhCO0FEeUJJO0VBQ0ksa0JBQUE7RUFDQSxTQUFBO0VBQ0EsY0FBQTtFQUNBLFdBQUE7RUFDQSxhQUFBO0VBQ0Esc0JBQUE7RUFDQSxTQUFBO0VBQ0EsZ0JBQUE7QUN2QlI7QUR5QlE7RUFDSSxlQUFBO0VBQ0EsY0FBQTtFQUNBLGtCQUFBO0VBQ0Esa0JBQUE7RUFDQSx1QkFBQTtFQUFBLGtCQUFBO0FDdkJaO0FEMEJZO0VBQ0ksV0FBQTtFQUNBLGtCQUFBO0VBQ0EsU0FBQTtFQUNBLDJCQUFBO0VBQ0EsY0FBQTtFQUNBLFdBQUE7RUFDQSxZQUFBO0VBQ0EsU0FBQTtFQUNBLG1EQUFBO1VBQUEsMkNBQUE7RUFDQSx3QkFBQTtVQUFBLGdCQUFBO0VBQ0EsOEJBQUE7VUFBQSxzQkFBQTtFQUNBLDZCQUFBO1VBQUEscUJBQUE7RUFDQSxtSkFBQTtFQUNBLHNCQUFBO0VBQ0EsbUJBQUE7QUN4QmhCO0FENEJRO0VBQ0ksYUFBQTtFQUNBLHNCQUFBO0VBQ0EsUUFBQTtFQUNBLGdCQUFBO0FDMUJaO0FENEJZO0VBQ0ksU0FBQTtFQUNBLGdCQUFBO0VBQ0EsdUJBQUE7RUFBQSxrQkFBQTtBQzFCaEI7QUQ2Qlk7RUFDSSxhQUFBO0VBQ0EsUUFBQTtBQzNCaEI7QUQ2QmdCO0VBU0ksZUFBQTtFQUNBLGdCQUFBO0VBQ0EsWUFBQTtFQUNBLDBCQUFBO0FDbkNwQjtBRHdCb0I7RUFFSSx3QkFBQTtBQ3ZCeEI7QURxQ1E7RUFDSSxhQUFBO0VBQ0Esc0JBQUE7RUFDQSxRQUFBO0FDbkNaO0FEcUNZO0VBQ0ksU0FBQTtFQUNBLGdCQUFBO0VBQ0EsdUJBQUE7RUFBQSxrQkFBQTtBQ25DaEI7QURzQ1k7RUFDSSx5Q0FBQTtFQUVBLGFBQUE7RUFDQSxtQkFBQTtBQ3JDaEI7QUQ2Q0k7RUFDSSxrQkFBQTtFQUNBLGFBQUE7RUFDQSx1QkFBQTtFQUNBLHNCQUFBO0VBQ0EsbUJBQUE7RUFDQSxRQUFBO0VBQ0EsU0FBQTtFQUNBLGdDQUFBO0VBQ0EsU0FBQTtBQzNDUjtBRDZDUTtFQUNJLGdCQUFBO0FDM0NaO0FEK0NRO0VBQ0ksZUFBQTtFQUNBLFNBQUE7RUFDQSxrQkFBQTtFQUNBLGtCQUFBO0FDN0NaO0FEZ0RZO0VBQ0ksV0FBQTtFQUNBLGtCQUFBO0VBQ0EsU0FBQTtFQUNBLDJCQUFBO0VBQ0EsY0FBQTtFQUNBLFdBQUE7RUFDQSxZQUFBO0VBQ0EsU0FBQTtFQUNBLG1EQUFBO1VBQUEsMkNBQUE7RUFDQSx3QkFBQTtVQUFBLGdCQUFBO0VBQ0EsOEJBQUE7VUFBQSxzQkFBQTtFQUNBLDZCQUFBO1VBQUEscUJBQUE7RUFDQSxtSkFBQTtFQUNBLHNCQUFBO0VBQ0EsbUJBQUE7QUM5Q2hCO0FEa0RRO0VBQ0ksZUFBQTtFQUNBLFNBQUE7RUFDQSxnQkFBQTtFQUNBLGtCQUFBO0VBQ0EseUJBQUE7QUNoRFo7QURtRFE7RUFDSSxTQUFBO0VBQ0Esd0JBQUE7QUNqRFo7QURxRFE7RUFDSSxhQUFBO0VBQ0EsdUJBQUE7RUFBQSxrQkFBQTtFQUNBLG1CQUFBO0VBQ0EsZ0JBQUE7RUFDQSxTQUFBO0VBQ0EsbUJBQUE7QUNuRFo7QURxRFk7RUFDSSxZQUFBO0VBQ0EsYUFBQTtFQUNBLDJEQUFBO1VBQUEsbURBQUE7RUFDQSwwQkFBQTtVQUFBLGtCQUFBO0VBQ0EsOEJBQUE7VUFBQSxzQkFBQTtFQUNBLDZCQUFBO1VBQUEscUJBQUE7RUFDQSxtQ0FBQTtFQUNBLGNBQUE7RUFDQSxrREFBQTtBQ25EaEI7QURvRGdCO0VBQ0k7SUFDSSx3QkFBQTtFQ2xEdEI7RURxRGtCO0lBQ0ksMkJBQUE7RUNuRHRCO0VEc0RrQjtJQUNJLHdCQUFBO0VDcER0QjtBQUNGO0FEMkRRO0VBQ0k7SUFDSSxVQUFBO0VDekRkO0VENERVO0lBQ0ksVUFBQTtFQzFEZDtBQUNGO0FENkRRO0VBQ0ksWUFBQTtFQUNBLGVBQUE7RUFDQSxpQkFBQTtFQUNBLDZFQUFBO1VBQUEscUVBQUE7RUFDQSwwQkFBQTtVQUFBLGtCQUFBO0VBQ0EsbUNBQUE7RUFDQSxtREFBQTtFQUNBLGNBQUE7QUMzRFo7QUQ2RFk7RUFDSTtJQUNJLHdCQUFBO0VDM0RsQjtFRDhEYztJQUNJLHlCQUFBO0VDNURsQjtFRCtEYztJQUNJLHdCQUFBO0VDN0RsQjtBQUNGO0FEaUVRO0VBQ0ksU0FBQTtFQUNBLGdCQUFBO0VBQ0EsZUFBQTtBQy9EWjtBRGtFUTtFQUNJLGtCQUFBO0VBQ0EsY0FBQTtFQUNBLGVBQUE7QUNoRVo7QURtRVE7RUFDSSxrQkFBQTtBQ2pFWjtBRG9FUTtFQUNJLHdCQUFBO0FDbEVaIiwiZmlsZSI6InBsYXkuY3NzIn0= */
+/*# sourceMappingURL=play.css.map */
