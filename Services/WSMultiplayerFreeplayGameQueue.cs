@@ -77,8 +77,12 @@ public static class WSMultiplayerFreeplayGameQueue {
                 yourAccount = new {
                     account.UUID,
                     account.Name,
-                    isOwnerOfRoom = Rooms.Find(x => x.Number == roomNumber)?.Owner.UUID == account.UUID
-                }
+                    isOwnerOfRoom = Rooms.Find(x => x.Number == roomNumber)?.Owner.UUID == account.UUID,
+                },
+                roomOwner = new {
+                    Rooms.Find(x => x.Number == roomNumber)?.Owner.UUID,
+                    Rooms.Find(x => x.Number == roomNumber)?.Owner.Name
+                },
             };
 
             var message = JsonSerializer.SerializeToUtf8Bytes(payload, new JsonSerializerOptions(){ PropertyNamingPolicy = JsonNamingPolicy.CamelCase});

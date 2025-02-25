@@ -20,12 +20,14 @@ export const vue = new Vue({
         freeplayQueue: {
             players: [],
             roomNumber: null,
-            account: null
+            account: null,
+            owner: null,
         },
         rankedQueue: {
             size: null,
             timeElapsed: null,
         },
+        loggedAccount: null,
     },
     methods: {
         main: function () {
@@ -134,6 +136,7 @@ export const vue = new Vue({
                             _this.freeplayQueue.roomNumber = data.roomNumber;
                             _this.freeplayQueue.players = data.players;
                             _this.freeplayQueue.account = data.yourAccount;
+                            _this.freeplayQueue.owner = data.roomOwner;
                             console.warn(_this.freeplayQueue);
                         }
                         break;

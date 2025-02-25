@@ -96,6 +96,27 @@ public sealed class Account {
         return cmd.ExecuteNonQuery() > 0;
     }
 
+    public async Task<bool> UpdateWDLInDatabaseAsync(int? wAdd = null, int? dAdd = null, int? lAdd = null) {
+        if(wAdd == null && dAdd == null && lAdd == null) return false;
+
+        if(wAdd != null) this.Wins += (uint)wAdd;
+        if(dAdd != null) this.Draws += (uint)dAdd;
+        if(lAdd != null) this.Losses += (uint)lAdd;
+
+        await using var conn = await Database.GetConnectionAsync();
+        if (conn == null) return false;
+
+        await using var cmd = new MySqlCommand("UPDATE `users` SET `wins` = @wins, `draws` = @draws, `losses` = @losses WHERE `uuid` = @uuid", conn);
+        cmd.Parameters.AddWithValue("@wins", this.Wins);
+        cmd.Parameters.AddWithValue("@draws", this.Draws);
+        cmd.Parameters.AddWithValue("@losses", this.Losses);
+        cmd.Parameters.AddWithValue("@uuid", this.UUID);
+
+        return cmd.ExecuteNonQuery() > 0;
+    }
+
+    public bool UpdateWDLInDatabase(int? wAdd = null, int? dAdd = null, int? lAdd = null) => UpdateWDLInDatabaseAsync(wAdd, dAdd, lAdd).Result;
+
     public bool UpdateEloInDatabase(in uint newElo) => UpdateEloInDatabaseAsync(newElo).Result;
 
     public override string ToString() => JsonSerializer.Serialize(this);

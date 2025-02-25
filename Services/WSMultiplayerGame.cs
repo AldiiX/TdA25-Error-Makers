@@ -365,7 +365,9 @@ public static class WSMultiplayerRankedGame {
 
         if (game.Type == MultiplayerGame.GameType.RANKED) {
             _ = winnerAccount.UpdateEloInDatabaseAsync((uint)newEloWinner);
+            _ = winnerAccount.UpdateWDLInDatabaseAsync(1,0,0);
             _ = loserAccount.UpdateEloInDatabaseAsync((uint)newEloLoser);
+            _ = loserAccount.UpdateWDLInDatabaseAsync(0,0,1);
         }
 
         _ = game.UpdateGameTime();

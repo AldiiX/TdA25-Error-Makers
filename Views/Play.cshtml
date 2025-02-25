@@ -2,6 +2,7 @@
 @using TdA25_Error_Makers.Classes
 @{
     var webTheme = Utilities.WebTheme.Get();
+    var loggedAccount = Utilities.GetLoggedAccountFromContextOrNull();
 
     // části stránky
     var background = Html.PartialAsync("/Views/Components/BlurBackground.cshtml");
@@ -81,6 +82,7 @@
                                 <div class="player" v-for="player in freeplayQueue.players">
                                     <div class="img"></div>
                                     <p>{{ player.name }}</p>
+                                    <p class="hosticon" v-if="player?.uuid === freeplayQueue?.owner?.uuid">(host)</p>
                                 </div>
                             </div>
                         </div>
@@ -110,26 +112,36 @@
                 </div>
 
                 <!-- faze vybirani singleplayer modu -->
-                <div v-show="temp.faze === 'selectSingleplayerMode'">
-                    <div class="game-type-1v1" v-on:click="temp.selectedSingleplayerMode = '1v1'; locationHref('/play/singleplayer/1v1');">
-                        <h2>1v1</h2>
-                        <p>Zahraj si piškvorky proti kamarádovi na jednom počítači!</p>
+                <div class="select-singleplayer-mode" v-show="temp.faze === 'selectSingleplayerMode'">
+                    <div class="m1v1" v-on:click="temp.selectedSingleplayerMode = '1v1'; locationHref('/play/singleplayer/1v1');">
+                        <div>
+                            <h2>1v1</h2>
+                            <p>Zahraj si piškvorky proti kamarádovi na jednom počítači!</p>
+                        </div>
                     </div>
-                    <div class="" v-on:click="temp.selectedSingleplayerMode = 'vsai';">
-                        <h2>Proti AI</h2>
-                        <p>Zkusíš porazit umělou inteligenci v piškvorkách?</p>
+                    <div class="ai" v-on:click="temp.selectedSingleplayerMode = 'vsai';">
+                        <div>
+                            <h2>Proti AI</h2>
+                            <p>Zkusíš porazit umělou inteligenci v piškvorkách?</p>
+                        </div>
                     </div>
                 </div>
 
                 <!-- faze vybirani multiplayer modu -->
-                <div v-show="temp.faze === 'selectMultiplayerMode'">
-                    <div class="" v-on:click="changeFaze('createFreeplayLobby');">
-                        <h2>Freeplay</h2>
-                        <p>Zahraj si piškvorkový souboj proti svýmu kamarádovi</p>
+                <div class="select-multiplayer-mode" v-show="temp.faze === 'selectMultiplayerMode'">
+                    <div class="freeplay" v-on:click="changeFaze('createFreeplayLobby');">
+                        <div>
+                            <h2>Freeplay</h2>
+                            <p>Vyzvi svého kamaráda na pořádný piškvorkový souboj!</p>
+                        </div>
                     </div>
-                    <div class="" v-on:click="changeFaze('multiplayerModeQueue');">
-                        <h2>Ranked</h2>
-                        <p>Zahraj si proti náhodnému hráči a ukaž, co v tobě je</p>
+                    <div v-bind:class="['ranked', { 'locked': loggedAccount === null }]" v-on:click="changeFaze('multiplayerModeQueue');">
+                        <div>
+                            <h2>Ranked</h2>
+                            <p>Zahraj si proti náhodnému hráči, ukaž, co v tobě je a získej ELO.</p>
+                        </div>
+
+                        <p class="loginwarn">Pro hraní tohoto módu <a href="/login">se musíš přihlásit</a>.</p>
                     </div>
                 </div>
 
@@ -153,6 +165,15 @@
 <script type="module">
     import * as f from "/scripts/functions.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
     import { vue } from "/scripts/play.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
+
+    @if (loggedAccount is not null) {
+        <text>
+            vue.loggedAccount ??= {};
+            vue.loggedAccount.uuid = '@(loggedAccount?.UUID ?? null)';
+            vue.loggedAccount.name = '@(loggedAccount?.DisplayName ?? null)';
+            //console.warn(vue.loggedAccount);
+        </text>
+    }
     window.addCookie = f.addCookie;
     if (window.history.replaceState) window.history.replaceState( null, null, window.location.href );
 </script>

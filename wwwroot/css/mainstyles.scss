@@ -18,6 +18,13 @@
     font-synthesis: none !important;
 }
 
+
+:root:is(.showlines) {
+    * {
+        outline: 1px solid orange;
+    }
+}
+
 input,
 textarea,
 button,
