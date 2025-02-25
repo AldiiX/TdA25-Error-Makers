@@ -195,9 +195,8 @@ public static class WSMultiplayerFreeplayGameQueue {
 
     private static async void SendStatus(object? state) {
         List<Room> roomsCopy;
-        lock (Rooms) {
-            roomsCopy = [..Rooms];
-        }
+        lock (Rooms) roomsCopy = [..Rooms];
+
 
         foreach (var room in roomsCopy) {
             var roomNumber = room.Number;
@@ -205,7 +204,7 @@ public static class WSMultiplayerFreeplayGameQueue {
 
             // If the room owner is not connected, remove the room.
             if (!players.Contains(room.Owner)) {
-                foreach (var player in players) {
+                foreach (var player in players.ToList()) {
                     // pokud je websocket zavreny, tak to hrace odpoji
                     if (player.WebSocket?.State != WebSocketState.Open) {
                         lock(Rooms) Rooms.Find(r => r.Number == room.Number)?.Players.Remove(player);

@@ -1,4 +1,4 @@
-import { addAnnouncement } from "/scripts/functions.js";
+import { addAnnouncement, openModal } from "/scripts/functions.js";
 export const vue = new Vue({
     el: "#app",
     mounted: function () {
@@ -10,6 +10,7 @@ export const vue = new Vue({
     },
     data: {
         currentPlayer: null,
+        modalOpened: null,
         game: null,
         gameLoaded: false,
         gameNumberOfPlayers: 0,
@@ -35,6 +36,16 @@ export const vue = new Vue({
         main: function () {
             const _this = this;
             this.connectToSocket();
+        },
+        openModal: function (modalId) {
+            const _this = this;
+            setTimeout(() => {
+            }, 300);
+            openModal(this, modalId);
+            setTimeout(() => {
+                if (modalId === "editgame") {
+                }
+            }, 300);
         },
         connectToSocket: function () {
             const _this = this;
@@ -80,6 +91,7 @@ export const vue = new Vue({
             if (data.action === "finishGame") {
                 _this.finishGameObject = data;
                 _this.gameLocked = true;
+                _this.openModal(null);
                 if (data.winner !== null) {
                     setTimeout(() => {
                         _this.showEndGameScreen();
@@ -221,6 +233,15 @@ export const vue = new Vue({
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = seconds % 60;
             return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+        },
+        surrenderGame: function () {
+            const _this = this;
+            _this.socket.send(JSON.stringify({
+                action: "surrender",
+            }));
+            _this.gameLocked = true;
+            _this.openModal(null);
+            _this.addAnnouncement("Hra byla ukončena - vzdal/a ses.", "info", 3000);
         },
     },
     computed: {},

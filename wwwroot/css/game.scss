@@ -831,6 +831,23 @@
                 }
 
                 .chat-input {
+                    >.actions {
+                        width: calc(100% - 48px);
+                        margin: 0 auto;//
+                        padding-bottom: 24px;
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 48px;
+                        justify-content: space-around;
+
+                        >div {
+                            >p {
+                                margin: 0;
+                                width: fit-content;
+                            }
+                        }
+                    }
+
                     input {
                         width: calc(100% - 48px);
                         left: 50%;

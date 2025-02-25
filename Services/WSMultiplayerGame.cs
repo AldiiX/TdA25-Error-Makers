@@ -58,8 +58,8 @@ public static class WSMultiplayerRankedGame {
         }
 
         // Nastavení času pro hráče
-        game.PlayerXTimeLeft = 5 * 60;
-        game.PlayerOTimeLeft = 5 * 60;
+        game.PlayerXTimeLeft = 8 * 60;
+        game.PlayerOTimeLeft = 8 * 60;
 
         // Vytvoření instance hráče a přidání do hry
         var playerAccount = new PlayerAccount(_sessionAccount.UUID, _sessionAccount.DisplayName, _sessionAccount.Elo, webSocket);
@@ -90,6 +90,10 @@ public static class WSMultiplayerRankedGame {
                     break;
                 case "SendChatMessage":
                     await ProcessChatMessage(playerAccount, game, jsonNode);
+                    break;
+
+                case "surrender":
+                    await ForceEndGame(game, game.PlayerX?.UUID == playerAccount.UUID ? "O" : "X");
                     break;
             }
         }
@@ -269,7 +273,7 @@ public static class WSMultiplayerRankedGame {
                 _ = SendStatusToPlayer(game, player, players.Count);
             }
 
-            if (game.Board.GetWinner() == null) {
+            if (game.Winner == null) {
                 game.GameTime++;
             }
         }
@@ -298,7 +302,14 @@ public static class WSMultiplayerRankedGame {
             }
         }
 
+        // uprava game winnera v hlavnim objektu
         game.Winner = winnerChar == "X" ? GameBoard.Player.X : winnerChar == "O" ? GameBoard.Player.O : null;
+        lock (Games) {
+            var g = Games.Keys.FirstOrDefault(_g => _g.UUID == game.UUID);
+
+            if(g != null) g.Winner = game.Winner;
+        }
+
         if (winnerPlayer == null || loserPlayer == null)
             return false;
 

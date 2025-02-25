@@ -152,6 +152,23 @@
         width: 100%;
         height: 100%;
         gap: 64px;
+        position: relative;
+
+        >.back {
+            position: absolute;
+            top: -24px;
+            left: 2px;
+            cursor: pointer;
+            user-select: none;
+            color: var(--text-color);
+            transition-duration: 0.3s;
+            margin: 0;
+
+            &:hover {
+                transition-duration: 0.3s;
+                color: var(--color-gray);
+            }
+        }
 
 
         >.m1v1, >.ai {
@@ -166,6 +183,36 @@
             cursor: pointer;
             transition-duration: 0.3s;
             user-select: none;
+
+            &:is(.locked) {
+                background-color: var(--button-outline-color);
+                cursor: not-allowed;
+                pointer-events: none;
+
+                >div {
+                    filter: invert(0.5);
+
+                }
+
+                >.loginwarn {
+                    position: absolute;
+                    font-size: 16px;
+                    display: block;
+                    bottom: 20px;
+                    width: 70%;
+                    text-align: center;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    margin: 0;
+                    z-index: 2;
+
+                    >a {
+                        color: var(--accent-color-primary);
+                        text-decoration: none;
+                        cursor: pointer;
+                    }
+                }
+            }
 
             >div {
                 position: absolute;
@@ -251,6 +298,23 @@
         width: 100%;
         height: 100%;
         gap: 64px;
+        position: relative;
+
+        >.back {
+            position: absolute;
+            top: -24px;
+            left: 2px;
+            cursor: pointer;
+            user-select: none;
+            color: var(--text-color);
+            transition-duration: 0.3s;
+            margin: 0;
+
+            &:hover {
+                transition-duration: 0.3s;
+                color: var(--color-gray);
+            }
+        }
 
 
         >.freeplay, >.ranked {
@@ -580,6 +644,7 @@
             margin: 0;
             text-align: center;
             position: relative;
+            margin-bottom: 24px;
 
             // effect
             &::after {
@@ -704,6 +769,12 @@
 
         p {
             color: var(--color-gray);
+        }
+
+        >button {
+            display: grid;
+            margin: 0 auto;
+            margin-top: 16px;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿// @ts-ignore
-import { scrollToElement, getCookie, addAnnouncement } from "/scripts/functions.js";
+import { scrollToElement, getCookie, addAnnouncement, openModal } from "/scripts/functions.js";
 
 // @ts-ignore
 export const vue = new Vue({
@@ -20,6 +20,7 @@ export const vue = new Vue({
 
     data: {
         currentPlayer: null,
+        modalOpened: null,
         game: null,
         gameLoaded: false,
         gameNumberOfPlayers: 0,
@@ -54,6 +55,27 @@ export const vue = new Vue({
 
             //_this.gameLoaded = true;
             this.connectToSocket();
+        },
+
+        openModal: function (modalId: string|null): void {
+            const _this = this as any;
+
+
+            // před zavřením modalu
+            setTimeout(() => {
+
+            }, 300);
+
+
+            openModal(this, modalId);
+
+
+            // po otevření modalu
+            setTimeout(() => {
+                if (modalId === "editgame") {
+
+                }
+            }, 300);
         },
 
         connectToSocket: function(): void {
@@ -111,6 +133,7 @@ export const vue = new Vue({
 
                 _this.finishGameObject = data;
                 _this.gameLocked = true;
+                _this.openModal(null);
 
                 // zobrazi se endgame veci
                 if(data.winner !== null) {
@@ -297,6 +320,18 @@ export const vue = new Vue({
             const remainingSeconds = seconds % 60;
 
             return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+        },
+
+        surrenderGame: function(): void {
+            const _this = this as any;
+            _this.socket.send(JSON.stringify({
+                action: "surrender",
+            }));
+
+            _this.gameLocked = true;
+            _this.openModal(null);
+
+            _this.addAnnouncement("Hra byla ukončena - vzdal/a ses.", "info", 3000);
         },
     },
 
