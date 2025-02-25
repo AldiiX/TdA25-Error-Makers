@@ -30,7 +30,7 @@ public class WebSocketMiddleware(RequestDelegate next) {
 
                 var account = new MultiplayerGame.PlayerAccount(
                     acc?.UUID ?? Guid.NewGuid().ToString(),
-                    acc?.DisplayName ?? "Guest " + Guid.NewGuid().ToString()[..5].ToUpper(),
+                    acc?.DisplayName ?? "Guest " + Guid.NewGuid().ToString()[..6].ToUpper(),
                     acc?.Elo ?? 0,
                     null
                 );

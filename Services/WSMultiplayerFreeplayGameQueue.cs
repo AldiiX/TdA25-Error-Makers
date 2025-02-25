@@ -262,8 +262,8 @@ public static class WSMultiplayerFreeplayGameQueue {
 
     private static async Task<string?> ReceiveMessageAsync(WebSocket socket, byte[] buffer, CancellationToken cancellationToken = default) {
         using var ms = new MemoryStream();
-        WebSocketReceiveResult result;
         try {
+            WebSocketReceiveResult result;
             do {
                 result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationToken);
                 if (result.MessageType == WebSocketMessageType.Close)

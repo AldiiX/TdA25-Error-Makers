@@ -359,6 +359,12 @@
             }
         }
 
+        >.timer {
+            margin: 0;
+            margin-top: 32px;
+            font-size: 32px;
+        }
+
         p, h1 {
             text-align: center;
             margin: 0 auto;
@@ -366,7 +372,6 @@
         }
 
         h1 {
-            margin-top: 32px;
             margin-bottom: 8px;
         }
 

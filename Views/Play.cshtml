@@ -78,9 +78,9 @@
             </div>
 
             <div class="centerdiv" v-show="temp.faze !== 'createFreeplayLobby'" v-cloak>
-                <h1 class="title" v-if="temp.selectedMode === null">Hrát</h1>
-                <h1 v-if="temp.selectedMode === 'singleplayer'">Singleplayer</h1>
-                <h1 v-if="temp.selectedMode === 'multiplayer' && temp.faze !== 'multiplayerModeQueue'">Multiplayer</h1>
+                <h1 class="title" v-if="temp.selectedMode === null && temp.faze !== 'multiplayerModeQueue'">Hrát</h1>
+                <h1 v-else-if="temp.selectedMode === 'singleplayer'">Singleplayer</h1>
+                <h1 v-else-if="temp.selectedMode === 'multiplayer' && temp.faze !== 'multiplayerModeQueue'">Multiplayer</h1>
 
                 <!-- faze vybirani singleplayer / multiplayer -->
                 <div class="first" v-show="temp.faze === 'selectSingleplayerOrMultiplayer'">
@@ -123,8 +123,11 @@
                 <!-- faze kdy je uzivatel v queue -->
                 <div class="mmqueue" v-show="temp.faze === 'multiplayerModeQueue'">
                     <div class="img"></div>
+                    <p class="timer">{{ parseTimeToDigital(rankedQueue?.timeElapsed ?? 0) }}</p>
                     <h1>Hledáme soupeře proti tobě</h1>
-                    <p>Mezitím, co čekáš tu pro tebe máme tip: {{ generateRandomTip() }}</p>
+                    <p v-if="rankedQueue.size === 0 || rankedQueue.size === 1">Ve frontě jsi aktuálně sám... :(</p>
+                    <p v-else-if="rankedQueue.size > 0 && rankedQueue.size <= 4">Ve frontě jsou aktuálně {{ rankedQueue?.size ?? 0 }} hráči.</p>
+                    <p v-else-if="rankedQueue.size > 4">Ve frontě je aktuálně {{ rankedQueue?.size ?? 0 }} hráčů.</p>
                 </div>
             </div>
         </div>

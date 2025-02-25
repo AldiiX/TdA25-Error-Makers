@@ -20,6 +20,7 @@ public class MultiplayerGame {
         public string Name { get; set; }
         public uint Elo { get; set; }
         public WebSocket? WebSocket { get; set; }
+        public uint QueueTime { get; set; }
 
         public PlayerAccount(string uuid, string name, uint elo, WebSocket? webSocket = null) {
             UUID = uuid;

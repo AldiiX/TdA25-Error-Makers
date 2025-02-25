@@ -43,7 +43,12 @@ export const vue = new Vue({
             players: [],
             roomNumber: null,
             account: null
-        }
+        },
+
+        rankedQueue: {
+            size: null,
+            timeElapsed: null,
+        },
     },
 
 
@@ -72,6 +77,7 @@ export const vue = new Vue({
             if(faze === "multiplayerModeQueue") {
                 _this.connectToMultiplayerRankedQueue();
                 _this.temp.selectedMultiplayerMode = 'ranked';
+                _this.temp.selectedMode = 'multiplayer';
             }
 
             if(faze === "createFreeplayLobby") {
@@ -135,6 +141,11 @@ export const vue = new Vue({
                 const data = JSON.parse(event.data);
                 if(data.action === "sendToMatch") {
                     _this.locationHref(`/multiplayer/${data.matchUUID}`);
+                }
+
+                if(data.action === "status") {
+                    _this.rankedQueue.size = data.queueSize;
+                    _this.rankedQueue.timeElapsed = data.queueTime;
                 }
             };
 
@@ -226,6 +237,13 @@ export const vue = new Vue({
             _this.socket.send(JSON.stringify({
                 action: "startFreeplayLobby"
             }));
+        },
+
+        parseTimeToDigital: function(seconds: number): string {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+
+            return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
         },
     },
 
