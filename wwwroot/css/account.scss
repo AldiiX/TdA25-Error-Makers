@@ -1,6 +1,7 @@
 ﻿#ACCOUNT-PAGE {
 
     background-color: var(--background-color);
+    font-family: "Dosis", sans-serif;
 
     .sections {
         //min-height: calc(100vh - 25vh);
@@ -167,6 +168,7 @@
                         gap: 10vw;
                         justify-content: center;
                         align-items: center;
+                        cursor: default;
                     }
 
                     > .divider {
@@ -177,6 +179,10 @@
                     }
 
                     > .account-game-history {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 16px;
+                        
                         > .game {
                             display: flex;
                             flex-direction: column;

@@ -85,20 +85,20 @@ export const vue = new Vue({
                     return;
                 }
 
-                _this.gameHistory = data;
                 //console.log(data);
+                _this.gameHistory = data;
             })
         },
         
         getGameResult: function (game: any) {
             if (game.loggeduserwon){
-                return "win";
+                return "Výhra";
             }
             else if (!game.loggeduserwon){
-                return "lose";
+                return "Prohra";
             }
             else {
-                return "draw";
+                return "Remíza";
             }
         },
         

@@ -19,7 +19,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Account • Think Different Academy</title>
+    <title>Účet • Think Different Academy</title>
     <link rel="icon" href="/favicon.ico">
 
     @{ // Vue.js definice
@@ -60,12 +60,12 @@
                     
                     <div class="left">
                         <div class="account-elo">
-                            <p class="text">ELO Rating:</p>
+                            <p class="text">ELO hodnocení:</p>
                             <p class="elo">@loggedAccount?.Elo</p>
                         </div>
                         
                         <div class="win-loss-ratio">
-                            <p class="text">Win/Loss Ratio:</p>
+                            <p class="text">Poměr výher/proher:</p>
                             <p class="ratio">
                                 @((loggedAccount.Losses > 0) ? ((double)loggedAccount.Wins / loggedAccount.Losses).ToString("0.00") : loggedAccount.Wins.ToString("0.00"))
                             </p>
@@ -129,18 +129,19 @@
                     @if (loggedAccount?.AccountType is Account.TypeOfAccount.ADMIN or Account.TypeOfAccount.DEVELOPER) {
                         <div class="admin-panel" v-if="currentTab === 'AdminPanel'">
                             <div class="admin-panel-top">
-                                <p class="users">Users</p>
+                                <p class="users">Uživatelé</p>
                                 <input v-model="searchUserInput" v-on:keyup="filterUsers()" type="text" class="search" placeholder="Vyhledat uživatele">
                             </div>
                             
                             <table class="admin-panel-users">
                                 <thead>
                                 <tr>
-                                    <th>Username</th>
-                                    <th>Display Name</th>
+                                    <th>Uživatelské jméno</th>
+                                    <th>Zobrazované jméno</th>
                                     <th>Elo</th>
-                                    <th>Created At</th>
-                                    <th>Actions</th>
+                                    <th>Vytvořen</th>
+                                    <th>Oprávnění účtu</th>
+                                    <th>Akce</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -149,6 +150,7 @@
                                     <td>{{user.display_name}}</td>
                                     <td>{{user.elo}}</td>
                                     <td>{{new Date(user.created_at).toLocaleDateString()}}</td>
+                                    <td>{{user.account_type}}</td>
                                     <td>
                                         <button class="button-primary-col-sec" v-if="user.is_banned === false" v-on:click="banUser(user)">BAN</button>
                                         <button class="button-primary" v-if="user.is_banned === true" v-on:click="unbanUser(user)">UNBAN</button>
