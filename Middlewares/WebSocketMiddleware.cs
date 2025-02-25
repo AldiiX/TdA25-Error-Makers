@@ -23,14 +23,14 @@ public class WebSocketMiddleware(RequestDelegate next) {
             if (context.WebSockets.IsWebSocketRequest) {
                 context.Request.EnableBuffering();
 
-                ushort? roomNumber = ushort.TryParse(context.Request.Query["roomNumber"].FirstOrDefault(), out var _rn)
+                uint? roomNumber = uint.TryParse(context.Request.Query["roomNumber"].FirstOrDefault(), out var _rn)
                     ? _rn : null;
 
                 var acc = Utilities.GetLoggedAccountFromContextOrNull();
 
                 var account = new MultiplayerGame.PlayerAccount(
                     acc?.UUID ?? Guid.NewGuid().ToString(),
-                    acc?.DisplayName ?? "Guest " + Guid.NewGuid().ToString()[..5].ToUpper(),
+                    acc?.DisplayName ?? "Guest " + Guid.NewGuid().ToString()[..6].ToUpper(),
                     acc?.Elo ?? 0,
                     null
                 );

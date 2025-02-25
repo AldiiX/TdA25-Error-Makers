@@ -12,6 +12,8 @@ public static class WSMultiplayerRankedGameQueue {
     // Seznam připojených hráčů
     private static readonly List<MultiplayerGame.PlayerAccount> connectedPlayers = [];
     private static Timer? sortAndPairTimer;
+
+    private static Timer? timer2;
     //private static Timer? sendQueueCountTimer;
 
     #endregion
@@ -19,6 +21,7 @@ public static class WSMultiplayerRankedGameQueue {
     static WSMultiplayerRankedGameQueue() {
         // Spouštíme periodicky třídění a párování hráčů každých 5 sekund
         sortAndPairTimer = new Timer(SortAndPairPlayers!, null, 0, 5000);
+        timer2 = new Timer(SendStatus!, null, 0, 1000);
     }
 
     #region Obsluha fronty
@@ -95,6 +98,20 @@ public static class WSMultiplayerRankedGameQueue {
 
                 _ = SendGameLink(player1, player2);
             }
+        }
+    }
+
+    private static void SendStatus(object state) {
+        foreach (var player in new List<MultiplayerGame.PlayerAccount>(connectedPlayers)) {
+            var payload = new {
+                action = "status",
+                queueSize = connectedPlayers.Count,
+                queueTime = player.QueueTime
+            };
+
+            var msg = JsonSerializer.SerializeToUtf8Bytes(payload);
+            if (player.WebSocket?.State == WebSocketState.Open) player.WebSocket.SendAsync(new ArraySegment<byte>(msg), WebSocketMessageType.Text, true, CancellationToken.None);
+            if(connectedPlayers.Find(_p => _p.Name == player.Name) is { } p) p.QueueTime++;
         }
     }
 

@@ -6,7 +6,232 @@
     width: 100%;
     min-height: calc(100vh/* + 80px*/);
     position: relative;
+    transition-duration: .3s;
+    animation: sdoifnjspdojfnsjfdvmvmvm 0.3s ease-in-out;
+    
+    @keyframes sdoifnjspdojfnsjfdvmvmvm {
+        from {
+            opacity: 0;
+        }
 
+        to {
+            opacity: 1;
+        }
+    }
+
+    &:is(.fadeout) >div {
+        animation: dsfdsfsd 0.15s ease-in-out;
+        animation-iteration-count: 1;
+        opacity: 0;
+
+        @keyframes dsfdsfsd {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+
+        }
+    }
+
+    &:is(.fadein) >div {
+        animation: iuosdfosdjf 0.15s ease-in-out;
+        animation-iteration-count: 1;
+        opacity: 1;
+
+        @keyframes iuosdfosdjf {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+
+        }
+    }
+    
+    .first {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        width: 100%;
+        height: 100%;
+        gap: 64px;
+
+        >.singleplayer {
+
+        }
+
+        >.singleplayer, >.multiplayer {
+            height: 300px;
+            width: 300px;
+            border-radius: 12px;
+            background-color: var(--background-color);
+            border: 1px solid var(--button-outline-color);
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition-duration: 0.3s;
+            user-select: none;
+
+            h2 {
+                width: fit-content;
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 1;
+            }
+
+            >.img {
+                width: 100%;
+                position: absolute;
+                aspect-ratio: 1/1;
+                mask-image: url("/images/icons/zarivka_playing_bile.svg");
+                background-color: var(--text-color);
+                mask-size: contain;
+                mask-position: center;
+                mask-repeat: no-repeat;
+                margin: 0 auto;
+                top: 0;
+                right: 0;
+                opacity: 0.05;
+                z-index: 1;
+            }
+
+            &:hover {
+                background-color: var(--button-outline-color);
+                transition-duration: 0.3s;
+
+                h2 {
+                    color: white;
+                }
+
+                >.img {
+                    background-color: white;
+                }
+
+                &::after {
+                    opacity: 1;
+                }
+            }
+
+            &::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: url("/images/bg1.png"), linear-gradient(90deg, rgb(0, 112, 187) 0%, rgb(57, 90, 154) 25%, rgb(114, 68, 121) 50%, rgb(227, 24, 55) 100%);
+                background-size: cover;
+                z-index: 0;
+                transition-duration: 0.3s;
+                opacity: 0;
+            }
+        }
+    }
+
+
+    >.mpfreeplaylobby {
+        position: relative;
+        top: 30vh;
+        margin: 0 auto;
+        width: 75vw;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        max-width: 500px;
+
+        >h1 {
+            font-size: 64px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            width: fit-content;
+
+            // effect
+            &::after {
+                content: "";
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                display: block;
+                width: 150%;
+                height: 20px;
+                top: 100%;
+                mask-image: url("/images/icons/effect.svg");
+                mask-size: cover;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                background: url("/images/bg1.png"), linear-gradient(90deg, rgb(0, 112, 187) 0%, rgb(57, 90, 154) 25%, rgb(114, 68, 121) 50%, rgb(227, 24, 55) 100%);
+                background-size: cover;
+                border-radius: 100%;
+            }
+        }
+
+        >.joinlobby {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 24px;
+
+            p {
+                margin: 0;
+                margin-left: 2px;
+                width: fit-content;
+            }
+
+            >div {
+                display: flex;
+                gap: 8px;
+
+                >input {
+                    &::-webkit-outer-spin-button,
+                    &::-webkit-inner-spin-button {
+                        -webkit-appearance: none;
+                    }
+
+                    &::placeholder {
+                    }
+
+                    font-size: 32px;
+                    min-width: 300px;
+                    flex-grow: 1;
+                    -moz-appearance: textfield;
+                }
+            }
+        }
+
+        >.createlobby {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            p {
+                margin: 0;
+                margin-left: 2px;
+                width: fit-content;
+            }
+
+            >div {
+                background-color: var(--background-color);
+                //border: 1px solid var(--button-outline-color);
+                padding: 24px;
+                border-radius: 12px;
+                //box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            }
+        }
+    }
+    
+    
+    
     >.centerdiv {
         position: absolute;
         display: flex;
@@ -16,7 +241,7 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        gap: 16px;
+        gap: 48px;
         
         >.game-type-1v1{
             max-width: 295px;
@@ -24,10 +249,29 @@
 
 
         >h1 {
-            font-size: 32px;
+            font-size: 64px;
             margin: 0;
             text-align: center;
-            margin-bottom: 8px;
+            position: relative;
+
+            // effect
+            &::after {
+                content: "";
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                display: block;
+                width: 150%;
+                height: 20px;
+                top: 100%;
+                mask-image: url("/images/icons/effect.svg");
+                mask-size: cover;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                background: url("/images/bg1.png"), linear-gradient(90deg, rgb(0, 112, 187) 0%, rgb(57, 90, 154) 25%, rgb(114, 68, 121) 50%, rgb(227, 24, 55) 100%);
+                background-size: cover;
+                border-radius: 100%;
+            }
         }
 
         >button {
@@ -115,6 +359,12 @@
             }
         }
 
+        >.timer {
+            margin: 0;
+            margin-top: 32px;
+            font-size: 32px;
+        }
+
         p, h1 {
             text-align: center;
             margin: 0 auto;
@@ -122,7 +372,6 @@
         }
 
         h1 {
-            margin-top: 32px;
             margin-bottom: 8px;
         }
 
