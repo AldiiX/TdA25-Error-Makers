@@ -28,7 +28,7 @@ a {
 }
 
 html {
-  font-size: 14px;
+  font-size: 16px;
   color: var(--text-color);
   background-color: var(--background-color-secondary);
   margin: 0;
@@ -79,8 +79,7 @@ html {
   width: 100vw;
   height: 100vh;
   background-color: var(--modal-blur-color);
-  -webkit-backdrop-filter: blur(0.2vw);
-          backdrop-filter: blur(0.2vw);
+  backdrop-filter: blur(0.2vw);
   z-index: 10;
 }
 .modal-main > .modal {
@@ -125,12 +124,6 @@ body {
   border-radius: 100px;
 }
 
-::-moz-selection {
-  background-color: var(--accent-color-secondary);
-  color: white;
-  text-shadow: none;
-}
-
 ::selection {
   background-color: var(--accent-color-secondary);
   color: white;
@@ -170,9 +163,7 @@ button, input, textarea, select {
   border-radius: 12px;
   padding: 10px 20px;
   cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 .button-primary:hover, .button-primary-col-prim:hover {
   background: var(--accent-color-primary-darker);
@@ -188,9 +179,7 @@ button, input, textarea, select {
   border-radius: 12px;
   padding: 10px 20px;
   cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 .button-primary-col-sec:hover {
   background: var(--accent-color-secondary-darker);
@@ -206,13 +195,22 @@ button, input, textarea, select {
   padding: 10px 20px;
   cursor: pointer;
   text-decoration: none;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 .button-secondary:hover {
   background: var(--button-bg);
   transition-duration: 0.3s;
+}
+
+.button-unavailable {
+  background: var(--button-bg);
+  color: var(--text-color-primary);
+  border: none;
+  text-decoration: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  cursor: not-allowed;
+  user-select: none;
 }
 
 .sections {
@@ -295,7 +293,6 @@ button, input, textarea, select {
 .sections > section:is(.top) > .texts > h1, .sections > section:is(.top) > .texts > p {
   margin: 0;
   text-align: center;
-  width: -moz-fit-content;
   width: fit-content;
   margin: 0 auto;
   color: white;
