@@ -208,6 +208,45 @@
                 }
             }
         }
+        
+        >.leavelobby{
+            display: flex;
+            justify-content: space-around;
+            background-color: var(--background-color);
+            padding: 16px;
+            border-radius: 12px;
+            
+            >.left{
+                display: flex;
+                flex-direction: column;
+                
+                >.text{
+                    margin: 0;
+                    margin-bottom: 8px;
+                }
+                
+                >.roomnumber{
+                    font-size: 24px;
+                    margin: 0;
+                    
+                }
+            }
+            
+            >.right{
+                display: block;
+                align-content: center;
+                
+                >.leavebutton{
+                    background: var(--accent-color-primary);
+                    color: white;
+                    text-decoration: none;
+                    border: none;
+                    border-radius: 12px;
+                    padding: 10px 20px;
+                    cursor: pointer;
+                }
+            }
+        }
 
         >.createlobby {
             display: flex;
@@ -227,6 +266,53 @@
                 border-radius: 12px;
                 //box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
             }
+            
+            >.infolobby{
+                >.top{
+                    display: flex;
+                    justify-content: space-between;
+                    
+                    >.roomnumber{
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                    }
+
+                    >.players{
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                    }
+        
+                }
+                >.bottom{
+                    display: flex;
+                    justify-content: center;
+                    margin-top: 8px;
+                    
+                    >.ownerbutton{
+                        background: var(--accent-color-primary);
+                        color: white;
+                        text-decoration: none;
+                        border: none;
+                        border-radius: 12px;
+                        padding: 10px 20px;
+                        cursor: pointer;
+                    }
+                    
+                    >.userbutton{
+                        background: var(--accent-color-secondary);
+                        color: white;
+                        text-decoration: none;
+                        border: none;
+                        border-radius: 12px;
+                        padding: 10px 20px;
+                        cursor: pointer;
+                    }
+                }
+            }
+            
+            
         }
     }
     
