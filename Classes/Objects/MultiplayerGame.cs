@@ -15,7 +15,7 @@ public class MultiplayerGame {
     public enum GameState { RUNNING, FINISHED }
     public enum GameType { FREEPLAY, RANKED }
 
-    public record PlayerAccount {
+    public class PlayerAccount {
         public string UUID { get; set; }
         public string Name { get; set; }
         public uint Elo { get; set; }
@@ -33,6 +33,26 @@ public class MultiplayerGame {
 
         public async Task<Account?> ToFullAccountAsync() {
             return await Account.GetByUUIDAsync(UUID);
+        }
+
+        public override bool Equals(object? obj) {
+            return obj is PlayerAccount account && account.UUID == UUID;
+        }
+
+        public static bool operator ==(PlayerAccount? left, PlayerAccount? right) {
+            if (left is null && right is null) return true;
+            if (left is null || right is null) return false;
+
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(PlayerAccount? left, PlayerAccount? right) {
+            return !(left == right);
+        }
+
+
+        public override int GetHashCode() {
+            return HashCode.Combine(UUID!, Name!, Elo!);
         }
 
         public async Task<bool> PushToDatabaseAsync() {
@@ -86,7 +106,7 @@ public class MultiplayerGame {
     public ushort PlayerOTimeLeft { get; set; } = 180;
     public ushort GameTime { get; set; }
     public bool EloUpdated { get; set; } = false;
-    public byte DrawVotes { get; set; } = 0;
+    public List<PlayerAccount> DrawVotes { get; set; } = [];
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public GameType Type { get; private set; }
@@ -240,7 +260,7 @@ public class MultiplayerGame {
         return game;
     }
 
-    public async Task<bool> UpdateGameTime(ushort? gameTime = null) {
+    public async Task<bool> UpdateGameTimeInDatabase(ushort? gameTime = null) {
         gameTime ??= GameTime;
 
         await using var conn = await Database.GetConnectionAsync();
@@ -249,6 +269,17 @@ public class MultiplayerGame {
         await using var cmd = new MySqlCommand("UPDATE multiplayer_games SET time_played = @time_played WHERE uuid = @uuid", conn);
         cmd.Parameters.AddWithValue("@uuid", UUID);
         cmd.Parameters.AddWithValue("@time_played", gameTime);
+
+        return await cmd.ExecuteNonQueryAsync() > 0;
+    }
+
+    public async Task<bool> UpdateGameStateInDatabase(GameState state) {
+        await using var conn = await Database.GetConnectionAsync();
+        if(conn == null) return false;
+
+        await using var cmd = new MySqlCommand("UPDATE multiplayer_games SET state = @state WHERE uuid = @uuid", conn);
+        cmd.Parameters.AddWithValue("@uuid", UUID);
+        cmd.Parameters.AddWithValue("@state", state.ToString().ToUpper());
 
         return await cmd.ExecuteNonQueryAsync() > 0;
     }

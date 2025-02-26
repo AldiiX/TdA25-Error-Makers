@@ -335,6 +335,16 @@ export const vue = new Vue({
 
             _this.addAnnouncement("Hra byla ukončena - vzdal/a ses.", "info", 3000);
         },
+
+        requestDraw: function() {
+            const _this = this as any;
+            _this.socket.send(JSON.stringify({
+                action: "requestDraw",
+            }));
+
+            _this.openModal(null);
+            _this.addAnnouncement("Žádost o remízu odeslána druhému hráči.", "info", 3000);
+        }
     },
 
     computed: {
