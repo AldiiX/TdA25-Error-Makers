@@ -392,8 +392,11 @@ public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?
         while (reader.Read()) {
             var player = reader.GetString("player_o") == loggedAccount.UUID ? "player_o" : "player_x";
             var opponent = player == "player_o" ? "player_x" : "player_o";
-            var loggeduserwon = reader.GetValueOrNull<string>("winner") == "X" && player == "player_x" ||
-                                reader.GetValueOrNull<string>("winner") == "O" && player == "player_o";
+            var winner = reader.GetValueOrNull<string>("winner");
+            bool? loggeduserwon = winner == null ? null :
+                (winner == "X" && player == "player_x") ||
+                (winner == "O" && player == "player_o");
+    
 
             var playerOName = reader.GetValueOrNull<string>("player_o_display_name") ?? reader.GetValueOrNull<string>("player_o_username") ?? "Neznámý hráč";
             var playerXName = reader.GetValueOrNull<string>("player_x_display_name") ?? reader.GetValueOrNull<string>("player_x_username") ?? "Neznámý hráč";

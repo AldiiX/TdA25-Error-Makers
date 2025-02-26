@@ -74,10 +74,11 @@ export const vue = new Vue({
             });
         },
         getGameResult: function (game) {
-            if (game.loggeduserwon) {
+            console.log(game);
+            if (game.loggeduserwon === true) {
                 return "Výhra";
             }
-            else if (!game.loggeduserwon) {
+            else if (game.loggeduserwon === false) {
                 return "Prohra";
             }
             else {
