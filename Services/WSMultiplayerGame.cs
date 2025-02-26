@@ -95,6 +95,7 @@ public static class WSMultiplayerGame {
                 case "MakeMove":
                     await ProcessMakeMove(playerAccount, game, jsonNode);
                     break;
+
                 case "SendChatMessage":
                     await ProcessChatMessage(playerAccount, game, jsonNode);
                     break;
@@ -256,25 +257,17 @@ public static class WSMultiplayerGame {
         if (game.Winner != null)
             return false;
 
-        var updatedGame = await MultiplayerGame.ReplaceCellAsync(game.UUID, x, y);
-        if (updatedGame == null)
-            return false;
+        _ = await game.ReplaceCellAsync(x, y);
 
-        // Aktualizace hracího pole v instanci hry
-        lock (Games) {
-            var gameKey = Games.Keys.FirstOrDefault(g => g.UUID == game.UUID);
-            if (gameKey != null)
-                gameKey.Board = updatedGame.Board;
-        }
 
         // Odeslání aktualizované hry všem hráčům
-        var updatePayload = new { action = "updateGame", game = updatedGame };
+        var updatePayload = new { action = "updateGame", game };
         var updateBytes = JsonSerializer.SerializeToUtf8Bytes(updatePayload, JsonOptions);
         await BroadcastToGame(game, updateBytes);
 
         // Pokud je výhra, ukonči hru a aktualizuj ELO
-        if (updatedGame.Winner != null) {
-            await EndGameNormal(updatedGame, playerAccount);
+        if (game is { Winner: not null, State: MultiplayerGame.GameState.RUNNING }) {
+            await EndGameNormal(game, playerAccount);
         }
 
         return true;
@@ -310,7 +303,7 @@ public static class WSMultiplayerGame {
                 _ = SendStatusToPlayer(game, player, players.Count);
             }
 
-            if (game.Winner == null && game.State == MultiplayerGame.GameState.RUNNING) {
+            if (game.State == MultiplayerGame.GameState.RUNNING) {
                 game.GameTime++;
             }
         }
@@ -331,16 +324,15 @@ public static class WSMultiplayerGame {
             if (winnerChar == "X") {
                 winnerPlayer = players.Find(p => p.UUID == game.PlayerX?.UUID);
                 loserPlayer = players.Find(p => p.UUID == game.PlayerO?.UUID);
-            }
-
-            else {
+            } else {
                 winnerPlayer = players.Find(p => p.UUID == game.PlayerO?.UUID);
                 loserPlayer = players.Find(p => p.UUID == game.PlayerX?.UUID);
             }
         }
 
-        // uprava game winnera v hlavnim objektu
+        // Update game winner and state
         game.Winner = winnerChar == "X" ? GameBoard.Player.X : winnerChar == "O" ? GameBoard.Player.O : null;
+        game.State = MultiplayerGame.GameState.FINISHED;
 
         if (winnerPlayer == null || loserPlayer == null)
             return false;
@@ -353,7 +345,9 @@ public static class WSMultiplayerGame {
         var (winnerMessage, loserMessage, _, _, _, _) = await CalculateEloAndCreateFinishMessages(game, winnerAccount, loserAccount);
         await BroadcastFinishGame(winnerPlayer, winnerMessage, loserPlayer, loserMessage);
 
-        // Aktualizace databáze
+        await game.UpdateGameStateInDatabase(MultiplayerGame.GameState.FINISHED);
+
+        // Update database
         await using var conn = await Database.GetConnectionAsync();
         if (conn == null)
             return false;
@@ -441,13 +435,12 @@ public static class WSMultiplayerGame {
                 winnerPlayer = Games[game].Find(p => p.UUID == game.PlayerO?.UUID);
                 loserPlayer = Games[game].Find(p => p.UUID == game.PlayerX?.UUID);
             }
-
-
         }
 
         if (winnerPlayer == null || loserPlayer == null)
             return false;
 
+        game.State = MultiplayerGame.GameState.FINISHED;
 
         Account? winnerAccount = await (game.PlayerX?.UUID == playerAccount.UUID ? game.PlayerX : game.PlayerO)?.ToFullAccountAsync();
         Account? loserAccount = await (game.PlayerX?.UUID == playerAccount.UUID ? game.PlayerO : game.PlayerX)?.ToFullAccountAsync();
