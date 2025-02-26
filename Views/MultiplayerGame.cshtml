@@ -79,7 +79,7 @@
                     <p>Výsledek hry</p>
                     <h1 class="win" v-if="finishGameObject?.result === 'win' || game?.result === 'win'">Výhra</h1>
                     <h1 class="lose" v-else-if="finishGameObject?.result === 'lose'  || game?.result === 'lose'">Prohra</h1>
-                    <h1 v-else>Remíza</h1>
+                    <h1 class="draw" v-else>Remíza</h1>
 
                     <div class="randominfo">
                         <div class="elo" v-if="game?.type === 'RANKED' && finishGameObject && finishGameObject?.elo && finishGameObject?.oldElo">
@@ -178,9 +178,10 @@
                                     <p>Vzdát se</p>
                                 </div>
 
-                                <div class="suggestdraw" v-on:click="requestDraw()">
+                                <div class="suggestdraw" v-on:click="requestDraw()" v-bind:class="{ 'disabled': drawRequestSent, 'red': drawRequestReceived }">
                                     <div class="icon" style="--mask: url('/images/icons/handshake.svg')"></div>
-                                    <p>Navrhnout remízu</p>
+                                    <p v-if="!drawRequestReceived">Navrhnout remízu</p>
+                                    <p v-else>Přijmout remízu</p>
                                 </div>
                             </div>
                         </div>
@@ -188,7 +189,7 @@
 
                     <!-- varovani pokud se druhy hrac odpoji -->
                     <div class="player-disconnected-warn" v-show="gameLoaded && gameNumberOfPlayers < 2">
-                        <p>Druhý hráč se odpojil, hra skončí za XX sekund.</p>
+                        <p>Druhý hráč ztratil spojení.</p>
                     </div>
                 </div>
             </div>

@@ -85,6 +85,10 @@
                 &:is(.lose) {
                     color: var(--accent-color-secondary);
                 }
+
+                &:is(.draw) {
+                    color: var(--accent-color-additional-1);
+                }
             }
 
             >.randominfo {
@@ -846,6 +850,22 @@
                             align-items: center;
                             cursor: pointer;
                             user-select: none;
+
+
+                            &:is(.disabled) {
+                                filter: invert(0.5);
+                                pointer-events: none;
+                            }
+
+                            &:is(.red) {
+                                >p {
+                                    color: var(--accent-color-secondary);
+                                }
+
+                                >.icon {
+                                    background-color: var(--accent-color-secondary);
+                                }
+                            }
 
                             &:hover {
                                 >p {

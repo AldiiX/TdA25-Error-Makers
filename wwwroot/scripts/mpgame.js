@@ -32,6 +32,8 @@ export const vue = new Vue({
         playerOTimeLeft: null,
         playerXTimeLeft: null,
         gameTime: 0,
+        drawRequestSent: false,
+        drawRequestReceived: false,
     },
     methods: {
         main: function () {
@@ -67,51 +69,71 @@ export const vue = new Vue({
             console.log(data);
             if (data.c === "UNA1")
                 location.href = "/error?code=404&message=Hra skončila&buttonLink=/play";
-            if (data.action === "status") {
-                _this.gameNumberOfPlayers = data.playerCount;
-                _this.myTimeLeft = data.myTimeLeft;
-                _this.playerXTimeLeft = data.playerXTimeLeft;
-                _this.playerOTimeLeft = data.playerOTimeLeft;
-                _this.accountChar = data.yourChar;
-                _this.currentPlayer = data.currentPlayer;
-                if (_this.game) {
-                    if (data?.gameTime)
-                        _this.game.gameTime = data.gameTime;
-                    if (data?.gameTime)
-                        _this.gameTime = data.gameTime;
-                    _this.game.winner = data.winner;
-                    _this.game.result = data.result;
-                }
-                if (data.winner !== null) {
-                    setTimeout(() => {
-                        _this.showEndGameScreen();
-                    }, 3000);
-                }
-            }
-            if (data.action === "updateGame") {
-                this.initializeGame(data.game);
-            }
-            if (data.action === "finishGame") {
-                _this.finishGameObject = data;
-                _this.gameLocked = true;
-                _this.openModal(null);
-                if (data.winner !== null) {
-                    setTimeout(() => {
-                        _this.showEndGameScreen();
-                    }, 3000);
-                }
-            }
-            if (data.action === "chatMessage") {
-                _this.chatMessages.push({
-                    sender: data.sender,
-                    message: data.message,
-                    letter: String(data.letter).toUpperCase(),
-                    isMe: data.sender === _this.accountName,
-                });
-                setTimeout(() => {
-                    const chatDiv = document.querySelector(".chat-messages");
-                    chatDiv.scroll({ top: chatDiv.scrollHeight + 100000, behavior: 'smooth' });
-                }, 10);
+            switch (data.action) {
+                case "status":
+                    {
+                        _this.gameNumberOfPlayers = data.playerCount;
+                        _this.myTimeLeft = data.myTimeLeft;
+                        _this.playerXTimeLeft = data.playerXTimeLeft;
+                        _this.playerOTimeLeft = data.playerOTimeLeft;
+                        _this.accountChar = data.yourChar;
+                        _this.currentPlayer = data.currentPlayer;
+                        if (_this.game) {
+                            if (data?.gameTime)
+                                _this.game.gameTime = data.gameTime;
+                            if (data?.gameTime)
+                                _this.gameTime = data.gameTime;
+                            _this.game.winner = data.winner;
+                            _this.game.result = data.result;
+                        }
+                        if (data.winner !== null) {
+                            setTimeout(() => {
+                                _this.showEndGameScreen();
+                            }, 3000);
+                        }
+                    }
+                    break;
+                case "updateGame":
+                    {
+                        this.initializeGame(data.game);
+                    }
+                    break;
+                case "finishGame":
+                    {
+                        _this.finishGameObject = data;
+                        _this.gameLocked = true;
+                        _this.openModal(null);
+                        if (data.winner !== null) {
+                            setTimeout(() => {
+                                _this.showEndGameScreen();
+                            }, 3000);
+                        }
+                    }
+                    break;
+                case "chatMessage":
+                    {
+                        _this.chatMessages.push({
+                            sender: data.sender,
+                            message: data.message,
+                            letter: String(data.letter).toUpperCase(),
+                            isMe: data.sender === _this.accountName,
+                        });
+                        setTimeout(() => {
+                            const chatDiv = document.querySelector(".chat-messages");
+                            chatDiv.scroll({ top: chatDiv.scrollHeight + 100000, behavior: 'smooth' });
+                        }, 10);
+                    }
+                    break;
+                case "drawRequest":
+                    {
+                        if (!_this.drawRequestSent)
+                            _this.addAnnouncement(`${data.sender} žádá o remízu. V chatu ji můžeš přijmout.`, "info", 6000);
+                        else
+                            _this.addAnnouncement("Remíza byla přijata. Hra končí.", "info", 3000);
+                        if (!_this.drawRequestSent)
+                            _this.drawRequestReceived = true;
+                    }
+                    break;
             }
             if (!_this.gameLoaded && data.action === "status" && data.playerCount >= 2 && _this.game) {
                 _this.gameLoaded = true;
@@ -248,11 +270,19 @@ export const vue = new Vue({
         },
         requestDraw: function () {
             const _this = this;
+            if (_this.drawRequestSent) {
+                _this.addAnnouncement("Žádost o remízu již byla odeslána.", "error", 3000);
+                return;
+            }
             _this.socket.send(JSON.stringify({
                 action: "requestDraw",
             }));
             _this.openModal(null);
-            _this.addAnnouncement("Žádost o remízu odeslána druhému hráči.", "info", 3000);
+            _this.drawRequestSent = true;
+            if (_this.drawRequestReceived)
+                _this.addAnnouncement("Remíza byla přijata. Hra končí.", "info", 3000);
+            else
+                _this.addAnnouncement("Žádost o remízu odeslána druhému hráči.", "info", 3000);
         }
     },
     computed: {},
