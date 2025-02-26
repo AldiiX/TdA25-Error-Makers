@@ -500,4 +500,35 @@ public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?
             ? new JsonResult(new { success = true, message = "Uživatel byl odbanován." }) 
             : new JsonResult(new { success = false, message = "Uživatel nebyl odbanován." }) { StatusCode = 400 };
     }
+
+    [HttpPut("users/{uuid}/elo")]
+    public IActionResult ChangeElo(string uuid, [FromBody] Dictionary<string, object?> body) { 
+        using var conn = Database.GetConnection();
+        if (conn == null)
+            return new BadRequestObjectResult(new { success = false, message = "Databáze nebyla připojena" });
+
+        var loggedAccount = Auth.ReAuthUser();
+        if (loggedAccount == null)
+            return new UnauthorizedObjectResult(new { success = false, message = "Musíš být přihlášený." });
+
+        if (loggedAccount.AccountType is not (Account.TypeOfAccount.ADMIN or Account.TypeOfAccount.DEVELOPER))
+            return new UnauthorizedObjectResult(new { success = false, message = "Nemáš dostatečná práva." });
+        
+        if (!body.TryGetValue("elo", out var _elo) || !int.TryParse(_elo?.ToString(), out var elo))
+            return new BadRequestObjectResult(new { success = false, message = "Chybí nebo je špatně zadané elo." });
+
+        if (elo < 0) 
+            return new BadRequestObjectResult(new { success = false, message = "Elo nemůže být záporné." });
+
+        var query = "UPDATE `users` SET `elo` = @elo WHERE `uuid` = @uuid";
+
+        using var cmd = new MySqlCommand(query, conn);
+        cmd.Parameters.AddWithValue("@uuid", uuid);
+        cmd.Parameters.AddWithValue("@elo", elo);
+
+        return cmd.ExecuteNonQuery() > 0
+            ? new OkObjectResult(new { success = true, message = "Elo bylo změněno." })
+            : new BadRequestObjectResult(new { success = false, message = "Elo nebylo změněno." });
+    }
+
 }

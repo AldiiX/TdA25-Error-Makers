@@ -208,6 +208,8 @@
                                         display: flex;
                                         flex-direction: column;
                                         gap: 8px;
+                                        width: calc(25% - 32px);
+                                        align-items: center;
 
                                         >.player{
                                             margin: 0;
@@ -215,11 +217,11 @@
                                     }
 
                                     >.gameboard {
-                                        max-width: 250px;
-                                        max-height: 250px;
+                                        max-width: 150px;
+                                        max-height: 150px;
                                         display: grid;
-                                        grid-template-columns: repeat(15, 25px);
-                                        grid-template-rows: repeat(15, 25px);
+                                        grid-template-columns: repeat(15, 15px);
+                                        grid-template-rows: repeat(15, 15px);
                                         gap: 0;
                                         width: fit-content;
                                         border-radius: 12px;
@@ -234,8 +236,8 @@
                                         }
 
                                         .cell {
-                                            width: 25px;
-                                            height: 25px;
+                                            width: 15px;
+                                            height: 15px;
                                             background-color: var(--button-bg);
                                             //background-color: rgba(0, 0, 0, 0.3);
                                             border-radius: 8px;
@@ -309,6 +311,24 @@
                                                 }
                                             }
                                         }
+                                    }
+                                    
+                                    >.game-result{
+                                        font-family: Dosis, sans-serif;
+                                        font-size: 16px;
+                                        font-weight: 500;
+                                        width: calc(25% - 32px);
+                                        display: flex;
+                                        justify-content: center;
+                                    }
+                                    
+                                    >.game-played-on{
+                                        font-family: Dosis, sans-serif;
+                                        font-size: 16px;
+                                        font-weight: 500;
+                                        width: calc(25% - 32px);
+                                        display: flex;
+                                        justify-content: center;
                                     }
                                 }
                             }

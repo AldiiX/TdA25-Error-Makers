@@ -12,7 +12,6 @@ export const vue = new Vue({
         users: [],
         usersFiltered: [],
         searchUserInput: "",
-        showBoard: false,
     },
     methods: {
         main: function () {
@@ -74,7 +73,6 @@ export const vue = new Vue({
             });
         },
         getGameResult: function (game) {
-            console.log(game);
             if (game.loggeduserwon === true) {
                 return "Výhra";
             }
@@ -143,6 +141,24 @@ export const vue = new Vue({
             const col = index % boardSize;
             return game.winningCells?.some((cell) => cell[0] === row && cell[1] === col);
         },
+        changeElo: function (user, event) {
+            const _this = this;
+            const elo = parseInt(event.target.value);
+            fetch(`/api/v2/users/${user.uuid}/elo`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ elo: elo })
+            }).then(async (response) => {
+                const data = await response.json();
+                if (!response.ok) {
+                    console.error("požadavek nebyl uspesny");
+                    return;
+                }
+                _this.getUsers();
+            });
+        }
     },
     computed: {},
 });

@@ -117,13 +117,8 @@
                                         <p class="player">{{ game.player_x_name }}</p>
                                     </div>
                                     
-                                    <!-- Tlačítko pro zobrazení boardu -->
-                                    <div v-if="!showBoard">
-                                        <button v-on:click="showBoard = true">Zobrazit desku</button>
-                                    </div>
-
-                                    <!-- Board se zobrazí, když je showBoard true, a po kliknutí na něj se opět skryje -->
-                                    <div v-else class="gameboard" v-on:click="showBoard = false">
+                                  
+                                    <div class="gameboard">
                                         <div 
                                             v-for="(cell, index) in game.board.flat()" 
                                             :key="index"
@@ -173,7 +168,9 @@
                                 <tr v-for="user in usersFiltered">
                                     <td>{{user.username}}</td>
                                     <td>{{user.display_name}}</td>
-                                    <td>{{user.elo}}</td>
+                                    <td>
+                                        <input placeholder="Elo" type="number" v-bind:value="user.elo" v-on:blur="changeElo(user, $event)" style="width: 120px"/>
+                                    </td>
                                     <td>{{new Date(user.created_at).toLocaleDateString()}}</td>
                                     <td>{{user.account_type}}</td>
                                     <td>
@@ -182,7 +179,7 @@
                                                 :class="{'button-primary-col-sec': user.account_type !== 'ADMIN' 
                                                 && user.account_type !== 'DEVELOPER',
                                                 'button-unavailable': user.account_type === 'ADMIN' || user.account_type === 'DEVELOPER'}"
-                                                >BAN</button>
+                                        >BAN</button>
                                         <button class="button-primary" v-if="user.is_banned === true" v-on:click="unbanUser(user)">UNBAN</button>
                                     </td>
                                 </tr>
