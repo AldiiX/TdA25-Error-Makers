@@ -155,7 +155,7 @@
                             <p>Aktuální kolo: <span v-cloak>{{ game?.round + 1 }}.</span></p>
                             <p>Hra vytvořena: <span v-cloak>{{ (new Date(game?.createdAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</span></p>
                             <p>Poslední aktualizace: <span v-cloak>{{ (new Date(game?.updatedAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</span></p>
-                            <p>Herní čas: <span v-cloak>{{ parseTimeToWord(game?.gameTime ?? 0) }}</span></p>
+                            <p>Herní čas: <span v-cloak>{{ parseTimeToWord(gameTime ?? 0) }}</span></p>
                         </div>
                     </div>
 
@@ -174,12 +174,12 @@
 
                             <div class="actions">
                                 <div class="surrender" v-on:click="openModal('surrender')">
-                                    <div class="icon"></div>
+                                    <div class="icon" style="--mask: url('/images/icons/flag.svg')"></div>
                                     <p>Vzdát se</p>
                                 </div>
 
                                 <div class="suggestdraw">
-                                    <div class="icon"></div>
+                                    <div class="icon" style="--mask: url('/images/icons/handshake.svg')"></div>
                                     <p>Navrhnout remízu</p>
                                 </div>
                             </div>

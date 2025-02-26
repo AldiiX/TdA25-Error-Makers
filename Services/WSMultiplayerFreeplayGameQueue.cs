@@ -26,6 +26,14 @@ public static class WSMultiplayerFreeplayGameQueue {
 
     public static async Task HandleQueueAsync(WebSocket webSocket, PlayerAccount account, uint? forceRoomNumber = null) {
 
+        // kontrola zda hráč už nehraje
+        lock (WSMultiplayerGame.Games) {
+            if (WSMultiplayerGame.Games.Values.Any(players => players.Exists(p => p.UUID == account.UUID))) {
+                SendErrorAndCloseAsync(webSocket, "Nepodařilo se připojit do queue -> už jsi totiž ve hře.", "Already in game", WebSocketCloseStatus.PolicyViolation).Wait();
+                return;
+            }
+        }
+
         // vytvoření room čísla (6 čísel)
         uint roomNumber = forceRoomNumber ?? 0;
         lock (Rooms) {

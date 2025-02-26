@@ -49,12 +49,25 @@ public static class WSMultiplayerRankedGameQueue {
         }
 
         if (alreadyInQueue) {
-            await SendErrorAndCloseAsync(webSocket, "Already in queue", "Already in queue", WebSocketCloseStatus.PolicyViolation);
+            await SendErrorAndCloseAsync(webSocket, "Nepodařilo se připojit do queue -> už jsi v queue.", "Already in queue", WebSocketCloseStatus.PolicyViolation);
             return;
         }
 
+        // kontrola zda hráč už nehraje
+        lock (WSMultiplayerGame.Games) {
+            if (WSMultiplayerGame.Games.Values.Any(players => players.Exists(p => p.UUID == account.UUID))) {
+                SendErrorAndCloseAsync(webSocket, "Nepodařilo se připojit do queue -> už jsi totiž ve hře.", "Already in game", WebSocketCloseStatus.PolicyViolation).Wait();
+                return;
+            }
+        }
+
+
+        // přijímání zpráv
         await ReceiveLoopAsync(webSocket);
 
+
+
+        // při ukončení socketu
         lock (connectedPlayers) {
             connectedPlayers.Remove(account);
         }

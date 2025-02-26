@@ -51,7 +51,7 @@ public class WebSocketMiddleware(RequestDelegate next) {
             if (context.WebSockets.IsWebSocketRequest) {
                 WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
                 string gameUUID = context.Request.Path.Value.Split('/').Last();
-                await WSMultiplayerRankedGame.HandleAsync(webSocket, gameUUID);
+                await WSMultiplayerGame.HandleAsync(webSocket, gameUUID);
             } else {
                 context.Response.StatusCode = 400;
             }

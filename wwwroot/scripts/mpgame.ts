@@ -42,6 +42,7 @@ export const vue = new Vue({
         myTimeLeft: null,
         playerOTimeLeft: null,
         playerXTimeLeft: null,
+        gameTime: 0,
     },
 
 
@@ -111,6 +112,7 @@ export const vue = new Vue({
 
                 if(_this.game) {
                     if(data?.gameTime) _this.game.gameTime = data.gameTime;
+                    if(data?.gameTime) _this.gameTime = data.gameTime;
                     _this.game.winner = data.winner;
                     _this.game.result = data.result;
                 }

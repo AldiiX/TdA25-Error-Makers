@@ -12,17 +12,17 @@ namespace TdA25_Error_Makers.Services;
 
 
 
-public static class WSMultiplayerRankedGame {
+public static class WSMultiplayerGame {
     #region Statické proměnné
 
-    private static readonly Dictionary<MultiplayerGame, List<PlayerAccount>> Games = new();
+    public static readonly Dictionary<MultiplayerGame, List<PlayerAccount>> Games = new();
     private static Timer? _statusTimer;
     private static Account? _sessionAccount;
     private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
     #endregion
 
-    static WSMultiplayerRankedGame() {
+    static WSMultiplayerGame() {
         _statusTimer = new Timer(SendStatus, null, 0, 1000);
     }
 
@@ -273,7 +273,7 @@ public static class WSMultiplayerRankedGame {
                 _ = SendStatusToPlayer(game, player, players.Count);
             }
 
-            if (game.Winner == null) {
+            if (game.Winner == null && game.State == MultiplayerGame.GameState.RUNNING) {
                 game.GameTime++;
             }
         }
@@ -307,7 +307,10 @@ public static class WSMultiplayerRankedGame {
         lock (Games) {
             var g = Games.Keys.FirstOrDefault(_g => _g.UUID == game.UUID);
 
-            if(g != null) g.Winner = game.Winner;
+            if (g != null) {
+                g.Winner = game.Winner;
+                g.State = MultiplayerGame.GameState.FINISHED;
+            }
         }
 
         if (winnerPlayer == null || loserPlayer == null)
@@ -348,10 +351,21 @@ public static class WSMultiplayerRankedGame {
                 winnerPlayer = Games[game].Find(p => p.UUID == game.PlayerO?.UUID);
                 loserPlayer = Games[game].Find(p => p.UUID == game.PlayerX?.UUID);
             }
+
+
         }
 
         if (winnerPlayer == null || loserPlayer == null)
             return false;
+
+        lock (Games) {
+            var g = Games.Keys.FirstOrDefault(_g => _g.UUID == game.UUID);
+
+            if (g != null) {
+                g.Winner = winnerPlayer.UUID == game.PlayerX?.UUID ? GameBoard.Player.X : GameBoard.Player.O;
+                g.State = MultiplayerGame.GameState.FINISHED;
+            }
+        }
 
         Account? winnerAccount = await (game.PlayerX?.UUID == playerAccount.UUID ? game.PlayerX : game.PlayerO)?.ToFullAccountAsync();
         Account? loserAccount = await (game.PlayerX?.UUID == playerAccount.UUID ? game.PlayerO : game.PlayerX)?.ToFullAccountAsync();
