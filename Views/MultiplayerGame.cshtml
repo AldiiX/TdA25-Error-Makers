@@ -99,26 +99,40 @@
 
                 </div>
 
-                <div class="chat">
-                    <p>Chat</p>
+                <div class="right">
+                    <div class="chat">
+                        <p>Chat</p>
 
-                    <div class="chat-messages" v-cloak>
-                        <div class="message" v-for="message in chatMessages" v-bind:class="{ mymsg: message.isMe }" v-bind:style="{ '--color': message.letter === 'X' ? 'var(--accent-color-secondary)' : 'var(--accent-color-primary)' }">
-                            <p class="name">{{ message.sender }}</p>
-                            <p class="text">{{ message.message }}</p>
+                        <div class="chat-messages" v-cloak>
+                            <div class="message" v-for="message in chatMessages" v-bind:class="{ mymsg: message.isMe }" v-bind:style="{ '--color': message.letter === 'X' ? 'var(--accent-color-secondary)' : 'var(--accent-color-primary)' }">
+                                <p class="name">{{ message.sender }}</p>
+                                <p class="text">{{ message.message }}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="chat-input">
-                        <input type="text" maxlength="64" v-model="chatMessageInput" v-on:keyup.enter="sendMessageToMultiplayerChat(chatMessageInput, $event)" v-bind:placeholder="`Napiš zprávu jako ${accountName}...`"/>
+                        <div class="chat-input">
+                            <input type="text" maxlength="64" v-model="chatMessageInput" v-on:keyup.enter="sendMessageToMultiplayerChat(chatMessageInput, $event)" v-bind:placeholder="`Napiš zprávu jako ${accountName}...`"/>
 
-                        <div class="actions">
-                            <div class="suggestrematch" v-on:click="requestRematch()" v-bind:class="{ 'disabled': rematchRequestSent, 'blue': rematchRequestReceived }">
-                                <div class="icon" style="--mask: url('/images/icons/swords.svg')"></div>
-                                <p v-if="!rematchRequestReceived">Vyzvat protihráče na rematch</p>
-                                <p v-else>Přijmout rematch</p>
+                            <div class="actions">
+                                <div class="back" onclick="location.href='/play'" v-if="game?.type === 'FREEPLAY'">
+                                    <div class="icon" style="--mask: url('/images/icons/back_arrow.svg')"></div>
+                                    <p>Zpět do menu</p>
+                                </div>
+
+                                <div class="suggestrematch" v-on:click="requestRematch()" v-bind:class="{ 'disabled': rematchRequestSent || (gameLoaded && gameNumberOfPlayers < 2), 'blue': rematchRequestReceived }">
+                                    <div class="icon" style="--mask: url('/images/icons/swords.svg')"></div>
+                                    <p v-if="!rematchRequestReceived">Vyzvat protihráče na rematch</p>
+                                    <p v-else>Přijmout rematch</p>
+                                </div>
+
+                                <div class="rematch" onclick="location.href='/play?faze=multiplayerModeQueue'" v-if="game?.type === 'RANKED'">
+                                    <div class="icon" style="--mask: url('/images/icons/lupa.svg')"></div>
+                                    <p>Najít novou hru</p>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <p class="player-left-warn" v-if="gameLoaded && gameNumberOfPlayers < 2">Druhý hráč se odpojil</p>
                 </div>
             </div>
 
