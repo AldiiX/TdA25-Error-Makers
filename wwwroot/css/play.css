@@ -447,6 +447,7 @@
 }
 .main > .mpfreeplaylobby > .leavelobby > .left > .roomnumber {
   font-size: 24px;
+  font-weight: 800;
   margin: 0;
 }
 .main > .mpfreeplaylobby > .leavelobby > .right {
@@ -476,6 +477,9 @@
   background-color: var(--background-color);
   padding: 24px;
   border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 .main > .mpfreeplaylobby > .createlobby > .infolobby > .top {
   display: flex;
@@ -486,9 +490,12 @@
   flex-direction: column;
   gap: 8px;
 }
+.main > .mpfreeplaylobby > .createlobby > .infolobby > .top > .roomnumber > .text {
+  font-weight: bold;
+}
 .main > .mpfreeplaylobby > .createlobby > .infolobby > .top > .roomnumber > .number {
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 800;
   margin: 0;
 }
 .main > .mpfreeplaylobby > .createlobby > .infolobby > .top > .players {
@@ -496,11 +503,17 @@
   flex-direction: column;
   gap: 8px;
 }
-.main > .mpfreeplaylobby > .createlobby > .infolobby > .top > .players > .player {
+.main > .mpfreeplaylobby > .createlobby > .infolobby > .top > .players > .text {
+  font-weight: bold;
+}
+.main > .mpfreeplaylobby > .createlobby > .infolobby > .top > .players > .joinedplayers > .player {
   display: flex;
   gap: 8px;
 }
-.main > .mpfreeplaylobby > .createlobby > .infolobby > .top > .players > .player > .hosticon {
+.main > .mpfreeplaylobby > .createlobby > .infolobby > .top > .players > .joinedplayers > .player > .name {
+  font-weight: 500;
+}
+.main > .mpfreeplaylobby > .createlobby > .infolobby > .top > .players > .joinedplayers > .player > .hosticon {
   width: 16px;
   height: 16px;
   display: block;
@@ -521,15 +534,17 @@
   border-radius: 12px;
   padding: 10px 20px;
   cursor: pointer;
+  width: 100%;
 }
 .main > .mpfreeplaylobby > .createlobby > .infolobby > .bottom > .userbutton {
-  background: var(--accent-color-secondary);
-  color: white;
+  background: var(--button-outline-color);
+  color: var(--text-color);
   text-decoration: none;
   border: none;
   border-radius: 12px;
   padding: 10px 20px;
   cursor: pointer;
+  width: 100%;
 }
 .main > .centerdiv {
   position: absolute;
