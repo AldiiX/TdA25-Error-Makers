@@ -5,6 +5,10 @@
     var webTheme = Utilities.WebTheme.Get();
     var authType = ViewBag.AuthType ?? "login";
     var loggedAccount = Utilities.GetLoggedAccountFromContextOrNull();
+    var queryAccount = ViewBag.QueryAccount as Account ?? loggedAccount;
+    if(queryAccount == null) throw new Exception("QueryAccount is null");
+
+    var pathIsAccount = Path.StartsWith("/account");
 
 
     // části stránky
@@ -19,7 +23,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Účet • Think Different Academy</title>
+    <title>@(pathIsAccount ? "Účet" : queryAccount.DisplayName) • Think Different Academy</title>
     <link rel="icon" href="/favicon.ico">
 
     @{ // Vue.js definice
@@ -34,7 +38,7 @@
     <link rel="stylesheet" href="/css/mainstyles.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
     <link rel="stylesheet" href="/css/auth.css?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")">
     <link id="webtheme-link" rel="stylesheet" href="@Utilities.WebTheme.GetCSSFile()">
-    <link rel="stylesheet" href="css/account.css">
+    <link rel="stylesheet" href="/css/account.css">
 
     @*  scripty pro komponenty *@
     <script src="/scripts/components/header.js"></script>
@@ -61,34 +65,34 @@
                     <div class="left">
                         <div class="account-elo">
                             <p class="text">ELO hodnocení:</p>
-                            <p class="elo">@loggedAccount?.Elo</p>
+                            <p class="elo">@queryAccount?.Elo</p>
                         </div>
                         
                         <div class="win-loss-ratio">
                             <p class="text">Poměr výher/proher:</p>
                             <p class="ratio">
-                                @((loggedAccount.Losses > 0) ? ((double)loggedAccount.Wins / loggedAccount.Losses).ToString("0.00") : loggedAccount.Wins.ToString("0.00"))
+                                @((queryAccount.Losses > 0) ? ((double)queryAccount.Wins / queryAccount.Losses).ToString("0.00") : queryAccount.Wins.ToString("0.00"))
                             </p>
                         </div>
                     </div>
 
                     <div class="account-info">
                         <div class="avatar">
-                            @loggedAccount?.DisplayName[0].ToString().ToUpper()
+                            @queryAccount?.DisplayName[0].ToString().ToUpper()
                         </div>
-                        <h1>@loggedAccount?.DisplayName</h1>
-                        <p>@loggedAccount?.Username</p>
+                        <h1>@queryAccount?.DisplayName</h1>
+                        <p>@queryAccount?.Username</p>
                     </div>
 
                     <div class="right">
                         <div class="account-createdat">
                             <p class="text">Vytvořen:</p>
-                            <p class="time">@loggedAccount?.CreatedAt.ToString("dd.MM.yyyy")</p>
+                            <p class="time">@queryAccount?.CreatedAt.ToString("dd.MM.yyyy")</p>
                         </div>
                         
                         <div class="account-last-active">
                             <p class="text">Poslední aktivita:</p>
-                            <p class="time">@(loggedAccount?.LastActive != null ? Utilities.HowLongSinceLastActivity(loggedAccount.LastActive??DateTime.Now) : "Neznámý")</p>
+                            <p class="time">@(queryAccount?.LastActive != null ? Utilities.HowLongSinceLastActivity(queryAccount.LastActive??DateTime.Now) : "Neznámý")</p>
                         </div>
 
                     </div>
@@ -101,10 +105,12 @@
                 <div class="account-bottom">
                     <div class="panel">
                         <div class="history-tab" v-on:click="currentTab = 'GameHistory'">Historie Her</div>
-                        @if (loggedAccount?.AccountType is Account.TypeOfAccount.ADMIN or Account.TypeOfAccount.DEVELOPER) {
+                        @if (queryAccount == loggedAccount && queryAccount?.AccountType is Account.TypeOfAccount.ADMIN or Account.TypeOfAccount.DEVELOPER) {
                             <div class="admin-tab" v-on:click="currentTab = 'AdminPanel'">Admin panel</div>
                         }
-                        <div class="settings-tab" v-on:click="currentTab = 'Settings'">Nastavení</div>
+                        @if (queryAccount == loggedAccount) {
+                            <div class="settings-tab" v-on:click="currentTab = 'Settings'">Nastavení</div>
+                        }
                     </div>
                     <div class="divider"></div>
                     
@@ -126,7 +132,7 @@
                     </div>
 
                     
-                    @if (loggedAccount?.AccountType is Account.TypeOfAccount.ADMIN or Account.TypeOfAccount.DEVELOPER) {
+                    @if (queryAccount == loggedAccount && queryAccount?.AccountType is Account.TypeOfAccount.ADMIN or Account.TypeOfAccount.DEVELOPER) {
                         <div class="admin-panel" v-if="currentTab === 'AdminPanel'">
                             <div class="admin-panel-top">
                                 <p class="users">Uživatelé</p>
@@ -166,32 +172,33 @@
                         </div>
                     }
                     
-                    
-                    <div class="account-settings" v-if="currentTab === 'Settings'">
-                        <p class="text">Nastavení účtu</p>
-                        
-                        <div class="center">
-                            <form v-on:submit.prevent="changeCredentialsFormSubmit($event)">
-                                <label for="displayName">Zobrazované jméno:</label>
-                                <input type="text" name="displayName" value="@loggedAccount.DisplayName" placeholder="Display Name"/>
-                                <label for="username">Uživatelské jméno:</label>
-                                <input type="text" name="username" value="@loggedAccount.Username" placeholder="Username"/>
-                                <label for="email">Email:</label>
-                                <input type="text" name="email" value="@loggedAccount.Email" placeholder="Email"/>
-                                <label for="oldPassword">Staré heslo:</label>
-                                <input type="password" name="oldPassword" placeholder="Staré Heslo"/>
-                                <label for="newPassword">Nové heslo:</label>
-                                <input type="password" name="newPassword" placeholder="Nové Heslo"/>
+                    @if (queryAccount == loggedAccount) {
+                        <div class="account-settings" v-if="currentTab === 'Settings'">
+                            <p class="text">Nastavení účtu</p>
 
-                                <input type="submit"/>
-                            </form>
-                        
-                            <div class="account-buttons">
-                                <button class="button-primary-col-sec" v-on:click="deleteaccount()">Smazat účet</button>
-                                <a href="/logout" class="button-primary">Odhlásit se</a>
+                            <div class="center">
+                                <form v-on:submit.prevent="changeCredentialsFormSubmit($event)">
+                                    <label for="displayName">Zobrazované jméno:</label>
+                                    <input type="text" name="displayName" value="@queryAccount.DisplayName" placeholder="Display Name"/>
+                                    <label for="username">Uživatelské jméno:</label>
+                                    <input type="text" name="username" value="@queryAccount.Username" placeholder="Username"/>
+                                    <label for="email">Email:</label>
+                                    <input type="text" name="email" value="@queryAccount.Email" placeholder="Email"/>
+                                    <label for="oldPassword">Staré heslo:</label>
+                                    <input type="password" name="oldPassword" placeholder="Staré Heslo"/>
+                                    <label for="newPassword">Nové heslo:</label>
+                                    <input type="password" name="newPassword" placeholder="Nové Heslo"/>
+
+                                    <input type="submit"/>
+                                </form>
+
+                                <div class="account-buttons">
+                                    <button class="button-primary-col-sec" v-on:click="deleteaccount()">Smazat účet</button>
+                                    <a href="/logout" class="button-primary">Odhlásit se</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </div>
         </section>
