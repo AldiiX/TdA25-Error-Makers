@@ -73,17 +73,16 @@
 
                     <div class="infolobby">
                         <div class="top">
-                            <div class="roomnumber">
-                                <p>Kód tvojí roomky:</p>
-                                <p>{{ freeplayQueue?.roomNumber }}</p>
-                            </div>
                             <div class="players">
                                 <p>Připojení hráči:</p>
                                 <div class="player" v-for="player in freeplayQueue.players">
-                                    <div class="img"></div>
                                     <p>{{ player.name }}</p>
-                                    <p class="hosticon" v-if="player?.uuid === freeplayQueue?.owner?.uuid">(host)</p>
+                                    <i class="hosticon" v-if="player?.uuid === freeplayQueue?.owner?.uuid"></i>
                                 </div>
+                            </div>
+                            <div class="roomnumber">
+                                <p class="text">Kód tvojí roomky:</p>
+                                <p class="number">{{ freeplayQueue?.roomNumber }}</p>
                             </div>
                         </div>
                         <div class="bottom">
