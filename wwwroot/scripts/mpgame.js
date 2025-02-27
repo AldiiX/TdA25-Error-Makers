@@ -34,6 +34,8 @@ export const vue = new Vue({
         gameTime: 0,
         drawRequestSent: false,
         drawRequestReceived: false,
+        rematchRequestSent: false,
+        rematchRequestReceived: false,
     },
     methods: {
         main: function () {
@@ -132,6 +134,21 @@ export const vue = new Vue({
                             _this.addAnnouncement("Remíza byla přijata. Hra končí.", "info", 3000);
                         if (!_this.drawRequestSent)
                             _this.drawRequestReceived = true;
+                    }
+                    break;
+                case "rematchRequest":
+                    {
+                        if (!_this.rematchRequestSent)
+                            _this.addAnnouncement(`${data.sender} chce hrát proti tobě ještě jednou. V chatu to můžeš přijmout.`, "info", 6000);
+                        else
+                            _this.addAnnouncement("Rematch byl přijat druhým hráčem. Začíná nová hra.", "info", 3000);
+                        if (!_this.rematchRequestSent)
+                            _this.rematchRequestReceived = true;
+                    }
+                    break;
+                case "sendToMatch":
+                    {
+                        location.href = `/multiplayer/${data.matchUUID}`;
                     }
                     break;
             }
@@ -280,10 +297,26 @@ export const vue = new Vue({
             _this.openModal(null);
             _this.drawRequestSent = true;
             if (_this.drawRequestReceived)
-                _this.addAnnouncement("Remíza byla přijata. Hra končí.", "info", 3000);
+                _this.addAnnouncement("Remíza byla přijata. Hra končí...", "info", 3000);
             else
                 _this.addAnnouncement("Žádost o remízu odeslána druhému hráči.", "info", 3000);
-        }
+        },
+        requestRematch: function () {
+            const _this = this;
+            if (_this.rematchRequestSent) {
+                _this.addAnnouncement("Žádost o rematch již byla odeslána.", "error", 3000);
+                return;
+            }
+            _this.socket.send(JSON.stringify({
+                action: "requestRematch",
+            }));
+            _this.openModal(null);
+            _this.rematchRequestSent = true;
+            if (_this.rematchRequestReceived)
+                _this.addAnnouncement("Rematch byl přijat, začíná nová hra...", "info", 3000);
+            else
+                _this.addAnnouncement("Žádost o rematch odeslána druhému hráči.", "info", 3000);
+        },
     },
     computed: {},
 });

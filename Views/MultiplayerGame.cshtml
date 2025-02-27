@@ -110,6 +110,14 @@
                     </div>
                     <div class="chat-input">
                         <input type="text" maxlength="64" v-model="chatMessageInput" v-on:keyup.enter="sendMessageToMultiplayerChat(chatMessageInput, $event)" v-bind:placeholder="`Napiš zprávu jako ${accountName}...`"/>
+
+                        <div class="actions">
+                            <div class="suggestrematch" v-on:click="requestRematch()" v-bind:class="{ 'disabled': rematchRequestSent, 'blue': rematchRequestReceived }">
+                                <div class="icon" style="--mask: url('/images/icons/swords.svg')"></div>
+                                <p v-if="!rematchRequestReceived">Vyzvat protihráče na rematch</p>
+                                <p v-else>Přijmout rematch</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

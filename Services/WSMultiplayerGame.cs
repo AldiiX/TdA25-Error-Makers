@@ -107,6 +107,10 @@ public static class WSMultiplayerGame {
                 case "requestDraw":
                     await RequestDraw(game, playerAccount);
                     break;
+
+                case "requestRematch":
+                    await RequestRematch(game, playerAccount);
+                    break;
             }
         }
 
@@ -115,13 +119,13 @@ public static class WSMultiplayerGame {
             if (Games.TryGetValue(game, out var players)) {
                 players.Remove(playerAccount);
                 if (players.Count == 0) {
-                    _ = MultiplayerGame.EndAsync(gameUUID, null);
+                    _ = game.EndAndUpdateDatabaseAsync();
                     Games.Remove(game);
                 }
             }
         }
 
-        await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by server", CancellationToken.None);
+        if(playerAccount.WebSocket?.State == WebSocketState.Open) await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by server", CancellationToken.None);
     }
 
     #region Zpracování zpráv
@@ -210,32 +214,6 @@ public static class WSMultiplayerGame {
         }
     }
 
-    private static async Task RequestDraw(MultiplayerGame game, PlayerAccount player) {
-        // už jedna žádost o remízu byla
-        if(game.DrawVotes.Contains(player)) return;
-
-        game.DrawVotes.Add(player);
-
-        // poslani upozorneni druhemu hracovi
-        var drawPayload = new {
-            action = "drawRequest",
-            sender = player.Name
-        };
-
-        var message = JsonSerializer.SerializeToUtf8Bytes(drawPayload, JsonOptions);
-        PlayerAccount? otherPlayer;
-        lock(Games) otherPlayer = Games[game].Find(p => p.UUID != player.UUID);
-
-        if(otherPlayer?.WebSocket is { State: WebSocketState.Open })
-            await otherPlayer.WebSocket.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None);
-
-
-        // pokud oba hráči hlasovali pro remízu
-        if(game.DrawVotes.Count == 2) {
-            await ForceEndGameDraw(game);
-        }
-    }
-
     private static async Task BroadcastFinishGame(PlayerAccount winnerPlayer, byte[] winnerMessage, PlayerAccount loserPlayer, byte[] loserMessage) {
         List<Task> finishTasks = [];
         if (winnerPlayer.WebSocket is { State: WebSocketState.Open }) {
@@ -249,6 +227,12 @@ public static class WSMultiplayerGame {
         await Task.WhenAll(finishTasks);
     }
 
+    private static async Task SendMessageAndCloseAsync(PlayerAccount player, byte[] message, string closeDescription) {
+        if (player.WebSocket?.State == WebSocketState.Open) {
+            await player.WebSocket.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None);
+            await player.WebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, closeDescription, CancellationToken.None);
+        }
+    }
     #endregion
 
     #region Herní logika
@@ -309,6 +293,79 @@ public static class WSMultiplayerGame {
         }
     }
 
+    private static async Task RequestDraw(MultiplayerGame game, PlayerAccount player) {
+        // už jedna žádost o remízu byla
+        var votes = game.Votes["drawVotes"];
+        if(votes.Contains(player)) return;
+
+        votes.Add(player);
+
+        // poslani upozorneni druhemu hracovi
+        var drawPayload = new {
+            action = "drawRequest",
+            sender = player.Name
+        };
+
+        var message = JsonSerializer.SerializeToUtf8Bytes(drawPayload, JsonOptions);
+        PlayerAccount? otherPlayer;
+        lock(Games) otherPlayer = Games[game].Find(p => p.UUID != player.UUID);
+
+        if(otherPlayer?.WebSocket is { State: WebSocketState.Open })
+            await otherPlayer.WebSocket.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None);
+
+
+        // pokud oba hráči hlasovali pro remízu
+        if(votes.Count == 2) {
+            await ForceEndGameDraw(game);
+        }
+    }
+
+    private static async Task RequestRematch(MultiplayerGame game, PlayerAccount player) {
+        // pokud neni konec hry
+        if (game.State != MultiplayerGame.GameState.FINISHED) return;
+
+        var votes = game.Votes["rematchVotes"];
+        PlayerAccount? otherPlayer;
+        lock(Games) otherPlayer = Games[game].Find(p => p.UUID != player.UUID);
+
+        // pokud druhy hrac neni pripojeny
+        if(otherPlayer == null) return;
+
+        // pokud už jedna žádost o rematch byla
+        if(votes.Contains(player)) return;
+
+        votes.Add(player);
+
+        // poslani upozorneni druhemu hracovi
+        var drawPayload = new {
+            action = "rematchRequest",
+            sender = player.Name
+        };
+
+        var message = JsonSerializer.SerializeToUtf8Bytes(drawPayload, JsonOptions);
+
+
+        if(otherPlayer?.WebSocket is { State: WebSocketState.Open })
+            await otherPlayer.WebSocket.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None);
+
+
+        // pokud oba hráči hlasovali pro remízu
+        if(votes.Count == 2 && otherPlayer != null) {
+            var newMatch = await MultiplayerGame.CreateAsync(player, otherPlayer, game.Type);
+            if (newMatch == null)
+                return;
+
+            var payload = new {
+                action = "sendToMatch",
+                matchUUID = newMatch.UUID
+            };
+
+            var rematchMessage = JsonSerializer.SerializeToUtf8Bytes(payload, JsonOptions);
+            await SendMessageAndCloseAsync(player, rematchMessage, "Rematch found");
+            await SendMessageAndCloseAsync(otherPlayer, rematchMessage, "Rematch found");
+        }
+    }
+
     private static async Task<bool> ForceEndGame(MultiplayerGame game, string? winnerChar) {
         if (game.EloUpdated)
             return false;
@@ -345,7 +402,8 @@ public static class WSMultiplayerGame {
         var (winnerMessage, loserMessage, _, _, _, _) = await CalculateEloAndCreateFinishMessages(game, winnerAccount, loserAccount);
         await BroadcastFinishGame(winnerPlayer, winnerMessage, loserPlayer, loserMessage);
 
-        await game.UpdateGameStateInDatabase(MultiplayerGame.GameState.FINISHED);
+        // updatnuti hry
+        await game.UpdateInDatabaseAsync();
 
         // Update database
         await using var conn = await Database.GetConnectionAsync();
@@ -391,7 +449,8 @@ public static class WSMultiplayerGame {
             _ = playerOAccount.UpdateWDLInDatabaseAsync(0,1,0);
         }
 
-        _ = game.UpdateGameTimeInDatabase();
+        // uprava hry v db
+        await game.UpdateInDatabaseAsync();
 
 
         var payload = new {
@@ -470,8 +529,8 @@ public static class WSMultiplayerGame {
             _ = loserAccount.UpdateWDLInDatabaseAsync(0,0,1);
         }
 
-        _ = game.UpdateGameTimeInDatabase();
-        _ = game.UpdateGameStateInDatabase(MultiplayerGame.GameState.FINISHED);
+        // uprava hry v db
+        await game.UpdateInDatabaseAsync();
 
         var finishWinnerPayload = new {
             action = "finishGame",

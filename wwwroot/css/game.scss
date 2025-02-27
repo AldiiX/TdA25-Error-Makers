@@ -230,6 +230,77 @@
             }
 
             .chat-input {
+                >.actions {
+                    width: calc(100% - 48px);
+                    margin: 0 auto;//
+                    padding-bottom: 24px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 48px;
+                    justify-content: space-between;
+
+                    >div {
+                        display: flex;
+                        gap: 8px;
+                        align-items: center;
+                        cursor: pointer;
+                        user-select: none;
+
+
+                        &:is(.disabled) {
+                            filter: invert(0.5);
+                            pointer-events: none;
+                        }
+
+                        &:is(.red) {
+                            >p {
+                                color: var(--accent-color-secondary);
+                            }
+
+                            >.icon {
+                                background-color: var(--accent-color-secondary);
+                            }
+                        }
+
+                        &:is(.blue) {
+                            >p {
+                                color: var(--accent-color-primary);
+                            }
+
+                            >.icon {
+                                background-color: var(--accent-color-primary);
+                            }
+                        }
+
+                        &:hover {
+                            >p {
+                                color: var(--color-gray);
+                                transition-duration: 0.3s;
+                            }
+
+                            >.icon {
+                                transition-duration: 0.3s;
+                                background-color: var(--color-gray);
+                            }
+                        }
+
+                        >.icon {
+                            width: 16px;
+                            height: 16px;
+                            background-color: var(--text-color);
+                            mask: var(--mask) no-repeat center;
+                            mask-size: contain;
+                            transition-duration: 0.3s;
+                        }
+
+                        >p {
+                            transition-duration: 0.3s;
+                            margin: 0;
+                            width: fit-content;
+                        }
+                    }
+                }
+
                 input {
                     width: calc(100% - 48px);
                     left: 50%;

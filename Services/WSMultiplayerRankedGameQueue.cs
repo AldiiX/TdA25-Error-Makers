@@ -135,8 +135,7 @@ public static class WSMultiplayerRankedGameQueue {
             return;
 
         var payload = new { action = "sendToMatch", matchUUID = match.UUID };
-        string json = JsonSerializer.Serialize(payload);
-        var message = Encoding.UTF8.GetBytes(json);
+        var message = JsonSerializer.SerializeToUtf8Bytes(payload);
 
         await SendMessageAndCloseAsync(player1, message, "Match found");
         await SendMessageAndCloseAsync(player2, message, "Match found");
