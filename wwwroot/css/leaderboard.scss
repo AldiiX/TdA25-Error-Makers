@@ -1,0 +1,174 @@
+﻿.sections{
+    font-family: "Dosis", sans-serif;
+    .mainsection{
+        padding-bottom: 64px;
+        >.leaderboard{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            >.top-three{
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+                gap: 32px;
+                margin-top: 128px;
+                margin-bottom: 32px;
+                
+                .player-first,
+                .player-second,
+                .player-third{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    position: relative;
+                    
+                    .avatar-wrapper{
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                    }
+                    
+                    .rank {
+                        font-size: 24px;
+                        font-weight: 600;
+                    
+                    }
+                    
+                    .score{
+                        font-size: 16px;
+                        font-weight: 600;
+                        color: var(--text-color-primary);
+                    }
+                    
+                }
+
+                .player-info {
+                    margin-top: 8px;
+                    text-align: center;
+
+                    .name {
+                        font-size: 32px;
+                        font-weight: 700;
+                    }
+
+                    .elo {
+                        font-size: 16px;
+                        color: #555;
+                    }
+                }
+            }
+            
+            .player-first{
+                transform: translateY(-20%);
+                .crown{
+                    position: absolute;
+                    top: -40px;
+                    transform: rotate(12deg) translateX(10px);
+                    width: 60px;
+                    height: 60px;
+                    background: url("/images/svg/crown.svg") no-repeat center;
+                    background-size: contain;
+                }
+
+                .avatar {
+                    width: 120px;
+                    height: 120px;
+                    border-radius: 50%;
+                    background-color: var(--accent-color-additional-2);
+                    color: var(--text-color-primary);
+                    font-size: 48px;
+                    font-weight: bold;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    text-transform: uppercase;
+                }
+                
+                .rank{
+                    color: gold;
+                }
+                
+                .name{
+                    color: gold
+                }
+                
+            }
+            
+            .player-second{
+                transform: translateY(-10%);
+
+                .avatar {
+                    width: 120px;
+                    height: 120px;
+                    border-radius: 50%;
+                    background-color: var(--accent-color-primary-darker);
+                    color: var(--text-color-primary);
+                    font-size: 48px;
+                    font-weight: bold;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    text-transform: uppercase;
+                }
+                
+                .rank{
+                    color: silver;
+                }
+                
+                .name{
+                    color: silver
+                }
+            }
+                
+            .player-third{
+                transform: translateY(-5%);
+
+                .avatar {
+                    width: 120px;
+                    height: 120px;
+                    border-radius: 50%;
+                    background-color: var(--accent-color-secondary-darker);
+                    color: var(--text-color-primary);
+                    font-size: 48px;
+                    font-weight: bold;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    text-transform: uppercase;
+                }
+                
+                .rank{
+                    color: #cd7f32;
+                }
+                
+                .name{
+                    color: #cd7f32
+                }
+            }
+            
+            >.leaderboard-bottom{
+                font-weight: 500;
+                font-size: 16px;
+                width: 40%;
+                margin-bottom: 64px;
+                
+                >.rest-of-leaderboard{
+                    display: flex;
+                    justify-content: space-between;;
+                    border-bottom: 1px solid var(--color-gray);
+                    padding: 16px 0;
+                    
+                    >.left{
+                        display: flex;
+                        gap: 24px;
+                    }
+                    >.right{
+                        display: flex
+                    }
+                }
+            }
+            
+        }
+    }
+}
+
