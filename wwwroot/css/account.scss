@@ -215,7 +215,11 @@
                             display: flex;
                             flex-direction: column;
                             padding: 16px;
-                            border-bottom: 1px solid var(--color-gray);
+
+                            &:not(:last-child) {
+                                border-bottom: 1px solid var(--color-gray);
+                            }
+
                             margin: 0 auto;
                             
 
@@ -243,6 +247,10 @@
                                             margin: 0;
                                             display: flex;
                                             gap: 8px;
+
+                                            &::selection{
+                                                background-color: var(--accent-color-primary);
+                                            }
 
                                             .o-icon{
                                                 display: block;
@@ -278,6 +286,7 @@
                                         gap: 0;
                                         width: fit-content;
                                         border-radius: 2px;
+                                        pointer-events: none;
                                         //overflow: scroll;
 
                                         &:is(.locked) {

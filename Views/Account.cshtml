@@ -111,22 +111,23 @@
                     <div class="divider"></div>
                     
                     <div class="account-game-history" v-if="currentTab === 'GameHistory'">
-                        <div class="game" v-for="game in gameHistory">
+                        <div class="game" v-for="game in gameHistory" v-cloak>
                             <div class="game-info">
                                 <div class="game-info-top">
                                     <div class="game-between">
-                                            <p class="player-o">
-                                                <span>
-                                                    <i class="o-icon"></i>
-                                                </span>
-                                                {{ game.player_o_name }}
-                                            </p>
-                                            <p class="player-x">
-                                                <span>
-                                                    <i class="x-icon"></i>
-                                                </span>
-                                                {{ game.player_x_name }}
-                                            </p>
+                                        <p class="player-x">
+                                            <span>
+                                                <i class="x-icon"></i>
+                                            </span>
+                                            {{ game.player_x_name }}
+                                        </p>
+
+                                        <p class="player-o">
+                                            <span>
+                                                <i class="o-icon"></i>
+                                            </span>
+                                            {{ game.player_o_name }}
+                                        </p>
                                     </div>
                                     <p class="game-result">
                                         {{getGameResult(game)}}
@@ -155,7 +156,7 @@
 
                     
                     @if (queryAccount == loggedAccount && queryAccount?.AccountType is Account.TypeOfAccount.ADMIN or Account.TypeOfAccount.DEVELOPER) {
-                        <div class="admin-panel" v-if="currentTab === 'AdminPanel'">
+                        <div class="admin-panel" v-if="currentTab === 'AdminPanel'" v-cloak>
                             <div class="admin-panel-top">
                                 <p class="users">Uživatelé</p>
                                 <input v-model="searchUserInput" v-on:keyup="filterUsers()" type="text" class="search" placeholder="Vyhledat uživatele">
@@ -197,7 +198,7 @@
                     }
                     
                     @if (queryAccount == loggedAccount) {
-                        <div class="account-settings" v-if="currentTab === 'Settings'">
+                        <div class="account-settings" v-if="currentTab === 'Settings'" v-cloak>
                             <p class="text">Nastavení účtu</p>
 
                             <div class="center">
@@ -236,6 +237,8 @@
     import * as f from "/scripts/functions.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
     import { vue } from "/scripts/account.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
 
+    vue.userUUID = "@queryAccount?.UUID";
+    vue.getGameHistory();
     window.addCookie = f.addCookie;
     //console.warn(vue);
     if (window.history.replaceState) window.history.replaceState( null, null, window.location.href );

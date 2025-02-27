@@ -13,6 +13,7 @@ export const vue = new Vue({
         announcements: [],
         currentTab: "GameHistory",
         username: "",
+        userUUID: null,
         gameHistory: [],
         users: [],
         usersFiltered: [],
@@ -22,7 +23,7 @@ export const vue = new Vue({
     methods: {
         main: function (): void {
             const _this = this as any;
-            _this.getGameHistory();
+            //_this.getGameHistory();
             _this.getUsers();
         },
 
@@ -75,7 +76,7 @@ export const vue = new Vue({
         
         getGameHistory: function () {
             const _this = this as any;
-            fetch("/api/v2/gamehistory", {
+            fetch("/api/v2/gamehistory/" + _this.userUUID, {
                 method: "GET",
             }).then(async response => {
                 const data = await response.json();

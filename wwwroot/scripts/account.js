@@ -8,6 +8,7 @@ export const vue = new Vue({
         announcements: [],
         currentTab: "GameHistory",
         username: "",
+        userUUID: null,
         gameHistory: [],
         users: [],
         usersFiltered: [],
@@ -16,7 +17,6 @@ export const vue = new Vue({
     methods: {
         main: function () {
             const _this = this;
-            _this.getGameHistory();
             _this.getUsers();
         },
         changeCredentialsFormSubmit: function (event) {
@@ -61,7 +61,7 @@ export const vue = new Vue({
         },
         getGameHistory: function () {
             const _this = this;
-            fetch("/api/v2/gamehistory", {
+            fetch("/api/v2/gamehistory/" + _this.userUUID, {
                 method: "GET",
             }).then(async (response) => {
                 const data = await response.json();

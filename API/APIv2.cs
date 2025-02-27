@@ -340,34 +340,38 @@ public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?
             : new JsonResult(new { success = false, message = "Uživatel nebyl nalezen" });
     }
     
-    [HttpGet("gamehistory")]
-    public IActionResult GetGameHistory() {
+    [HttpGet("gamehistory/{uuid}")]
+    public IActionResult GetGameHistory(string uuid) {
         using var conn = Database.GetConnection();
         if (conn == null)
             return new BadRequestObjectResult(new { success = false, message = "Databáze nebyla připojena" });
 
-        var loggedAccount = Auth.ReAuthUser();
-        if (loggedAccount == null)
-            return new UnauthorizedObjectResult(new { success = false, message = "Musíš být přihlášený." });
+        //var loggedAccount = Auth.ReAuthUser();
 
-        var query = @"
-        SELECT mg.*, 
-            u1.username AS player_o_username, u2.username AS player_x_username, 
-            u1.display_name AS player_o_display_name, u2.display_name AS player_x_display_name
-        FROM `multiplayer_games` mg
-        LEFT JOIN `users` u1 ON mg.player_o = u1.uuid
-        LEFT JOIN `users` u2 ON mg.player_x = u2.uuid
-        WHERE (mg.player_o = @uuid OR mg.player_x = @uuid)
-        AND FIND_IN_SET('RANKED', mg.type)
-        ORDER BY mg.created_at DESC";
+        var queryAccount = Account.GetByUUID(uuid);
+        if (queryAccount == null)
+            return new NotFoundObjectResult(new { success = false, message = "Uživatel nebyl nalezen." });
+
+        const string query =
+        """
+             SELECT mg.*, 
+                 u1.username AS player_o_username, u2.username AS player_x_username, 
+                 u1.display_name AS player_o_display_name, u2.display_name AS player_x_display_name
+             FROM `multiplayer_games` mg
+             LEFT JOIN `users` u1 ON mg.player_o = u1.uuid
+             LEFT JOIN `users` u2 ON mg.player_x = u2.uuid
+             WHERE (mg.player_o = @uuid OR mg.player_x = @uuid)
+             AND FIND_IN_SET('RANKED', mg.type)
+             ORDER BY mg.created_at DESC
+         """;
 
         using var cmd = new MySqlCommand(query, conn);
-        cmd.Parameters.AddWithValue("@uuid", loggedAccount.UUID);
+        cmd.Parameters.AddWithValue("@uuid", queryAccount.UUID);
 
         using var reader = cmd.ExecuteReader();
         var games = new JsonArray();
         while (reader.Read()) {
-            var player = reader.GetString("player_o") == loggedAccount.UUID ? "player_o" : "player_x";
+            var player = reader.GetString("player_o") == queryAccount.UUID ? "player_o" : "player_x";
             var opponent = player == "player_o" ? "player_x" : "player_o";
             var winner = reader.GetValueOrNull<string>("winner");
             bool? loggeduserwon = winner == null ? null :
@@ -380,7 +384,7 @@ public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?
             var winningCells = GameBoard.Parse(reader.GetString("board")).GetWinningCells();
             var winningCellsList = winningCells?
                 .Select(cell => new List<int> { cell.row, cell.col })
-                .ToList() ?? new List<List<int>>();
+                .ToList() ?? [];
 
             var game = new JsonObject() {
                 { "uuid", reader.GetString("uuid") },
