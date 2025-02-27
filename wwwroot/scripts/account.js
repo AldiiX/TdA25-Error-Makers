@@ -73,10 +73,10 @@ export const vue = new Vue({
             });
         },
         getGameResult: function (game) {
-            if (game.loggeduserwon) {
+            if (game.loggeduserwon === true) {
                 return "Výhra";
             }
-            else if (!game.loggeduserwon) {
+            else if (game.loggeduserwon === false) {
                 return "Prohra";
             }
             else {
@@ -135,6 +135,30 @@ export const vue = new Vue({
                 return user.username.toLowerCase().includes(_this.searchUserInput.toLowerCase()) || user.display_name?.toLowerCase().includes(_this.searchUserInput.toLowerCase());
             });
         },
+        isWinningCell: function (index, game) {
+            const boardSize = 15;
+            const row = Math.floor(index / boardSize);
+            const col = index % boardSize;
+            return game.winningCells?.some((cell) => cell[0] === row && cell[1] === col);
+        },
+        changeElo: function (user, event) {
+            const _this = this;
+            const elo = parseInt(event.target.value);
+            fetch(`/api/v2/users/${user.uuid}/elo`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ elo: elo })
+            }).then(async (response) => {
+                const data = await response.json();
+                if (!response.ok) {
+                    console.error("požadavek nebyl uspesny");
+                    return;
+                }
+                _this.getUsers();
+            });
+        }
     },
     computed: {},
 });

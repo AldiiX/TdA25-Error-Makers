@@ -392,11 +392,18 @@ public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?
         while (reader.Read()) {
             var player = reader.GetString("player_o") == loggedAccount.UUID ? "player_o" : "player_x";
             var opponent = player == "player_o" ? "player_x" : "player_o";
-            var loggeduserwon = reader.GetValueOrNull<string>("winner") == "X" && player == "player_x" ||
-                                reader.GetValueOrNull<string>("winner") == "O" && player == "player_o";
+            var winner = reader.GetValueOrNull<string>("winner");
+            bool? loggeduserwon = winner == null ? null :
+                (winner == "X" && player == "player_x") ||
+                (winner == "O" && player == "player_o");
+    
 
             var playerOName = reader.GetValueOrNull<string>("player_o_display_name") ?? reader.GetValueOrNull<string>("player_o_username") ?? "Neznámý hráč";
             var playerXName = reader.GetValueOrNull<string>("player_x_display_name") ?? reader.GetValueOrNull<string>("player_x_username") ?? "Neznámý hráč";
+            var winningCells = GameBoard.Parse(reader.GetString("board")).GetWinningCells();
+            var winningCellsList = winningCells?
+                .Select(cell => new List<int> { cell.row, cell.col })
+                .ToList() ?? new List<List<int>>();
 
             var game = new JsonObject() {
                 { "uuid", reader.GetString("uuid") },
@@ -411,7 +418,9 @@ public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?
                 { "player_x", reader.GetValueOrNull<string>("player_x") ?? "neznámý" },
                 { "player_o_name", playerOName },
                 { "player_x_name", playerXName },
+                { "winningCells", JsonSerializer.SerializeToNode(winningCellsList) }
             };
+
 
             games.Add(game);
         }
@@ -491,4 +500,35 @@ public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?
             ? new JsonResult(new { success = true, message = "Uživatel byl odbanován." }) 
             : new JsonResult(new { success = false, message = "Uživatel nebyl odbanován." }) { StatusCode = 400 };
     }
+
+    [HttpPut("users/{uuid}/elo")]
+    public IActionResult ChangeElo(string uuid, [FromBody] Dictionary<string, object?> body) { 
+        using var conn = Database.GetConnection();
+        if (conn == null)
+            return new BadRequestObjectResult(new { success = false, message = "Databáze nebyla připojena" });
+
+        var loggedAccount = Auth.ReAuthUser();
+        if (loggedAccount == null)
+            return new UnauthorizedObjectResult(new { success = false, message = "Musíš být přihlášený." });
+
+        if (loggedAccount.AccountType is not (Account.TypeOfAccount.ADMIN or Account.TypeOfAccount.DEVELOPER))
+            return new UnauthorizedObjectResult(new { success = false, message = "Nemáš dostatečná práva." });
+        
+        if (!body.TryGetValue("elo", out var _elo) || !int.TryParse(_elo?.ToString(), out var elo))
+            return new BadRequestObjectResult(new { success = false, message = "Chybí nebo je špatně zadané elo." });
+
+        if (elo < 0) 
+            return new BadRequestObjectResult(new { success = false, message = "Elo nemůže být záporné." });
+
+        var query = "UPDATE `users` SET `elo` = @elo WHERE `uuid` = @uuid";
+
+        using var cmd = new MySqlCommand(query, conn);
+        cmd.Parameters.AddWithValue("@uuid", uuid);
+        cmd.Parameters.AddWithValue("@elo", elo);
+
+        return cmd.ExecuteNonQuery() > 0
+            ? new OkObjectResult(new { success = true, message = "Elo bylo změněno." })
+            : new BadRequestObjectResult(new { success = false, message = "Elo nebylo změněno." });
+    }
+
 }

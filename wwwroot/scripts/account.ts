@@ -91,10 +91,11 @@ export const vue = new Vue({
         },
         
         getGameResult: function (game: any) {
-            if (game.loggeduserwon){
+            //console.log(game);
+            if (game.loggeduserwon === true){
                 return "Výhra";
             }
-            else if (!game.loggeduserwon){
+            else if (game.loggeduserwon === false){
                 return "Prohra";
             }
             else {
@@ -165,6 +166,35 @@ export const vue = new Vue({
                 return user.username.toLowerCase().includes(_this.searchUserInput.toLowerCase()) || user.display_name?.toLowerCase().includes(_this.searchUserInput.toLowerCase());
             });
         },
+
+        isWinningCell: function (index: number, game :any): any {
+            //console.log(game);
+            const boardSize = 15; // velikost hrací desky 15x15
+            const row = Math.floor(index / boardSize);
+            const col = index % boardSize;
+            return game.winningCells?.some((cell: any) => cell[0] === row && cell[1] === col);
+        },
+        
+        changeElo: function (user: any, event: Event) {
+            const _this = this as any;
+            const elo = parseInt((event.target as HTMLInputElement).value);
+            fetch(`/api/v2/users/${user.uuid}/elo`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ elo: elo})
+            }).then(async response => {
+                const data = await response.json();
+
+                if (!response.ok) {
+                    console.error("požadavek nebyl uspesny");
+                    return;
+                }
+
+                _this.getUsers();
+            })
+        }
     },
 
     computed: {
