@@ -1,11 +1,14 @@
 ﻿.sections{
     font-family: "Dosis", sans-serif;
+
     .mainsection{
         padding-bottom: 64px;
+
         >.leaderboard{
             display: flex;
             flex-direction: column;
             align-items: center;
+
             >.top-three{
                 display: flex;
                 justify-content: center;
@@ -16,11 +19,19 @@
                 
                 .player-first,
                 .player-second,
-                .player-third{
+                .player-third {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     position: relative;
+                    transition-duration: .3s;
+                    cursor: pointer;
+                    user-select: none;
+
+                    &:hover {
+                        transition-duration: .3s;
+                        scale: 1.05;
+                    }
                     
                     .avatar-wrapper{
                         display: flex;
@@ -37,9 +48,8 @@
                     .score{
                         font-size: 16px;
                         font-weight: 600;
-                        color: var(--text-color-primary);
+                        color: var(--color-gray);
                     }
-                    
                 }
 
                 .player-info {
@@ -60,6 +70,7 @@
             
             .player-first{
                 transform: translateY(-20%);
+
                 .crown{
                     position: absolute;
                     top: -40px;
@@ -163,7 +174,11 @@
                         gap: 24px;
                     }
                     >.right{
-                        display: flex
+                        display: flex;
+
+                        >.elo {
+                            font-weight: 700;
+                        }
                     }
                 }
             }

@@ -58,9 +58,9 @@
         <section class="mainsection">
             <div class="leaderboard">
 
-                <div class="top-three" v-if="topThree.length">
+                <div class="top-three" v-if="topThree.length" v-cloak>
                     <!-- 2. místo nalevo -->
-                    <div class="player-second" v-if="topThree[1]">
+                    <div class="player-second" v-if="topThree[1]" v-on:click="locationHref(`@@${topThree[1].username}`)">
                         <div class="avatar-wrapper">
                             <div class="avatar">
                                 {{ getInitials(topThree[1]) }}
@@ -74,7 +74,7 @@
                     </div>
 
                     <!-- 1. místo uprostřed (s korunou) -->
-                    <div class="player-first" v-if="topThree[0]">
+                    <div class="player-first" v-if="topThree[0]" v-on:click="locationHref(`@@${topThree[0].username}`)">
                         <div class="crown"></div>
                         <div class="avatar-wrapper">
                             <div class="avatar">
@@ -89,7 +89,7 @@
                     </div>
 
                     <!-- 3. místo napravo -->
-                    <div class="player-third" v-if="topThree[2]">
+                    <div class="player-third" v-if="topThree[2]" v-on:click="locationHref(`@@${topThree[2].username}`)">
                         <div class="avatar-wrapper">
                             <div class="avatar">
                                 {{ getInitials(topThree[2]) }}

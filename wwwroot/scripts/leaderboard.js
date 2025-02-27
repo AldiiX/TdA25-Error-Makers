@@ -31,7 +31,10 @@ export const vue = new Vue({
                 return "";
             const name = user.display_name || user.username;
             return name ? name.charAt(0).toUpperCase() : "";
-        }
+        },
+        locationHref: function (url) {
+            location.href = url;
+        },
     },
     computed: {
         topThree: function () {

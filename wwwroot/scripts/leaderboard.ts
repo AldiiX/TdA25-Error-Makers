@@ -44,12 +44,15 @@ export const vue = new Vue({
             })
         },
 
-        getInitials: function(user) {
+        getInitials: function(user: any) {
             if (!user) return "";
             const name = user.display_name || user.username;
             return name ? name.charAt(0).toUpperCase() : "";
-        }
-        
+        },
+
+        locationHref: function (url: string) {
+            location.href = url;
+        },
     },
 
 

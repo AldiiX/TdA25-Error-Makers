@@ -509,7 +509,7 @@ public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?
                 userRank = currentRank;
             }
 
-            if (users.Count < 10)
+            if (users.Count < 15)
                 users.Add(user);
 
             currentRank++;

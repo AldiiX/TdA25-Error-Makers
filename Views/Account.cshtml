@@ -105,12 +105,12 @@
 
                 <div class="account-bottom">
                     <div class="panel">
-                        <div class="history-tab" v-on:click="currentTab = 'GameHistory'">Historie Her</div>
+                        <div class="history-tab" v-bind:class="{ 'active': currentTab === 'GameHistory' }" v-on:click="currentTab = 'GameHistory'">Historie Her</div>
                         @if (queryAccount == loggedAccount && queryAccount?.AccountType is Account.TypeOfAccount.ADMIN or Account.TypeOfAccount.DEVELOPER) {
-                            <div class="admin-tab" v-on:click="currentTab = 'AdminPanel'">Admin panel</div>
+                            <div class="admin-tab" v-bind:class="{ 'active': currentTab === 'AdminPanel' }" v-on:click="currentTab = 'AdminPanel'">Admin panel</div>
                         }
                         @if (queryAccount == loggedAccount) {
-                            <div class="settings-tab" v-on:click="currentTab = 'Settings'">Nastavení</div>
+                            <div class="settings-tab" v-bind:class="{ 'active': currentTab === 'Settings' }" v-on:click="currentTab = 'Settings'">Nastavení</div>
                         }
                     </div>
                     <div class="divider"></div>
