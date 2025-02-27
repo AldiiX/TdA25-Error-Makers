@@ -6,6 +6,52 @@
     width: 100%;
     min-height: calc(100vh/* + 80px*/);
     position: relative;
+    transition-duration: .3s;
+    animation: sdoifnjspdojfnsjfdvmvmvm 0.3s ease-in-out;
+    
+    @keyframes sdoifnjspdojfnsjfdvmvmvm {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    &:is(.fadeout) >div {
+        animation: dsfdsfsd 0.15s ease-in-out;
+        animation-iteration-count: 1;
+        opacity: 0;
+
+        @keyframes dsfdsfsd {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+
+        }
+    }
+
+    &:is(.fadein) >div {
+        animation: iuosdfosdjf 0.15s ease-in-out;
+        animation-iteration-count: 1;
+        opacity: 1;
+
+        @keyframes iuosdfosdjf {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+
+        }
+    }
     
     .first {
         display: flex;
@@ -15,25 +61,563 @@
         width: 100%;
         height: 100%;
         gap: 64px;
-        
-        >div {
+
+        >.singleplayer {
+
+        }
+
+        >.multiplayer {
+            >.img {
+                mask-image: url("/images/icons/zarivka_mp_playing_bile.svg") !important;
+            }
+        }
+
+        >.singleplayer, >.multiplayer {
             height: 300px;
             width: 300px;
             border-radius: 12px;
-            background-color: var(--background-color-secondary);
+            background-color: var(--background-color);
+            border: 1px solid var(--button-outline-color);
             text-align: center;
             overflow: hidden;
-            
-            .img {
-                width: 100%;
-                position: relative;
-                aspect-ratio: 1/1;
-                background-image: url("/images/icons/zarivka_playing_bile.svg");
-                background-size: contain;
-                background-position: left;
-                background-repeat: no-repeat;
-                margin: 0 auto;
+            position: relative;
+            cursor: pointer;
+            transition-duration: 0.3s;
+            user-select: none;
+
+            h2 {
+                width: fit-content;
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 1;
             }
+
+            >.img {
+                width: 100%;
+                position: absolute;
+                aspect-ratio: 1/1;
+                mask-image: url("/images/icons/zarivka_playing_bile.svg");
+                background-color: var(--text-color);
+                mask-size: contain;
+                mask-position: center;
+                mask-repeat: no-repeat;
+                margin: 0 auto;
+                top: 0;
+                right: 0;
+                opacity: 0.05;
+                z-index: 1;
+            }
+
+            &:hover {
+                background-color: var(--button-outline-color);
+                transition-duration: 0.3s;
+
+                h2 {
+                    color: white;
+                }
+
+                >.img {
+                    background-color: white;
+                }
+
+                &::after {
+                    opacity: 1;
+                }
+            }
+
+            &::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: url("/images/bg1.png"), linear-gradient(90deg, rgb(0, 112, 187) 0%, rgb(57, 90, 154) 25%, rgb(114, 68, 121) 50%, rgb(227, 24, 55) 100%);
+                background-size: cover;
+                z-index: 0;
+                transition-duration: 0.3s;
+                opacity: 0;
+            }
+        }
+    }
+
+    .select-singleplayer-mode {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        width: 100%;
+        height: 100%;
+        gap: 64px;
+        position: relative;
+
+        >.back {
+            position: absolute;
+            top: -24px;
+            left: 2px;
+            cursor: pointer;
+            user-select: none;
+            color: var(--text-color);
+            transition-duration: 0.3s;
+            margin: 0;
+
+            &:hover {
+                transition-duration: 0.3s;
+                color: var(--color-gray);
+            }
+        }
+
+
+        >.m1v1, >.ai {
+            height: 300px;
+            width: 300px;
+            border-radius: 12px;
+            background-color: var(--background-color);
+            border: 1px solid var(--button-outline-color);
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition-duration: 0.3s;
+            user-select: none;
+
+            &:is(.locked) {
+                background-color: var(--button-outline-color);
+                cursor: not-allowed;
+                pointer-events: none;
+
+                >div {
+                    filter: invert(0.5);
+
+                }
+
+                >.loginwarn {
+                    position: absolute;
+                    font-size: 16px;
+                    display: block;
+                    bottom: 20px;
+                    width: 70%;
+                    text-align: center;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    margin: 0;
+                    z-index: 2;
+
+                    >a {
+                        color: var(--accent-color-primary);
+                        text-decoration: none;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            >div {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 2;
+                width: 70%;
+
+                h2 {
+                    width: 100%;
+                    margin: 0;
+                    z-index: 1;
+                    text-align: left;
+                    transition-duration: 0.3s;
+                }
+
+                p {
+                    width: 100%;
+                    margin: 0;
+                    text-align: left;
+                    color: var(--color-gray);
+                    transition-duration: 0.3s;
+                }
+            }
+
+
+            >.img {
+                width: 100%;
+                position: absolute;
+                aspect-ratio: 1/1;
+                mask-image: url("/images/icons/zarivka_playing_bile.svg");
+                background-color: var(--text-color);
+                mask-size: contain;
+                mask-position: center;
+                mask-repeat: no-repeat;
+                margin: 0 auto;
+                top: 0;
+                right: 0;
+                opacity: 0.05;
+                z-index: 1;
+            }
+
+            &:hover {
+                background-color: var(--button-outline-color);
+                transition-duration: 0.3s;
+
+                h2, p {
+                    color: white;
+                    transition-duration: 0.3s;
+                }
+
+                >.img {
+                    background-color: white;
+                }
+
+                &::after {
+                    opacity: 1;
+                }
+            }
+
+            &::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: url("/images/bg1.png"), linear-gradient(90deg, rgb(0, 112, 187) 0%, rgb(57, 90, 154) 25%, rgb(114, 68, 121) 50%, rgb(227, 24, 55) 100%);
+                background-size: cover;
+                z-index: 0;
+                transition-duration: 0.3s;
+                opacity: 0;
+            }
+        }
+    }
+
+    .select-multiplayer-mode {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        width: 100%;
+        height: 100%;
+        gap: 64px;
+        position: relative;
+
+        >.back {
+            position: absolute;
+            top: -24px;
+            left: 2px;
+            cursor: pointer;
+            user-select: none;
+            color: var(--text-color);
+            transition-duration: 0.3s;
+            margin: 0;
+
+            &:hover {
+                transition-duration: 0.3s;
+                color: var(--color-gray);
+            }
+        }
+
+
+        >.freeplay, >.ranked {
+            height: 300px;
+            width: 300px;
+            border-radius: 12px;
+            background-color: var(--background-color);
+            border: 1px solid var(--button-outline-color);
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition-duration: 0.3s;
+            user-select: none;
+
+
+            &:is(.locked) {
+                background-color: var(--button-outline-color);
+                cursor: not-allowed;
+                pointer-events: none;
+
+                >div {
+                    filter: invert(0.5);
+
+                }
+
+                >.loginwarn {
+                    position: absolute;
+                    font-size: 16px;
+                    display: block;
+                    bottom: 20px;
+                    width: 70%;
+                    text-align: center;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    margin: 0;
+                    z-index: 2;
+
+                    >a {
+                        color: var(--accent-color-primary);
+                        text-decoration: none;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            >.loginwarn {
+                display: none;
+            }
+
+            >div {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 2;
+                width: 70%;
+
+
+
+                h2 {
+                    width: 100%;
+                    margin: 0;
+                    z-index: 1;
+                    text-align: left;
+                    //transition-duration: 0.3s;
+                }
+
+                p {
+                    width: 100%;
+                    margin: 0;
+                    text-align: left;
+                    color: var(--color-gray);
+                    transition-duration: 0.3s;
+                }
+            }
+
+
+            >.img {
+                width: 100%;
+                position: absolute;
+                aspect-ratio: 1/1;
+                mask-image: url("/images/icons/zarivka_playing_bile.svg");
+                background-color: var(--text-color);
+                mask-size: contain;
+                mask-position: center;
+                mask-repeat: no-repeat;
+                margin: 0 auto;
+                top: 0;
+                right: 0;
+                opacity: 0.05;
+                z-index: 1;
+            }
+
+            &:hover {
+                background-color: var(--button-outline-color);
+                transition-duration: 0.3s;
+
+                h2, p {
+                    color: white;
+                    transition-duration: 0.3s;
+                }
+
+                >.img {
+                    background-color: white;
+                }
+
+                &::after {
+                    opacity: 1;
+                }
+            }
+
+            &::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: url("/images/bg1.png"), linear-gradient(90deg, rgb(0, 112, 187) 0%, rgb(57, 90, 154) 25%, rgb(114, 68, 121) 50%, rgb(227, 24, 55) 100%);
+                background-size: cover;
+                z-index: 0;
+                transition-duration: 0.3s;
+                opacity: 0;
+            }
+        }
+    }
+
+
+    >.mpfreeplaylobby {
+        position: relative;
+        top: 30vh;
+        margin: 0 auto;
+        width: 75vw;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        max-width: 500px;
+
+        >h1 {
+            font-size: 64px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            width: fit-content;
+
+            // effect
+            &::after {
+                content: "";
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                display: block;
+                width: 150%;
+                height: 20px;
+                top: 100%;
+                mask-image: url("/images/icons/effect.svg");
+                mask-size: cover;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                background: url("/images/bg1.png"), linear-gradient(90deg, rgb(0, 112, 187) 0%, rgb(57, 90, 154) 25%, rgb(114, 68, 121) 50%, rgb(227, 24, 55) 100%);
+                background-size: cover;
+                border-radius: 100%;
+            }
+        }
+
+        >.joinlobby {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 24px;
+
+            p {
+                margin: 0;
+                margin-left: 2px;
+                width: fit-content;
+            }
+
+            >div {
+                display: flex;
+                gap: 8px;
+
+                >input {
+                    &::-webkit-outer-spin-button,
+                    &::-webkit-inner-spin-button {
+                        -webkit-appearance: none;
+                    }
+
+                    &::placeholder {
+                    }
+
+                    font-size: 32px;
+                    min-width: 300px;
+                    flex-grow: 1;
+                    -moz-appearance: textfield;
+                }
+            }
+        }
+        
+        >.leavelobby{
+            display: flex;
+            justify-content: space-around;
+            background-color: var(--background-color);
+            padding: 16px;
+            border-radius: 12px;
+            
+            >.left{
+                display: flex;
+                flex-direction: column;
+                
+                >.text{
+                    margin: 0;
+                    margin-bottom: 8px;
+                }
+                
+                >.roomnumber{
+                    font-size: 24px;
+                    margin: 0;
+                    
+                }
+            }
+            
+            >.right{
+                display: block;
+                align-content: center;
+                
+                >.leavebutton{
+                    background: var(--accent-color-primary);
+                    color: white;
+                    text-decoration: none;
+                    border: none;
+                    border-radius: 12px;
+                    padding: 10px 20px;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        >.createlobby {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            p {
+                margin: 0;
+                margin-left: 2px;
+                width: fit-content;
+            }
+
+            >div {
+                background-color: var(--background-color);
+                //border: 1px solid var(--button-outline-color);
+                padding: 24px;
+                border-radius: 12px;
+                //box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            }
+            
+            >.infolobby{
+                >.top{
+                    display: flex;
+                    justify-content: space-between;
+                    
+                    >.roomnumber{
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                    }
+
+                    >.players{
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                    }
+        
+                }
+                >.bottom{
+                    display: flex;
+                    justify-content: center;
+                    margin-top: 8px;
+                    
+                    >.ownerbutton{
+                        background: var(--accent-color-primary);
+                        color: white;
+                        text-decoration: none;
+                        border: none;
+                        border-radius: 12px;
+                        padding: 10px 20px;
+                        cursor: pointer;
+                    }
+                    
+                    >.userbutton{
+                        background: var(--accent-color-secondary);
+                        color: white;
+                        text-decoration: none;
+                        border: none;
+                        border-radius: 12px;
+                        padding: 10px 20px;
+                        cursor: pointer;
+                    }
+                }
+            }
+            
+            
         }
     }
     
@@ -48,7 +632,7 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        gap: 16px;
+        gap: 48px;
         
         >.game-type-1v1{
             max-width: 295px;
@@ -56,10 +640,30 @@
 
 
         >h1 {
-            font-size: 32px;
+            font-size: 64px;
             margin: 0;
             text-align: center;
-            margin-bottom: 8px;
+            position: relative;
+            margin-bottom: 24px;
+
+            // effect
+            &::after {
+                content: "";
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                display: block;
+                width: 150%;
+                height: 20px;
+                top: 100%;
+                mask-image: url("/images/icons/effect.svg");
+                mask-size: cover;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                background: url("/images/bg1.png"), linear-gradient(90deg, rgb(0, 112, 187) 0%, rgb(57, 90, 154) 25%, rgb(114, 68, 121) 50%, rgb(227, 24, 55) 100%);
+                background-size: cover;
+                border-radius: 100%;
+            }
         }
 
         >button {
@@ -147,6 +751,12 @@
             }
         }
 
+        >.timer {
+            margin: 0;
+            margin-top: 32px;
+            font-size: 32px;
+        }
+
         p, h1 {
             text-align: center;
             margin: 0 auto;
@@ -154,12 +764,17 @@
         }
 
         h1 {
-            margin-top: 32px;
             margin-bottom: 8px;
         }
 
         p {
             color: var(--color-gray);
+        }
+
+        >button {
+            display: grid;
+            margin: 0 auto;
+            margin-top: 16px;
         }
     }
 }

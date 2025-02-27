@@ -15,11 +15,12 @@ public class MultiplayerGame {
     public enum GameState { RUNNING, FINISHED }
     public enum GameType { FREEPLAY, RANKED }
 
-    public record PlayerAccount {
+    public class PlayerAccount {
         public string UUID { get; set; }
         public string Name { get; set; }
         public uint Elo { get; set; }
         public WebSocket? WebSocket { get; set; }
+        public uint QueueTime { get; set; }
 
         public PlayerAccount(string uuid, string name, uint elo, WebSocket? webSocket = null) {
             UUID = uuid;
@@ -32,6 +33,26 @@ public class MultiplayerGame {
 
         public async Task<Account?> ToFullAccountAsync() {
             return await Account.GetByUUIDAsync(UUID);
+        }
+
+        public override bool Equals(object? obj) {
+            return obj is PlayerAccount account && account.UUID == UUID;
+        }
+
+        public static bool operator ==(PlayerAccount? left, PlayerAccount? right) {
+            if (left is null && right is null) return true;
+            if (left is null || right is null) return false;
+
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(PlayerAccount? left, PlayerAccount? right) {
+            return !(left == right);
+        }
+
+
+        public override int GetHashCode() {
+            return HashCode.Combine(UUID!, Name!, Elo!);
         }
 
         public async Task<bool> PushToDatabaseAsync() {
@@ -56,7 +77,7 @@ public class MultiplayerGame {
         }
     }
 
-    public record FreeplayRoom(ushort Number, List<PlayerAccount> Players, PlayerAccount Owner) { }
+    public record FreeplayRoom(uint Number, List<PlayerAccount> Players, PlayerAccount Owner) { }
 
 
 
@@ -85,12 +106,16 @@ public class MultiplayerGame {
     public ushort PlayerOTimeLeft { get; set; } = 180;
     public ushort GameTime { get; set; }
     public bool EloUpdated { get; set; } = false;
+    public Dictionary<string, List<PlayerAccount>> Votes { get; set; } = new() {
+        { "drawVotes", [] },
+        { "rematchVotes", [] }
+    };
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public GameType Type { get; private set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public GameState State { get; private set; }
+    public GameState State { get; set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public GameBoard.Player? Winner { get; set; }
@@ -142,12 +167,13 @@ public class MultiplayerGame {
     public static List<MultiplayerGame> GetAll() => GetAllAsync().Result;*/
 
     public override bool Equals(object? obj) {
-        return obj is MultiplayerGame game && game.UUID == UUID;
+        return obj is MultiplayerGame other && this.UUID == other.UUID;
     }
 
     public override int GetHashCode() {
-        return HashCode.Combine(UUID, PlayerO, PlayerX);
+        return UUID.GetHashCode();
     }
+
 
     public override string ToString() {
         return JsonSerializer.Serialize(this);
@@ -164,92 +190,48 @@ public class MultiplayerGame {
         return !(left == right);
     }
 
-    public static async Task<MultiplayerGame?> ReplaceCellAsync(string gameUUID, ushort x, ushort y, string? letter = null) {
-        await using var conn = await Database.GetConnectionAsync();
-        if(conn == null) return null;
-
-
-
-        await using var cmd = new MySqlCommand(
-        """
-                    SELECT 
-                        *, 
-                        po.uuid AS player_o_uuid, 
-                        po.display_name AS player_o_name, 
-                        po.username AS player_o_username, 
-                        po.elo AS player_o_elo, 
-                        px.uuid AS player_x_uuid, 
-                        px.display_name AS player_x_name, 
-                        px.username AS player_x_username, 
-                        px.elo AS player_x_elo
-                    FROM multiplayer_games
-                    JOIN users po ON multiplayer_games.player_o = po.uuid
-                    JOIN users px ON multiplayer_games.player_x = px.uuid
-                    WHERE multiplayer_games.uuid = @uuid;
-                """, conn);
-
-        cmd.Parameters.AddWithValue("@uuid", gameUUID);
-
-        await using var reader = await cmd.ExecuteReaderAsync() as MySqlDataReader;
-        if(reader == null) return null;
-
-        if(!await reader.ReadAsync()) return null;
-
-        var playerX = new PlayerAccount(
-            reader.GetValueOrNull<string>("player_x_uuid") ?? Guid.NewGuid().ToString(),
-            reader.GetValueOrNull<string>("player_x_name") ?? reader.GetValueOrNull<string>("player_x_username") ?? "Guest",
-            reader.GetValueOrNull<UInt32?>("player_x_elo") ?? 400
-        );
-
-        var playerO = new PlayerAccount(
-            reader.GetValueOrNull<string>("player_o_uuid") ?? Guid.NewGuid().ToString(),
-            reader.GetValueOrNull<string>("player_o_name") ?? reader.GetValueOrNull<string>("player_o_username") ?? "Guest",
-            reader.GetValueOrNull<UInt32?>("player_o_elo") ?? 400
-        );
-
-        var game = new MultiplayerGame(
-            reader.GetString("uuid"),
-            reader.GetDateTime("created_at"),
-            reader.GetDateTime("updated_at"),
-            Enum.TryParse<GameBoard.Player>(reader.GetValueOrNull<string>("winner"), out var winner) ? winner : null,
-            GameBoard.Parse(reader.GetString("board")),
-            playerX,
-            playerO,
-            Enum.Parse<GameType>(reader.GetString("type")),
-            Enum.Parse<GameState>(reader.GetString("state")),
-            reader.GetUInt16("time_played")
-        );
-
-        await reader.CloseAsync();
-
-
-        GameBoard.Player player = game.Board.GetCurrentPlayer() == GameBoard.Player.O ? GameBoard.Player.X : GameBoard.Player.O;
-        game.Board.SetCell(x, y, player);
-
-        game.Winner = game.Board.GetWinner();
-
-        await using var cmd2 = new MySqlCommand("UPDATE multiplayer_games SET board = @board, winner = @winner WHERE uuid = @uuid", conn);
-        cmd2.Parameters.AddWithValue("@uuid", gameUUID);
-        cmd2.Parameters.AddWithValue("@board", game.Board.ToString());
-        cmd2.Parameters.AddWithValue("@winner", game.Winner?.ToString().ToUpper());
-
-        await cmd2.ExecuteNonQueryAsync();
-
-        return game;
-    }
-
-    public async Task<bool> UpdateGameTime(ushort? gameTime = null) {
-        gameTime ??= GameTime;
-
+    public async Task<bool> ReplaceCellAsync(ushort x, ushort y, string? letter = null) {
         await using var conn = await Database.GetConnectionAsync();
         if(conn == null) return false;
 
-        await using var cmd = new MySqlCommand("UPDATE multiplayer_games SET time_played = @time_played WHERE uuid = @uuid", conn);
+        GameBoard.Player player = Board.GetCurrentPlayer() == GameBoard.Player.O ? GameBoard.Player.X : GameBoard.Player.O;
+        Board.SetCell(x, y, player);
+
+        Winner = Board.GetWinner();
+
+        await using var cmd = new MySqlCommand("UPDATE multiplayer_games SET board = @board, winner = @winner, round = @round WHERE uuid = @uuid", conn);
         cmd.Parameters.AddWithValue("@uuid", UUID);
-        cmd.Parameters.AddWithValue("@time_played", gameTime);
+        cmd.Parameters.AddWithValue("@board", Board.ToString());
+        cmd.Parameters.AddWithValue("@winner", Winner?.ToString().ToUpper());
+        cmd.Parameters.AddWithValue("@round", Round);
 
         return await cmd.ExecuteNonQueryAsync() > 0;
     }
+
+    public async Task<bool> UpdateInDatabaseAsync() {
+        await using var conn = await Database.GetConnectionAsync();
+        if(conn == null) return false;
+
+        await using var cmd = new MySqlCommand("UPDATE multiplayer_games SET updated_at = @updated_at, board = @board, winner = @winner, round = @round, state = @state, time_played = @timePlayed WHERE uuid = @uuid", conn);
+        cmd.Parameters.AddWithValue("@uuid", UUID);
+        cmd.Parameters.AddWithValue("@updated_at", DateTime.Now);
+        cmd.Parameters.AddWithValue("@board", Board.ToString());
+        cmd.Parameters.AddWithValue("@winner", Winner?.ToString().ToUpper());
+        cmd.Parameters.AddWithValue("@round", Round);
+        cmd.Parameters.AddWithValue("@state", State.ToString().ToUpper());
+        cmd.Parameters.AddWithValue("@timePlayed", GameTime);
+
+        return await cmd.ExecuteNonQueryAsync() > 0;
+    }
+
+    public bool UpdateInDatabase() => UpdateInDatabaseAsync().Result;
+
+    public async Task<bool> EndAndUpdateDatabaseAsync() {
+        this.State = GameState.FINISHED;
+        return await UpdateInDatabaseAsync();
+    }
+
+    public bool EndAndUpdateDatabase() => EndAndUpdateDatabaseAsync().Result;
 
     public static async Task<MultiplayerGame?> GetAsync(string uuid) {
         await using var conn = await Database.GetConnectionAsync();
@@ -345,16 +327,4 @@ public class MultiplayerGame {
     }
 
     public static MultiplayerGame? Create(in PlayerAccount player1, in PlayerAccount player2, in GameType type) => CreateAsync(player1, player2, type).Result;
-
-    public static async Task EndAsync(string gameUUID, PlayerAccount? winner) {
-        await using var conn = await Database.GetConnectionAsync();
-        if(conn == null) return;
-
-        await using var cmd = new MySqlCommand("UPDATE multiplayer_games SET winner = @winner, state = 'FINISHED' WHERE uuid = @uuid", conn);
-        cmd.Parameters.AddWithValue("@uuid", gameUUID);
-        cmd.Parameters.AddWithValue("@winner", winner?.UUID);
-
-        var res = await cmd.ExecuteNonQueryAsync();
-        //Console.WriteLine($"Game {gameUUID} ended with {(winner == null ? "draw" : winner.Name)}");
-    }
 }

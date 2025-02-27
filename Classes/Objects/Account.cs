@@ -77,6 +77,21 @@ public sealed class Account {
         return targetNewElo;
     }
 
+    public override bool Equals(object? obj) => obj is Account account && account.UUID == this.UUID;
+
+    public override int GetHashCode() => this.UUID.GetHashCode();
+
+    public static bool operator ==(Account? a, Account? b) {
+        if (a is null && b is null) return true;
+        if (a is null || b is null) return false;
+        return a.Equals(b);
+    }
+
+    public static bool operator !=(Account? a, Account? b) {
+        if (a is null && b is null) return false;
+        if (a is null || b is null) return true;
+        return !a.Equals(b);
+    }
 
     public uint CalculateNewELO(Account b, MatchResult result) => CalculateNewELO(this, b, result);
 
@@ -95,6 +110,27 @@ public sealed class Account {
 
         return cmd.ExecuteNonQuery() > 0;
     }
+
+    public async Task<bool> UpdateWDLInDatabaseAsync(int? wAdd = null, int? dAdd = null, int? lAdd = null) {
+        if(wAdd == null && dAdd == null && lAdd == null) return false;
+
+        if(wAdd != null) this.Wins += (uint)wAdd;
+        if(dAdd != null) this.Draws += (uint)dAdd;
+        if(lAdd != null) this.Losses += (uint)lAdd;
+
+        await using var conn = await Database.GetConnectionAsync();
+        if (conn == null) return false;
+
+        await using var cmd = new MySqlCommand("UPDATE `users` SET `wins` = @wins, `draws` = @draws, `losses` = @losses WHERE `uuid` = @uuid", conn);
+        cmd.Parameters.AddWithValue("@wins", this.Wins);
+        cmd.Parameters.AddWithValue("@draws", this.Draws);
+        cmd.Parameters.AddWithValue("@losses", this.Losses);
+        cmd.Parameters.AddWithValue("@uuid", this.UUID);
+
+        return cmd.ExecuteNonQuery() > 0;
+    }
+
+    public bool UpdateWDLInDatabase(int? wAdd = null, int? dAdd = null, int? lAdd = null) => UpdateWDLInDatabaseAsync(wAdd, dAdd, lAdd).Result;
 
     public bool UpdateEloInDatabase(in uint newElo) => UpdateEloInDatabaseAsync(newElo).Result;
 
@@ -180,6 +216,34 @@ public sealed class Account {
     }
 
     public static Account? GetByUUID(in string uuid) => GetByUUIDAsync(uuid).Result;
+
+    public static async Task<Account?> GetByUsernameAsync(string username) {
+        await using var conn = await Database.GetConnectionAsync();
+        if (conn == null) return null;
+
+        await using var cmd = new MySqlCommand("SELECT * FROM `users` WHERE `username` = @username", conn);
+        cmd.Parameters.AddWithValue("@username", username);
+
+        await using var reader = await cmd.ExecuteReaderAsync() as MySqlDataReader;
+        if (reader == null || !reader.Read()) return null;
+
+        return new Account(
+            reader.GetString("username"),
+            reader.GetString("password"),
+            reader.GetValueOrNull<string>("display_name") ?? reader.GetString("username"),
+            reader.GetValueOrNull<string>("email"),
+            reader.GetValueOrNull<string>("avatar"),
+            Enum.TryParse(reader.GetString("type"), out TypeOfAccount _e) ? _e : TypeOfAccount.USER,
+            reader.GetUInt32("elo"),
+            reader.GetUInt32("wins"),
+            reader.GetUInt32("losses"),
+            reader.GetUInt32("draws"),
+            reader.GetString("uuid"),
+            reader.GetDateTime("created_at"),
+            reader.GetValueOrNull<DateTime>("last_active"),
+            reader.GetValueOrNull<DateTime?>("is_banned") != null && reader.GetDateTime("is_banned") > DateTime.Now
+        );
+    }
 
     /* public static async Task<List<Account>> GetAllAsync()
     {

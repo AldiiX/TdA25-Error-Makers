@@ -17,6 +17,7 @@
     var backgroundBlur = Html.PartialAsync("/Views/Components/BlurBackground.cshtml");
     var confetti = Html.PartialAsync("/Views/Components/Confetti.cshtml");
     var announcements = Html.PartialAsync("/Views/Components/AnnouncementsMain.cshtml");
+    var surrenderModal = Html.PartialAsync("/Views/Components/Modals/Surrender.cshtml");
 }
 <!doctype html>
 <html lang="en" ontouchmove>
@@ -48,6 +49,8 @@
     <div id="app">
         @await backgroundBlur
         @await announcements
+        @await surrenderModal
+
 
         <div v-show="gameLoaded">
             @await backgroundComponent
@@ -76,7 +79,7 @@
                     <p>Výsledek hry</p>
                     <h1 class="win" v-if="finishGameObject?.result === 'win' || game?.result === 'win'">Výhra</h1>
                     <h1 class="lose" v-else-if="finishGameObject?.result === 'lose'  || game?.result === 'lose'">Prohra</h1>
-                    <h1 v-else>Remíza</h1>
+                    <h1 class="draw" v-else>Remíza</h1>
 
                     <div class="randominfo">
                         <div class="elo" v-if="game?.type === 'RANKED' && finishGameObject && finishGameObject?.elo && finishGameObject?.oldElo">
@@ -96,18 +99,40 @@
 
                 </div>
 
-                <div class="chat">
-                    <p>Chat</p>
+                <div class="right">
+                    <div class="chat">
+                        <p>Chat</p>
 
-                    <div class="chat-messages" v-cloak>
-                        <div class="message" v-for="message in chatMessages" v-bind:class="{ mymsg: message.isMe }" v-bind:style="{ '--color': message.letter === 'X' ? 'var(--accent-color-secondary)' : 'var(--accent-color-primary)' }">
-                            <p class="name">{{ message.sender }}</p>
-                            <p class="text">{{ message.message }}</p>
+                        <div class="chat-messages" v-cloak>
+                            <div class="message" v-for="message in chatMessages" v-bind:class="{ mymsg: message.isMe }" v-bind:style="{ '--color': message.letter === 'X' ? 'var(--accent-color-secondary)' : 'var(--accent-color-primary)' }">
+                                <p class="name">{{ message.sender }}</p>
+                                <p class="text">{{ message.message }}</p>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" maxlength="64" v-model="chatMessageInput" v-on:keyup.enter="sendMessageToMultiplayerChat(chatMessageInput, $event)" v-bind:placeholder="`Napiš zprávu jako ${accountName}...`"/>
+
+                            <div class="actions">
+                                <div class="back" onclick="location.href='/play'" v-if="game?.type === 'FREEPLAY'">
+                                    <div class="icon" style="--mask: url('/images/icons/back_arrow.svg')"></div>
+                                    <p>Zpět do menu</p>
+                                </div>
+
+                                <div class="suggestrematch" v-on:click="requestRematch()" v-bind:class="{ 'disabled': rematchRequestSent || (gameLoaded && gameNumberOfPlayers < 2), 'blue': rematchRequestReceived }">
+                                    <div class="icon" style="--mask: url('/images/icons/swords.svg')"></div>
+                                    <p v-if="!rematchRequestReceived">Vyzvat protihráče na rematch</p>
+                                    <p v-else>Přijmout rematch</p>
+                                </div>
+
+                                <div class="rematch" onclick="location.href='/play?faze=multiplayerModeQueue'" v-if="game?.type === 'RANKED'">
+                                    <div class="icon" style="--mask: url('/images/icons/lupa.svg')"></div>
+                                    <p>Najít novou hru</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="chat-input">
-                        <input type="text" maxlength="64" v-model="chatMessageInput" v-on:keyup.enter="sendMessageToMultiplayerChat(chatMessageInput, $event)" v-bind:placeholder="`Napiš zprávu jako ${accountName}...`"/>
-                    </div>
+
+                    <p class="player-left-warn" v-if="gameLoaded && gameNumberOfPlayers < 2">Druhý hráč se odpojil</p>
                 </div>
             </div>
 
@@ -152,7 +177,7 @@
                             <p>Aktuální kolo: <span v-cloak>{{ game?.round + 1 }}.</span></p>
                             <p>Hra vytvořena: <span v-cloak>{{ (new Date(game?.createdAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</span></p>
                             <p>Poslední aktualizace: <span v-cloak>{{ (new Date(game?.updatedAt)).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', year: "numeric", hour: "numeric", minute: "numeric" }) }}</span></p>
-                            <p>Herní čas: <span v-cloak>{{ parseTimeToWord(game?.gameTime ?? 0) }}</span></p>
+                            <p>Herní čas: <span v-cloak>{{ parseTimeToWord(gameTime ?? 0) }}</span></p>
                         </div>
                     </div>
 
@@ -168,12 +193,25 @@
                         </div>
                         <div class="chat-input">
                             <input type="text" maxlength="64" v-model="chatMessageInput" v-on:keyup.enter="sendMessageToMultiplayerChat(chatMessageInput, $event)" v-bind:placeholder="`Napiš zprávu jako ${accountName}...`"/>
+
+                            <div class="actions">
+                                <div class="surrender" v-on:click="openModal('surrender')">
+                                    <div class="icon" style="--mask: url('/images/icons/flag.svg')"></div>
+                                    <p>Vzdát se</p>
+                                </div>
+
+                                <div class="suggestdraw" v-on:click="requestDraw()" v-bind:class="{ 'disabled': drawRequestSent, 'red': drawRequestReceived }">
+                                    <div class="icon" style="--mask: url('/images/icons/handshake.svg')"></div>
+                                    <p v-if="!drawRequestReceived">Navrhnout remízu</p>
+                                    <p v-else>Přijmout remízu</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- varovani pokud se druhy hrac odpoji -->
                     <div class="player-disconnected-warn" v-show="gameLoaded && gameNumberOfPlayers < 2">
-                        <p>Druhý hráč se odpojil, hra skončí za XX sekund.</p>
+                        <p>Druhý hráč ztratil spojení.</p>
                     </div>
                 </div>
             </div>

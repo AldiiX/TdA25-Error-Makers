@@ -18,6 +18,13 @@
     font-synthesis: none !important;
 }
 
+
+:root:is(.showlines) {
+    * {
+        outline: 1px solid orange;
+    }
+}
+
 input,
 textarea,
 button,
@@ -39,7 +46,7 @@ a {
 
 
 html {
-    font-size: 14px;
+    font-size: 16px;
     color: var(--text-color);
     background-color: var(--background-color-secondary);
     margin: 0;
@@ -214,6 +221,17 @@ button,input,textarea,select {
         background: var(--button-bg);
         transition-duration: 0.3s;
     }
+}
+
+.button-unavailable{
+    background: var(--button-bg);
+    color: var(--text-color-primary);
+    border: none;
+    text-decoration: none;
+    border-radius: 12px;
+    padding: 10px 20px;
+    cursor: not-allowed;
+    user-select: none;
 }
 
 .sections {

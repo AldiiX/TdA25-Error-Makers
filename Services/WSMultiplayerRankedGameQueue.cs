@@ -12,6 +12,8 @@ public static class WSMultiplayerRankedGameQueue {
     // Seznam připojených hráčů
     private static readonly List<MultiplayerGame.PlayerAccount> connectedPlayers = [];
     private static Timer? sortAndPairTimer;
+
+    private static Timer? timer2;
     //private static Timer? sendQueueCountTimer;
 
     #endregion
@@ -19,6 +21,7 @@ public static class WSMultiplayerRankedGameQueue {
     static WSMultiplayerRankedGameQueue() {
         // Spouštíme periodicky třídění a párování hráčů každých 5 sekund
         sortAndPairTimer = new Timer(SortAndPairPlayers!, null, 0, 5000);
+        timer2 = new Timer(SendStatus!, null, 0, 1000);
     }
 
     #region Obsluha fronty
@@ -46,12 +49,25 @@ public static class WSMultiplayerRankedGameQueue {
         }
 
         if (alreadyInQueue) {
-            await SendErrorAndCloseAsync(webSocket, "Already in queue", "Already in queue", WebSocketCloseStatus.PolicyViolation);
+            await SendErrorAndCloseAsync(webSocket, "Nepodařilo se připojit do queue -> už jsi v queue.", "Already in queue", WebSocketCloseStatus.PolicyViolation);
             return;
         }
 
+        // kontrola zda hráč už nehraje
+        lock (WSMultiplayerGame.Games) {
+            if (WSMultiplayerGame.Games.Values.Any(players => players.Exists(p => p.UUID == account.UUID))) {
+                SendErrorAndCloseAsync(webSocket, "Nepodařilo se připojit do queue -> už jsi totiž ve hře.", "Already in game", WebSocketCloseStatus.PolicyViolation).Wait();
+                return;
+            }
+        }
+
+
+        // přijímání zpráv
         await ReceiveLoopAsync(webSocket);
 
+
+
+        // při ukončení socketu
         lock (connectedPlayers) {
             connectedPlayers.Remove(account);
         }
@@ -98,6 +114,20 @@ public static class WSMultiplayerRankedGameQueue {
         }
     }
 
+    private static void SendStatus(object state) {
+        foreach (var player in new List<MultiplayerGame.PlayerAccount>(connectedPlayers)) {
+            var payload = new {
+                action = "status",
+                queueSize = connectedPlayers.Count,
+                queueTime = player.QueueTime
+            };
+
+            var msg = JsonSerializer.SerializeToUtf8Bytes(payload);
+            if (player.WebSocket?.State == WebSocketState.Open) player.WebSocket.SendAsync(new ArraySegment<byte>(msg), WebSocketMessageType.Text, true, CancellationToken.None);
+            if(connectedPlayers.Find(_p => _p.Name == player.Name) is { } p) p.QueueTime++;
+        }
+    }
+
     // Vytvoří zápas a odešle odkaz oběma hráčům, poté uzavře jejich spojení.
     private static async Task SendGameLink(MultiplayerGame.PlayerAccount player1, MultiplayerGame.PlayerAccount player2) {
         var match = await MultiplayerGame.CreateAsync(player1, player2, MultiplayerGame.GameType.RANKED);
@@ -105,8 +135,7 @@ public static class WSMultiplayerRankedGameQueue {
             return;
 
         var payload = new { action = "sendToMatch", matchUUID = match.UUID };
-        string json = JsonSerializer.Serialize(payload);
-        var message = Encoding.UTF8.GetBytes(json);
+        var message = JsonSerializer.SerializeToUtf8Bytes(payload);
 
         await SendMessageAndCloseAsync(player1, message, "Match found");
         await SendMessageAndCloseAsync(player2, message, "Match found");

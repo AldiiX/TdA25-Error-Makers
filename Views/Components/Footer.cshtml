@@ -34,6 +34,7 @@
                     <a href="/play" class="@Utilities.SetActiveClass("/play")">Hrát</a>
                 </p>
             </div>
+
             <div class="other">
                 <p class="upper">Ostatní</p>
                 <p>
@@ -43,6 +44,7 @@
                     <a href="/privacy/cookies" class="@Utilities.SetActiveClass("/privacy/cookies")">Cookies</a>
                 </p>
             </div>
+
             <div class="team">
                 <p class="upper">Tým</p>
                 <p>
@@ -58,6 +60,28 @@
                     <a href="https://github.com/wedralda" target="_blank" style="--team-image: url(/images/team/paja.png)"> Pavel Andrle</a>
                 </p>
             </div>
+
+            @if (loggedAccount is { AccountType: Account.TypeOfAccount.DEVELOPER }) {
+                <div class="admintools">
+                    <p class="upper">Dev Info</p>
+                    <p>Uptime aplikace: @($"{Program.AppUptime.Days:D2}:{Program.AppUptime.Hours:D2}:{Program.AppUptime.Minutes:D2}:{Program.AppUptime.Seconds:D2}")</p>
+                    <p>MySQL Server: @(Database.IsUsingFallbackServer ? "Fallback" : "Externí")</p>
+                    <button onclick="
+                        this.disabled = true;
+                        fetch('/api/app/restartmysql', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(() => {
+                            window.location.reload();
+                        }).catch(() => {
+                            alert('Nepodařilo se restartovat MySQL server.');
+                        });
+                    ">Restartovat MySQL</button>
+                </div>
+            }
+
             <div class="login">
                 @if(loggedAccount != null) {
                     <p class="upper">Přihlášení</p>
@@ -82,27 +106,6 @@
                     </P>
                 }
             </div>
-
-            @if (loggedAccount is { AccountType: Account.TypeOfAccount.DEVELOPER }) {
-                <div class="admintools">
-                    <p class="upper">Dev Info</p>
-                    <p>Uptime aplikace: @($"{Program.AppUptime.Days:D2}:{Program.AppUptime.Hours:D2}:{Program.AppUptime.Minutes:D2}:{Program.AppUptime.Seconds:D2}")</p>
-                    <p>MySQL Server: @(Database.IsUsingFallbackServer ? "Fallback" : "Externí")</p>
-                    <button onclick="
-                        this.disabled = true;
-                        fetch('/api/app/restartmysql', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        }).then(() => {
-                            window.location.reload();
-                        }).catch(() => {
-                            alert('Nepodařilo se restartovat MySQL server.');
-                        });
-                    ">Restartovat MySQL</button>
-                </div>
-            }
         </div>
 
         <div class="copyright">

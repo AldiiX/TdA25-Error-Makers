@@ -2,6 +2,7 @@
 @using TdA25_Error_Makers.Classes
 @{
     var webTheme = Utilities.WebTheme.Get();
+    var loggedAccount = Utilities.GetLoggedAccountFromContextOrNull();
 
     // části stránky
     var background = Html.PartialAsync("/Views/Components/BlurBackground.cshtml");
@@ -42,79 +43,126 @@
         @await background
 
         <div class="main">
-            <div class="centerdiv" v-cloak>
-                <h1 class="title" v-if="temp.selectedMode === null">Hrát</h1>
-                <h1 v-if="temp.selectedMode === 'singleplayer'">Singleplayer</h1>
-                <h1 v-if="temp.selectedMode === 'multiplayer' && temp.faze !== 'multiplayerModeQueue'">Multiplayer</h1>
+            <div class="mpfreeplaylobby" v-cloak v-show="temp.faze === 'createFreeplayLobby'">
+                <h1>Freeplay</h1>
+
+                <div class="joinlobby" v-if="freeplayQueue?.account?.isOwnerOfRoom === true">
+                    <p>Připoj se ke kamarádovi</p>
+
+                    <div>
+                        <input type="number" min="100000" max="999999" maxlength="6" v-model="temp.inputLobbyCode" placeholder="Kód lobby">
+                        <button class="button-primary" v-on:click="connectToMultiplayerFreeplayQueue(temp.inputLobbyCode)">Připojit</button>
+                    </div>
+                </div>
+
+                <div class="leavelobby" v-if="freeplayQueue?.account?.isOwnerOfRoom === false">
+                    
+                    <div class="left">
+                        <p class="text">Jsi připojen do hry s id:</p>
+                        <p class="roomnumber">{{ freeplayQueue?.roomNumber }}</p>
+                    </div>
+                    <div class="right">
+                        <button class="leavebutton" v-on:click="connectToMultiplayerFreeplayQueue()">Odpojit</button>
+                    </div>
+                    
+                    
+                </div>
+
+                <div class="createlobby">
+                    <p>Vytvoření lobby</p>
+
+                    <div class="infolobby">
+                        <div class="top">
+                            <div class="roomnumber">
+                                <p>Kód tvojí roomky:</p>
+                                <p>{{ freeplayQueue?.roomNumber }}</p>
+                            </div>
+                            <div class="players">
+                                <p>Připojení hráči:</p>
+                                <div class="player" v-for="player in freeplayQueue.players">
+                                    <div class="img"></div>
+                                    <p>{{ player.name }}</p>
+                                    <p class="hosticon" v-if="player?.uuid === freeplayQueue?.owner?.uuid">(host)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bottom">
+                            <button class="ownerbutton" v-if="freeplayQueue?.account?.isOwnerOfRoom === true" v-on:click="startFreeplayLobby()">Začít hru</button>
+                            <button class="userbutton" v-else v-on:click="startFreeplayLobby()" disabled>Začít hru</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="centerdiv" v-show="temp.faze !== 'createFreeplayLobby'" v-cloak>
+                <h1 class="title" v-if="temp.selectedMode === null && temp.faze !== 'multiplayerModeQueue'">Hrát</h1>
+                <h1 v-else-if="temp.selectedMode === 'singleplayer'">Singleplayer</h1>
+                <h1 v-else-if="temp.selectedMode === 'multiplayer' && temp.faze !== 'multiplayerModeQueue'">Multiplayer</h1>
 
                 <!-- faze vybirani singleplayer / multiplayer -->
-                <div class="first" v-if="temp.faze === 'selectSingleplayerOrMultiplayer'">
-                    <div class="singleplayer" v-on:click="temp.selectedMode = 'singleplayer'; temp.faze = 'selectSingleplayerMode'">
+                <div class="first" v-show="temp.faze === 'selectSingleplayerOrMultiplayer'">
+                    <div class="singleplayer" v-on:click="changeFaze('selectSingleplayerMode', () => { temp.selectedMode = 'singleplayer' });">
                         <h2>Singleplayer</h2>
                         <div class="img"></div>
                     </div>
-                    <div class="multiplayer" v-on:click="temp.selectedMode = 'multiplayer'; temp.faze = 'selectMultiplayerMode'">
+                    <div class="multiplayer" v-on:click="changeFaze('selectMultiplayerMode', () => { temp.selectedMode = 'multiplayer' });">
                         <h2>Multiplayer</h2>
                         <div class="img"></div>
                     </div>
                 </div>
 
                 <!-- faze vybirani singleplayer modu -->
-                <template v-if="temp.faze === 'selectSingleplayerMode'">
-                    <div class="game-type-1v1" v-on:click="temp.selectedSingleplayerMode = '1v1'; locationHref('/play/singleplayer/1v1');">
-                        <h2>1v1</h2>
-                        <p>Zahraj si piškvorky proti kamarádovi na jednom počítači!</p>
-                    </div>
-                    <div class="" v-on:click="temp.selectedSingleplayerMode = 'vsai';">
-                        <h2>Proti AI</h2>
-                        <p>Zkusíš porazit umělou inteligenci v piškvorkách?</p>
-                    </div>
-                </template>
+                <div class="select-singleplayer-mode" v-show="temp.faze === 'selectSingleplayerMode'">
+                    <p class="back" v-on:click="changeFaze('selectSingleplayerOrMultiplayer', () => { temp.selectedMode = null })">« Zpět</p>
 
-                <!-- faze vybirani multiplayer modu -->
-                <template v-if="temp.faze === 'selectMultiplayerMode'">
-                    <div class="" v-on:click="temp.selectedMultiplayerMode = 'freeplay'; temp.faze = 'createFreeplayLobby'; connectToMultiplayerFreeplayQueue()">
-                        <h2>Freeplay</h2>
-                        <p>Zahraj si piškvorkový souboj proti svýmu kamarádovi</p>
-                    </div>
-                    <div class="" v-on:click="temp.selectedMultiplayerMode = 'ranked'; temp.faze = 'multiplayerModeQueue'; connectToMultiplayerRankedQueue()">
-                        <h2>Ranked</h2>
-                        <p>Zahraj si proti náhodnému hráči a ukaž, co v tobě je</p>
-                    </div>
-                </template>
-
-                <div class="mpfreeplaylobby" v-if="temp.faze === 'createFreeplayLobby'">
-                    <div class="joinlobby" v-if="freeplayQueue?.account?.isOwnerOfRoom === true">
-                        <p>Připoj se ke kamarádovi</p>
-                        <input type="text" v-model="temp.inputLobbyCode" placeholder="Kód lobby">
-                        <button v-on:click="connectToMultiplayerFreeplayQueue(temp.inputLobbyCode)">Připojit</button>
-                    </div>
-
-                    <div class="leavelobby" v-if="freeplayQueue?.account?.isOwnerOfRoom === false">
-                        <p>Jsi připojen do hry s id {{ freeplayQueue?.roomNumber }}</p>
-                        <button v-on:click="connectToMultiplayerFreeplayQueue()">Odpojit</button>
-                    </div>
-
-                    <div class="createlobby">
-                        <p>Vytvoření hry</p>
-                        <p>Kód tvojí roomky: {{ freeplayQueue?.roomNumber }}</p>
-                        <div class="players">
-                            <p>Připojení hráči</p>
-                            <div class="player" v-for="player in freeplayQueue.players">
-                                <div class="img"></div>
-                                <p>{{ player.name }}</p>
-                            </div>
+                    <div class="m1v1" v-on:click="temp.selectedSingleplayerMode = '1v1'; locationHref('/play/singleplayer/1v1');">
+                        <div>
+                            <h2>1v1</h2>
+                            <p>Zahraj si piškvorky proti kamarádovi na jednom počítači!</p>
                         </div>
-                        <button v-if="freeplayQueue?.account?.isOwnerOfRoom === true" v-on:click="startFreeplayLobby()">Začít hru</button>
-                        <button v-else v-on:click="startFreeplayLobby()" disabled>Začít hru</button>
+                    </div>
+                    <div class="ai locked" v-on:click="temp.selectedSingleplayerMode = 'vsai';">
+                        <div>
+                            <h2>Proti AI</h2>
+                            <p>Zkusíš porazit umělou inteligenci v piškvorkách?</p>
+                        </div>
+
+                        <p class="loginwarn">Naše AI momentálně odpočívá :)</p>
                     </div>
                 </div>
 
+                <!-- faze vybirani multiplayer modu -->
+                <div class="select-multiplayer-mode" v-show="temp.faze === 'selectMultiplayerMode'">
+                    <p class="back" v-on:click="changeFaze('selectSingleplayerOrMultiplayer', () => { temp.selectedMode = null })">« Zpět</p>
+
+                    <div class="freeplay" v-on:click="changeFaze('createFreeplayLobby');">
+                        <div>
+                            <h2>Freeplay</h2>
+                            <p>Vyzvi svého kamaráda na pořádný piškvorkový souboj!</p>
+                        </div>
+                    </div>
+                    <div v-bind:class="['ranked', { 'locked': loggedAccount === null }]" v-on:click="changeFaze('multiplayerModeQueue');">
+                        <div>
+                            <h2>Ranked</h2>
+                            <p>Zahraj si proti náhodnému hráči, ukaž, co v tobě je a získej ELO.</p>
+                        </div>
+
+                        <p class="loginwarn">Pro hraní tohoto módu se musíš přihlásit.</p>
+                    </div>
+                </div>
+
+
+
                 <!-- faze kdy je uzivatel v queue -->
-                <div class="mmqueue" v-if="temp.faze === 'multiplayerModeQueue'">
+                <div class="mmqueue" v-show="temp.faze === 'multiplayerModeQueue'">
                     <div class="img"></div>
+                    <p class="timer">{{ parseTimeToDigital(rankedQueue?.timeElapsed ?? 0) }}</p>
                     <h1>Hledáme soupeře proti tobě</h1>
-                    <p>Mezitím, co čekáš tu pro tebe máme tip: {{ generateRandomTip() }}</p>
+                    <p v-if="rankedQueue.size === 0 || rankedQueue.size === 1">Ve frontě jsi aktuálně sám... :(</p>
+                    <p v-else-if="rankedQueue.size > 0 && rankedQueue.size <= 4">Ve frontě jsou aktuálně {{ rankedQueue?.size ?? 0 }} hráči.</p>
+                    <p v-else-if="rankedQueue.size > 4">Ve frontě je aktuálně {{ rankedQueue?.size ?? 0 }} hráčů.</p>
+                    <p v-else>.....</p>
+                    <button class="button-primary-col-sec" v-on:click="changeFaze('selectMultiplayerMode'); socket.close(); socket = null">Opustit</button>
                 </div>
             </div>
         </div>
@@ -125,6 +173,15 @@
 <script type="module">
     import * as f from "/scripts/functions.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
     import { vue } from "/scripts/play.js?ver=@Program.ENV.GetValueOrNull("CACHE_VERSION")";
+
+    @if (loggedAccount is not null) {
+        <text>
+            vue.loggedAccount ??= {};
+            vue.loggedAccount.uuid = '@(loggedAccount?.UUID ?? null)';
+            vue.loggedAccount.name = '@(loggedAccount?.DisplayName ?? null)';
+            //console.warn(vue.loggedAccount);
+        </text>
+    }
     window.addCookie = f.addCookie;
     if (window.history.replaceState) window.history.replaceState( null, null, window.location.href );
 </script>
