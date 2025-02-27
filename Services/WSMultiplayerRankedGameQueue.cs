@@ -49,12 +49,25 @@ public static class WSMultiplayerRankedGameQueue {
         }
 
         if (alreadyInQueue) {
-            await SendErrorAndCloseAsync(webSocket, "Already in queue", "Already in queue", WebSocketCloseStatus.PolicyViolation);
+            await SendErrorAndCloseAsync(webSocket, "Nepodařilo se připojit do queue -> už jsi v queue.", "Already in queue", WebSocketCloseStatus.PolicyViolation);
             return;
         }
 
+        // kontrola zda hráč už nehraje
+        lock (WSMultiplayerGame.Games) {
+            if (WSMultiplayerGame.Games.Values.Any(players => players.Exists(p => p.UUID == account.UUID))) {
+                SendErrorAndCloseAsync(webSocket, "Nepodařilo se připojit do queue -> už jsi totiž ve hře.", "Already in game", WebSocketCloseStatus.PolicyViolation).Wait();
+                return;
+            }
+        }
+
+
+        // přijímání zpráv
         await ReceiveLoopAsync(webSocket);
 
+
+
+        // při ukončení socketu
         lock (connectedPlayers) {
             connectedPlayers.Remove(account);
         }
@@ -122,8 +135,7 @@ public static class WSMultiplayerRankedGameQueue {
             return;
 
         var payload = new { action = "sendToMatch", matchUUID = match.UUID };
-        string json = JsonSerializer.Serialize(payload);
-        var message = Encoding.UTF8.GetBytes(json);
+        var message = JsonSerializer.SerializeToUtf8Bytes(payload);
 
         await SendMessageAndCloseAsync(player1, message, "Match found");
         await SendMessageAndCloseAsync(player2, message, "Match found");

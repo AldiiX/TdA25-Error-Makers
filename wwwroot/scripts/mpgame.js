@@ -1,4 +1,4 @@
-import { addAnnouncement } from "/scripts/functions.js";
+import { addAnnouncement, openModal } from "/scripts/functions.js";
 export const vue = new Vue({
     el: "#app",
     mounted: function () {
@@ -10,6 +10,7 @@ export const vue = new Vue({
     },
     data: {
         currentPlayer: null,
+        modalOpened: null,
         game: null,
         gameLoaded: false,
         gameNumberOfPlayers: 0,
@@ -30,11 +31,26 @@ export const vue = new Vue({
         myTimeLeft: null,
         playerOTimeLeft: null,
         playerXTimeLeft: null,
+        gameTime: 0,
+        drawRequestSent: false,
+        drawRequestReceived: false,
+        rematchRequestSent: false,
+        rematchRequestReceived: false,
     },
     methods: {
         main: function () {
             const _this = this;
             this.connectToSocket();
+        },
+        openModal: function (modalId) {
+            const _this = this;
+            setTimeout(() => {
+            }, 300);
+            openModal(this, modalId);
+            setTimeout(() => {
+                if (modalId === "editgame") {
+                }
+            }, 300);
         },
         connectToSocket: function () {
             const _this = this;
@@ -55,48 +71,86 @@ export const vue = new Vue({
             console.log(data);
             if (data.c === "UNA1")
                 location.href = "/error?code=404&message=Hra skončila&buttonLink=/play";
-            if (data.action === "status") {
-                _this.gameNumberOfPlayers = data.playerCount;
-                _this.myTimeLeft = data.myTimeLeft;
-                _this.playerXTimeLeft = data.playerXTimeLeft;
-                _this.playerOTimeLeft = data.playerOTimeLeft;
-                _this.accountChar = data.yourChar;
-                _this.currentPlayer = data.currentPlayer;
-                if (_this.game) {
-                    if (data?.gameTime)
-                        _this.game.gameTime = data.gameTime;
-                    _this.game.winner = data.winner;
-                    _this.game.result = data.result;
-                }
-                if (data.winner !== null) {
-                    setTimeout(() => {
-                        _this.showEndGameScreen();
-                    }, 3000);
-                }
-            }
-            if (data.action === "updateGame") {
-                this.initializeGame(data.game);
-            }
-            if (data.action === "finishGame") {
-                _this.finishGameObject = data;
-                _this.gameLocked = true;
-                if (data.winner !== null) {
-                    setTimeout(() => {
-                        _this.showEndGameScreen();
-                    }, 3000);
-                }
-            }
-            if (data.action === "chatMessage") {
-                _this.chatMessages.push({
-                    sender: data.sender,
-                    message: data.message,
-                    letter: String(data.letter).toUpperCase(),
-                    isMe: data.sender === _this.accountName,
-                });
-                setTimeout(() => {
-                    const chatDiv = document.querySelector(".chat-messages");
-                    chatDiv.scroll({ top: chatDiv.scrollHeight + 100000, behavior: 'smooth' });
-                }, 10);
+            switch (data.action) {
+                case "status":
+                    {
+                        _this.gameNumberOfPlayers = data.playerCount;
+                        _this.myTimeLeft = data.myTimeLeft;
+                        _this.playerXTimeLeft = data.playerXTimeLeft;
+                        _this.playerOTimeLeft = data.playerOTimeLeft;
+                        _this.accountChar = data.yourChar;
+                        _this.currentPlayer = data.currentPlayer;
+                        if (_this.game) {
+                            if (data?.gameTime)
+                                _this.game.gameTime = data.gameTime;
+                            if (data?.gameTime)
+                                _this.gameTime = data.gameTime;
+                            _this.game.winner = data.winner;
+                            _this.game.result = data.result;
+                        }
+                        if (data.winner !== null) {
+                            setTimeout(() => {
+                                _this.showEndGameScreen();
+                            }, 3000);
+                        }
+                    }
+                    break;
+                case "updateGame":
+                    {
+                        this.initializeGame(data.game);
+                    }
+                    break;
+                case "finishGame":
+                    {
+                        _this.finishGameObject = data;
+                        _this.gameLocked = true;
+                        _this.openModal(null);
+                        if (data.winner !== null) {
+                            setTimeout(() => {
+                                _this.showEndGameScreen();
+                            }, 3000);
+                        }
+                    }
+                    break;
+                case "chatMessage":
+                    {
+                        _this.chatMessages.push({
+                            sender: data.sender,
+                            message: data.message,
+                            letter: String(data.letter).toUpperCase(),
+                            isMe: data.sender === _this.accountName,
+                        });
+                        setTimeout(() => {
+                            const chatDiv = document.querySelector(".chat-messages");
+                            chatDiv.scroll({ top: chatDiv.scrollHeight + 100000, behavior: 'smooth' });
+                        }, 10);
+                    }
+                    break;
+                case "drawRequest":
+                    {
+                        if (!_this.drawRequestSent)
+                            _this.addAnnouncement(`${data.sender} žádá o remízu. V chatu ji můžeš přijmout.`, "info", 6000);
+                        else
+                            _this.addAnnouncement("Remíza byla přijata. Hra končí.", "info", 3000);
+                        if (!_this.drawRequestSent)
+                            _this.drawRequestReceived = true;
+                    }
+                    break;
+                case "rematchRequest":
+                    {
+                        if (!_this.rematchRequestSent)
+                            _this.addAnnouncement(`${data.sender} chce hrát proti tobě ještě jednou. V chatu to můžeš přijmout.`, "info", 6000);
+                        else
+                            _this.addAnnouncement("Rematch byl přijat druhým hráčem. Začíná nová hra.", "info", 3000);
+                        if (!_this.rematchRequestSent)
+                            _this.rematchRequestReceived = true;
+                    }
+                    break;
+                case "sendToMatch":
+                    {
+                        location.href = `/multiplayer/${data.matchUUID}`;
+                    }
+                    break;
             }
             if (!_this.gameLoaded && data.action === "status" && data.playerCount >= 2 && _this.game) {
                 _this.gameLoaded = true;
@@ -221,6 +275,47 @@ export const vue = new Vue({
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = seconds % 60;
             return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+        },
+        surrenderGame: function () {
+            const _this = this;
+            _this.socket.send(JSON.stringify({
+                action: "surrender",
+            }));
+            _this.gameLocked = true;
+            _this.openModal(null);
+            _this.addAnnouncement("Hra byla ukončena - vzdal/a ses.", "info", 3000);
+        },
+        requestDraw: function () {
+            const _this = this;
+            if (_this.drawRequestSent) {
+                _this.addAnnouncement("Žádost o remízu již byla odeslána.", "error", 3000);
+                return;
+            }
+            _this.socket.send(JSON.stringify({
+                action: "requestDraw",
+            }));
+            _this.openModal(null);
+            _this.drawRequestSent = true;
+            if (_this.drawRequestReceived)
+                _this.addAnnouncement("Remíza byla přijata. Hra končí...", "info", 3000);
+            else
+                _this.addAnnouncement("Žádost o remízu odeslána druhému hráči.", "info", 3000);
+        },
+        requestRematch: function () {
+            const _this = this;
+            if (_this.rematchRequestSent) {
+                _this.addAnnouncement("Žádost o rematch již byla odeslána.", "error", 3000);
+                return;
+            }
+            _this.socket.send(JSON.stringify({
+                action: "requestRematch",
+            }));
+            _this.openModal(null);
+            _this.rematchRequestSent = true;
+            if (_this.rematchRequestReceived)
+                _this.addAnnouncement("Rematch byl přijat, začíná nová hra...", "info", 3000);
+            else
+                _this.addAnnouncement("Žádost o rematch odeslána druhému hráči.", "info", 3000);
         },
     },
     computed: {},

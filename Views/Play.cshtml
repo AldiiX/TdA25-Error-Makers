@@ -113,22 +113,28 @@
 
                 <!-- faze vybirani singleplayer modu -->
                 <div class="select-singleplayer-mode" v-show="temp.faze === 'selectSingleplayerMode'">
+                    <p class="back" v-on:click="changeFaze('selectSingleplayerOrMultiplayer', () => { temp.selectedMode = null })">« Zpět</p>
+
                     <div class="m1v1" v-on:click="temp.selectedSingleplayerMode = '1v1'; locationHref('/play/singleplayer/1v1');">
                         <div>
                             <h2>1v1</h2>
                             <p>Zahraj si piškvorky proti kamarádovi na jednom počítači!</p>
                         </div>
                     </div>
-                    <div class="ai" v-on:click="temp.selectedSingleplayerMode = 'vsai';">
+                    <div class="ai locked" v-on:click="temp.selectedSingleplayerMode = 'vsai';">
                         <div>
                             <h2>Proti AI</h2>
                             <p>Zkusíš porazit umělou inteligenci v piškvorkách?</p>
                         </div>
+
+                        <p class="loginwarn">Naše AI momentálně odpočívá :)</p>
                     </div>
                 </div>
 
                 <!-- faze vybirani multiplayer modu -->
                 <div class="select-multiplayer-mode" v-show="temp.faze === 'selectMultiplayerMode'">
+                    <p class="back" v-on:click="changeFaze('selectSingleplayerOrMultiplayer', () => { temp.selectedMode = null })">« Zpět</p>
+
                     <div class="freeplay" v-on:click="changeFaze('createFreeplayLobby');">
                         <div>
                             <h2>Freeplay</h2>
@@ -141,7 +147,7 @@
                             <p>Zahraj si proti náhodnému hráči, ukaž, co v tobě je a získej ELO.</p>
                         </div>
 
-                        <p class="loginwarn">Pro hraní tohoto módu <a href="/login">se musíš přihlásit</a>.</p>
+                        <p class="loginwarn">Pro hraní tohoto módu se musíš přihlásit.</p>
                     </div>
                 </div>
 
@@ -155,6 +161,8 @@
                     <p v-if="rankedQueue.size === 0 || rankedQueue.size === 1">Ve frontě jsi aktuálně sám... :(</p>
                     <p v-else-if="rankedQueue.size > 0 && rankedQueue.size <= 4">Ve frontě jsou aktuálně {{ rankedQueue?.size ?? 0 }} hráči.</p>
                     <p v-else-if="rankedQueue.size > 4">Ve frontě je aktuálně {{ rankedQueue?.size ?? 0 }} hráčů.</p>
+                    <p v-else>.....</p>
+                    <button class="button-primary-col-sec" v-on:click="changeFaze('selectMultiplayerMode'); socket.close(); socket = null">Opustit</button>
                 </div>
             </div>
         </div>

@@ -150,6 +150,10 @@ export const vue = new Vue({
                     _this.rankedQueue.size = data.queueSize;
                     _this.rankedQueue.timeElapsed = data.queueTime;
                 }
+
+                if(data.error == true) {
+                    _this.addAnnouncement(data.message, "error");
+                }
             };
 
             socket.onclose = function (event) {

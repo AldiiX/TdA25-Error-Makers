@@ -29,6 +29,13 @@ public class BeforeInitMiddleware(RequestDelegate next){
         var multiplayerGame = path.StartsWith("/multiplayer/") ? MultiplayerGame.GetAsync(path.Split("/")[2]) : null;
         var multiplayerGameWS = path.StartsWith("/ws/multiplayer/game/") ? MultiplayerGame.GetAsync(path.Split("/")[4]) : null;
 
+        Task<Account?>? accountTask = null;
+        if (path.StartsWith("/user/") && path != "/user/") {
+            accountTask = Account.GetByUsernameAsync(path.Split("/")[2]);
+        } else if(path.StartsWith("/@")) {
+            accountTask = Account.GetByUsernameAsync(path[2..]);
+        }
+
         // používání async věcí
         /*if (path.StartsWith("/game/") && path != "/game/") {
             Game? game = gameTask != null ? await gameTask : null;
@@ -61,6 +68,17 @@ public class BeforeInitMiddleware(RequestDelegate next){
             MultiplayerGame? game = multiplayerGameWS != null ? await multiplayerGameWS : null;
 
             context.Items["game"] = game;
+        }
+
+        else if (path.StartsWith("/@") || path.StartsWith("/user/")) {
+            Account? account = accountTask != null ? await accountTask : null;
+
+            if (account == null) {
+                context.Response.StatusCode = 404;
+                return;
+            }
+
+            context.Items["queryAccount"] = account;
         }
 
 
