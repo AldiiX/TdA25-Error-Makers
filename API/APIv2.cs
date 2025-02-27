@@ -251,39 +251,7 @@ public class APIv2 : Controller {
         var games = MultiplayerGame.GetAll();
         return new JsonResult(games) { ContentType = "application/json" };
     }*/
-
     
-    // Leaderboard
-    [HttpGet("leaderboard")]
-    public IActionResult GetLeaderboard()
-    {
-        var array = new JsonArray();
-        
-        using var conn = Database.GetConnection();
-        if (conn == null) return new JsonResult(array);
-        using var cmd = new MySqlCommand("SELECT * FROM `users` WHERE temporary = 0 ORDER BY `elo` desc", conn);
-        using var reader = cmd.ExecuteReader();
-        
-        while (reader.Read())
-        {
-            var obj = new JsonObject();
-            obj["uuid"] = reader.GetString("uuid");
-            if (!reader.IsDBNull(reader.GetOrdinal("display_name")))
-            {
-                obj["name"] = reader.GetString("display_name");
-            }
-            else
-            {
-                obj["name"] = reader.GetString("username");
-            }
-            obj["elo"] = reader.GetInt32("elo");
-            array.Add(obj);
-                
-
-        }
-        return new JsonResult(array);
-    }
-
     [HttpPut("credentials")]
 public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?> body) {
     using var conn = Database.GetConnection();
@@ -509,4 +477,49 @@ public IActionResult GetGameHistory() {
             ? new JsonResult(new { success = true, message = "Uživatel byl odbanován." }) 
             : new JsonResult(new { success = false, message = "Uživatel nebyl odbanován." }) { StatusCode = 400 };
     }
+
+    [HttpGet("leaderboard")]
+    public IActionResult GetLeaderboard() {
+        var loggedUser = Auth.ReAuthUser();
+        using var conn = Database.GetConnection();
+        if (conn == null)
+            return BadRequest(new { success = false, message = "Databáze nebyla připojena" });
+
+        var query = "SELECT * FROM `users` WHERE `temporary` = 0 ORDER BY `elo` DESC";
+        using var cmd = new MySqlCommand(query, conn);
+        using var reader = cmd.ExecuteReader();
+
+        var users = new List<JsonObject>();
+        JsonObject? userEntry = null;
+        int userRank = 0;
+        int currentRank = 1;
+
+        while (reader.Read()) {
+            var user = new JsonObject {
+                { "uuid", reader.GetString("uuid") },
+                { "username", reader.GetString("username") },
+                { "display_name", reader.GetValueOrNull<string>("display_name") },
+                { "elo", reader.GetInt32("elo") },
+                { "rank", currentRank }
+            };
+
+            if (user["uuid"]?.ToString() == loggedUser?.UUID) {
+                userEntry = user;
+                userRank = currentRank;
+            }
+
+            if (users.Count < 10)
+                users.Add(user);
+
+            currentRank++;
+        }
+
+        if (userEntry != null && users.All(u => u["uuid"]?.ToString() != loggedUser?.UUID)) {
+            users.Add(userEntry);
+        }
+
+        return new JsonResult(users);
+    }
+
+
 }

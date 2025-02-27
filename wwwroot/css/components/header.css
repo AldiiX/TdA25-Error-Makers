@@ -163,6 +163,7 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
   margin-left: 32px;
 }
 .header-5F015D44-0984-4A50-B52B-5319AE57C19C > .flex > .Login > .User .UserIcon {
+  font-family: "Dosis", sans-serif;
   font-size: 24px;
   font-weight: 700;
   color: white;

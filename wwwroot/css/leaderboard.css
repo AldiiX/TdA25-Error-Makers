@@ -1,33 +1,155 @@
-.sections .mainsection .texts {
-  width: 80%;
-  margin: 0 auto;
-  margin-top: 64px;
+.sections {
+  font-family: "Dosis", sans-serif;
+}
+.sections .mainsection {
+  padding-bottom: 64px;
+}
+.sections .mainsection > .leaderboard {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
-.sections .mainsection .texts table {
-  text-align: justify;
-  margin: 0 auto;
-  font-size: 20px;
-  font-family: Dosis, serif;
-  border-collapse: separate;
-  border-spacing: 0 16px;
-  background-color: var(--background-color-primary);
-  border-radius: 20px;
-  table-layout: auto;
-  width: 100%;
-  padding: 32px;
+.sections .mainsection > .leaderboard > .top-three {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 32px;
+  margin-top: 128px;
+  margin-bottom: 32px;
 }
-
-@media screen and (min-width: 600px) and (max-width: 960px) {
-  .sections .mainsection .texts p {
-    font-size: 16px;
-  }
+.sections .mainsection > .leaderboard > .top-three .player-first,
+.sections .mainsection > .leaderboard > .top-three .player-second,
+.sections .mainsection > .leaderboard > .top-three .player-third {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 }
-@media screen and (max-width: 600px) {
-  .sections .mainsection .texts p {
-    font-size: 16px;
-  }
+.sections .mainsection > .leaderboard > .top-three .player-first .avatar-wrapper,
+.sections .mainsection > .leaderboard > .top-three .player-second .avatar-wrapper,
+.sections .mainsection > .leaderboard > .top-three .player-third .avatar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.sections .mainsection > .leaderboard > .top-three .player-first .rank,
+.sections .mainsection > .leaderboard > .top-three .player-second .rank,
+.sections .mainsection > .leaderboard > .top-three .player-third .rank {
+  font-size: 24px;
+  font-weight: 600;
+}
+.sections .mainsection > .leaderboard > .top-three .player-first .score,
+.sections .mainsection > .leaderboard > .top-three .player-second .score,
+.sections .mainsection > .leaderboard > .top-three .player-third .score {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-color-primary);
+}
+.sections .mainsection > .leaderboard > .top-three .player-info {
+  margin-top: 8px;
+  text-align: center;
+}
+.sections .mainsection > .leaderboard > .top-three .player-info .name {
+  font-size: 32px;
+  font-weight: 700;
+}
+.sections .mainsection > .leaderboard > .top-three .player-info .elo {
+  font-size: 16px;
+  color: #555;
+}
+.sections .mainsection > .leaderboard .player-first {
+  transform: translateY(-20%);
+}
+.sections .mainsection > .leaderboard .player-first .crown {
+  position: absolute;
+  top: -40px;
+  transform: rotate(12deg) translateX(10px);
+  width: 60px;
+  height: 60px;
+  background: url("/images/svg/crown.svg") no-repeat center;
+  background-size: contain;
+}
+.sections .mainsection > .leaderboard .player-first .avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: var(--accent-color-additional-2);
+  color: var(--text-color-primary);
+  font-size: 48px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+}
+.sections .mainsection > .leaderboard .player-first .rank {
+  color: gold;
+}
+.sections .mainsection > .leaderboard .player-first .name {
+  color: gold;
+}
+.sections .mainsection > .leaderboard .player-second {
+  transform: translateY(-10%);
+}
+.sections .mainsection > .leaderboard .player-second .avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: var(--accent-color-primary-darker);
+  color: var(--text-color-primary);
+  font-size: 48px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+}
+.sections .mainsection > .leaderboard .player-second .rank {
+  color: silver;
+}
+.sections .mainsection > .leaderboard .player-second .name {
+  color: silver;
+}
+.sections .mainsection > .leaderboard .player-third {
+  transform: translateY(-5%);
+}
+.sections .mainsection > .leaderboard .player-third .avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: var(--accent-color-secondary-darker);
+  color: var(--text-color-primary);
+  font-size: 48px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+}
+.sections .mainsection > .leaderboard .player-third .rank {
+  color: #cd7f32;
+}
+.sections .mainsection > .leaderboard .player-third .name {
+  color: #cd7f32;
+}
+.sections .mainsection > .leaderboard > .leaderboard-bottom {
+  font-weight: 500;
+  font-size: 16px;
+  width: 40%;
+  margin-bottom: 64px;
+}
+.sections .mainsection > .leaderboard > .leaderboard-bottom > .rest-of-leaderboard {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-gray);
+  padding: 16px 0;
+}
+.sections .mainsection > .leaderboard > .leaderboard-bottom > .rest-of-leaderboard > .left {
+  display: flex;
+  gap: 24px;
+}
+.sections .mainsection > .leaderboard > .leaderboard-bottom > .rest-of-leaderboard > .right {
+  display: flex;
 }
 
 /*# sourceMappingURL=leaderboard.css.map */
