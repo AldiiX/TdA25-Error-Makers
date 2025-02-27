@@ -307,13 +307,13 @@
                                             //box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
                                             cursor: pointer;
                                             position: relative;
-                                            transition-duration: 0.3s;
                                             overflow: hidden;
+                                            transition-duration: 0s;//
 
                                             &:is(.x),
                                             &:is(.o) {
                                                 pointer-events: none;
-                                                transition-duration: 0.3s;
+                                                transition-duration: 0s;//
 
                                                 >.cellhover {
                                                     display: none;
@@ -337,7 +337,7 @@
                                                     mask-size: 60%;
                                                     background: var(--accent-color-secondary);
                                                     animation: xoappear 0.2s ease-out;
-                                                    transition-duration: 0.5s;
+                                                    transition-duration: 0s;
 
                                                     @keyframes xoappear {
                                                         0% {
