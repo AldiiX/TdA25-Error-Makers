@@ -95,7 +95,6 @@
                             <p class="text">Poslední aktivita:</p>
                             <p class="time">@(queryAccount?.LastActive != null ? Utilities.HowLongSinceLastActivity(queryAccount.LastActive??DateTime.Now) : "Neznámý")</p>
                         </div>
-
                     </div>
                 </div>
 
@@ -116,11 +115,23 @@
                             <div class="game-info">
                                 <div class="game-info-top">
                                     <div class="game-between">
-                                        <p class="player">{{ game.player_o_name }}</p>
-                                        <p class="player">{{ game.player_x_name }}</p>
+                                            <p class="player-o">
+                                                <span>
+                                                    <i class="o-icon"></i>
+                                                </span>
+                                                {{ game.player_o_name }}
+                                            </p>
+                                            <p class="player-x">
+                                                <span>
+                                                    <i class="x-icon"></i>
+                                                </span>
+                                                {{ game.player_x_name }}
+                                            </p>
                                     </div>
-                                    
-                                  
+                                    <p class="game-result">
+                                        {{getGameResult(game)}}
+                                    </p>
+                                    <p class="game-played-on">{{ new Date(game.created_at).toLocaleDateString() }}</p>
                                     <div class="gameboard">
                                         <div 
                                             v-for="(cell, index) in game.board.flat()" 
@@ -136,13 +147,7 @@
                                         >
                                         </div>
                                     </div>
-
-
                                     
-                                    <p class="game-result">
-                                        {{getGameResult(game)}}
-                                    </p>
-                                    <p class="game-played-on">{{ new Date(game.created_at).toLocaleDateString() }}</p>
                                 </div>
                             </div>
                         </div>
