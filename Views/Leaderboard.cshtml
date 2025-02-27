@@ -104,12 +104,14 @@
                 </div>
                 
                 <div class="leaderboard-bottom">
-                    <div class="rest-of-leaderboard" v-for="(user, i) in restOfLeaderboard" :key="user.uuid">
+                    <div v-for="(user, i) in restOfLeaderboard" v-bind:class="['rest-of-leaderboard', { 'me': user.isLoggedAccount }]"  :key="user.uuid" v-on:click="locationHref(`@@${String(user.username).toLowerCase()}`)">
                         <div class="left">
                             <div class="rank">{{user.rank}}.</div>
-                            <div class="user">{{user.display_name || user.username}}</div>
+                            <div class="user">{{user.display_name ?? user.username}}<span v-if="user.isLoggedAccount">TY</span></div>
                         </div>
+
                         <div class="right">
+                            <div class="wld">{{user.wins}} / {{user.draws}} / {{user.losses}}</div>
                             <div class="elo">{{user.elo}} Elo</div>
                         </div>
                     </div>

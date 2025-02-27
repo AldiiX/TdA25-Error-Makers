@@ -80,6 +80,8 @@
                             > .elo {
                                 font-size: 20px;
                                 margin: 0;
+                                color: var(--color-gray);
+
                             }
                         }
 
@@ -93,6 +95,7 @@
                             > .ratio {
                                 font-size: 20px;
                                 margin: 0;
+                                color: var(--color-gray);
                             }
                         }
                     }
@@ -101,6 +104,10 @@
 
                         >h1, >p {
                             margin: 0;
+                        }
+
+                        >p {
+                            color: var(--color-gray);
                         }
 
                         > .avatar {
@@ -139,6 +146,7 @@
                             > .time {
                                 font-size: 20px;
                                 margin: 0;
+                                color: var(--color-gray);
                             }
                         }
 
@@ -152,6 +160,7 @@
                             > .time {
                                 font-size: 20px;
                                 margin: 0;
+                                color: var(--color-gray);
                             }
                         }
                     }

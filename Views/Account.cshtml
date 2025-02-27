@@ -70,9 +70,9 @@
                         </div>
                         
                         <div class="win-loss-ratio">
-                            <p class="text">Poměr výher/proher:</p>
+                            <p class="text" title="Poměr výher / remíz / proher">Poměr W/D/L:</p>
                             <p class="ratio">
-                                @((queryAccount.Losses > 0) ? ((double)queryAccount.Wins / queryAccount.Losses).ToString("0.00") : queryAccount.Wins.ToString("0.00"))
+                                @queryAccount?.Wins / @queryAccount?.Draws / @queryAccount?.Losses
                             </p>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                             @queryAccount?.DisplayName[0].ToString().ToUpper()
                         </div>
                         <h1>@queryAccount?.DisplayName</h1>
-                        <p>@queryAccount?.Username</p>
+                        <p>@@@queryAccount?.Username</p>
                     </div>
 
                     <div class="right">
@@ -97,10 +97,6 @@
                         </div>
 
                     </div>
-
-
-
-
                 </div>
 
                 <div class="account-bottom">

@@ -501,7 +501,11 @@ public IActionResult UserChangeCredentials([FromBody] Dictionary<string, object?
                 { "username", reader.GetString("username") },
                 { "display_name", reader.GetValueOrNull<string>("display_name") },
                 { "elo", reader.GetInt32("elo") },
-                { "rank", currentRank }
+                { "wins", reader.GetUInt32("wins") },
+                { "losses", reader.GetUInt32("losses") },
+                { "draws", reader.GetUInt32("draws") },
+                { "rank", currentRank },
+                { "isLoggedAccount", loggedUser?.UUID == reader.GetString("uuid") }
             };
 
             if (user["uuid"]?.ToString() == loggedUser?.UUID) {
