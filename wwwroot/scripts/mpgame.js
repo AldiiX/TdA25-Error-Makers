@@ -59,7 +59,6 @@ export const vue = new Vue({
             const socket = new WebSocket(`${locationIsLocalhost ? "ws" : "wss"}://${window.location.host}/ws/multiplayer/game/${uuid}`);
             _this.socket = socket;
             socket.onopen = () => {
-                console.log("Connected to the server");
             };
             socket.onmessage = (event) => {
                 _this.receiveSocketMessage(event);
@@ -68,7 +67,6 @@ export const vue = new Vue({
         receiveSocketMessage: function (event) {
             const _this = this;
             const data = JSON.parse(event.data);
-            console.log(data);
             if (data.c === "UNA1")
                 location.href = "/error?code=404&message=Hra skončila&buttonLink=/play";
             switch (data.action) {

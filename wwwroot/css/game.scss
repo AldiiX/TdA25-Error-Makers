@@ -1086,6 +1086,24 @@
 
 // mobil
 @media screen and (max-width: 735px) {
+    .mainsection .flex > .right > .chat {
+        width: 100%;
+    }
+
+    .mainsection > .endgame {
+        position: relative;
+        top: 30vh;
+        left: 0;
+        margin: 0 auto;
+        transform: none;
+        width: 85vw;
+        gap: 72px;
+    }
+
+    .mainsection > .endgame > .right > .chat {
+        width: 100%;
+    }
+
     .mainsection {
         height: auto;
         min-height: 100vh;

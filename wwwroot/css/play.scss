@@ -822,3 +822,37 @@
         }
     }
 }
+
+
+
+// mobilni design
+@media  screen and (max-width: 735px) {
+    .main > .mpfreeplaylobby > .joinlobby > div {
+        flex-direction: column;
+    }
+
+    .main .select-multiplayer-mode {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .main .first {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .main .select-singleplayer-mode {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .main > .centerdiv {
+        position: relative;
+        margin: 0 auto;
+        margin-top: 30vh;
+        top: 0;
+        left: 0;
+        transform: none;
+        width: 85vw;
+    }
+}

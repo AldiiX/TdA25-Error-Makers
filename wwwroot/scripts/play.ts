@@ -99,7 +99,7 @@ export const vue = new Vue({
                 url.searchParams.set("faze", faze);
                 window.history.pushState({}, "", url);
 
-                console.log(_this.temp)
+                //console.log(_this.temp)
             }, 150);
 
 
@@ -135,11 +135,11 @@ export const vue = new Vue({
             const socket = new WebSocket(`${locationIsLocalhost ? "ws" : "wss"}://${window.location.host}/ws/multiplayer/ranked/queue`);
 
             socket.onopen = function (event) {
-                console.log('Connected to WebSocket.');
+                //console.log('Connected to WebSocket.');
             };
 
             socket.onmessage = function (event) {
-                console.log('Message from server:', event.data);
+                //console.log('Message from server:', event.data);
 
                 const data = JSON.parse(event.data);
                 if(data.action === "sendToMatch") {
@@ -157,13 +157,13 @@ export const vue = new Vue({
             };
 
             socket.onclose = function (event) {
-                console.log('WebSocket connection closed:', event);
+                //console.log('WebSocket connection closed:', event);
             };
 
             socket.onerror = function (error) {
-                console.error('WebSocket error:', error);
-                console.error('WebSocket readyState:', socket.readyState);
-                console.error('WebSocket URL:', socket.url);
+                //console.error('WebSocket error:', error);
+                //console.error('WebSocket readyState:', socket.readyState);
+                //console.error('WebSocket URL:', socket.url);
             };
 
             _this.socket = socket;
@@ -172,7 +172,7 @@ export const vue = new Vue({
         connectToMultiplayerFreeplayQueue: function(code: number | null = null): void {
             const _this = this as any;
 
-            console.log("connectToMultiplayerFreeplayQueue", code);
+            //console.log("connectToMultiplayerFreeplayQueue", code);
 
             if(_this.socket) {
                 _this.socket.close();
@@ -182,11 +182,11 @@ export const vue = new Vue({
             const socket = new WebSocket(`${locationIsLocalhost ? "ws" : "wss"}://${window.location.host}/ws/multiplayer/freeplay/queue${code ? `?roomNumber=${code}` : ""}`);
 
             socket.onopen = function (event) {
-                console.log('Connected to WebSocket.');
+                //console.log('Connected to WebSocket.');
             };
 
             socket.onmessage = function (event) {
-                console.log('Message from server:', event.data);
+                //console.log('Message from server:', event.data);
 
                 const data = JSON.parse(event.data);
                 switch (data.action) {
@@ -196,7 +196,7 @@ export const vue = new Vue({
                         _this.freeplayQueue.account = data.yourAccount;
                         _this.freeplayQueue.owner = data.roomOwner;
 
-                        console.warn(_this.freeplayQueue);
+                        //console.warn(_this.freeplayQueue);
                     } break;
 
                     case "lobbyDoesntExistError": {
@@ -225,13 +225,13 @@ export const vue = new Vue({
             };
 
             socket.onclose = function (event) {
-                console.log('WebSocket connection closed:', event);
+                //console.log('WebSocket connection closed:', event);
             };
 
             socket.onerror = function (error) {
-                console.error('WebSocket error:', error);
-                console.error('WebSocket readyState:', socket.readyState);
-                console.error('WebSocket URL:', socket.url);
+                //console.error('WebSocket error:', error);
+                //console.error('WebSocket readyState:', socket.readyState);
+                //console.error('WebSocket URL:', socket.url);
             };
 
             _this.socket = socket;

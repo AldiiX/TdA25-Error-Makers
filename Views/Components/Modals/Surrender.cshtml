@@ -7,7 +7,8 @@
 
         <div class="modal-content">
             <h1>Vzdát se</h1>
-            <p>Opravdu se chceš vzdát? Hra se vyhodnotí jako prohra a ztratíš ELO.</p>
+            <p v-if="game?.type === 'RANKED'">Opravdu se chceš vzdát? Hra se vyhodnotí jako prohra a ztratíš ELO.</p>
+            <p v-if="game?.type === 'FREEPLAY'">Opravdu se chceš vzdát? Hra se vyhodnotí jako prohra.</p>
             <button class="button-primary-col-sec" v-on:click="surrenderGame()">Vzdát se</button>
             <button class="button-secondary" v-on:click="openModal(null)">Zrušit</button>
         </div>

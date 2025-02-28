@@ -36,7 +36,7 @@ export const vue = new Vue({
                 const data = await response.json();
 
                 if (!response.ok) {
-                    console.error("požadavek nebyl uspesny");
+                    //console.error("požadavek nebyl uspesny");
                     return;
                 }
                 _this.leaderboard = data;

@@ -91,7 +91,7 @@ export const vue = new Vue({
             _this.socket = socket;
 
             socket.onopen = () => {
-                console.log("Connected to the server");
+                //console.log("Connected to the server");
             }
 
             socket.onmessage = (event) => {
@@ -102,7 +102,7 @@ export const vue = new Vue({
         receiveSocketMessage: function(event: MessageEvent<any>) {
             const _this = this as any;
             const data = JSON.parse(event.data);
-            console.log(data);
+            //console.log(data);
 
             if(data.c === "UNA1") location.href="/error?code=404&message=Hra skončila&buttonLink=/play";
 
