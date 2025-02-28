@@ -183,6 +183,7 @@
                     position: relative;
                     overflow: hidden;
                     transition-duration: .3s;
+                    gap: 12px;
 
                     &:is(.me) {
                         >.left {
@@ -245,3 +246,21 @@
     }
 }
 
+@media screen and (max-width: 768px) {
+    .sections .mainsection > .leaderboard > .top-three {
+        flex-wrap: wrap;
+
+        >div {
+            transform: none !important;
+            width: fit-content !important;
+        }
+    }
+
+    .sections .mainsection > .leaderboard > .leaderboard-bottom {
+        width: 100%;
+
+        > .rest-of-leaderboard {
+
+        }
+    }
+}

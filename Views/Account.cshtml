@@ -62,6 +62,14 @@
         <section class="mainsection">
             <div class="account">
                 <div class="account-main">
+
+                    <div class="mobile-show-grid account-info">
+                        <div class="avatar">
+                            @queryAccount?.DisplayName[0].ToString().ToUpper()
+                        </div>
+                        <h1>@queryAccount?.DisplayName</h1>
+                        <p>@@@queryAccount?.Username</p>
+                    </div>
                     
                     <div class="left">
                         <div class="account-elo">
@@ -77,7 +85,7 @@
                         </div>
                     </div>
 
-                    <div class="account-info">
+                    <div class="mobile-hide-grid account-info">
                         <div class="avatar">
                             @queryAccount?.DisplayName[0].ToString().ToUpper()
                         </div>

@@ -18,6 +18,22 @@
     font-synthesis: none !important;
 }
 
+.mobile-show-flex {
+    display: none !important;
+}
+
+.mobile-hide-flex {
+    display: flex !important;
+}
+
+.mobile-show-grid {
+    display: none !important;
+}
+
+.mobile-hide-grid {
+    display: grid !important;
+}
+
 
 :root:is(.showlines) {
     * {
@@ -360,7 +376,23 @@ input, select {
 }
 
 // mobily
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 735px) {
+    .mobile-show-flex {
+        display: flex !important;
+    }
+
+    .mobile-hide-flex {
+        display: none !important;
+    }
+
+    .mobile-show-grid {
+        display: grid !important;
+    }
+
+    .mobile-hide-grid {
+        display: none !important;
+    }
+
     .sections > section:is(.top) > .texts > h1 {
         font-size: 64px;
     }

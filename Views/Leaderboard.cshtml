@@ -59,6 +59,21 @@
             <div class="leaderboard">
 
                 <div class="top-three" v-if="topThree.length" v-cloak>
+                    <!-- 1. místo uprostřed (s korunou) pro mobily -->
+                    <div class="player-first mobile-show-flex" v-if="topThree[0]" v-on:click="locationHref(`@@${topThree[0].username}`)">
+                        <div class="crown"></div>
+                        <div class="avatar-wrapper">
+                            <div class="avatar">
+                                {{ getInitials(topThree[0]) }}
+                            </div>
+                            <div class="rank">1</div>
+                        </div>
+                        <div class="player-info">
+                            <div class="name">{{ topThree[0].display_name || topThree[0].username }}</div>
+                            <div class="score">{{ topThree[0].elo }} Elo</div>
+                        </div>
+                    </div>
+
                     <!-- 2. místo nalevo -->
                     <div class="player-second" v-if="topThree[1]" v-on:click="locationHref(`@@${topThree[1].username}`)">
                         <div class="avatar-wrapper">
@@ -74,7 +89,7 @@
                     </div>
 
                     <!-- 1. místo uprostřed (s korunou) -->
-                    <div class="player-first" v-if="topThree[0]" v-on:click="locationHref(`@@${topThree[0].username}`)">
+                    <div class="player-first mobile-hide-flex" v-if="topThree[0]" v-on:click="locationHref(`@@${topThree[0].username}`)">
                         <div class="crown"></div>
                         <div class="avatar-wrapper">
                             <div class="avatar">

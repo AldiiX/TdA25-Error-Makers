@@ -101,6 +101,7 @@
                     }
 
                     > .account-info {
+                        display: grid;
 
                         >h1, >p {
                             margin: 0;
@@ -133,7 +134,7 @@
 
                     >.right{
                         display: flex;
-                        justify-content: space-between;
+                        justify-content: space-around;
 
                         > .account-createdat {
 
@@ -461,6 +462,42 @@
                    }
                 }
             }
+        }
+    }
+}
+
+@media screen and (max-width: 735px) {
+    #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .admin-panel > .admin-panel-users th,
+    #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .admin-panel > .admin-panel-users td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #ACCOUNT-PAGE .sections .mainsection > .account {
+        width: 100%;
+    }
+
+    #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game {
+        width: 100%;
+    }
+
+    #ACCOUNT-PAGE .sections .mainsection > .account > .account-main {
+        display: flex;
+        flex-wrap: wrap;
+
+        > div {
+            width: 100%;
+        }
+    }
+
+    #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+
+        >* {
+            flex-shrink: 0;
+            min-width: 150px;
         }
     }
 }

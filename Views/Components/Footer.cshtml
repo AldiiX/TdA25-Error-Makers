@@ -85,7 +85,7 @@
             <div class="login">
                 @if(loggedAccount != null) {
                     <p class="upper">Přihlášení</p>
-                    <div class="UserInformation">
+                    <div class="UserInformation" onclick="location.href='/account'">
                         <span class="UserIcon" onclick="location.href='/account'">
                             @loggedAccount.DisplayName[0].ToString().ToUpper()
                         </span>
