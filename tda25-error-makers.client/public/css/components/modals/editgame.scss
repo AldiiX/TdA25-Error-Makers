@@ -1,0 +1,393 @@
+﻿.modal-editgame {
+    >.modal {
+        padding: 0;
+        display: flex;
+        overflow: hidden;
+        border: 1px solid var(--button-outline-color);
+        transition-duration: 0.3s;
+
+        >.closebutton {
+            display: none;
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            mask-image: url('/images/icons/X_bile.svg');
+            mask-size: 50%;
+            mask-repeat: no-repeat;
+            mask-position: top right;
+            top: 16px;
+            right: 16px;
+            cursor: pointer;
+            user-select: none;
+            background-color: var(--accent-color-secondary);
+            transition-duration: 0.3s;
+
+            &:hover {
+                background-color: var(--accent-color-secondary-darker);
+                transition-duration: 0.3s;
+            }
+        }
+
+        >.left {
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            border-right: 1px solid var(--button-outline-color);
+
+            >.modal-header {
+                display: flex;
+                gap: 24px;
+                align-items: center;
+                margin-bottom: 24px;
+
+                >.img {
+                    width: 90px;
+                    height: 90px;
+                    background-color: var(--text-color);
+                    mask-image: var(--game-icon);
+                    mask-size: contain;
+                    mask-repeat: no-repeat;
+                    mask-position: center;
+                }
+
+                >.texts {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2px;
+
+                    >h1 {
+                        margin: 0;
+                        width: max-content;
+                    }
+
+                    >p {
+                        margin: 0;
+                        max-width: 250px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        color: var(--color-gray);
+                    }
+                }
+            }
+
+            >.modal-content {
+                display: flex;
+                gap: 24px;
+                position: relative;
+                flex-direction: column;
+
+                >.input {
+                    >p {
+                        margin: 0;
+                        font-weight: 600;
+                        margin-bottom: 6px;
+                    }
+
+                    input, select {
+                        width: 100%;
+                    }
+
+                    >.select-wrapper {
+                        position: relative;
+
+                        >select {
+                            appearance: none;
+                            padding-right: 52px;
+                        }
+
+
+                        &::after {
+                            content: '';
+                            width: 12px;
+                            height: 12px;
+                            position: absolute;
+                            right: 20px;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            pointer-events: none;
+                            background-color: var(--text-color);
+                            mask: url("/images/icons/arrow_down.svg") no-repeat center;
+                            mask-size: contain;
+                            mask-repeat: no-repeat;
+                        }
+                    }
+                }
+
+                >.buttons {
+                    display: flex;
+                    gap: 8px;
+
+                    >input {
+                        flex-grow: 1;
+
+                        &:is(.locked) {
+                            background-color: var(--color-gray);
+                            pointer-events: none;
+                        }
+                    }
+                }
+            }
+
+            >.bottom {
+                display: flex;
+                flex-grow: 1;
+                flex-direction: column;
+                margin-top: 24px;
+
+                >.help {
+                    display: flex;
+                    flex-direction: column;
+                    flex-grow: 1;
+
+                    >div {
+                        display: flex;
+                        gap: 8px;
+                        align-items: center;
+
+                        >div {
+                            background-color: var(--text-color);
+                            width: 16px;
+                            height: 16px;
+                            mask-size: contain;
+                            mask-repeat: no-repeat;
+                            mask-position: center;
+                        }
+
+                        >p {
+                            margin: 0;
+                            color: var(--text-color);
+                        }
+                    }
+                }
+
+                >.errors {
+                    p {
+                        width: 260px;
+                        color: var(--accent-color-secondary);
+                        margin: 0;
+
+                        /*&:is(.withfadeout) {
+                            opacity: 0;
+                            animation: asdfsdeuofsdiofh 4s forwards ease-in-out;
+
+                            @keyframes asdfsdeuofsdiofh {
+                                0% { opacity: 1; }
+                                75% { opacity: 1; }
+                                100% { opacity: 0; }
+                            }
+                        }*/
+                    }
+                }
+
+                >.delete-button {
+                    display: flex;
+                    gap: 8px;
+                    margin-top: 24px;
+                    cursor: pointer;
+                    user-select: none;
+                    color: var(--accent-color-secondary);
+                    transition-duration: 0.3s;
+                    align-items: center;
+
+                    >div {
+                        width: 16px;
+                        height: 16px;
+                        background-color: var(--accent-color-secondary);
+                        mask-image: url('/images/icons/trash.svg');
+                        mask-size: contain;
+                        mask-repeat: no-repeat;
+                        mask-position: center;
+                        transition-duration: 0.3s;
+                    }
+
+                    &:hover {
+                        color: var(--accent-color-secondary-darker);
+                        transition-duration: 0.3s;
+
+                        >div {
+                            transition-duration: 0.3s;
+                            background-color: var(--accent-color-secondary-darker);
+                        }
+                    }
+                }
+            }
+        }
+
+        >.right {
+            padding: 24px;
+
+            >.grid {
+                $cell-size: 38px;
+                display: grid;
+                grid-template-columns: repeat(15, $cell-size);
+                grid-template-rows: repeat(15, $cell-size);
+                gap: 0;
+                width: fit-content;
+                border-radius: 12px;
+                //overflow: hidden;
+
+                .cell {
+                    width: $cell-size;
+                    height: $cell-size;
+                    background-color: var(--button-bg);
+                    //background-color: rgba(0, 0, 0, 0.3);
+                    border-radius: 6px;
+                    border: 2px solid var(--background-color-primary);
+                    //box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+                    cursor: pointer;
+                    position: relative;
+                    transition-duration: 0.3s;
+
+                    &:hover {
+                        background-color: var(--button-bg-hover);
+                    }
+
+                    &:is(.x),
+                    &:is(.o) {
+                        //pointer-events: none;
+                        transition-duration: 0.3s;
+
+                        &:is(.winning-cell) {
+                            animation: dsadasasdsa 2s ease 1;
+                            animation-delay: 0.5s;
+
+                            &::after {
+                                background-color: white;
+                            }
+
+                            @keyframes dsadasasdsa {
+                                0% {
+                                    transform: scale(1);
+                                    z-index: 2;
+                                }
+
+                                40% {
+                                    transform: scale(1.5);
+                                    z-index: 2;
+                                }
+
+                                60% {
+                                    transform: scale(1.5);
+                                    z-index: 2;
+                                }
+
+                                100% {
+                                    transform: scale(1);
+                                    z-index: 2;
+                                }
+                            }
+                        }
+
+                        &::after {
+                            content: "";
+                            width: 100%;
+                            height: 100%;
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            mask: url('/images/icons/X_bile.svg') no-repeat center;
+                            mask-size: 60%;
+                            background: var(--accent-color-secondary);
+                            animation: xoappear 0.2s ease-out;
+                            transition-duration: 0.5s;
+
+                            @keyframes xoappear {
+                                0% {
+                                    transform: translate(-50%, -50%) scale(0);
+                                }
+
+                                100% {
+                                    transform: translate(-50%, -50%) scale(1);
+                                }
+                            }
+                        }
+                    }
+
+                    &:is(.x) {
+                        &::after {
+                            mask-image: url('/images/icons/X_bile.svg');
+                            background: var(--accent-color-secondary);
+                        }
+
+                        &:is(.winning-cell) {
+                            background-color: var(--accent-color-secondary);
+                        }
+                    }
+
+                    &:is(.o) {
+                        &::after {
+                            mask-image: url('/images/icons/O_bile.svg');
+                            background: var(--accent-color-primary);
+                        }
+
+                        &:is(.winning-cell) {
+                            background-color: var(--accent-color-primary);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 600px) and (max-width: 1000px) {
+    .modal-editgame > .modal {
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        width: 90%;
+        max-width: 628px;
+        height: 90%;
+        border: 1px solid var(--button-outline-color);
+        transition-duration: 0.3s;
+
+        >.closebutton {
+            display: block;
+        }
+
+        >.right{
+            overflow: auto;
+        }
+        >.left{
+            >.bottom{
+                >.help{
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width: 600px){
+    .modal-editgame > .modal {
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        width: 95vw;
+        height: 95svh;
+        top: 50svh;
+        transform: translate(-50%, calc(-50svh +  20px));
+        border: 1px solid var(--button-outline-color);
+        transition-duration: 0.3s;
+
+        >.closebutton {
+            display: block;
+        }
+        
+        >.right{
+            overflow: auto;
+        }
+        >.left{
+            >.bottom{
+                >.help{
+                    display: none;
+                }
+            }
+        }
+    }
+}

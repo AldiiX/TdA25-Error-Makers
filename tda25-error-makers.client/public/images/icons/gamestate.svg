@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   style="color: rgb(0, 0, 0);"
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="controller.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="2.2207031"
+     inkscape:cx="255.77485"
+     inkscape:cy="256"
+     inkscape:window-width="2560"
+     inkscape:window-height="1351"
+     inkscape:window-x="2391"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <defs
+     id="defs4" />
+  <title
+     id="title1">ionicons-v5-g</title>
+  <path
+     d="M 481.05513,248.38937 C 461.51595,160.05955 432.53637,103.71451 386.08835,89.983992 A 97.164929,97.164929 0 0 0 358.3937,86.097394 c -28.55481,0 -51.08858,16.990586 -101.94354,16.990586 -50.85495,0 -73.4312,-16.990586 -101.94353,-16.990586 a 105.22484,105.22484 0 0 0 -28.884,3.886598 C 79.110893,103.71451 50.37556,160.11265 30.613381,248.38937 10.437057,338.55631 14.090034,409.79996 53.529438,423.47739 c 27.609707,9.55721 52.299152,-10.20498 75.682452,-39.29074 26.54779,-33.13164 59.24406,-43.32599 127.23827,-43.32599 67.99422,0 99.41618,10.19435 126.00645,43.32599 23.36206,29.107 48.96475,48.62494 75.84175,39.46065 43.55962,-14.87739 42.94371,-84.02908 22.75677,-175.25793 z"
+     style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:33.9812px;stroke-miterlimit:10;stroke-opacity:1"
+     fill="#000000"
+     id="path1" />
+  <metadata
+     id="metadata23">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>ionicons-v5-g</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

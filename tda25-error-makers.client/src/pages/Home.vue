@@ -1,5 +1,7 @@
 <script setup lang="ts">
     import { ref, onMounted, onUnmounted } from "vue";
+    import BlurBackground from "@/components/backgrounds/BlurBackground.vue";
+    import ColoredBackground from "@/components/backgrounds/ColoredBackground.vue";
 
     const projects = ref<any[] | null>(null);
 
@@ -9,10 +11,6 @@
             projects.value = data;
         })
     });
-
-    onUnmounted(() => {
-        console.log("home byl odstraněn");
-    });
 </script>
 
 
@@ -20,16 +18,17 @@
 
 <template>
     <section class="top">
+        <ColoredBackground />
 
-    </section>
+        <div class="center">
+            <div class="left">
+                <h1>Think different Academy</h1>
+                <p>Platforma na řešení zajímavých piškvorkových úloh, která ti pomůže rozvíjet logické myšlení a strategické schopnosti.</p>
+                <button class="button-primary-col-sec" onclick="location.href='/play'">HRÁT</button>
+            </div>
 
-    <section class="main">
-        <h1>Moje projekty</h1>
-
-        <div class="parent">
-            <div class="child" v-if="projects !== null" v-for="project in projects">
-                <h2>{{ project.title }}</h2>
-                <p>{{ project.description }}</p>
+            <div class="right">
+                <div class="img"></div>
             </div>
         </div>
     </section>
@@ -37,13 +36,167 @@
 
 
 <style>
-.top {
-    background-color: darkgreen;
-    height: 80vh
+@keyframes ospfpodskfposdkfpsok {
+    from { opacity: 0; margin-top: 100px; }
+    to { opacity: 1; margin-top: 0;}
 }
 
-.main {
-    background-color: #1c1c1c;
-    height: 500px;
+
+
+:root:is(.theme-light) {
+    .background {
+
+        &::after {
+            background: none;
+        }
+    }
+
+    section:is(.top) > .center > .left > p {
+        color: #e3e3e3;
+    }
+}
+
+section:is(.top) {
+    position: relative;
+    height: calc(100vh + 80px);
+    width: 100%;
+    overflow: hidden;
+
+
+    h1, p {
+        margin: 0;
+    }
+
+    >.center {
+        position: absolute;
+        width: 80%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: ospfpodskfposdkfpsok 1s forwards ease;
+
+
+
+        >.left {
+            >h1 {
+                width: clamp(0px, 50vw, 700px);
+                font-size: clamp(0px, 6vw, 96px);
+                line-height: clamp(0px, 5.5vw, 90px);
+                position: relative;
+                color: white;
+
+                &::before {
+                    content: 'X O O X X O';
+                    position: absolute;
+                    bottom: 100%;
+                    left: 0;
+                    font-size: clamp(0px, 1.5vw, 32px);
+                    color: #ff7575;
+                }
+            }
+
+            >p {
+                width: 30vw;
+                font-size: clamp(0px, 1.5vw, 24px);
+
+                margin-top: 2vw;
+                opacity: 0.7;
+            }
+
+            >button{
+                border-radius: 12px;
+                padding: 0.8vw 3vw;
+                font-size: clamp(0px, 1.5vw, 24px);
+                cursor: pointer;
+                margin: 0;
+                margin-top: 2vw;
+            }
+        }
+
+        >.right {
+            position: relative;
+            flex-grow: 1;
+
+            >.img {
+                width: 100%;
+                max-width: 30vw;
+                aspect-ratio: 1/1;
+                background-image: url("/images/icons/zarivka_playing_bile.svg");
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+                margin-left: auto;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 600px) and (max-width: 960px){
+    section:is(.top) > .center > .left > p {
+        width: 45vw;
+        font-size: clamp(0px, 2.5vw, 24px);
+        margin-top: 2vw;
+        opacity: 0.7;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    section:is(.top) {
+        height: calc(100svh + 80px);
+        transition-duration: 0.3s;
+
+        >.center {
+            position: absolute;
+            width: auto;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: ospfpodskfposdkfpsok 1s forwards ease;
+
+            >.left {
+                h1{
+                    width: 80vw;
+                    font-size: 48px;
+                    line-height: 48px;
+                    position: relative;
+                    color: white;
+
+                    &::before {
+                        content: "X O O X X O";
+                        position: absolute;
+                        bottom: 100%;
+                        left: 0;
+                        font-size: 16px;
+                        color: #ff7575;
+                    }
+                }
+
+                p {
+                    width: 80vw;
+                    font-size: 16px;
+                    margin-top: 16px;
+                    opacity: 0.7;
+                }
+
+                >button{
+                    border-radius: 12px;
+                    padding: 10px 30px;
+                    font-size: 16px;
+                    cursor: pointer;
+                    margin: 0;
+                    margin-top: 16px;
+                }
+            }
+            >.right {
+                display: none;
+            }
+        }
+    }
 }
 </style>

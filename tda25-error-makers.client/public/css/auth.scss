@@ -1,0 +1,99 @@
+﻿#AUTH-PAGE {
+
+    .sections {
+        min-height: calc(100vh - 25vh);
+
+        .mainsection {
+            position: relative;
+            margin-top: 25vh;
+
+            .auth-box {
+                width: fit-content;
+                position: relative;
+                margin: 0 auto;
+            }
+
+            h1 {
+                text-align: center;
+                font-size: 5vw;
+                margin: 0;
+            }
+
+            p {
+                font-size: 20px;
+                text-align: center;
+                margin-top: 16px;
+                margin-bottom: 48px;
+            }
+
+            a {
+                color: var(--accent-color-secondary);
+                text-decoration: none;
+                font-weight: 700;
+                font-size: 20px;
+            }
+
+            form {
+                width: auto;
+                position: relative;
+            }
+
+            .input {
+                text-align: center;
+                margin: 16px auto;
+                font-size: 16px;
+                display: flex;
+                flex-direction: column;
+                width: fit-content;
+
+                >input {
+                    width: 250px;
+                }
+
+                >label {
+                    text-align: left;
+                    margin-bottom: 4px;
+                }
+            }
+
+            .errortxt {
+                color: var(--accent-color-secondary);
+                font-size: 16px;
+                max-width: 250px;
+                margin: 10px auto;
+            }
+
+            .submit {
+                text-align: center;
+                margin: 0 auto;
+                font-size: 16px;
+                margin-top: 32px;
+
+                >input {
+                    width: 250px;
+
+                    &:hover {
+                        background-color: var(--accent-color-secondary-darker);
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 600px) and (max-width: 960px){
+    #AUTH-PAGE .sections .mainsection h1 {
+        font-size: 7vw;
+    }
+
+    #AUTH-PAGE p {
+        margin-bottom: 48px;
+    }
+}
+
+@media screen and (max-width: 600px){
+    #AUTH-PAGE .sections .mainsection h1 {
+        font-size: 12vw;
+    }
+}

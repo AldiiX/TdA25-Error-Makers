@@ -1,0 +1,393 @@
+[v-cloak] {
+  display: none !important;
+}
+
+* {
+  font-synthesis: none !important;
+}
+
+.mobile-show-flex {
+  display: none !important;
+}
+
+.mobile-hide-flex {
+  display: flex !important;
+}
+
+.mobile-show-grid {
+  display: none !important;
+}
+
+.mobile-hide-grid {
+  display: grid !important;
+}
+
+:root:is(.showlines) * {
+  outline: 1px solid orange;
+}
+
+input,
+textarea,
+button,
+select,
+div,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+html {
+  font-size: 16px;
+  color: var(--text-color);
+  background-color: var(--background-color-secondary);
+  margin: 0;
+  position: relative;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+.animation-fadeout-03 {
+  animation: fadeout 0.3s forwards ease-in-out !important;
+  animation-iteration-count: 1 !important;
+  opacity: 0;
+  display: none;
+}
+@keyframes fadeout {
+  from {
+    opacity: 1;
+    display: unset;
+  }
+  to {
+    opacity: 0;
+    display: none;
+  }
+}
+
+.modal-main {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  animation: dfksdopfdspkfopdsfk 0.3s forwards ease-in-out;
+  animation-iteration-count: 1;
+}
+@keyframes dfksdopfdspkfopdsfk {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.modal-main > .blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--modal-blur-color);
+  -webkit-backdrop-filter: blur(0.2vw);
+          backdrop-filter: blur(0.2vw);
+  z-index: 10;
+}
+.modal-main > .modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--background-color);
+  border: 1px solid var(--button-outline-color);
+  border-radius: 12px;
+  padding: 20px;
+  z-index: 11;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+  margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  transition-duration: 0.3s;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-color);
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+  transition-duration: 0.3s;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-color);
+  transition-duration: 0.3s;
+  border-radius: 100px;
+}
+
+::-moz-selection {
+  background-color: var(--accent-color-secondary);
+  color: white;
+  text-shadow: none;
+}
+
+::selection {
+  background-color: var(--accent-color-secondary);
+  color: white;
+  text-shadow: none;
+}
+
+@font-face {
+  font-family: "Dosis";
+  src: url("/fonts/dosis.ttf") format("truetype");
+}
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 1000;
+  font-family: Dosis, sans-serif;
+  font-size: 32px;
+}
+
+p, a, button, input, textarea, select, label, li {
+  font-family: Dosis, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+button, input, textarea, select {
+  transition-duration: 0.3s;
+}
+
+.button-primary, .button-primary-col-prim {
+  transition-duration: 0.3s;
+  background: var(--accent-color-primary);
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.button-primary:hover, .button-primary-col-prim:hover {
+  background: var(--accent-color-primary-darker);
+  transition-duration: 0.3s;
+}
+
+.button-primary-col-sec {
+  transition-duration: 0.3s;
+  background: var(--accent-color-secondary);
+  color: white;
+  border: none;
+  text-decoration: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.button-primary-col-sec:hover {
+  background: var(--accent-color-secondary-darker);
+  transition-duration: 0.3s;
+}
+
+.button-secondary {
+  transition-duration: 0.3s;
+  background: none;
+  color: var(--text-color);
+  border: 1px solid var(--button-outline-color);
+  border-radius: 12px;
+  padding: 10px 20px;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.button-secondary:hover {
+  background: var(--button-bg);
+  transition-duration: 0.3s;
+}
+
+.button-unavailable {
+  background: var(--button-bg);
+  color: var(--text-color-primary);
+  border: none;
+  text-decoration: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  cursor: not-allowed;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+.sections {
+  position: relative;
+  min-height: 100vh;
+  margin: 0 auto;
+}
+.sections > section:is(.top) {
+  background-size: cover;
+  width: 100vw;
+  height: calc(55vh + 100px);
+  top: 0;
+  left: 0;
+  position: relative;
+  overflow: hidden;
+  animation: wseiohfiusdouijasdnfodsajf 1s ease;
+  animation-iteration-count: 1;
+}
+@keyframes wseiohfiusdouijasdnfodsajf {
+  from {
+    height: calc(100vh + 100px);
+  }
+  to {
+    height: calc(55vh + 100px);
+  }
+}
+.sections > section:is(.top) .wallpaper {
+  overflow: hidden;
+  position: absolute;
+  background: url("/images/bg1.png"), linear-gradient(90deg, rgb(0, 112, 187) 0%, rgb(57, 90, 154) 25%, rgb(114, 68, 121) 50%, rgb(227, 24, 55) 100%);
+  background-position: center;
+  background-size: cover;
+  filter: blur(1vw);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 110%;
+  height: 110%;
+  z-index: 0;
+}
+.sections > section:is(.top) .wallpaper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(0deg, black, transparent);
+  opacity: 0.7;
+  transition-duration: 0.3s;
+}
+.sections > section:is(.top)::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  rotate: 180deg;
+  background-image: var(--divider1);
+  z-index: 1;
+  background-size: 100% 100%;
+}
+.sections > section:is(.top) > .texts {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: apsldsadld 1s ease;
+  animation-iteration-count: 1;
+}
+@keyframes apsldsadld {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.sections > section:is(.top) > .texts > h1, .sections > section:is(.top) > .texts > p {
+  margin: 0;
+  text-align: center;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: 0 auto;
+  color: white;
+}
+.sections > section:is(.top) > .texts > h1 {
+  font-size: clamp(32px, 6vw, 96px);
+}
+.sections > section:is(.top) > .texts > p {
+  font-size: clamp(0px, 1.5vw, 24px);
+  opacity: 0.7;
+  margin: 8px 0;
+}
+.sections > section:not(.top) {
+  width: 80%;
+  margin: 0 auto;
+}
+
+input, select {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  background-color: var(--button-bg);
+  color: var(--text-color);
+}
+input:focus, select:focus {
+  outline: none;
+  background-color: var(--button-bg-hover);
+}
+
+@media screen and (min-width: 600px) and (max-width: 960px) {
+  .sections > section:is(.top) > .texts > h1 {
+    font-size: 86px;
+  }
+  .sections > section:is(.top) > .texts > p {
+    font-size: 24px;
+  }
+}
+@media screen and (max-width: 735px) {
+  .mobile-show-flex {
+    display: flex !important;
+  }
+  .mobile-hide-flex {
+    display: none !important;
+  }
+  .mobile-show-grid {
+    display: grid !important;
+  }
+  .mobile-hide-grid {
+    display: none !important;
+  }
+  .sections > section:is(.top) > .texts > h1 {
+    font-size: 64px;
+  }
+  .sections > section:is(.top) > .texts > p {
+    font-size: 18px;
+  }
+  .sections > section:not(.top) {
+    width: 90%;
+  }
+  .sections > section:is(.top)::after {
+    height: 6vh;
+    bottom: -1px;
+  }
+}
+
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm1haW5zdHlsZXMuc2NzcyIsIm1haW5zdHlsZXMuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQVlBO0VBQ0ksd0JBQUE7QUNYSjs7QURjQTtFQUNJLCtCQUFBO0FDWEo7O0FEY0E7RUFDSSx3QkFBQTtBQ1hKOztBRGNBO0VBQ0ksd0JBQUE7QUNYSjs7QURjQTtFQUNJLHdCQUFBO0FDWEo7O0FEY0E7RUFDSSx3QkFBQTtBQ1hKOztBRGdCSTtFQUNJLHlCQUFBO0FDYlI7O0FEaUJBOzs7Ozs7RUFNSSx3Q0FBQTtBQ2RKOztBRGlCQTtFQUNJLHdCQUFBO0FDZEo7O0FEZ0JBO0VBQ0ksVUFBQTtBQ2JKOztBRG9CQTtFQUNJLGVBQUE7RUFDQSx3QkFBQTtFQUNBLG1EQUFBO0VBQ0EsU0FBQTtFQUNBLGtCQUFBO0VBQ0EsZ0JBQUE7RUFDQSxrQkFBQTtBQ2pCSjs7QURvQkE7RUFDSSx1REFBQTtFQUNBLHVDQUFBO0VBQ0EsVUFBQTtFQUNBLGFBQUE7QUNqQko7QURtQkk7RUFDSTtJQUFPLFVBQUE7SUFBWSxjQUFBO0VDZnpCO0VEZ0JNO0lBQUssVUFBQTtJQUFZLGFBQUE7RUNadkI7QUFDRjs7QURlQTtFQUNJLGVBQUE7RUFDQSxNQUFBO0VBQ0EsT0FBQTtFQUNBLFlBQUE7RUFDQSxhQUFBO0VBQ0EsV0FBQTtFQUNBLHdEQUFBO0VBQ0EsNEJBQUE7QUNaSjtBRGNJO0VBQ0k7SUFBTyxVQUFBO0VDWGI7RURZTTtJQUFLLFVBQUE7RUNUWDtBQUNGO0FEV0k7RUFDSSxrQkFBQTtFQUNBLE1BQUE7RUFDQSxPQUFBO0VBQ0EsWUFBQTtFQUNBLGFBQUE7RUFDQSx5Q0FBQTtFQUNBLG9DQUFBO1VBQUEsNEJBQUE7RUFDQSxXQUFBO0FDVFI7QURZSTtFQUNJLGtCQUFBO0VBQ0EsUUFBQTtFQUNBLFNBQUE7RUFDQSxnQ0FBQTtFQUNBLG1DQUFBO0VBQ0EsNkNBQUE7RUFDQSxtQkFBQTtFQUNBLGFBQUE7RUFDQSxXQUFBO0VBQ0EsdUNBQUE7QUNWUjs7QURjQTtFQUNJ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 */

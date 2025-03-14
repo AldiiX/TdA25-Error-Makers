@@ -1,0 +1,407 @@
+#ACCOUNT-PAGE {
+  background-color: var(--background-color);
+  font-family: "Dosis", sans-serif;
+}
+#ACCOUNT-PAGE .sections > .top {
+  height: 60vh;
+  animation-name: asodjasd;
+}
+@keyframes asodjasd {
+  from {
+    height: calc(100vh + 100px);
+    -webkit-mask-position: center;
+            mask-position: center;
+    -webkit-mask-size: 500%;
+            mask-size: 500%;
+  }
+  to {
+    height: 60vh;
+    -webkit-mask-size: 100vw;
+            mask-size: 100vw;
+    -webkit-mask-position: bottom;
+            mask-position: bottom;
+  }
+}
+#ACCOUNT-PAGE .sections > .top::after {
+  background-image: var(--divider2);
+}
+#ACCOUNT-PAGE .sections .mainsection {
+  z-index: 1;
+  margin-top: -15vh;
+  padding-bottom: 104px;
+  position: relative;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account {
+  position: relative;
+  width: 75vw;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > div {
+  position: relative;
+  background-color: var(--background-color-secondary);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 5vw;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > div {
+  width: calc(33.3333333333% - 5vw);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .left {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .left > .account-elo > .text {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .left > .account-elo > .elo {
+  font-size: 20px;
+  margin: 0;
+  color: var(--color-gray);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .left > .win-loss-ratio > .text {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .left > .win-loss-ratio > .ratio {
+  font-size: 20px;
+  margin: 0;
+  color: var(--color-gray);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .account-info {
+  display: grid;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .account-info > h1, #ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .account-info > p {
+  margin: 0;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .account-info > p {
+  color: var(--color-gray);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .account-info > .avatar {
+  font-size: 64px;
+  font-weight: 700;
+  color: var(--text-color-primary);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  align-content: center;
+  position: relative;
+  display: block;
+  border-radius: 50%;
+  width: 200px;
+  aspect-ratio: 1/1;
+  margin: 0 auto;
+  transform: translateY(-125px);
+  margin-bottom: -108px;
+  background-color: var(--background-color-3);
+  font-family: "Dosis", sans-serif;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .right {
+  display: flex;
+  justify-content: space-around;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .right > .account-createdat > .text {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .right > .account-createdat > .time {
+  font-size: 20px;
+  margin: 0;
+  color: var(--color-gray);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .right > .account-last-active > .text {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-main > .right > .account-last-active > .time {
+  font-size: 20px;
+  margin: 0;
+  color: var(--color-gray);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .panel {
+  display: flex;
+  gap: 10vw;
+  font-size: 16px;
+  font-weight: 500;
+  justify-content: center;
+  align-items: center;
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .panel > div {
+  cursor: pointer;
+  transition-duration: 0.3s;
+  font-weight: 800;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .panel > div:hover {
+  color: var(--color-gray);
+  transition-duration: 0.3s;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .panel > div:is(.active) {
+  color: var(--accent-color-primary);
+  transition-duration: 0.3s;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .divider {
+  width: 100%;
+  height: 1px;
+  margin-bottom: 64px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history {
+  display: flex;
+  flex-direction: column;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  margin: 0 auto;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game:not(:last-child) {
+  border-bottom: 1px solid var(--color-gray);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 16px;
+  margin-right: 16px;
+  align-items: center;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .game-between {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: calc(25% - 32px);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .game-between > .player-o {
+  margin: 0;
+  display: flex;
+  gap: 8px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .game-between > .player-o::-moz-selection {
+  background-color: var(--accent-color-primary);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .game-between > .player-o::selection {
+  background-color: var(--accent-color-primary);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .game-between > .player-o .o-icon {
+  display: block;
+  height: 16px;
+  width: 16px;
+  -webkit-mask-image: url("/images/icons/O_bile.svg");
+          mask-image: url("/images/icons/O_bile.svg");
+  background: var(--accent-color-primary);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .game-between > .player-x {
+  margin: 0;
+  display: flex;
+  gap: 8px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .game-between > .player-x .x-icon {
+  display: block;
+  height: 16px;
+  width: 16px;
+  -webkit-mask-image: url("/images/icons/X_bile.svg");
+          mask-image: url("/images/icons/X_bile.svg");
+  background: var(--accent-color-secondary);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard {
+  max-width: 150px;
+  max-height: 150px;
+  display: grid;
+  grid-template-columns: repeat(15, 10px);
+  grid-template-rows: repeat(15, 10px);
+  gap: 0;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-radius: 2px;
+  pointer-events: none;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard:is(.locked) {
+  pointer-events: none !important;
+  /*.cell {
+      pointer-events: none !important;
+  }*/
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell {
+  width: 10px;
+  height: 10px;
+  background-color: var(--button-bg);
+  border-radius: 2px;
+  border: 0.5px solid var(--background-color-primary);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: 0s;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.x), #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.o) {
+  pointer-events: none;
+  transition-duration: 0s;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.x) > .cellhover, #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.o) > .cellhover {
+  display: none;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.x):is(.winning-cell)::after, #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.o):is(.winning-cell)::after {
+  background-color: white;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.x)::after, #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.o)::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-mask: url("/images/icons/X_bile.svg") no-repeat center;
+          mask: url("/images/icons/X_bile.svg") no-repeat center;
+  -webkit-mask-size: 60%;
+          mask-size: 60%;
+  background: var(--accent-color-secondary);
+  animation: xoappear 0.2s ease-out;
+  transition-duration: 0s;
+}
+@keyframes xoappear {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.x)::after {
+  -webkit-mask-image: url("/images/icons/X_bile.svg");
+          mask-image: url("/images/icons/X_bile.svg");
+  background: var(--accent-color-secondary);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.x):is(.winning-cell) {
+  background-color: var(--accent-color-secondary);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.o)::after {
+  -webkit-mask-image: url("/images/icons/O_bile.svg");
+          mask-image: url("/images/icons/O_bile.svg");
+  background: var(--accent-color-primary);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .gameboard .cell:is(.o):is(.winning-cell) {
+  background-color: var(--accent-color-primary);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .game-result {
+  font-family: Dosis, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  width: calc(25% - 32px);
+  display: flex;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > .game-played-on {
+  font-family: Dosis, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  width: calc(25% - 32px);
+  display: flex;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .admin-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .admin-panel > .admin-panel-top {
+  display: flex;
+  gap: 10vw;
+  justify-content: left;
+  align-items: center;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .admin-panel > .admin-panel-top > .search {
+  width: 400px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .admin-panel > .admin-panel-users {
+  width: 100%;
+  table-layout: fixed;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 500;
+  border-spacing: 0;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .admin-panel > .admin-panel-users th, #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .admin-panel > .admin-panel-users td {
+  padding: 8px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .admin-panel > .admin-panel-users thead tr, #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .admin-panel > .admin-panel-users thead th {
+  border-bottom: 1px solid var(--color-gray);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .admin-panel > .admin-panel-users tbody tr:nth-child(odd) {
+  background-color: var(--background-color-3);
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-settings > .center {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+#ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-settings > .center > form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 250px;
+}
+
+@media screen and (max-width: 735px) {
+  #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .admin-panel > .admin-panel-users th,
+  #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .admin-panel > .admin-panel-users td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #ACCOUNT-PAGE .sections .mainsection > .account {
+    width: 100%;
+  }
+  #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game {
+    width: 100%;
+  }
+  #ACCOUNT-PAGE .sections .mainsection > .account > .account-main {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  #ACCOUNT-PAGE .sections .mainsection > .account > .account-main > div {
+    width: 100%;
+  }
+  #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+  #ACCOUNT-PAGE .sections .mainsection > .account > .account-bottom > .account-game-history > .game > .game-info > .game-info-top > * {
+    flex-shrink: 0;
+    min-width: 150px;
+  }
+}
+
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFjY291bnQuc2NzcyIsImFjY291bnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFDO0VBRUcseUNBQUE7RUFDQSxnQ0FBQTtBQ0FKO0FETVE7RUFFSSxZQURTO0VBRVQsd0JBQUE7QUNMWjtBRE9ZO0VBQ0k7SUFDSSwyQkFBQTtJQUNBLDZCQUFBO1lBQUEscUJBQUE7SUFDQSx1QkFBQTtZQUFBLGVBQUE7RUNMbEI7RURRYztJQUNJLFlBQUE7SUFDQSx3QkFBQTtZQUFBLGdCQUFBO0lBQ0EsNkJBQUE7WUFBQSxxQkFBQTtFQ05sQjtBQUNGO0FEU1k7RUFDSSxpQ0FBQTtBQ1BoQjtBRFdRO0VBQ0ksVUFBQTtFQUNBLGlCQUFBO0VBQ0EscUJBQUE7RUFDQSxrQkFBQTtBQ1RaO0FEV1k7RUFDSSxrQkFBQTtFQUNBLFdBQUE7RUFDQSxjQUFBO0VBQ0EsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsU0FBQTtBQ1RoQjtBRFlnQjtFQUNJLGtCQUFBO0VBQ0EsbURBQUE7RUFDQSxtQkFBQTtFQUNBLGFBQUE7RUFDQSx3Q0FBQTtBQ1ZwQjtBRGFnQjtFQUNJLGFBQUE7RUFDQSx1QkFBQTtFQUNBLG1CQUFBO0VBQ0Esa0JBQUE7RUFDQSxRQUFBO0FDWHBCO0FEYW9CO0VBQ0ksaUNBQUE7QUNYeEI7QURjb0I7RUFDSSxhQUFBO0VBQ0EsNkJBQUE7RUFDQSxtQkFBQTtBQ1p4QjtBRGU0QjtFQUNJLGlCQUFBO0VBQ0EsZUFBQTtFQUNBLGtCQUFBO0FDYmhDO0FEZ0I0QjtFQUNJLGVBQUE7RUFDQSxTQUFBO0VBQ0Esd0JBQUE7QUNkaEM7QURvQjRCO0VBQ0ksaUJBQUE7RUFDQSxlQUFBO0VBQ0Esa0JBQUE7QUNsQmhDO0FEcUI0QjtFQUNJLGVBQUE7RUFDQSxTQUFBO0VBQ0Esd0JBQUE7QUNuQmhDO0FEd0JvQjtFQUNJLGFBQUE7QUN0QnhCO0FEd0J3QjtFQUNJLFNBQUE7QUN0QjVCO0FEeUJ3QjtFQUNJLHdCQUFBO0FDdkI1QjtBRDBCd0I7RUFDSSxlQUFBO0VBQ0Es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 */

@@ -1,0 +1,124 @@
+#announcements {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    bottom: 5vh;
+    z-index: 11;
+    width: 100%;
+
+    >div {
+        position: relative;
+        width: fit-content;
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: var(--accent-color);
+        color: white;
+        font-family: "Dosis", sans-serif;
+        font-weight: 750;
+        font-size: 20px;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.22);
+        transition-duration: 0.3s;
+        user-select: none;
+        animation: sdfsdfdsfdsfsdfsdffqderwehh 0.5s ease;
+        animation-iteration-count: 1;
+        max-width: 40vw;
+        pointer-events: none;
+        left: 50%;
+        transform: translateX(-50%);
+
+
+        &:hover {
+            transition-duration: 0.3s;
+            background-color: var(--accent-color-darker);
+        }
+
+        &:is(.success) {
+            background-color: #2ecc71;
+        }
+
+        &:is(.accentprimary), &:is(.pskr_owin) {
+            background-color: var(--accent-color-primary);
+        }
+
+        &:is(.accentsecondary), &:is(.pskr_xwin) {
+            background-color: var(--accent-color-secondary);
+        }
+
+        &:is(.pskr_xwin), &:is(.pskr_owin) {
+            animation-duration: 0.8s;
+            font-size: 32px;
+            padding: 0 32px;
+            width: max-content;
+            max-width: 60vw;
+            left: unset;
+            margin-left: auto;
+            margin-right: 5vh;
+            transform: none;
+            border-radius: 12px;
+
+            &::after {
+                // ikonka
+                content: "";
+                width: 120px;
+                height: 120px;
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                background-color: white;
+                margin-left: 32px;
+                transform: scaleX(-1);
+            }
+        }
+
+        &:is(.pskr_xwin)::after {
+            mask-image: url("/images/icons/zarivka_playing_x_bile.svg");
+        }
+
+        &:is(.pskr_owin)::after {
+            mask-image: url("/images/icons/zarivka_playing_o_bile.svg");
+        }
+
+        &:is(.error) {
+            background-color: var(--accent-color-secondary);
+        }
+
+        &:is(.fade-out) {
+            opacity: 0;
+            animation: asdsadsadasdd 0.5s ease;
+            animation-iteration-count: 1;
+        }
+
+        @keyframes sdfsdfdsfdsfsdfsdffqderwehh {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes asdsadsadasdd {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+    }
+}
+
+// mobily
+@media screen and (max-width: 600px) {
+    #announcements {
+        >div {
+            font-size: 16px;
+            max-width: 90vw;
+        }
+    }
+}
