@@ -1,5 +1,4 @@
 import { fileURLToPath, URL } from 'node:url';
-
 import { defineConfig } from 'vite';
 import plugin from '@vitejs/plugin-vue';
 import fs from 'fs';
@@ -7,55 +6,92 @@ import path from 'path';
 import child_process from 'child_process';
 import { env } from 'process';
 
-const baseFolder =
-    env.APPDATA !== undefined && env.APPDATA !== ''
-        ? `${env.APPDATA}/ASP.NET/https`
-        : `${env.HOME}/.aspnet/https`;
+const target = env.ASPNETCORE_HTTPS_PORT
+    ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}`
+    : env.ASPNETCORE_URLS
+        ? env.ASPNETCORE_URLS.split(';')[0]
+        : 'https://localhost:7055';
 
-const certificateName = "tda25-error-makers.client";
-const certFilePath = path.join(baseFolder, `${certificateName}.pem`);
-const keyFilePath = path.join(baseFolder, `${certificateName}.key`);
-
-if (!fs.existsSync(baseFolder)) {
-    fs.mkdirSync(baseFolder, { recursive: true });
-}
-
-if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
-    if (0 !== child_process.spawnSync('dotnet', [
-        'dev-certs',
-        'https',
-        '--export-path',
-        certFilePath,
-        '--format',
-        'Pem',
-        '--no-password',
-    ], { stdio: 'inherit', }).status) {
-        throw new Error("Could not create certificate.");
+export default defineConfig(({ command, mode }: any): any => {
+    // Produkční konfigurace: vypínáme HTTPS (a tedy ani generování certifikátů)
+    if (mode === 'production') {
+        return {
+            plugins: [plugin()],
+            resolve: {
+                alias: {
+                    '@': fileURLToPath(new URL('./src', import.meta.url))
+                }
+            },
+            server: {
+                proxy: {
+                    '^/api/': {
+                        target,
+                        secure: false
+                    }
+                },
+                port: 8115,  // Port pro frontend
+                host: '0.0.0.0', // Naslouchá na všech IP
+                https: false
+            },
+            preview: {
+                allowedHosts: ["stanislavskudrna.cz"]
+            }
+        };
     }
-}
 
-const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
-    env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'http://localhost:5097';
+    // Vývojová konfigurace: generace certifikátů a nastavení HTTPS
+    const baseFolder =
+        env.APPDATA !== undefined && env.APPDATA !== ''
+            ? `${env.APPDATA}/ASP.NET/https`
+            : `${env.HOME}/.aspnet/https`;
 
-// https://vitejs.dev/config/
-export default defineConfig({
-    plugins: [plugin()],
-    resolve: {
-        alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
+    const certificateName = "stanislavskudrna.cz.client";
+    const certFilePath = path.join(baseFolder, `${certificateName}.pem`);
+    const keyFilePath = path.join(baseFolder, `${certificateName}.key`);
+
+    if (!fs.existsSync(baseFolder)) {
+        fs.mkdirSync(baseFolder, { recursive: true });
+    }
+
+    if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
+        const result = child_process.spawnSync('dotnet', [
+            'dev-certs',
+            'https',
+            '--export-path',
+            certFilePath,
+            '--format',
+            'Pem',
+            '--no-password',
+        ], { stdio: 'inherit' });
+        if (result.status !== 0) {
+            throw new Error("Could not create certificate.");
         }
-    },
-    server: {
-        proxy: {
-            '^/api/v1/': {
-                target,
-                secure: false
+    }
+
+    return {
+        plugins: [plugin()],
+        resolve: {
+            alias: {
+                '@': fileURLToPath(new URL('./src', import.meta.url))
             }
         },
-        port: parseInt(env.DEV_SERVER_PORT || '58055'),
-        https: {
-            key: fs.readFileSync(keyFilePath),
-            cert: fs.readFileSync(certFilePath),
+        server: {
+            proxy: {
+                '^/api/': {
+                    target,
+                    secure: false
+                },
+                '^/openapi/': {
+                    target,
+                    secure: false
+                }
+            },
+            port: 8115, // Port pro frontend
+            host: '0.0.0.0', // Naslouchá na všech IP
+            https: false, /*{
+                key: fs.readFileSync(keyFilePath),
+                cert: fs.readFileSync(certFilePath),
+            }*/
         }
-    }
-})
+    };
+});
