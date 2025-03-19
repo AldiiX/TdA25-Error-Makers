@@ -2,6 +2,7 @@
     import { ref, onMounted, onUnmounted } from "vue";
     import BlurBackground from "@/components/backgrounds/BlurBackground.vue";
     import ColoredBackground from "@/components/backgrounds/ColoredBackground.vue";
+    import { RouterLink } from "vue-router";
 
     const projects = ref<any[] | null>(null);
 
@@ -24,7 +25,9 @@
             <div class="left">
                 <h1>Think different Academy</h1>
                 <p>Platforma na řešení zajímavých piškvorkových úloh, která ti pomůže rozvíjet logické myšlení a strategické schopnosti.</p>
-                <button class="button-primary-col-sec" onclick="location.href='/play'">HRÁT</button>
+                <RouterLink to="/play" custom v-slot="{ navigate, href, isActive, isExactActive }">
+                    <button class="button-primary-col-sec" @click="navigate">Hrát</button>
+                </RouterLink>
             </div>
 
             <div class="right">

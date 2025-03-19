@@ -75,12 +75,8 @@ const routes = [
         component: Home,
         meta: {
             title: "Domů",
+            hasColoredBackground: true,
         }
-    },
-    {
-        path: '/about',
-        name: 'About',
-        component: About
     },
     {
         path: '/:pathMatch(.*)*',
@@ -89,11 +85,12 @@ const routes = [
         component: Error,
         meta: {
             title: "Chyba 404",
-            icon: "/images/svg/favicon_error.svg"
+            icon: "/images/svg/favicon_error.svg",
+            hasColoredBackground: false,
         }
     },
-    { path: '/privacy/gdpr', name: "GDPR", component: GDPR },
-    { path: '/privacy/cookies', name: "Cookies", component: Cookies },
+    { path: '/privacy/gdpr', name: "GDPR", component: GDPR, meta: { hasColoredBackground: true } },
+    { path: '/privacy/cookies', name: "Cookies", component: Cookies, meta: { hasColoredBackground: true } },
 ]
 
 const router = createRouter({
@@ -109,6 +106,7 @@ const router = createRouter({
 
 // pri zmeneni routu se nastavi promenna isTransitioning na true, po 100ms se nastavi na false
 const isTransitioning = ref<boolean>(false);
+const transitionType = ref<'blurbg' | 'coloredbg'>('blurbg');
 const transitionEnabled = ref<boolean>(false);
 
 router.beforeEach((to, from, next) => {
@@ -128,6 +126,7 @@ router.beforeEach((to, from, next) => {
     }
 
     isTransitioning.value = true;
+    transitionType.value = to.meta.hasColoredBackground ? 'coloredbg' : 'blurbg';
 
     setTimeout(() => {
         next();
@@ -158,8 +157,9 @@ router.afterEach(() => {
 
 
 
-const app = createApp(App)
-app.provide('theme', theme)
-app.provide('isTransitioning', isTransitioning)
-app.use(router)
-app.mount('#app')
+const app = createApp(App);
+app.provide('theme', theme);
+app.provide('isTransitioning', isTransitioning);
+app.provide('transitionType', transitionType);
+app.use(router);
+app.mount('#app');

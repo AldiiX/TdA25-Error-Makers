@@ -1,7 +1,21 @@
 <script setup lang="ts">
     import { ref, onMounted, onUnmounted } from 'vue';
 
+    const props = defineProps({
+        positionAbsolute: {
+            type: Boolean,
+            default: false
+        },
+
+        changeHeaderStyle: {
+            type: Boolean,
+            default: true
+        }
+    });
+
     onMounted(() => {
+        if(!props.changeHeaderStyle) return;
+
         const body = document.querySelector("body");
         if(!body) return;
 
@@ -9,17 +23,12 @@
     });
 
     onUnmounted(() => {
+        if(!props.changeHeaderStyle) return;
+
         const body = document.querySelector("body");
         if(!body) return;
 
         body.classList.remove("header-top-light");
-    });
-
-    defineProps({
-        positionAbsolute: {
-            type: Boolean,
-            default: false
-        }
     });
 </script>
 

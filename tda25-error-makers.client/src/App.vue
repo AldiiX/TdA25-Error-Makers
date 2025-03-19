@@ -5,8 +5,11 @@
     import { ref, watch, provide, onMounted, inject, type Ref } from "vue";
     import { useRoute } from "vue-router";
     import { getTheme } from "./main.ts";
+    import BlurBackground from "@/components/backgrounds/BlurBackground.vue";
+    import ColoredBackground from "@/components/backgrounds/ColoredBackground.vue";
 
     const isTransitioning = inject("isTransitioning") as Ref<boolean>;
+    const transitionType = inject("transitionType") as Ref<string>;
 
     onMounted(() => {
         getTheme();
@@ -20,7 +23,10 @@
 
 
 <template>
-    <div id="transition-div" v-if="isTransitioning"></div>
+    <div id="transition-div" v-if="isTransitioning">
+        <BlurBackground v-if="transitionType === 'blurbg'" />
+        <ColoredBackground v-bind:change-header-style="false" v-else-if="transitionType === 'coloredbg'" />
+    </div>
 
     <Header />
 
