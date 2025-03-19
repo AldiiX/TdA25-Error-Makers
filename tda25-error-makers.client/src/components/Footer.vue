@@ -1,5 +1,5 @@
 <script setup lang="ts">
-
+    import { RouterLink } from 'vue-router';
 </script>
 
 <template>
@@ -19,26 +19,26 @@
                 <div class="navigation">
                     <p class="upper">Navigace</p>
                     <p>
-                        <a href="/">Domů</a>
+                        <RouterLink to="/">Domů</RouterLink>
                     </p>
                     <p>
-                        <a href="/leaderboard">Žebříčky</a>
+                        <RouterLink to="/leaderboard">Žebříčky</RouterLink>
                     </p>
                     <p>
-                        <a href="/account">Účet</a>
+                        <RouterLink to="/account">Účet</RouterLink>
                     </p>
                     <p>
-                        <a href="/play">Hrát</a>
+                        <RouterLink to="/play">Hrát</RouterLink>
                     </p>
                 </div>
 
                 <div class="other">
                     <p class="upper">Ostatní</p>
                     <p>
-                        <a href="/privacy/gdpr">GDPR</a>
+                        <RouterLink to="/privacy/gdpr">GDPR</RouterLink>
                     </p>
                     <p>
-                        <a href="/privacy/cookies">Cookies</a>
+                        <RouterLink to="/privacy/cookies">Cookies</RouterLink>
                     </p>
                 </div>
 

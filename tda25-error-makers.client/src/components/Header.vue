@@ -94,7 +94,7 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
     left: 50%;
     transform: translateX(-50%);
     top: 0;
-    z-index: 3;
+    z-index: 5;
     transition-property: background, opacity;
     transition-duration: 0.3s;
 
@@ -209,6 +209,7 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
             background-repeat: no-repeat;
             background-position: center;
             cursor: pointer;
+            transition-duration: 0.3s;
         }
 
         >.Header-Menu {
@@ -229,6 +230,7 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
                 font-weight: 1000;
                 color: var(--text-color-primary);
                 user-select: none;
+                transition-duration: 0.3s;
 
                 &:is(.active), &:is(.router-link-active) {
                     &::before {

@@ -14,10 +14,17 @@
 
         body.classList.remove("header-top-light");
     });
+
+    defineProps({
+        positionAbsolute: {
+            type: Boolean,
+            default: false
+        }
+    });
 </script>
 
 <template>
-    <div class="background-f55288d9-4dcf-456d-87c4-26be60c16cdb"></div>
+    <div class="background-f55288d9-4dcf-456d-87c4-26be60c16cdb" v-bind:style="{ position: `${positionAbsolute ? 'absolute' : 'fixed'}`}"></div>
 </template>
 
 <style scoped>

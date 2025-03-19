@@ -5,6 +5,8 @@ import './main.css'
 import Home from "@/pages/Home.vue";
 import About from "@/pages/About.vue";
 import Error from "@/pages/Error.vue";
+import GDPR from "@/pages/GDPR.vue";
+import Cookies from "@/pages/Cookies.vue";
 
 
 
@@ -70,7 +72,10 @@ const routes = [
     {
         path: '/',
         name: 'Home',
-        component: Home
+        component: Home,
+        meta: {
+            title: "Domů",
+        }
     },
     {
         path: '/about',
@@ -81,8 +86,14 @@ const routes = [
         path: '/:pathMatch(.*)*',
         name: 'Error',
         props: { code: 404 },
-        component: Error
-    }
+        component: Error,
+        meta: {
+            title: "Chyba 404",
+            icon: "/images/svg/favicon_error.svg"
+        }
+    },
+    { path: '/privacy/gdpr', name: "GDPR", component: GDPR },
+    { path: '/privacy/cookies', name: "Cookies", component: Cookies },
 ]
 
 const router = createRouter({
@@ -92,14 +103,63 @@ const router = createRouter({
     linkExactActiveClass: 'active',
 })
 
+
+
+
+
+// pri zmeneni routu se nastavi promenna isTransitioning na true, po 100ms se nastavi na false
+const isTransitioning = ref<boolean>(false);
+const transitionEnabled = ref<boolean>(false);
+
 router.beforeEach((to, from, next) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    next();
+
+    // nastavení titlu
+    document.title = (to.meta.title as string ?? to.name as string) + ' • Think Different Academy';
+
+    // nastavení ikony
+    const favicon = document.querySelector('link[rel="icon"]');
+    if (to.meta.icon) favicon?.setAttribute('href', to.meta.icon as string);
+    else favicon?.setAttribute('href', '/favicon.ico');
+
+    if(!transitionEnabled.value) {
+        next();
+        return;
+    }
+
+    isTransitioning.value = true;
+
+    setTimeout(() => {
+        next();
+    }, 150);
+});
+
+
+
+
+router.afterEach(() => {
+    if(!transitionEnabled.value) {
+        transitionEnabled.value = true;
+        return;
+    }
+
+    const transitionDiv = document.getElementById("transition-div");
+    window.scrollTo(0, 0);
+
+    setTimeout(() => {
+        transitionDiv?.classList.add("fade-out");
+    }, 150);
+
+    setTimeout(() => {
+        transitionDiv?.classList.remove("fade-out");
+        isTransitioning.value = false;
+    }, 300);
 });
 
 
 
 const app = createApp(App)
+app.provide('theme', theme)
+app.provide('isTransitioning', isTransitioning)
 app.use(router)
 app.mount('#app')
-app.provide('theme', theme)
