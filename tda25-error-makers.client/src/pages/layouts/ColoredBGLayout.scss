@@ -1,3 +1,12 @@
+:root:is(.theme-light) {
+    display: none;
+    .sections >section:is(.top) .background-f55288d9-4dcf-456d-87c4-26be60c16cdb {
+        &::after {
+            opacity: 0 !important;
+        }
+    }
+}
+
 .sections {
     position: relative;
     min-height: calc(100vh);
