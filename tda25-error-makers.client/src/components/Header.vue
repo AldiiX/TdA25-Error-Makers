@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { onMounted, onUnmounted } from 'vue';
+    import { onMounted, onUnmounted, inject, type Ref } from 'vue';
     import { RouterLink } from 'vue-router';
     import { toggleTheme } from '@/main';
 
@@ -13,6 +13,8 @@
             header.classList.remove("scrolled")
         }
     }
+
+    const isTransitioning = inject("isTransitioning") as Ref<boolean>;
 
     onMounted(() => {
         document.addEventListener("scroll", ouasihfdusifhi);
@@ -36,7 +38,7 @@
                 <div :class="['Header-Logo', { active: isActive }]" @click="navigate"></div>
             </RouterLink>
 
-            <div class="Header-Menu">
+            <div :class="['Header-Menu', { locked: isTransitioning }]">
                 <RouterLink to="/">Domů</RouterLink>
                 <RouterLink to="/leaderboard">Žebříčky</RouterLink>
                 <RouterLink to="/account">Účet</RouterLink>

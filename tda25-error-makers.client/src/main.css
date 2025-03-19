@@ -45,7 +45,7 @@
     .background-f55288d9-4dcf-456d-87c4-26be60c16cdb {
         &::after {
             opacity: 0.35 !important;
-            /*background: linear-gradient(45deg, black, transparent 50%) !important;*/
+            background: linear-gradient(0deg, black, transparent 100%) !important;
         }
     }
 

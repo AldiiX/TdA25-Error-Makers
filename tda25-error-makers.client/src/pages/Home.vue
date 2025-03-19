@@ -26,7 +26,7 @@
                 <h1>Think different Academy</h1>
                 <p>Platforma na řešení zajímavých piškvorkových úloh, která ti pomůže rozvíjet logické myšlení a strategické schopnosti.</p>
                 <RouterLink to="/play" custom v-slot="{ navigate, href, isActive, isExactActive }">
-                    <button class="button-primary-col-sec" @click="navigate">Hrát</button>
+                    <button class="button-primary-col-sec" @click="navigate">HRÁT</button>
                 </RouterLink>
             </div>
 

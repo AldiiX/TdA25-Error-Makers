@@ -167,6 +167,10 @@ body:is(.header-top-light) .header-5F015D44-0984-4A50-B52B-5319AE57C19C:not(.scr
             left: 360px;
             transform: translate(-50%, -50%);
 
+            &:is(.locked) {
+                pointer-events: none;
+            }
+
             a {
                 position: relative;
                 text-decoration: none;
