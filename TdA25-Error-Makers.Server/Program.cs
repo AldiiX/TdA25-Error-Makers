@@ -98,12 +98,11 @@ public static class Program {
         });
         App.UseMiddleware<BeforeInitMiddleware>();
         App.UseMiddleware<WebSocketMiddleware>();
-        //App.UseStaticFiles();
+        App.UseStaticFiles();
         App.UseRouting();
         App.UseAuthorization();
         //App.UseMiddleware<ErrorHandlingMiddleware>();
         App.MapControllerRoute(name: "default", pattern: "/");
-
 
 
         // test připojení k databázi, pokud selže, zkusí se fallback

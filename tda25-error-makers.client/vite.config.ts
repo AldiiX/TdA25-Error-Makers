@@ -27,6 +27,11 @@ export default defineConfig(({ command, mode }: any): any => {
                     '^/api/': {
                         target,
                         secure: false
+                    },
+                    '^/ws/': {
+                        target,
+                        secure: false,
+                        ws: true,
                     }
                 },
                 port: 8115,  // Port pro frontend
@@ -40,7 +45,7 @@ export default defineConfig(({ command, mode }: any): any => {
     }
 
     // Vývojová konfigurace: generace certifikátů a nastavení HTTPS
-    const baseFolder =
+    /*const baseFolder =
         env.APPDATA !== undefined && env.APPDATA !== ''
             ? `${env.APPDATA}/ASP.NET/https`
             : `${env.HOME}/.aspnet/https`;
@@ -66,7 +71,7 @@ export default defineConfig(({ command, mode }: any): any => {
         if (result.status !== 0) {
             throw new Error("Could not create certificate.");
         }
-    }
+    }*/
 
     return {
         plugins: [plugin()],
@@ -80,6 +85,11 @@ export default defineConfig(({ command, mode }: any): any => {
                 '^/api/': {
                     target,
                     secure: false
+                },
+                '^/ws/': {
+                    target,
+                    secure: false,
+                    ws:true,
                 },
                 '^/openapi/': {
                     target,

@@ -11,6 +11,7 @@ namespace TdA25_Error_Makers.Server.WebSockets;
 
 public static class WSChat {
     private static readonly List<WebSocketClient> ConnectedUsers = [];
+    private static readonly List<ChatMessage> Messages = [];
     //private static Timer? statusTimer;
 
     public class Client : WebSocketClient {
@@ -31,6 +32,7 @@ public static class WSChat {
 
 
         lock(ConnectedUsers) ConnectedUsers.Add(client);
+        client.SendInicialChat().Wait();
 
 
 
@@ -84,25 +86,13 @@ public static class WSChat {
     
     //logisticky metody
     private static async Task<bool> SendInicialChat(this Client client) {
-        await using var conn = await Database.GetConnectionAsync();
-        if (conn == null) return false;
+        await client.BroadcastMessageAsync(JsonSerializer.Serialize(new {
+            action = "init",
+            messages = Messages
+        }, new JsonSerializerOptions() {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        }));
 
-        await using var cmd = new MySqlCommand("SELECT * FROM chat_messages ORDER BY id DESC LIMIT 50", conn);
-        
-        await using var reader = await cmd.ExecuteReaderAsync() as MySqlDataReader;
-        if (reader == null) return false;
-
-        var messages = new JsonArray();
-        while (await reader.ReadAsync()) {
-            var message = new JsonObject {
-
-            };
-
-            messages.Add(message);
-        } await client.BroadcastMessageAsync(new JsonObject {
-            ["action"] = "sendMessages",
-            ["messages"] = messages
-        }.ToString());
         return true;
     }
     
