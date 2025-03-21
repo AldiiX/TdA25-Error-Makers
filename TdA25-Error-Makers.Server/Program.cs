@@ -91,7 +91,7 @@ public static class Program {
 
 
 
-        //App.UseHttpsRedirection();
+        App.UseHttpsRedirection();
         App.UseSession();
         App.UseWebSockets(new WebSocketOptions() {
             KeepAliveInterval = TimeSpan.FromSeconds(120),

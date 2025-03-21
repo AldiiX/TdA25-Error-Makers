@@ -25,13 +25,13 @@ public static class WSChat {
 
     //handle 
     public static async Task HandleQueueAsync(WebSocket webSocket) {
-        var name = HCS.Current.Session.GetString("chatUsername") ?? "Guest " + new Random().Next(0,9999);
+        var name = HCS.Current.Session.GetString("chatUsername") ?? "Guest " + new Random().Next(0, 9999);
         var client = new Client(webSocket, name);
 
 
 
 
-        lock(ConnectedUsers) ConnectedUsers.Add(client);
+        lock (ConnectedUsers) ConnectedUsers.Add(client);
         client.SendInicialChat().Wait();
 
 
@@ -61,19 +61,44 @@ public static class WSChat {
             var action = messageJson?["action"]?.ToString();
             if (action == null) continue;
 
+            Program.Logger.LogInformation(messageJson?.ToString());
+
             switch (action) {
                 case "status":
                     /*await client.SendFullReservationInfoAsync();*/
                     break;
+
+                case "chatMessage": {
+                    lock(Messages) Messages.Add(new ChatMessage(client.Name,
+                            messageJson?["message"]?.ToString() ?? "Unknown"
+                        )
+                    );
+
+                    lock(ConnectedUsers)
+                        foreach (var cl in ConnectedUsers) {
+                            var msg = new {
+                                action = "message",
+                                message = new {
+                                    sender = client.Name,
+                                    content = messageJson?["message"]?.ToString() ?? "Unknown"
+                                }
+                            };
+
+                            cl.WebSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(msg))),
+                                WebSocketMessageType.Text, true, CancellationToken.None
+                            ).Wait();
+                        }
+                } break;
             }
         }
-        
+
 
 
         // pri ukonceni socketu
         lock (ConnectedUsers) ConnectedUsers.Remove(client);
     }
-    //metodiky 
+
+    //metodiky
     private static async Task BroadcastMessageAsync(this Client client, string message) {
         if (client.WebSocket is not { State: WebSocketState.Open }) return;
 
@@ -81,22 +106,26 @@ public static class WSChat {
         var buffer = Encoding.UTF8.GetBytes(message);
         var tasks = new List<Task>();
 
-        client.WebSocket?.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+        client.WebSocket?.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true,
+            CancellationToken.None
+        );
     }
-    
+
     //logisticky metody
     private static async Task<bool> SendInicialChat(this Client client) {
         await client.BroadcastMessageAsync(JsonSerializer.Serialize(new {
-            action = "init",
-            messages = Messages
-        }, new JsonSerializerOptions() {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        }));
+                    action = "init",
+                    messages = Messages
+                }, new JsonSerializerOptions() {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                }
+            )
+        );
 
         return true;
     }
-    
-    /*static WSChat() {
-        statusTimer = new Timer(Status!, null, 0, 1000);
-    }*/
+
+/*static WSChat() {
+    statusTimer = new Timer(Status!, null, 0, 1000);
+}*/
 }

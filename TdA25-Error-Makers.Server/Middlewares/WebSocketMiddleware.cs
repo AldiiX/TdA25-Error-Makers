@@ -7,8 +7,6 @@ namespace TdA25_Error_Makers.Server.Middlewares;
 public class WebSocketMiddleware(RequestDelegate next) {
     public async Task InvokeAsync(HttpContext context) {
 
-        Program.Logger.LogInformation("sdijsaifdiosjdsf");
-
         // ranked queue websocket
         if (context.Request.Path.Value == "/ws/chat") {
             if (context.WebSockets.IsWebSocketRequest) {
