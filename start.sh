@@ -1,6 +1,7 @@
 #!/bin/sh
 
 
+
 # Start Redis server
 redis-server &
 
