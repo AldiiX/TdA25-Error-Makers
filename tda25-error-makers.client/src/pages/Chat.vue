@@ -6,7 +6,7 @@
 
     <div class="chatbox">
         <div class="chatbox-top">
-            
+
         </div>
     </div>
 </template>
