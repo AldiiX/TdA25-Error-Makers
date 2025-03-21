@@ -7,6 +7,8 @@ import About from "@/pages/About.vue";
 import Error from "@/pages/Error.vue";
 import GDPR from "@/pages/GDPR.vue";
 import Cookies from "@/pages/Cookies.vue";
+import Features from "@/pages/Features.vue";
+import Chat from "@/pages/Chat.vue";
 
 
 
@@ -71,12 +73,27 @@ export const getTheme = () => {
 const routes = [
     {
         path: '/',
+        name: 'Chat',
+        component: Chat,
+        meta: {
+            title: "Chat",
+            //hasColoredBackground: true,
+        }
+    },
+    {
+        path: '/home',
         name: 'Home',
         component: Home,
         meta: {
             title: "Domů",
             hasColoredBackground: true,
         }
+    },
+    {
+        path: '/features',
+        name: 'Features',
+        component: Features,
+
     },
     {
         path: '/:pathMatch(.*)*',
