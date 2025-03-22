@@ -12,6 +12,7 @@ namespace TdA25_Error_Makers.Server.WebSockets;
 public static class WSRoom {
     private static readonly List<Room> Rooms = [];
     private static Timer? statusTimer;
+    private static readonly JsonSerializerOptions jsonOptions = new JsonSerializerOptions(){ PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
     static WSRoom() {
         //statusTimer = new Timer(Status!, null, 0, 1000);
@@ -19,9 +20,12 @@ public static class WSRoom {
 
     public class Client : WebSocketClient {
         public string? Name { get; set; }
+        public bool CanBePresenter { get; set; }
+        public bool IsPresenter { get; set; }
 
-        public Client(WebSocket webSocket, string name) : base(webSocket) {
+        public Client(WebSocket webSocket, string name, bool canBePresenter = false) : base(webSocket) {
             Name = name;
+            CanBePresenter = canBePresenter;
         }
     }
 
@@ -31,7 +35,6 @@ public static class WSRoom {
         // zjisteni roomky
         Room? room = null;
         if (roomNumber != null) {
-            lock (Rooms) Console.WriteLine(JsonSerializer.Serialize(Rooms));
             lock (Rooms) room = Rooms.FirstOrDefault(r => r.Code == roomNumber);
         }
 
@@ -49,7 +52,18 @@ public static class WSRoom {
             return;
         }
 
-        lock (room.ConnectedUsers) room.ConnectedUsers.Add(client);
+        lock (room.ConnectedUsers) {
+            room.ConnectedUsers.Add(client);
+
+            foreach (var user in room.ConnectedUsers) {
+                if(client == user) continue;
+
+                user.BroadcastMessageAsync(JsonSerializer.Serialize(new {
+                    action = "updateRoom",
+                    room = room
+                }, jsonOptions)).Wait();
+            }
+        }
 
         client.SendInitialMessage();
 
@@ -83,7 +97,7 @@ public static class WSRoom {
             Program.Logger.LogInformation(messageJson?.ToString());
 
             switch (action) {
-                case "status":
+                case "changeUserToPresenter":
                     /*await client.SendFullReservationInfoAsync();*/
                     break;
             }
@@ -102,7 +116,7 @@ public static class WSRoom {
                     user.BroadcastMessageAsync(JsonSerializer.Serialize(new {
                         action = "updateRoom",
                         room = room
-                    })).Wait();
+                    }, jsonOptions)).Wait();
                 }
             }
         }
@@ -134,7 +148,7 @@ public static class WSRoom {
             message = JsonSerializer.SerializeToUtf8Bytes(new {
                 action = "init",
                 room = Rooms.Find(r => r.ConnectedUsers.Contains(client))
-            });
+            }, jsonOptions);
         }
 
         client.WebSocket.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
