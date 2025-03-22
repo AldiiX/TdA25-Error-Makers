@@ -12,21 +12,34 @@ console.log(loggedUser);
 
     <div class="sections">
         <div class="mainsection">
-            <h1>Místnost</h1>
+            <p>Prezentující</p>
+            <div class="User">
+                <h1 class="title">Test</h1>
+            </div>
+            <p>Účastníci</p>
+
             <div class="users">
                 <div class="User">
-                    <h2 class="title">Test</h2>
+                    <h1 class="title">Test</h1>
                 </div>
                 <div class="User">
-                    <h2 class="title">Test</h2>
+                    <h1 class="title">Test</h1>
+                </div>
+                <div class="User">
+                    <h1 class="title">Test</h1>
                 </div>
             </div>
         </div>
-        <div class="buttons"></div>
-    </div>
-
-    <div v-if="loggedUser">
-        přihlášen jako {{ loggedUser.name }}
+        <div class="buttons-red">
+            <div class="button">
+                <div class="button-leave">
+                </div>
+            </div>
+            <div class="button">
+                <div class="button-leave">
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
