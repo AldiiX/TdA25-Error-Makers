@@ -10,32 +10,42 @@
         h1 {
             text-align: center;
         }
-        p {
+        >p {
             text-align: left;
             margin: 0;
             width: 100%;
-            border-bottom: solid 1px;
+            border-bottom: solid 1px rgba(0, 0, 0, 0.05);
             font-size: 20px;
-            width: 100%;
         }
             .User {
-                background-color: var(--background-color-3);
-                border-radius: 50%;
-                height: 100px;
-                width: 100px;
-                text-align: center;
-                margin: 0 auto;
-                gap: 16px;
+                margin-top: 16px;
+                .title {
+                    color: var(--text-color-primary);
+                    font-size: 48px;
+                    font-weight: 700;
+                    background-color: var(--background-color-3);
+                    border-radius: 50%;
+                    height: 100px;
+                    width: 100px;
+                    text-align: center;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin: 0 auto;
+                }
+
+                .username {
+                    font-size: 16px;
+                    margin-top: 8px;
+                    text-align: center;
+                }
             }
 
         .users {
-            overflow: scroll;
             overflow-x: hidden;
             display: flex;
             flex-direction: row;
             width: 100%;
-            margin: 5vh 0;
-            gap: 8px;
         }
 
     }

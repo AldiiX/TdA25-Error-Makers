@@ -11,6 +11,17 @@
     let socket: WebSocket | null = null;
     const room = ref<any | null>(null);
 
+
+    interface RoomUser {
+        name: string;
+        uuid: string;
+    }
+
+    const roomUsers = ref<RoomUser[]>([
+        { name: "Neco", uuid: "jfiosdhoiufdhf" },
+
+    ])
+
     onMounted(() => {
         socket = new WebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws/room${roomId ? "?roomNumber=" + roomId : ""}`);
         console.log(socket);
@@ -41,24 +52,18 @@
     <BlurBackground />
 
     <div class="sections">
-        <div class="mainsection" v-if="room">
-            <h1>Místnost {{ room.code }}</h1>
-
-            <p>Prezentující</p>
-            <div class="User">
-                <h1 class="title">Test</h1>
+        <div class="mainsection">
+                <p>Prezentující</p>
+            <div class="User" v-for="user in roomUsers">
+                <p class="title">{{ user.name[0].toUpperCase() }}</p>
+                <p class="username">{{ user.name }}</p>
             </div>
             <p>Účastníci</p>
 
             <div class="users">
-                <div class="User">
-                    <h1 class="title">Test</h1>
-                </div>
-                <div class="User">
-                    <h1 class="title">Test</h1>
-                </div>
-                <div class="User">
-                    <h1 class="title">Test</h1>
+                <div class="User" v-for="user in roomUsers">
+                    <p class="title">{{ user.name[0].toUpperCase() }}</p>
+                    <p class="username">{{ user.name }}</p>
                 </div>
             </div>
         </div>
