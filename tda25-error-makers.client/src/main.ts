@@ -10,6 +10,7 @@ import Cookies from "@/pages/Cookies.vue";
 import Features from "@/pages/Features.vue";
 import Chat from "@/pages/Chat.vue";
 import Login from "@/pages/Login.vue";
+import Room from "@/pages/Room.vue";
 
 
 
@@ -36,6 +37,21 @@ const getCookie = (name: string) => {
 }
 
 
+
+
+// logged user
+export interface LoggedUser {
+    name: string,
+    //password: string,
+}
+const loggedUser = ref<LoggedUser | any | null>(null);
+
+fetch("/api/v1/loggeduser").then(async (res) => {
+    const data = await res.json();
+
+    if(data.success === false || !res.ok) return;
+    loggedUser.value = data;
+});
 
 
 
@@ -100,6 +116,12 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: Login,
+
+    },
+    {
+        path: '/room',
+        name: 'Místnost',
+        component: Room,
 
     },
     {
@@ -185,5 +207,6 @@ const app = createApp(App);
 app.provide('theme', theme);
 app.provide('isTransitioning', isTransitioning);
 app.provide('transitionType', transitionType);
+app.provide('loggedUser', loggedUser);
 app.use(router);
 app.mount('#app');
