@@ -136,16 +136,21 @@
         background-color: var(--background-color-4);
         position: absolute;
         bottom: 0px;
+        
+        >div {
+            cursor: pointer;
+        }
 
-    .button-red {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        margin: 0 auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: var(--accent-color-secondary);
+        .button-red {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--accent-color-secondary);
+            
             .button-leave {
                 width: 24px;
                 height: 24px;
@@ -155,7 +160,8 @@
                 mask-image: url(../../public/images/icons/leave.svg);
                 background-color: white;
             }
-    }
+        }
+        
         .button {
             width: 48px;
             height: 48px;
@@ -174,21 +180,12 @@
                 mask-position: center;
                 mask-image: url(../../public/images/icons/beacon.svg);
                 background-color: white;
+                cursor: pointer;
             }
 
-        }
-
-        .button {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: var(--color-gray);
             .button-icon2 {
                 width: 24px;
+                cursor: pointer;
                 height: 24px;
                 mask-size: contain;
                 mask-repeat: no-repeat;

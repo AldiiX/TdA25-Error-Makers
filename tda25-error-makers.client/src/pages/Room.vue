@@ -89,16 +89,13 @@
         </div>
         <div class="buttons">
             <div class="button">
-                <div class="button-icon">
-                </div>
+                <div class="button-icon"></div>
             </div>
             <div class="button">
-                <div class="button-icon2">
-                </div>
+                <div class="button-icon2"></div>
             </div>
             <div class="button-red">
-                <div class="button-leave">
-                </div>
+                <div class="button-leave" onclick="location.href='/'"></div>
             </div>
         </div>
     </div>
