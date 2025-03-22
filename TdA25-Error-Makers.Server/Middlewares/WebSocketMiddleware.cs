@@ -8,34 +8,28 @@ public class WebSocketMiddleware(RequestDelegate next) {
     public async Task InvokeAsync(HttpContext context) {
 
         // ranked queue websocket
-        /*if (context.Request.Path.Value == "/ws/chat") {
+        if (context.Request.Path.Value == "/ws/chat") {
             if (context.WebSockets.IsWebSocketRequest) {
                 // z query se zjisti kod roomky
                 context.Request.EnableBuffering();
 
-                uint? roomNumber = uint.TryParse(context.Request.Query["roomNumber"].FirstOrDefault(), out var _rn)
-                    ? _rn : null;
+                string? roomNumber = context.Request.Query["roomNumber"];
 
-                var acc = Utilities.GetLoggedAccountFromContextOrNull();
+                var loggedAccount = Utilities.GetLoggedAccountFromContextOrNull();
+                if (loggedAccount == null) return;
 
-                var account = new MultiplayerGame.PlayerAccount(
-                    acc?.UUID ?? Guid.NewGuid().ToString(),
-                    acc?.DisplayName ?? "Guest " + Guid.NewGuid().ToString()[..6].ToUpper(),
-                    acc?.Elo ?? 0,
-                    null
-                );
-
-                context.Session.SetString("tempAccountUUID", account.UUID);
+                var name = loggedAccount.Username;
+                var client = new WSRoom.Client(null!, name);
 
                 WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                account.WebSocket = webSocket;
+                client.WebSocket = webSocket;
 
-                //await WSMultiplayerFreeplayGameQueue.HandleQueueAsync(webSocket, account, roomNumber);
+                await WSRoom.HandleQueueAsync(webSocket, loggedAccount, client, roomNumber);
             } else {
                 context.Response.StatusCode = 400;
             }
-        }*/
+        }
 
-        /*else */await next(context);
+        else await next(context);
     }
 }

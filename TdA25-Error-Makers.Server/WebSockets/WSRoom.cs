@@ -11,8 +11,6 @@ namespace TdA25_Error_Makers.Server.WebSockets;
 
 public static class WSRoom {
     private static readonly List<Room> Rooms = [];
-    private static readonly List<WebSocketClient> ConnectedUsers = [];
-    private static readonly List<ChatMessage> Messages = [];
     //private static Timer? statusTimer;
 
     public class Client : WebSocketClient {
@@ -25,20 +23,30 @@ public static class WSRoom {
 
 
     //handle
-    public static async Task HandleQueueAsync(WebSocket webSocket) {
-        var loggedAccount = Utilities.GetLoggedAccountFromContextOrNull();
-        if (loggedAccount == null) return;
+    public static async Task HandleQueueAsync(WebSocket webSocket, Account loggedAccount, Client client, string? roomNumber ) {
 
-        var name = loggedAccount.Username;
-        var client = new Client(webSocket, name);
+        // zjisteni roomky
+        Room? room = null;
+        if (roomNumber != null) {
+            lock (Rooms) room = Rooms.FirstOrDefault(r => r.Code == roomNumber);
+        }
+
+        else {
+            if (loggedAccount.Username != "spravce") return;
+
+            lock (Rooms) {
+                room = new Room();
+                Rooms.Add(room);
+            }
+        }
+
+        if (room == null) return;
+        client.SendInitialMessage();
 
 
 
 
-
-
-        lock (ConnectedUsers) ConnectedUsers.Add(client);
-        client.SendInicialChat().Wait();
+        lock (room.ConnectedUsers) room.ConnectedUsers.Add(client);
 
 
 
@@ -73,35 +81,13 @@ public static class WSRoom {
                 case "status":
                     /*await client.SendFullReservationInfoAsync();*/
                     break;
-
-                case "chatMessage": {
-                    lock(Messages) Messages.Add(new ChatMessage(client.Name,
-                            messageJson?["message"]?.ToString() ?? "Unknown"
-                        )
-                    );
-
-                    lock(ConnectedUsers)
-                        foreach (var cl in ConnectedUsers) {
-                            var msg = new {
-                                action = "message",
-                                message = new {
-                                    sender = client.Name,
-                                    content = messageJson?["message"]?.ToString() ?? "Unknown"
-                                }
-                            };
-
-                            cl.WebSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(msg))),
-                                WebSocketMessageType.Text, true, CancellationToken.None
-                            ).Wait();
-                        }
-                } break;
             }
         }
 
 
 
         // pri ukonceni socketu
-        lock (ConnectedUsers) ConnectedUsers.Remove(client);
+        lock (room.ConnectedUsers) room.ConnectedUsers.Remove(client);
     }
 
     //metodiky
@@ -118,18 +104,19 @@ public static class WSRoom {
     }
 
     //logisticky metody
-    private static async Task<bool> SendInicialChat(this Client client) {
-        await client.BroadcastMessageAsync(JsonSerializer.Serialize(new {
-                    action = "init",
-                    messages = Messages
-                }, new JsonSerializerOptions() {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                }
-            )
-        );
+    private static void SendInitialMessage(this Client client) {
+        byte[] message;
 
-        return true;
+        lock (Rooms) {
+            message = JsonSerializer.SerializeToUtf8Bytes(new {
+                action = "init",
+                room = Rooms.Find(r => r.ConnectedUsers.Contains(client))
+            });
+        }
+
+        client.WebSocket.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None);
     }
+
 
 /*static WSChat() {
     statusTimer = new Timer(Status!, null, 0, 1000);
