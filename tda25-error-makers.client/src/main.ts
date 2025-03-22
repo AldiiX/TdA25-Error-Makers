@@ -125,6 +125,12 @@ const routes = [
 
     },
     {
+        path: '/room/:id',
+        name: 'Místnost s ID',
+        component: Room,
+
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'Error',
         props: { code: 404 },

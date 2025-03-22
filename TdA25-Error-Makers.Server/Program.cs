@@ -133,6 +133,8 @@ public static class Program {
 
 
 
+
+
         // Spuštění aplikace
         App.Run();
     }

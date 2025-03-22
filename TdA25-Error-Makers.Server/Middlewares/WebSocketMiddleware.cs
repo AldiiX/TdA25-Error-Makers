@@ -8,7 +8,7 @@ public class WebSocketMiddleware(RequestDelegate next) {
     public async Task InvokeAsync(HttpContext context) {
 
         // ranked queue websocket
-        if (context.Request.Path.Value == "/ws/chat") {
+        if (context.Request.Path.Value == "/ws/room") {
             if (context.WebSockets.IsWebSocketRequest) {
                 // z query se zjisti kod roomky
                 context.Request.EnableBuffering();

@@ -11,7 +11,11 @@ namespace TdA25_Error_Makers.Server.WebSockets;
 
 public static class WSRoom {
     private static readonly List<Room> Rooms = [];
-    //private static Timer? statusTimer;
+    private static Timer? statusTimer;
+
+    static WSRoom() {
+        //statusTimer = new Timer(Status!, null, 0, 1000);
+    }
 
     public class Client : WebSocketClient {
         public string? Name { get; set; }
@@ -24,15 +28,15 @@ public static class WSRoom {
 
     //handle
     public static async Task HandleQueueAsync(WebSocket webSocket, Account loggedAccount, Client client, string? roomNumber ) {
-
         // zjisteni roomky
         Room? room = null;
         if (roomNumber != null) {
+            lock (Rooms) Console.WriteLine(JsonSerializer.Serialize(Rooms));
             lock (Rooms) room = Rooms.FirstOrDefault(r => r.Code == roomNumber);
         }
 
         else {
-            if (loggedAccount.Username != "spravce") return;
+            //if (loggedAccount.Username != "spravce") return;
 
             lock (Rooms) {
                 room = new Room();
@@ -40,13 +44,14 @@ public static class WSRoom {
             }
         }
 
-        if (room == null) return;
-        client.SendInitialMessage();
-
-
-
+        if (room == null) {
+            client.BroadcastMessageAndCloseAsync("Room not found").Wait();
+            return;
+        }
 
         lock (room.ConnectedUsers) room.ConnectedUsers.Add(client);
+
+        client.SendInitialMessage();
 
 
 
@@ -87,7 +92,20 @@ public static class WSRoom {
 
 
         // pri ukonceni socketu
-        lock (room.ConnectedUsers) room.ConnectedUsers.Remove(client);
+        lock (room.ConnectedUsers) {
+            room.ConnectedUsers.Remove(client);
+
+            if (room.ConnectedUsers.Count == 0) {
+                lock (Rooms) Rooms.Remove(room);
+            } else {
+                foreach (var user in room.ConnectedUsers) {
+                    user.BroadcastMessageAsync(JsonSerializer.Serialize(new {
+                        action = "updateRoom",
+                        room = room
+                    })).Wait();
+                }
+            }
+        }
     }
 
     //metodiky
@@ -103,6 +121,11 @@ public static class WSRoom {
         );
     }
 
+    private static async Task BroadcastMessageAndCloseAsync(this Client client, string message) {
+        await client.BroadcastMessageAsync(message);
+        await client.WebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
+    }
+
     //logisticky metody
     private static void SendInitialMessage(this Client client) {
         byte[] message;
@@ -114,11 +137,21 @@ public static class WSRoom {
             });
         }
 
-        client.WebSocket.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None);
+        client.WebSocket.SendAsync(new ArraySegment<byte>(message), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
     }
 
+    private static void Status(object? state) {
+        lock (Rooms) {
+            foreach (var room in Rooms) {
+                foreach (var client in room.ConnectedUsers) {
+                    var message = JsonSerializer.Serialize(new {
+                        action = "status",
+                        room = Rooms.Find(r => r.ConnectedUsers.Contains(client))
+                    });
 
-/*static WSChat() {
-    statusTimer = new Timer(Status!, null, 0, 1000);
-}*/
+                    client.WebSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(message)), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
+                }
+            }
+        }
+    }
 }
