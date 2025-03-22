@@ -6,6 +6,7 @@ import BlurBackground from "@/components/backgrounds/BlurBackground.vue";
 import {useRoute, useRouter} from "vue-router";
 
 const router = useRoute();
+const route = useRouter();
 const loggedUser = inject("loggedUser") as Ref<LoggedUser | any | null>;
 
 
@@ -33,6 +34,7 @@ async function submitForm() {
             console.log('Login successful', response.data);
             loggedUser.value = response;
             console.log(loggedUser.value);
+            route.push('/');
         } else {
             alert('Neplatné jméno nebo heslo');
         }
