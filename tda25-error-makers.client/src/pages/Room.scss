@@ -34,6 +34,17 @@
                     background-color: var(--text-color-primary);
                 }
             }
+
+            .voting {
+                margin-left: 24px;
+                width: 24px;
+                height: 24px;
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-image: url(../../public/images/icons/vote.svg);
+                background-color: var(--text-color-primary);
+            }
         }
 
         .text {
@@ -55,6 +66,7 @@
                     align-items: center;
                     justify-content: center;
                     margin-top: 8px;
+                    gap: 8px;
 
                     .username {
                         width: fit-content;
@@ -84,6 +96,7 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    border: transparent 3px solid;
                     margin: 0 auto;
                 }
 
@@ -93,8 +106,8 @@
                     font-weight: 700;
                     background-color: var(--background-color-3);
                     border-radius: 50%;
-                    height: 100px;
-                    width: 100px;
+                    height: 95px;
+                    width: 95px;
                     text-align: center;
                     display: flex;
                     justify-content: center;
