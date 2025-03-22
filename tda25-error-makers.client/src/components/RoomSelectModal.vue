@@ -1,10 +1,10 @@
 ﻿<script setup lang="ts">
-import {defineProps, defineEmits, ref} from "vue";
+import {defineProps, defineEmits, ref, inject, type Ref} from "vue";
 
 const props = defineProps<{
     show: boolean
 }>();
-
+const loggedUser = inject("loggedUser") as Ref<any>;
 const inputText = ref<number>(100_000);
 const emit = defineEmits(['close']);
 </script>
@@ -21,7 +21,7 @@ const emit = defineEmits(['close']);
                   </RouterLink>
                 </div>
             </div>
-            <a class="text">nebo vytvořit roomku</a>
+            <a class="text" v-if="loggedUser !== null && loggedUser?.name === 'spravce'">nebo vytvořit roomku</a>
         </div>
     </div>
 </template>
