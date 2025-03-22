@@ -12,15 +12,6 @@
     const room = ref<any | null>(null);
 
 
-    interface RoomUser {
-        name: string;
-        uuid: string;
-    }
-
-    const roomUsers = ref<RoomUser[]>([
-        { name: "Neco", uuid: "jfiosdhoiufdhf" },
-
-    ])
 
     onMounted(() => {
         socket = new WebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws/room${roomId ? "?roomNumber=" + roomId : ""}`);
@@ -54,14 +45,16 @@
     <div class="sections">
         <div class="mainsection">
                 <p>Prezentující</p>
-            <div class="User" v-for="user in roomUsers">
+            <div class="User" v-for="user in room.connectedUsers" v-if="room?.connectedUsers">
+              <template v-if="user.isPresenter">
                 <p class="title">{{ user.name[0].toUpperCase() }}</p>
                 <p class="username">{{ user.name }}</p>
+              </template>
             </div>
             <p>Účastníci</p>
 
             <div class="users">
-                <div class="User" v-for="user in roomUsers">
+                <div class="User" v-for="user in  room.connectedUsers" v-if="room?.connectedUsers">
                     <p class="title">{{ user.name[0].toUpperCase() }}</p>
                     <p class="username">{{ user.name }}</p>
                 </div>
