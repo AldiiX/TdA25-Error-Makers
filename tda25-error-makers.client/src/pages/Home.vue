@@ -3,15 +3,9 @@
     import BlurBackground from "@/components/backgrounds/BlurBackground.vue";
     import ColoredBackground from "@/components/backgrounds/ColoredBackground.vue";
     import { RouterLink } from "vue-router";
+    import RoomSelectModal from "@/components/RoomSelectModal.vue";
 
-    const projects = ref<any[] | null>(null);
-
-    onMounted(() => {
-        fetch("/api/v1/projects").then(async response => {
-            const data = await response.json();
-            projects.value = data;
-        })
-    });
+    const shownModal = ref<string | null>(null);
 </script>
 
 
@@ -19,15 +13,15 @@
 
 <template>
     <section class="top">
-        <ColoredBackground />
+        <BlurBackground />
+        <RoomSelectModal v-bind:show="shownModal === 'roomSelectModal'" />
 
         <div class="center">
             <div class="left">
                 <h1>Think different Academy</h1>
-                <p>Platforma na řešení zajímavých piškvorkových úloh, která ti pomůže rozvíjet logické myšlení a strategické schopnosti.</p>
-                <RouterLink to="/play" custom v-slot="{ navigate, href, isActive, isExactActive }">
-                    <button class="button-primary-col-sec" @click="navigate">HRÁT</button>
-                </RouterLink>
+                <p>Aplikace plná inovací</p>
+
+                <button class="button-primary-col-sec" @click="shownModal = 'roomSelectModal'">Připojit se do místnosti</button>
             </div>
 
             <div class="right">

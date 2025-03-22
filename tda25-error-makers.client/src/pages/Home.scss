@@ -48,10 +48,10 @@ section:is(.top) {
                 font-size: clamp(0px, 6vw, 96px);
                 line-height: clamp(0px, 5.5vw, 90px);
                 position: relative;
-                color: white;
+                color: var(--text-color-primary) !important;
 
                 &::before {
-                    content: 'X O O X X O';
+                    content: '' !important;
                     position: absolute;
                     bottom: 100%;
                     left: 0;
@@ -62,10 +62,12 @@ section:is(.top) {
 
             >p {
                 width: 30vw;
+                font-family: "Dosis", sans-serif !important;
                 font-size: clamp(0px, 1.5vw, 24px);
 
                 margin-top: 2vw;
-                opacity: 0.7;
+                color: var(--text-color-primary) !important;
+                opacity: 0.5 !important;
             }
 
             >button{
@@ -73,7 +75,7 @@ section:is(.top) {
                 padding: 0.8vw 3vw;
                 font-size: clamp(0px, 1.5vw, 24px);
                 cursor: pointer;
-                margin: 0;
+                margin: 0 ;
                 margin-top: 2vw;
             }
         }
@@ -86,7 +88,7 @@ section:is(.top) {
                 width: 100%;
                 max-width: 30vw;
                 aspect-ratio: 1/1;
-                background-image: url("/images/icons/zarivka_playing_bile.svg");
+                background-image: url("../../public/images/icons/zarivka_playing_bile.svg");
                 background-size: contain;
                 background-position: center;
                 background-repeat: no-repeat;

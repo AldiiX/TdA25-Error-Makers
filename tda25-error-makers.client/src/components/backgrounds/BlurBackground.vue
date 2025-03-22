@@ -18,7 +18,7 @@
     width: 100vw;
     height: 100vh;
     filter: blur(20vw);
-    opacity: 0.7;
+    opacity: 0.6;
     pointer-events: none;
     z-index: -1;
     transition-duration: 0.3s;

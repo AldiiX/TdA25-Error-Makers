@@ -73,7 +73,7 @@ export const getTheme = () => {
 
 const routes = [
     {
-        path: '/',
+        path: '/chat',
         name: 'Chat',
         component: Chat,
         meta: {
@@ -82,7 +82,7 @@ const routes = [
         }
     },
     {
-        path: '/home',
+        path: '/',
         name: 'Home',
         component: Home,
         meta: {
