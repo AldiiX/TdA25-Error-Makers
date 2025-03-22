@@ -10,11 +10,42 @@
         h1 {
             text-align: center;
         }
-        >p {
+
+        .top {
+            width: 100%;
+            border-bottom: solid 1px rgba(0, 0, 0, 0.05);
             text-align: left;
+            display: flex;
+            flex-direction: row;
+
+
+            .usercount {
+                text-align: right;
+                display: flex;
+                flex-direction: row;
+
+                .icon {
+                    width: 24px;
+                    height: 24px;
+                    mask-size: contain;
+                    mask-repeat: no-repeat;
+                    mask-position: center;
+                    mask-image: url(../../public/images/icons/user.svg);
+                    background-color: var(--text-color-primary);
+                }
+            }
+        }
+
+        .text {
             margin: 0;
             width: 100%;
             border-bottom: solid 1px rgba(0, 0, 0, 0.05);
+            font-size: 20px;
+        }
+
+        p{
+            margin: 0;
+            width: 100%;
             font-size: 20px;
         }
             .User {
