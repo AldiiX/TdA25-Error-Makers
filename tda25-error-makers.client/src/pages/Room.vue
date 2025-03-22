@@ -99,9 +99,9 @@
             </div>
         </div>
         <div class="buttons">
-            <div class="button">
-                <div class="button-icon"></div>
-            </div>
+<!--            <div class="button">-->
+<!--                <div class="button-icon"></div>-->
+<!--            </div>-->
             <div class="button" v-on:click="setUserAsPresenter()">
                 <div class="button-icon2">
                 </div>

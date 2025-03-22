@@ -21,7 +21,7 @@ const emit = defineEmits(['close']);
                   </RouterLink>
                 </div>
             </div>
-            <a class="text" v-if="loggedUser !== null && loggedUser?.name === 'spravce'">nebo vytvořit roomku</a>
+            <a class="text" style="text-decoration: none" v-if="loggedUser !== null && loggedUser?.name === 'spravce'" href="/room">nebo vytvořit roomku</a>
         </div>
     </div>
 </template>
