@@ -1,10 +1,11 @@
 ﻿<script setup lang="ts">
-import {defineProps, defineEmits} from "vue";
+import {defineProps, defineEmits, ref} from "vue";
 
 const props = defineProps<{
     show: boolean
 }>();
 
+const inputText = ref<number>(100_000);
 const emit = defineEmits(['close']);
 </script>
 
@@ -14,8 +15,8 @@ const emit = defineEmits(['close']);
             <div class="inputs">
                 <label for="kod">Zadej kód místnosti</label>
                 <div class="input-group">
-                    <input name="kod" type="text" maxlength="6" placeholder="000000"/>
-                  <RouterLink to="/room/id">
+                    <input name="kod" min="100000" max="999_999" maxlength="6" v-model="inputText" type="number" placeholder="000000"/>
+                  <RouterLink v-bind:to="'/room/' + inputText">
                     <button class="button-primary-col-sec">Připojit se</button>
                   </RouterLink>
                 </div>

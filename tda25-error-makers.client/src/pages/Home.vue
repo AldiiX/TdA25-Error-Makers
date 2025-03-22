@@ -20,7 +20,7 @@
 
         <div class="center">
             <div class="left">
-                <h1>Think different Academy</h1>
+                <h1>Think different App</h1>
                 <p>Aplikace plná inovací</p>
 
               <button class="button-primary-col-sec" @click="shownModal = true">

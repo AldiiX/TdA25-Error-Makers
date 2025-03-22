@@ -8,15 +8,23 @@
     import BlurBackground from "@/components/backgrounds/BlurBackground.vue";
     import {inject, onMounted, ref, type Ref} from "vue";
     import BlurBlueBackground from "@/components/backgrounds/BlurBlueBackground.vue";
+    import SelectNameModal from "@/components/SelectNameModal.vue";
     const loggedUser = inject("loggedUser") as Ref<any>;
     let socket: WebSocket | null = null;
     const room = ref<any | null>(null);
+    const nameModalShown = ref<boolean>(true);
 
 
 
-    onMounted(() => {
-        socket = new WebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws/room${roomId ? "?roomNumber=" + roomId : ""}`);
+    function connectToWS(name: string) {
+        let queryParams = [];
+        if(roomId) queryParams.push(`roomNumber=${roomId}`);
+        queryParams.push(`username=${loggedUser?.value?.name ?? name}`);
+
+
+        socket = new WebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws/room?${queryParams.join('&')}`);
         console.log(socket);
+        nameModalShown.value = false;
 
         socket.onopen = () => {
             console.log('Connected to the server');
@@ -37,7 +45,7 @@
                 } break;
             }
         };
-    });
+    }
 
     function setUserAsPresenter(uuid: string) {
         socket?.send(JSON.stringify({
@@ -49,6 +57,7 @@
 
 <template>
     <BlurBlueBackground />
+    <SelectNameModal :connectToWS v-bind:show="nameModalShown" />
 
     <div class="sections">
         <div class="mainsection">
