@@ -52,6 +52,11 @@
                 case "updateRoom":{
                     room.value = payload.room;
                 } break;
+
+                case "error": {
+                    alert(payload.message);
+                    if(payload.redirect) location.href = payload.redirect;
+                } break;
             }
         };
     }

@@ -49,7 +49,13 @@ public static class WSRoom {
         }
 
         if (room == null) {
-            client.BroadcastMessageAndCloseAsync("Room not found").Wait();
+            var message = JsonSerializer.Serialize(new {
+                action = "error",
+                message = "Room nebyla nalezena",
+                redirect = "/"
+            }, jsonOptions);
+
+            client.WebSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(message)), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
             return;
         }
 
