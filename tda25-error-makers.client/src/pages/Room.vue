@@ -10,12 +10,20 @@
     import BlurBlueBackground from "@/components/backgrounds/BlurBlueBackground.vue";
     import SelectNameModal from "@/components/SelectNameModal.vue";
     import Room from "@/pages/Room.vue";
+    import VoteModal from "@/components/VoteModal.vue";
     const loggedUser = inject("loggedUser") as Ref<any>;
     let socket: WebSocket | null = null;
     const room = ref<any | null>(null);
     const nameModalShown = ref<boolean>(true);
+    const showVoteModal = ref(false);
 
+    function showVoteModalHandler(){
+        showVoteModal.value = true;
+    }
 
+    function hideVoteModal(){
+        showVoteModal.value = false;
+    }
 
     function connectToWS(name: string) {
         let queryParams = [];
@@ -48,10 +56,9 @@
         };
     }
 
-    function setUserAsPresenter(uuid: string) {
+    function setUserAsPresenter() {
         socket?.send(JSON.stringify({
-            action: "setPresenter",
-            userUUID: uuid
+            action: "askingToSpeak",
         }));
     }
 </script>
@@ -59,6 +66,7 @@
 <template>
     <BlurBlueBackground />
     <SelectNameModal :connectToWS v-bind:show="nameModalShown" />
+    <VoteModal :show="showVoteModal" @close="hideVoteModal" />
 
     <div class="sections">
         <div class="mainsection">
@@ -67,6 +75,9 @@
                 <div class="usercount">
                     <div class="icon"></div>
                     <p>{{room?.connectedUsers.length}}</p>
+                </div>
+                <div class="voting" v-if="loggedUser?.name === 'spravce'" v-on:click="showVoteModalHandler">
+
                 </div>
             </div>
             <div class="User" v-for="user in room.connectedUsers" v-if="room?.connectedUsers">
@@ -92,7 +103,7 @@
                 <div class="button-icon">
                 </div>
             </div>
-            <div class="button">
+            <div class="button" v-on:click="setUserAsPresenter()">
                 <div class="button-icon2">
                 </div>
             </div>
