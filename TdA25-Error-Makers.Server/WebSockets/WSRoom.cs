@@ -27,7 +27,7 @@ public static class WSRoom {
 
 
     //handle
-    public static async Task HandleQueueAsync(WebSocket webSocket, Account loggedAccount, Client client, string? roomNumber ) {
+    public static async Task HandleQueueAsync(WebSocket webSocket, Account? loggedAccount, Client client, string? roomNumber ) {
         // zjisteni roomky
         Room? room = null;
         if (roomNumber != null) {

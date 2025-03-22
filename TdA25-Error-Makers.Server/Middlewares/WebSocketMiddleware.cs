@@ -14,11 +14,12 @@ public class WebSocketMiddleware(RequestDelegate next) {
                 context.Request.EnableBuffering();
 
                 string? roomNumber = context.Request.Query["roomNumber"];
+                string? username = context.Request.Query["username"];
 
                 var loggedAccount = Utilities.GetLoggedAccountFromContextOrNull();
-                if (loggedAccount == null) return;
+                //if (loggedAccount == null) return;
 
-                var name = loggedAccount.Username;
+                var name = loggedAccount?.Username ?? username ?? "Guest" + new Random().Next(1000, 9999);
                 var client = new WSRoom.Client(null!, name);
 
                 WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
