@@ -39,7 +39,7 @@ export default defineConfig(({ command, mode }: any): any => {
                 https: false
             },
             preview: {
-                    allowedHosts: "all"
+                    allowedHosts: true
             }
         };
     }
