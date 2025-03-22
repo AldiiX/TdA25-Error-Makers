@@ -7,6 +7,7 @@
 
     import BlurBackground from "@/components/backgrounds/BlurBackground.vue";
     import {inject, onMounted, ref, type Ref} from "vue";
+    import SelectNameModal from "@/components/SelectNameModal.vue";
     const loggedUser = inject("loggedUser") as Ref<any>;
     let socket: WebSocket | null = null;
     const room = ref<any | null>(null);
@@ -41,6 +42,7 @@
 
 <template>
     <BlurBackground />
+    <SelectNameModal />
 
     <div class="sections">
         <div class="mainsection">
