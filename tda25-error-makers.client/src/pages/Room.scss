@@ -50,11 +50,9 @@
         }
             .User {
                 margin-top: 16px;
-
                 .usernamediv {
                     display: flex;
                     align-items: center;
-                    gap:8px;
                     justify-content: center;
                     margin-top: 8px;
 
@@ -80,8 +78,8 @@
                     font-weight: 700;
                     background-color: var(--background-color-4);
                     border-radius: 50%;
-                    height: 100px;
-                    width: 100px;
+                    height: 95px;
+                    width: 95px;
                     text-align: center;
                     display: flex;
                     justify-content: center;
@@ -114,8 +112,9 @@
             }
 
         .users {
-            overflow-x: hidden;
+            flex-wrap: wrap;
             display: flex;
+            gap: 16px;
             flex-direction: row;
             width: 100%;
         }
