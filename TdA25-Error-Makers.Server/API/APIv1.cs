@@ -1,5 +1,6 @@
 using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Mvc;
+using TdA25_Error_Makers.Server.Classes;
 
 namespace TdA25_Error_Makers.Server.API;
 
@@ -24,5 +25,31 @@ public class APIv1 : Controller {
         });
 
         return new JsonResult(array);
+    }
+
+    [HttpGet("loggeduser")]
+    public IActionResult GetLoggedUser() {
+        var user = Utilities.GetLoggedAccountFromContextOrNull();
+        if(user == null) return new JsonResult(new { success = false, message = "User is not logged in" });
+
+        var obj = new JsonObject {
+            { "name", user.Username },
+            { "password", user.Password }
+        };
+
+        return new JsonResult(obj);
+    }
+
+    [HttpPost("loggeduser")]
+    public IActionResult LogUser([FromBody] JsonObject obj) {
+        var username = obj["username"]?.ToString();
+        var password = obj["password"]?.ToString();
+
+        if(username == null || password == null) return new BadRequestObjectResult(new { success = false, message = "Invalid request" });
+
+        var acc = Auth.AuthUser(username, Utilities.EncryptPassword(password));
+        if(acc == null) return new JsonResult(new { success = false, message = "Invalid credentials" });
+
+        return new JsonResult(acc);
     }
 }

@@ -1,3 +1,5 @@
+using TdA25_Error_Makers.Server.Classes;
+
 namespace TdA25_Error_Makers.Server.Middlewares;
 
 /*
@@ -18,6 +20,7 @@ public class BeforeInitMiddleware(RequestDelegate next){
 
 
         // async věci
+        var loggedAccount = Auth.ReAuthUserAsync();
 
 
         // vyhodnoceni
@@ -35,6 +38,7 @@ public class BeforeInitMiddleware(RequestDelegate next){
 
 
         // zbytek
+        await loggedAccount;
         await next(context);
     }
 }

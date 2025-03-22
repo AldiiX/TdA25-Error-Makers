@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using MySql.Data.MySqlClient;
+using TdA25_Error_Makers.Server.Classes.Objects;
 
 namespace TdA25_Error_Makers.Server.Classes;
 
@@ -117,14 +118,14 @@ public static class Utilities {
         return "";
     }
 
-    /*public static Account GetLoggedAccountFromContext() {
+    public static Account GetLoggedAccountFromContext() {
         if(HCS.Current.Items["loggeduser"] is not Account account) throw new Exception("Account not found in context");
         return account;
     }
 
     public static Account? GetLoggedAccountFromContextOrNull() {
         return HCS.Current.Items["loggeduser"] is not Account account ? null : account;
-    }*/
+    }
 
     private static string EncryptWithSHA512(in string password) {
         using SHA512 sha512 = SHA512.Create();
