@@ -6,9 +6,20 @@
     const roomId = route.params.id;
 
     import BlurBackground from "@/components/backgrounds/BlurBackground.vue";
-    import {inject, onMounted, type Ref} from "vue";
+    import {inject, onMounted, ref, type Ref} from "vue";
     const loggedUser = inject("loggedUser") as Ref<any>;
     let socket: WebSocket | null = null;
+
+
+    interface RoomUser {
+        name: string;
+        uuid: string;
+    }
+
+    const roomUsers = ref<RoomUser[]>([
+        { name: "Neco", uuid: "jfiosdhoiufdhf" },
+
+    ])
 
     onMounted(() => {
         socket = new WebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws/room${roomId ? "?roomNumber=" + roomId : ""}`);
@@ -31,21 +42,17 @@
 
     <div class="sections">
         <div class="mainsection">
-            <p>Prezentující</p>
-            <div class="User">
-                <h1 class="title">Test</h1>
+                <p>Prezentující</p>
+            <div class="User" v-for="user in roomUsers">
+                <p class="title">{{ user.name[0].toUpperCase() }}</p>
+                <p class="username">{{ user.name }}</p>
             </div>
             <p>Účastníci</p>
 
             <div class="users">
-                <div class="User">
-                    <h1 class="title">Test</h1>
-                </div>
-                <div class="User">
-                    <h1 class="title">Test</h1>
-                </div>
-                <div class="User">
-                    <h1 class="title">Test</h1>
+                <div class="User" v-for="user in roomUsers">
+                    <p class="title">{{ user.name[0].toUpperCase() }}</p>
+                    <p class="username">{{ user.name }}</p>
                 </div>
             </div>
         </div>
