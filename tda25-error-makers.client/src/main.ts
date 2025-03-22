@@ -9,6 +9,7 @@ import GDPR from "@/pages/GDPR.vue";
 import Cookies from "@/pages/Cookies.vue";
 import Features from "@/pages/Features.vue";
 import Chat from "@/pages/Chat.vue";
+import Login from "@/pages/Login.vue";
 
 
 
@@ -93,6 +94,12 @@ const routes = [
         path: '/features',
         name: 'Features',
         component: Features,
+
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login,
 
     },
     {
