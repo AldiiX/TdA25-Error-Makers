@@ -7,6 +7,7 @@
     --background-color: var(--background-color-primary);
     --background-color-secondary: #FFFFFF;
     --background-color-3: #efefef;
+    --background-color-4: #efefef;
     --color-gray: #666;
     --element-bg: rgb(0, 0, 0, 0.1);
     --accent-color-primary: #0070BB;
@@ -104,6 +105,7 @@
     --background-color: var(--background-color-primary);
     --background-color-secondary: #111111;
     --background-color-3: #0b0b0b;
+    --background-color-4: #232323;
     --color-gray: #666;
     --element-bg: rgb(255,255,255, 0.1);
     --accent-color-primary: #0070bb;

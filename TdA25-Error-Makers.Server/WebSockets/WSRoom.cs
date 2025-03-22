@@ -22,6 +22,7 @@ public static class WSRoom {
         public string? Name { get; set; }
         public bool CanBePresenter { get; set; }
         public bool IsPresenter { get; set; }
+        public bool IsAskingToBePresenter { get; set; }
 
         public Client(WebSocket webSocket, string name, bool canBePresenter = false) : base(webSocket) {
             Name = name;
@@ -97,9 +98,35 @@ public static class WSRoom {
             Program.Logger.LogInformation(messageJson?.ToString());
 
             switch (action) {
-                case "changeUserToPresenter":
-                    /*await client.SendFullReservationInfoAsync();*/
-                    break;
+                case "changeUserToPresenter": {
+                    var userUUID = messageJson?["userUUID"]?.ToString();
+                    if (userUUID == null) break;
+
+                    lock (room.ConnectedUsers) {
+                        var user = room.ConnectedUsers.Find(u => u.UUID == userUUID);
+                        if (user == null) break;
+
+                        user.IsPresenter = true;
+
+                        foreach (var u in room.ConnectedUsers) {
+                            u.BroadcastMessageAsync(JsonSerializer.Serialize(new {
+                                action = "updateRoom",
+                                room = room
+                            }, jsonOptions)).Wait();
+                        }
+                    }
+                } break;
+
+                case "askingToSpeak": {
+                    client.IsAskingToBePresenter = !client.IsAskingToBePresenter;
+
+                    lock(room.ConnectedUsers) foreach (var user in room.ConnectedUsers) {
+                        user.BroadcastMessageAsync(JsonSerializer.Serialize(new {
+                            action = "updateRoom",
+                            room = room
+                        }, jsonOptions)).Wait();
+                    }
+                } break;
             }
         }
 
@@ -161,7 +188,7 @@ public static class WSRoom {
                     var message = JsonSerializer.Serialize(new {
                         action = "status",
                         room = Rooms.Find(r => r.ConnectedUsers.Contains(client))
-                    });
+                    }, jsonOptions);
 
                     client.WebSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(message)), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
                 }

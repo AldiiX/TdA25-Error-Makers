@@ -67,7 +67,7 @@ export const toggleTheme = () => {
   root.classList.remove('theme-light', 'theme-dark');
   root.classList.add("theme-" + theme.value);
 
-    setCookie('theme', theme.value, 365);
+setCookie('theme', theme.value, 365);
 }
 
 const setTheme = (newTheme: string) => {
@@ -80,9 +80,12 @@ const setTheme = (newTheme: string) => {
 }
 
 export const getTheme = () => {
+    setTheme("dark");
+/*
+
     const savedTheme = getCookie('theme');
     if (savedTheme) setTheme(savedTheme);
-    else setTheme('light');
+    else setTheme('light');*/
 }
 
 

@@ -7,6 +7,7 @@
 
     import BlurBackground from "@/components/backgrounds/BlurBackground.vue";
     import {inject, onMounted, ref, type Ref} from "vue";
+    import BlurBlueBackground from "@/components/backgrounds/BlurBlueBackground.vue";
     const loggedUser = inject("loggedUser") as Ref<any>;
     let socket: WebSocket | null = null;
     const room = ref<any | null>(null);
@@ -37,10 +38,17 @@
             }
         };
     });
+
+    function setUserAsPresenter(uuid: string) {
+        socket?.send(JSON.stringify({
+            action: "setPresenter",
+            userUUID: uuid
+        }));
+    }
 </script>
 
 <template>
-    <BlurBackground />
+    <BlurBlueBackground />
 
     <div class="sections">
         <div class="mainsection">
