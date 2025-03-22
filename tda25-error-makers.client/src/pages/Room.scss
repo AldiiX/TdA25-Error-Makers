@@ -1,31 +1,120 @@
 ﻿.sections {
-    min-height: calc(100vh - 25vh);
+    height: 100vh;
     margin: 0 auto;
+    width: 100%;
 
     .mainsection {
         position: relative;
         margin-top: 2vh;
-
+        margin: 16px;
         h1 {
             text-align: center;
-            font-size: 12vw;
-            margin: 0;
         }
+        p {
+            text-align: left;
+            margin: 0;
+            width: 100%;
+            border-bottom: solid 1px;
+            font-size: 20px;
+            width: 100%;
+        }
+            .User {
+                background-color: var(--background-color-3);
+                border-radius: 50%;
+                height: 100px;
+                width: 100px;
+                text-align: center;
+                margin: 0 auto;
+                gap: 16px;
+            }
 
         .users {
+            overflow: scroll;
+            overflow-x: hidden;
             display: flex;
             flex-direction: row;
             width: 100%;
-            margin: 10vh 0;
-            gap: 16px;
-            .User {
-                background: var(--background-color-3);
-                border-radius: 12px;
-                height: 15vh;
-                width: 20vh;
-                text-align: center;
-                margin: 0 auto;
+            margin: 5vh 0;
+            gap: 8px;
+        }
+
+    }
+
+
+
+    .buttons {
+        height: 12vh;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        gap: 16px;
+        flex-direction: row;
+        align-items: center;
+        background-color: var(--background-color-3);
+        position: absolute;
+        bottom: 0px;
+
+    .button-red {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--accent-color-secondary);
+            .button-leave {
+                width: 24px;
+                height: 24px;
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-image: url(../../public/images/icons/leave.svg);
+                background-color: white;
             }
+    }
+        .button {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--color-gray);
+            .button-icon {
+                width: 24px;
+                height: 24px;
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-image: url(../../public/images/icons/beacon.svg);
+                background-color: white;
+            }
+
+        }
+
+        .button {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--color-gray);
+            .button-icon2 {
+                width: 24px;
+                height: 24px;
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-image: url(../../public/images/icons/hand-paper.svg);
+                background-color: white;
+            }
+
         }
     }
 }
