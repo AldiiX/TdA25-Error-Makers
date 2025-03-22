@@ -39,8 +39,10 @@
         }
 
     }
-    
-    .buttons-red {
+
+
+
+    .buttons {
         height: 12vh;
         border-top-left-radius: 12px;
         border-top-right-radius: 12px;
@@ -54,7 +56,7 @@
         position: absolute;
         bottom: 0px;
 
-    .button {
+    .button-red {
         width: 48px;
         height: 48px;
         border-radius: 50%;
@@ -69,11 +71,51 @@
                 mask-size: contain;
                 mask-repeat: no-repeat;
                 mask-position: center;
-                mask-image: url(../../public/images/icons/phone-slash.svg);
+                mask-image: url(../../public/images/icons/leave.svg);
                 background-color: white;
             }
     }
+        .button {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--color-gray);
+            .button-icon {
+                width: 24px;
+                height: 24px;
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-image: url(../../public/images/icons/beacon.svg);
+                background-color: white;
+            }
 
+        }
+
+        .button {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--color-gray);
+            .button-icon2 {
+                width: 24px;
+                height: 24px;
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-image: url(../../public/images/icons/hand-paper.svg);
+                background-color: white;
+            }
+
+        }
     }
 }
 

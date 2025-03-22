@@ -30,12 +30,16 @@ console.log(loggedUser);
                 </div>
             </div>
         </div>
-        <div class="buttons-red">
+        <div class="buttons">
             <div class="button">
-                <div class="button-leave">
+                <div class="button-icon">
                 </div>
             </div>
             <div class="button">
+                <div class="button-icon2">
+                </div>
+            </div>
+            <div class="button-red">
                 <div class="button-leave">
                 </div>
             </div>
