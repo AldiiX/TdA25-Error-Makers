@@ -9,6 +9,7 @@
     import {inject, onMounted, ref, type Ref} from "vue";
     import BlurBlueBackground from "@/components/backgrounds/BlurBlueBackground.vue";
     import SelectNameModal from "@/components/SelectNameModal.vue";
+    import Room from "@/pages/Room.vue";
     const loggedUser = inject("loggedUser") as Ref<any>;
     let socket: WebSocket | null = null;
     const room = ref<any | null>(null);
@@ -61,19 +62,28 @@
 
     <div class="sections">
         <div class="mainsection">
-                <p>Prezentující</p>
+            <div class="top">
+                <p class="text">Prezentující</p>
+                <div class="usercount">
+                    <div class="icon"></div>
+                    <p>{{room?.connectedUsers.length}}</p>
+                </div>
+            </div>
             <div class="User" v-for="user in room.connectedUsers" v-if="room?.connectedUsers">
               <template v-if="user.isPresenter">
                 <p class="title">{{ user.name[0].toUpperCase() }}</p>
                 <p class="username">{{ user.name }}</p>
               </template>
             </div>
-            <p>Účastníci</p>
+            <p class="text">Účastníci</p>
 
             <div class="users">
                 <div class="User" v-for="user in  room.connectedUsers" v-if="room?.connectedUsers">
-                    <p class="title">{{ user.name[0].toUpperCase() }}</p>
-                    <p class="username">{{ user.name }}</p>
+                    <p class="title" :class="{'bordered': user.isAskingToBePresenter}">{{ user.name[0].toUpperCase() }}</p>
+                    <div class="usernamediv">
+                        <p class="username">{{ user.name }}</p>
+                        <div class="icon" v-if="user.isAskingToBePresenter"></div>
+                    </div>
                 </div>
             </div>
         </div>
