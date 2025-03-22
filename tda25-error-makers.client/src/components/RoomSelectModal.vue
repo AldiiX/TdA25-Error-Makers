@@ -15,7 +15,7 @@ const emit = defineEmits(['close']);
             <div class="inputs">
                 <label for="kod">Zadej kód místnosti</label>
                 <div class="input-group">
-                    <input name="kod" min="100000" max="999999" maxlength="6" v-model="inputText" type="number" placeholder="000000"/>
+                    <input name="kod" min="100000" max="999_999" maxlength="6" v-model="inputText" type="number" placeholder="000000"/>
                   <RouterLink v-bind:to="'/room/' + inputText">
                     <button class="button-primary-col-sec">Připojit se</button>
                   </RouterLink>
