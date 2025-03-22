@@ -6,7 +6,7 @@
     const roomId = route.params.id;
 
     import BlurBackground from "@/components/backgrounds/BlurBackground.vue";
-    import {inject, onMounted, ref, type Ref} from "vue";
+    import {inject, onMounted, ref, type Ref, watch} from "vue";
     import BlurBlueBackground from "@/components/backgrounds/BlurBlueBackground.vue";
     import SelectNameModal from "@/components/SelectNameModal.vue";
     import Room from "@/pages/Room.vue";
@@ -58,7 +58,7 @@
 
     function setUserAsPresenter() {
         socket?.send(JSON.stringify({
-            action: "askingToSpeak",
+            action: "askingToBePresenter",
         }));
     }
 </script>
@@ -76,9 +76,9 @@
                     <div class="icon"></div>
                     <p>{{room?.connectedUsers.length}}</p>
                 </div>
-                <div class="voting" v-if="loggedUser?.name === 'spravce'" v-on:click="showVoteModalHandler">
+<!--                <div class="voting" v-if="loggedUser?.name === 'spravce'" v-on:click="showVoteModalHandler">-->
 
-                </div>
+<!--                </div>-->
             </div>
             <div class="User" v-for="user in room.connectedUsers" v-if="room?.connectedUsers">
               <template v-if="user.isPresenter">
