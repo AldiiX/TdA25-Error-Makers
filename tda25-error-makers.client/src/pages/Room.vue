@@ -62,8 +62,11 @@
 
             <div class="users">
                 <div class="User" v-for="user in  room.connectedUsers" v-if="room?.connectedUsers">
-                    <p class="title">{{ user.name[0].toUpperCase() }}</p>
-                    <p class="username">{{ user.name }}</p>
+                    <p class="title" :class="{'bordered': user.isAskingToBePresenter}">{{ user.name[0].toUpperCase() }}</p>
+                    <div class="usernamediv">
+                        <p class="username">{{ user.name }}</p>
+                        <div class="icon" v-if="user.isAskingToBePresenter"></div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -50,6 +50,30 @@
         }
             .User {
                 margin-top: 16px;
+
+                .usernamediv {
+                    display: flex;
+                    align-items: center;
+                    gap:8px;
+                    justify-content: center;
+                    margin-top: 8px;
+
+                    .username {
+                        width: fit-content;
+                        margin:0;
+                    }
+
+                    .icon {
+                        width: 16px;
+                        height: 16px;
+                        mask-size: contain;
+                        mask-repeat: no-repeat;
+                        mask-position: center;
+                        mask-image: url(../../public/images/icons/hand-paper.svg);
+                        background-color: var(--accent-color-secondary);
+                    }
+                }
+
                 .title {
                     color: var(--text-color-primary);
                     font-size: 48px;
@@ -63,6 +87,23 @@
                     justify-content: center;
                     align-items: center;
                     margin: 0 auto;
+                }
+
+                .bordered {
+                    color: var(--text-color-primary);
+                    font-size: 48px;
+                    font-weight: 700;
+                    background-color: var(--background-color-3);
+                    border-radius: 50%;
+                    height: 100px;
+                    width: 100px;
+                    text-align: center;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin: 0 auto;
+                    border: solid 3px;
+                    border-color: var(--accent-color-secondary);
                 }
 
                 .username {
