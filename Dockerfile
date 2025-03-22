@@ -6,8 +6,6 @@ ARG APP_UID=1000
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 5000
-EXPOSE 8115
 ENV DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
 
 # Stage to install Node.js (na základě SDK)
