@@ -13,7 +13,7 @@
     const loggedUser = inject("loggedUser") as Ref<any>;
     let socket: WebSocket | null = null;
     const room = ref<any | null>(null);
-    const nameModalShown = ref<boolean>(true);
+    const nameModalShown = ref<boolean>(loggedUser.value === null);
 
 
 

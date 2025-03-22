@@ -117,7 +117,7 @@ public static class WSRoom {
                     }
                 } break;
 
-                case "askingToSpeak": {
+                case "askingToBePresenter": {
                     client.IsAskingToBePresenter = !client.IsAskingToBePresenter;
 
                     lock(room.ConnectedUsers) foreach (var user in room.ConnectedUsers) {
