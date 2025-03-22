@@ -28,11 +28,8 @@
         <ColoredBackground v-bind:change-header-style="false" v-else-if="transitionType === 'coloredbg'" />
     </div>
 
-    <Header />
-
     <RouterView />
 
-    <Footer />
 </template>
 
 

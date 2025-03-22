@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import {inject, type Ref, ref} from 'vue';
+import { type LoggedUser } from "../main.ts";
 import axios from 'axios';
 import BlurBackground from "@/components/backgrounds/BlurBackground.vue";
+import {useRoute, useRouter} from "vue-router";
+
+const router = useRoute();
+const loggedUser = inject("loggedUser") as Ref<LoggedUser | any | null>;
 
 
 const username = ref('');
@@ -24,9 +29,10 @@ async function submitForm() {
 
         const response = await axios.post('/api/v1/loggeduser', formData);
 
-        if (response.data.success) {
+        if (response != null) {
             console.log('Login successful', response.data);
-            window.location.href = '/';
+            loggedUser.value = response;
+            console.log(loggedUser.value);
         } else {
             alert('Neplatné jméno nebo heslo');
         }
