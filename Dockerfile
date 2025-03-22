@@ -5,7 +5,7 @@ ARG APP_UID=1000
 # Base stage pro běh ASP.NET aplikace (použito pro build)
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
-EXPOSE 80
+
 ENV DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
 
 # Stage to install Node.js (na základě SDK)
@@ -98,4 +98,5 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # Příprava startovacího skriptu
 WORKDIR /app
 COPY --chmod=0755 start.sh .
+EXPOSE 80
 CMD ["./start.sh"]
