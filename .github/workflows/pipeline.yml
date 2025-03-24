@@ -2,9 +2,9 @@ name: Build and push to TdA
 
 on:
   push:
-    branches:
-      - main
-      - grf-main
+    branches: []
+      #- main
+      #- grf-main
 
 jobs:
   build:
