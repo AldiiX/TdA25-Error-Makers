@@ -10,7 +10,6 @@
 ---
 
 ### Jak aplikace vypadala v nominačním kole?
-![d1](/assets/demo.mp4)
 ![s1](/assets/1.png)
 ![s2](/assets/2.png)
 ![s3](/assets/3.png)
