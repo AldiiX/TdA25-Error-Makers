@@ -7,7 +7,16 @@
 
 > Soutěžíme za [Střední Školu EDUCHEM, a.s.](https://educhem.cz)  &nbsp;&nbsp;&nbsp;:))
 
---- 
+---
+
+### Jak aplikace vypadala v nominačním kole?
+![d1](/assets/demo.mp4)
+![s1](/assets/1.png)
+![s2](/assets/2.png)
+![s3](/assets/3.png)
+![s4](/assets/4.png)
+
+---
 
 ### Použité technologie
 - **Frontend**: ![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)

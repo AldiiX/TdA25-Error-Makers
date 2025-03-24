@@ -1,6 +1,0 @@
-@TdA25_Error_Makers.Server_HostAddress = http://localhost:5097
-
-GET {{TdA25_Error_Makers.Server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
