@@ -1,5 +1,7 @@
 # TdA25 - Error Makers
 
+[![wakatime](https://wakatime.com/badge/user/1acaf222-1e95-4b63-8353-39b3cbca8bd1/project/0ffc10a6-bb3d-4efa-ae8f-be0ea15d03e0.svg)](https://wakatime.com/badge/user/1acaf222-1e95-4b63-8353-39b3cbca8bd1/project/0ffc10a6-bb3d-4efa-ae8f-be0ea15d03e0)
+
 ### Tým
 - [**AldiiX** - Stanislav Škudrna](https://stanislavskudrna.cz)
 - [**DGKuba657** - Jakub Funk](https://github.com/DGKuba657)
